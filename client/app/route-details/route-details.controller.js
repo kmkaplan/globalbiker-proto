@@ -2,13 +2,17 @@
 
 angular.module('bikeTouringMapApp')
     .controller('RouteDetailsCtrl', function ($scope, leafletData) {
-        $scope.message = 'Hello';
+        
+        $scope.route = {
+            title: null,
+            state: 1
+        };
 
 
         angular.extend($scope, {
             defaults: {
-                // tileLayer: "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
-                tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
+                tileLayer: "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+                // tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
                 scrollWheelZoom: true,
                 maxZoom: 14
             },
