@@ -2,7 +2,6 @@
 
 <div class="container">
 
-
     <form role="form">
 
         <div class="row">
@@ -15,42 +14,52 @@
             <div class="col-md-5">
                 <div class="form-group">
                     <label for="tourCountry">Tour country</label>
-                    <input id="tourCountry" ng-model="tourCountry" placeholder="Country of departure" typeahead="country as country.label for country in getCountry($viewValue)" typeahead-loading="countryLoading" class="form-control">
+                    <input id="tourCountry" readonly="true" ng-model="tourCountry" placeholder="Country of departure" typeahead="country as country.label for country in getCountry($viewValue)" typeahead-loading="countryLoading" class="form-control">
                     <i ng-show="countryLoading" class="glyphicon glyphicon-refresh"></i>
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-md-7">
 
-                <table class="table" ng-show="tourCountry.geonameId && tourTitle">
+                <table class="table">
+                    <!-- ng-show="tourCountry.geonameId && tourTitle"> -->
                     <thead>
                         <tr>
                             <th class="col-md-1">Day</th>
-                            <th class="col-md-5">From</th>
-                            <th class="col-md-5">To</th>
-                            <th class="col-md-1">Difficulty</th>
+                            <th class="col-md-4">From</th>
+                            <th class="col-md-4">To</th>
+                            <th class="col-md-2">Difficulty</th>
+                            <th class="col-md-1"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="step in steps ">
-                            <th>{{ $index + 1 }}</th>
-                            <th>
+                            <td>{{ $index + 1 }}</td>
+                            <td>
                                 <div class="form-group">
-                                    <input ng-model="step.cityFrom" placeholder="City of departure" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityFromLoading" class="form-control">
+                                    <input ng-readonly="step.status == 'read-only'" ng-model="step.cityFrom" placeholder="City of departure" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityFromLoading" typeahead-input-formatter="cityToName($model)" class="form-control">
                                     <i ng-show="place.cityFromLoading" class="glyphicon glyphicon-refresh"></i>
                                 </div>
-                            </th>
-                            <th>
+                            </td>
+                            <td>
                                 <div class="form-group">
-                                    <input ng-show="step.cityFrom.geonameId" ng-model="step.cityTo" placeholder="City of arrival" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityToLoading" class="form-control">
+                                    <input ng-readonly="step.status == 'read-only'" ng-show="step.cityFrom.geonameId" ng-model="step.cityTo" placeholder="City of arrival" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityToLoading" typeahead-input-formatter="cityToName($model)" class="form-control">
                                     <i ng-show="place.cityToLoading" class="glyphicon glyphicon-refresh"></i>
                                 </div>
-                            </th>
-                            <th>
-                                <rating ng-show="step.cityFrom.geonameId && step.cityTo.geonameId" ng-model="step.difficulty" max="4" on-leave="overStar = null"></rating>
-                            </th>
+                            </td>
+                            <td>
+                                <rating readonly="step.status == 'read-only'" ng-show="step.cityFrom.geonameId && step.cityTo.geonameId" ng-model="step.difficulty" max="4" on-leave="overStar = null"></rating>
+                            </td>
+                            <td>
+                                <div ng-show="step.isReadyToSave()">
+                                    <a ng-click="saveStep(step)" class="btn btn-success save-step-button"><i class="fa fa-check"></i></a>
+                                </div>
+                                <div ng-show="step.isEditable()">
+                                    <a ng-click="editStep(step)" class="btn btn-default edit-step-button"><i class="fa fa-pencil-square-o"></i></a>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -58,10 +67,11 @@
             </div>
 
             <div class="col-md-5">
-                <leaflet id="tour-map" defaults="defaults" height="480px" width="100%"></leaflet>
+                <div extended-map config="mapConfig"></div>
             </div>
         </div>
 
+        <a ng-click="addTour" class="btn btn-success save-tour-button"><i class="fa fa-check"></i> Save tour</a>
 
     </form>
 
