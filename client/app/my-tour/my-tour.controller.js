@@ -1,7 +1,28 @@
 'use strict';
 
+angular.module('bikeTouringMapApp').factory('MyTour', function () {
+    return function (data) {
+        //set defaults properties and functions
+        angular.extend(this, {
+            title: null,
+            country: null,
+            isValid: function () {
+                return this.title && this.country && this.country.geonameId;
+            },
+            isReadyToCreate: function () {
+                return !this.isPersisted() && this.isValid();
+            },
+            isPersisted: function () {
+                return typeof (this._id) !== 'undefined';
+            }
+        });
+        angular.extend(this, data);
+    };
+});
+
+
 angular.module('bikeTouringMapApp').factory('MyTourStep', function () {
-    var MyTourStep = function (data) {
+    return function (data) {
         //set defaults properties and functions
         angular.extend(this, {
             status: 'edit',
@@ -20,90 +41,62 @@ angular.module('bikeTouringMapApp').factory('MyTourStep', function () {
         });
         angular.extend(this, data);
     };
-    return MyTourStep;
 });
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourCtrl', function ($scope, $http, leafletData, MyTourStep) {
+    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, leafletData, Tour, MyTour, MyTourStep, geonames) {
 
         $scope.init = function () {
 
-            $scope.tourCountry = {
-                // custom
-                "label": "France (FR)",
-                // geonames
-                "adminCode1": "00",
-                "lng": "2",
-                "geonameId": 3017382,
-                "toponymName": "Republic of France",
-                "countryId": "3017382",
-                "fcl": "A",
-                "population": 64768389,
-                "countryCode": "FR",
-                "name": "France",
-                "fclName": "country, state, region,...",
-                "countryName": "France",
-                "fcodeName": "independent political entity",
-                "adminName1": "",
-                "lat": "46",
-                "fcode": "PCLI"
-            };
+            if ($stateParams.id) {
+                // existing tour
 
-            $scope.steps = [
-            new MyTourStep({
-                    cityFrom: {
-                        // custom
-                        "label": "Toulouse (Midi-Pyrénées)",
-                        // geonames
-                        "adminCode1": "B3",
-                        "lng": "1.44367",
-                        "geonameId": 2972315,
-                        "toponymName": "Toulouse",
-                        "countryId": "3017382",
-                        "fcl": "P",
-                        "population": 433055,
-                        "countryCode": "FR",
-                        "name": "Toulouse",
-                        "fclName": "city, village,...",
-                        "countryName": "France",
-                        "fcodeName": "seat of a first-order administrative division",
-                        "adminName1": "Midi-Pyrénées",
-                        "lat": "43.60426",
-                        "fcode": "PPLA"
-                    },
-                    cityTo: {
-                        // custom
-                        "label": "Narbonne (Languedoc-Roussillon)",
-                        // geonames
-                        "countryId": "3017382",
-                        "adminCode1": "A9",
-                        "countryName": "France",
-                        "fclName": "city, village,...",
-                        "countryCode": "FR",
-                        "lng": "3",
-                        "fcodeName": "seat of a third-order administrative division",
-                        "toponymName": "Narbonne",
-                        "fcl": "P",
-                        "name": "Narbonne",
-                        "fcode": "PPLA3",
-                        "geonameId": 2990919,
-                        "lat": "43.18333",
-                        "adminName1": "Languedoc-Roussillon",
-                        "population": 50776
+                $scope.tourId = $stateParams.id;
+
+                return Tour.get({
+                    id: $stateParams.id
+                }, function (tour) {
+                    $scope.tour = new MyTour(tour);
+
+                    if (typeof ($scope.tour.steps) === 'undefined') {
+                        $scope.tour.steps = [new MyTourStep()];
                     }
-                })
-        ];
+
+                    if ($scope.tour.steps.length === 0) {
+                        $scope.tour.steps.push(new MyTourStep());
+                    }
+                });
+
+
+            } else {
+
+                $scope.tourId = null;
+
+                // new tour
+                // init tour with default country
+                $scope.tour = new MyTour({
+                    // default country: France
+                    country: {
+                        // geonames
+                        "geonameId": 3017382,
+                        "countryCode": "FR",
+                        "name": "France"
+                    },
+                    steps: [new MyTourStep()]
+                });
+            }
 
             $scope.updateMap();
         };
 
         $scope.saveStep = function (step) {
             step.status = 'read-only';
-            if (this.steps.indexOf(step) === (this.steps.length - 1)) {
-                $scope.steps.push(new MyTourStep({
+            if ($scope.tour.steps.indexOf(step) === ($scope.tour.steps.length - 1)) {
+                $scope.tour.steps.push(new MyTourStep({
                     cityFrom: step.cityTo
                 }));
             }
+
             $scope.updateMap();
         };
 
@@ -112,10 +105,9 @@ angular.module('bikeTouringMapApp')
             $scope.updateMap();
         };
 
-
         $scope.updateMap = function () {
 
-            var markers = $scope.steps.reduce(function (output, item) {
+            var markers = $scope.tour.steps.reduce(function (output, item) {
 
                 if (!item.isValid()) {
                     // only display city markers
@@ -137,7 +129,7 @@ angular.module('bikeTouringMapApp')
                 return output;
             }, []);
 
-            var polylines = $scope.steps.reduce(function (output, item) {
+            var polylines = $scope.tour.steps.reduce(function (output, item) {
 
                 if (item.isValid()) {
                     // display route line
@@ -166,14 +158,18 @@ angular.module('bikeTouringMapApp')
 
         };
 
+        $scope.citySelected = function ($item, $model, $label) {
+            $scope.updateMap();
+        }
+
         $scope.mapConfig = {
             class: 'my-tour-map',
             callbacks: {
                 'map:created': function (map) {
 
-                    $scope.$watch('tourCountry', function (newCountry, oldCountry) {
+                    $scope.$watch('tour.country', function (newCountry, oldCountry) {
 
-                        if (newCountry !== null && newCountry.countryCode) {
+                        if (typeof (newCountry) !== 'undefined' && newCountry !== null && newCountry.countryCode) {
 
                             return $http.get('http://api.geonames.org/countryInfoJSON?country=' + newCountry.countryCode + '&username=toub', {
                                 params: {
@@ -198,62 +194,87 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.getCountry = function (val) {
-            return $http.get('http://api.geonames.org/searchJSON?name_startsWith=' + val + '&featureCode=PCLI&maxRows=10&username=toub', {
-                params: {
-                    sensor: false
-                }
-            }).then(function (res) {
-                var countries = [];
-                angular.forEach(res.data.geonames, function (item) {
-                    item.label = item.countryName + ' (' + item.countryCode + ')';
-                    countries.push(item);
-                });
-                return countries;
+
+            // search geonames
+            return geonames.searchCountriesByName(startWith).then(function (countries) {
+
+                // build label
+                return countries.reduce(function (output, item) {
+                    item.label = geonames.countryToNameAndAdminName1(item);
+                    output.push(item);
+                    return output;
+                }, []);
+
             });
         };
 
-        $scope.getCity = function (val) {
-            return $http.get('http://api.geonames.org/searchJSON?name_startsWith=' + val + '&cities=cities1000&country=' + $scope.tourCountry.countryCode + '&maxRows=10&username=toub', {
-                params: {
-                    sensor: false
-                }
-            }).then(function (res) {
-                var cities = [];
-                angular.forEach(res.data.geonames, function (item) {
-                    item.label = $scope.cityToNameAndAdminName1(item);
-                    cities.push(item);
-                });
-                return cities;
+
+
+        $scope.getCity = function (startWith) {
+            // search geonames
+            return geonames.searchCitiesByNameAndCountryCode(startWith, $scope.tour.country.countryCode).then(function (cities) {
+
+                // build label
+                return cities.reduce(function (output, item) {
+                    item.label = geonames.cityToNameAndAdminName1(item);
+                    output.push(item);
+                    return output;
+                }, []);
             });
         };
 
-        $scope.cityToName = function (city) {
-            if (city && city.name) {
-                return city.name;
-            } else {
-                return '';
-            }
-        };
-        $scope.cityToNameAndAdminName1 = function (city) {
-            if (city && city.name) {
-                var s = city.name;
-                if (city.adminName1) {
-                    s += ' (' + city.adminName1 + ')';
-                }
-                return s;
-            } else {
-                return '';
+        $scope.updateTitle = function () {
+            if ($scope.tourId !== null) {
+                // update the title
+                // TODO PUT after a delay (only if title is valid)
             }
         };
 
         $scope.addTour = function () {
-            $http.post('/api/tour', {
-                name: $scope.newThing
-            });
+            if ($scope.tour.isValid()) {
+                $http.post('/api/tours', {
+                    title: $scope.tour.title,
+                    country: {
+                        geonameId: $scope.tour.country.geonameId,
+                        name: $scope.tour.country.name,
+                        countryCode: $scope.tour.country.countryCode
+                    }
+                }).then(function (res) {
+                    $state.go('my-tour', {
+                        id: res.data._id
+                    }, {
+                        inherit: false
+                    });
+                });
+            }
         };
 
-        $scope.init();
+        $scope.addStep = function () {
+            if ($scope.tour.isValid()) {
+                $http.post('/api/tours', {
+                    title: $scope.tour.title,
+                    country: {
+                        geonameId: $scope.tour.country.geonameId,
+                        name: $scope.tour.country.name,
+                        countryCode: $scope.tour.country.countryCode
+                    }
+                }).then(function (res) {
+                    $state.go('my-tour', {
+                        id: res.data._id
+                    }, {
+                        inherit: false
+                    });
+                });
+            }
+        };
 
+        $scope.cityToName = function (city) {
+            return geonames.cityToName(city);
+        };
 
+        $scope.countryToName = function (country) {
+            return geonames.countryToName(country);
+        };
 
+        return $scope.init();
     });

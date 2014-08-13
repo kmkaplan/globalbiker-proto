@@ -7,12 +7,8 @@ angular.module('bikeTouringMapApp')
                 'link': '/'
     },
             {
-                'title': 'Create a new tour',
-                'link': '/my-tour'
-    },
-            {
-                'title': 'Create a new route',
-                'link': '/route-details'
+                'title': 'My tours',
+                'link': '/my-tours'
     }];
 
         $scope.isCollapsed = true;
