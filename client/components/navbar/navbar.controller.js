@@ -7,6 +7,7 @@ angular.module('bikeTouringMapApp')
                 'link': '/'
     },
             {
+<<<<<<< HEAD
                 'title': 'Landing page',
                 'link': '/home'
     },
@@ -17,6 +18,10 @@ angular.module('bikeTouringMapApp')
             {
                 'title': 'Create a new route',
                 'link': '/route-details'
+=======
+                'title': 'My tours',
+                'link': '/my-tours'
+>>>>>>> origin/master
     }];
 
         $scope.isCollapsed = true;

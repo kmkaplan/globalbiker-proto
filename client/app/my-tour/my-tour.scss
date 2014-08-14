@@ -1,9 +1,25 @@
-.glyphicon-star{
-    color: #e61838;
-}
-.glyphicon-star-empty{
-    color: #2a8010;
-}
-.dropdown-menu{
-    z-index: 5000;
+.my-tour-page{
+
+    .glyphicon-star{
+        color: #e61838;
+    }
+    .glyphicon-star-empty{
+        color: #2a8010;
+    }
+    .dropdown-menu{
+        z-index: 5000;
+    }
+    .my-tour-map{
+        height: 500px;
+    }
+
+    /*.validate-step-button{
+        background-color:
+    }*/
+
+    .create-tour-button{
+        margin-top: 26px;
+        text-align: bottom;
+    }
+
 }
