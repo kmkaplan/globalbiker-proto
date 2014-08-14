@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, leafletData, Tour, Step, MyTour, MyTourStep, MyTourStepCity, geonames, myTourMap) {
+    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, leafletData, TourRepository, StepRepository, MyTourViewModelTour, MyTourViewModelStep, MyTourViewModelCity, geonames, MyTourMapService) {
 
         $scope.init = function () {
 
@@ -15,31 +15,31 @@ angular.module('bikeTouringMapApp')
 
                 // TODO manage errors
 
-                Tour.get({
+                TourRepository.get({
                     id: $scope.tourId
                 }, function (tour) {
 
-                    var tour = new MyTour(tour);
+                    var tour = new MyTourViewModelTour(tour);
 
                     // TODO manage errors
 
-                    Step.getByTour({
+                    StepRepository.getByTour({
                         tourId: $scope.tourId
                     }, function (steps) {
 
                         var lastCityTo = null;
 
                         // convert steps to viewmodel
-                        var myTourSteps = steps.reduce(function (output, step) {
-                            output.push(new MyTourStep(step));
+                        var steps = steps.reduce(function (output, step) {
+                            output.push(new MyTourViewModelStep(step));
                             lastCityTo = step.cityTo;
                             return output;
                         }, []);
 
-                        tour.steps = myTourSteps;
+                        tour.steps = steps;
 
                         // add a new tour
-                        tour.steps.push(new MyTourStep({
+                        tour.steps.push(new MyTourViewModelStep({
                             cityFrom: lastCityTo
                         }));
 
@@ -62,7 +62,7 @@ angular.module('bikeTouringMapApp')
 
                 // new tour
                 // init tour with default country
-                $scope.tour = new MyTour({
+                $scope.tour = new MyTourViewModelTour({
                     // default country: France
                     country: {
                         // geonames
@@ -70,7 +70,7 @@ angular.module('bikeTouringMapApp')
                         "countryCode": "FR",
                         "name": "France"
                     },
-                    steps: [new MyTourStep()]
+                    steps: [new MyTourViewModelStep()]
                 });
             }
 
@@ -81,7 +81,7 @@ angular.module('bikeTouringMapApp')
             $scope.createOrUpdateStep(step);
 
             if ($scope.tour.steps.indexOf(step) === ($scope.tour.steps.length - 1)) {
-                $scope.tour.steps.push(new MyTourStep({
+                $scope.tour.steps.push(new MyTourViewModelStep({
                     cityFrom: step.cityTo
                 }));
             }
@@ -95,8 +95,7 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.updateMap = function () {
-
-            myTourMap.updateMap($scope.mapConfig, $scope.tour);
+            MyTourMapService.updateMap($scope.mapConfig, $scope.tour);
         };
 
         $scope.citySelected = function ($item, $model, $label) {
@@ -155,7 +154,7 @@ angular.module('bikeTouringMapApp')
 
                 // build label
                 return cities.reduce(function (output, item) {
-                    var city = new MyTourStepCity({
+                    var city = new MyTourViewModelCity({
                         geonameId: item.geonameId,
                         name: item.name,
                         adminName1: item.adminName1,
@@ -180,7 +179,7 @@ angular.module('bikeTouringMapApp')
             if ($scope.tour.isValid()) {
 
                 // create tour resource
-                var newTour = new Tour({
+                var newTour = new TourRepository({
                     title: $scope.tour.title,
                     country: {
                         geonameId: $scope.tour.country.geonameId,
@@ -201,13 +200,22 @@ angular.module('bikeTouringMapApp')
             }
         };
 
+        $scope.editStepDetails = function (step) {
+            // redirect to edit step page
+            $state.go('my-tour-step', {
+                id: step._id
+            }, {
+                inherit: false
+            });
+        };
+
         $scope.createOrUpdateStep = function (step) {
             if (step.isValid()) {
 
                 // TODO display 'save in progress' indicator
 
                 // create step resource
-                var stepResource = new Step({
+                var stepResource = new StepRepository({
                     _id: step._id,
                     tour: $scope.tour._id,
                     difficulty: step.difficulty,
@@ -257,7 +265,7 @@ angular.module('bikeTouringMapApp')
 
             if (confirm('Are you sure do you want to delete this step ?')) {
 
-                Step.remove({
+                StepRepository.remove({
                     id: step._id
                 });
                 angular.forEach($scope.tour.steps, function (t, i) {

@@ -1,0 +1,16 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div extended-map config="mapConfig"></div>
+        </div>
+
+        <div class="col-md-6">
+
+            <form role="form">
+                <h2>From {{ step.cityFrom.name }} to {{ step.cityTo.name }}</h2>
+            </form>
+
+        </div>
+    </div>
+</div>

@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyToursCtrl', function ($scope, $state, Tour) {
+    .controller('MyToursCtrl', function ($scope, $state, TourRepository) {
         // Use the Tour $resource to fetch all tours
-        $scope.tours = Tour.query();
+        $scope.tours = TourRepository.query();
 
         $scope.createTour = function () {
             $state.go('my-tour', {
@@ -25,7 +25,7 @@ angular.module('bikeTouringMapApp')
 
             if (confirm('Are you sure do you want to delete the tour "' + tour.title + '" ?')) {
 
-                Tour.remove({
+                TourRepository.remove({
                     id: tour._id
                 });
                 angular.forEach($scope.tours, function (t, i) {
