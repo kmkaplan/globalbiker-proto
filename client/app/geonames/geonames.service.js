@@ -10,29 +10,29 @@ angular.module('bikeTouringMapApp')
 
             searchCountriesByName: function (startsWith) {
 
+                var deffered = $q.defer();
 
-
-                return $q(function (resolve, reject) {
-
-                    // build URL
+                 // build URL
                     var url = 'http://api.geonames.org/searchJSON?featureCode=PCLI&maxRows=10';
                     url += '&name_startsWith=' + startsWith;
                     url += '&username=' + this._username;
 
-                    // request geonames
-                    return $http.get(url, {
-                        params: {
-                            sensor: false
-                        }
-                    }).then(function (res) {
-                        // success: return geonames results
-                        resolve(res.data.geonames);
+                // request geonames
+                $http.get(url, {
+                    params: {
+                        sensor: false
+                    }
+                }).then(function (res) {
+                    // success: return geonames results
+                    deffered.resolve(res.data.geonames);
 
-                    }, function (reason) {
-                        // failure
-                        reject(reason);
-                    });
+                }, function (reason) {
+                    // failure
+                    deffered.reject(reason);
                 });
+
+                return deffered.promise;
+
             },
 
             searchCitiesByNameAndCountryCode: function (startsWith, countryCode) {

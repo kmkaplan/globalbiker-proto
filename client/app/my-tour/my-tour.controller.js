@@ -1,72 +1,58 @@
 'use strict';
 
-angular.module('bikeTouringMapApp').factory('MyTour', function () {
-    return function (data) {
-        //set defaults properties and functions
-        angular.extend(this, {
-            title: null,
-            country: null,
-            isValid: function () {
-                return this.title && this.country && this.country.geonameId;
-            },
-            isReadyToCreate: function () {
-                return !this.isPersisted() && this.isValid();
-            },
-            isPersisted: function () {
-                return typeof (this._id) !== 'undefined';
-            }
-        });
-        angular.extend(this, data);
-    };
-});
-
-
-angular.module('bikeTouringMapApp').factory('MyTourStep', function () {
-    return function (data) {
-        //set defaults properties and functions
-        angular.extend(this, {
-            status: 'edit',
-            isValid: function () {
-                return this.cityFrom && this.cityFrom.geonameId && this.cityTo && this.cityTo.geonameId && this.difficulty;
-            },
-            isReadyToSave: function () {
-                return this.status === 'edit' && this.isValid();
-            },
-            isEditable: function () {
-                return this.status === 'read-only';
-            },
-            cityFrom: null,
-            cityTo: null
-
-        });
-        angular.extend(this, data);
-    };
-});
-
 angular.module('bikeTouringMapApp')
-    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, leafletData, Tour, MyTour, MyTourStep, geonames) {
+    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, leafletData, Tour, Step, MyTour, MyTourStep, MyTourStepCity, geonames, myTourMap) {
 
         $scope.init = function () {
 
             if ($stateParams.id) {
+
+                var deffered = $q.defer();
+
                 // existing tour
 
                 $scope.tourId = $stateParams.id;
 
-                return Tour.get({
-                    id: $stateParams.id
+                // TODO manage errors
+
+                Tour.get({
+                    id: $scope.tourId
                 }, function (tour) {
-                    $scope.tour = new MyTour(tour);
 
-                    if (typeof ($scope.tour.steps) === 'undefined') {
-                        $scope.tour.steps = [new MyTourStep()];
-                    }
+                    var tour = new MyTour(tour);
 
-                    if ($scope.tour.steps.length === 0) {
-                        $scope.tour.steps.push(new MyTourStep());
-                    }
+                    // TODO manage errors
+
+                    Step.getByTour({
+                        tourId: $scope.tourId
+                    }, function (steps) {
+
+                        var lastCityTo = null;
+                        
+                        // convert steps to viewmodel
+                        var myTourSteps = steps.reduce(function (output, step) {
+                            output.push(new MyTourStep(step));
+                            lastCityTo = step.cityTo;
+                            return output;
+                        }, []);
+
+                        tour.steps = myTourSteps;
+
+                        // add a new tour
+                        tour.steps.push(new MyTourStep({
+                            cityFrom: lastCityTo
+                        }));
+
+                        $scope.tour = tour;
+
+                        deffered.resolve(tour);
+                    });
+
                 });
 
+
+
+                return deffered.promise;
 
             } else {
 
@@ -90,7 +76,9 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.saveStep = function (step) {
-            step.status = 'read-only';
+
+            $scope.createOrUpdateStep(step);
+
             if ($scope.tour.steps.indexOf(step) === ($scope.tour.steps.length - 1)) {
                 $scope.tour.steps.push(new MyTourStep({
                     cityFrom: step.cityTo
@@ -107,55 +95,7 @@ angular.module('bikeTouringMapApp')
 
         $scope.updateMap = function () {
 
-            var markers = $scope.tour.steps.reduce(function (output, item) {
-
-                if (!item.isValid()) {
-                    // only display city markers
-                    if (item.cityFrom && item.cityFrom.geonameId) {
-                        output.push({
-                            type: 'marker',
-                            latitude: item.cityFrom.lat,
-                            longitude: item.cityFrom.lng
-                        });
-                    }
-                    if (item.cityTo && item.cityTo.geonameId) {
-                        output.push({
-                            type: 'marker',
-                            latitude: item.cityTo.lat,
-                            longitude: item.cityTo.lng
-                        });
-                    }
-                }
-                return output;
-            }, []);
-
-            var polylines = $scope.tour.steps.reduce(function (output, item) {
-
-                if (item.isValid()) {
-                    // display route line
-                    output.push({
-                        type: 'polyline',
-                        points: [{
-                            latitude: item.cityFrom.lat,
-                            longitude: item.cityFrom.lng
-                        }, {
-                            latitude: item.cityTo.lat,
-                            longitude: item.cityTo.lng
-                        }]
-                    });
-                }
-                return output;
-            }, []);
-
-            $scope.mapConfig.drawnItems = {
-                routesCities: {
-                    items: markers
-                },
-                routesPaths: {
-                    items: polylines
-                }
-            };
-
+            myTourMap.updateMap($scope.mapConfig, $scope.tour);
         };
 
         $scope.citySelected = function ($item, $model, $label) {
@@ -208,16 +148,21 @@ angular.module('bikeTouringMapApp')
             });
         };
 
-
-
         $scope.getCity = function (startWith) {
             // search geonames
             return geonames.searchCitiesByNameAndCountryCode(startWith, $scope.tour.country.countryCode).then(function (cities) {
 
                 // build label
                 return cities.reduce(function (output, item) {
-                    item.label = geonames.cityToNameAndAdminName1(item);
-                    output.push(item);
+                    var city = new MyTourStepCity({
+                        geonameId: item.geonameId,
+                        name: item.name,
+                        adminName1: item.adminName1,
+                        latitude: item.lat,
+                        longitude: item.lng
+                    });
+
+                    output.push(city);
                     return output;
                 }, []);
             });
@@ -232,16 +177,22 @@ angular.module('bikeTouringMapApp')
 
         $scope.addTour = function () {
             if ($scope.tour.isValid()) {
-                $http.post('/api/tours', {
+
+                // create tour resource
+                var newTour = new Tour({
                     title: $scope.tour.title,
                     country: {
                         geonameId: $scope.tour.country.geonameId,
                         name: $scope.tour.country.name,
                         countryCode: $scope.tour.country.countryCode
                     }
-                }).then(function (res) {
+                });
+
+                // save resource
+                newTour.$save(function (data, putResponseHeaders) {
+                    // success: redirect to edit page
                     $state.go('my-tour', {
-                        id: res.data._id
+                        id: data._id
                     }, {
                         inherit: false
                     });
@@ -249,25 +200,50 @@ angular.module('bikeTouringMapApp')
             }
         };
 
-        $scope.addStep = function () {
-            if ($scope.tour.isValid()) {
-                $http.post('/api/tours', {
-                    title: $scope.tour.title,
-                    country: {
-                        geonameId: $scope.tour.country.geonameId,
-                        name: $scope.tour.country.name,
-                        countryCode: $scope.tour.country.countryCode
+        $scope.createOrUpdateStep = function (step) {
+            if (step.isValid()) {
+
+                // TODO display 'save in progress' indicator
+
+                // create step resource
+                var stepResource = new Step({
+                    _id: step._id,
+                    tour: $scope.tour._id,
+                    difficulty: step.difficulty,
+                    cityFrom: {
+                        geonameId: step.cityFrom.geonameId,
+                        name: step.cityFrom.name,
+                        adminName1: step.cityFrom.adminName1,
+                        latitude: step.cityFrom.latitude,
+                        longitude: step.cityFrom.longitude
+                    },
+                    cityTo: {
+                        geonameId: step.cityTo.geonameId,
+                        name: step.cityTo.name,
+                        adminName1: step.cityTo.adminName1,
+                        latitude: step.cityTo.latitude,
+                        longitude: step.cityTo.longitude
                     }
-                }).then(function (res) {
-                    $state.go('my-tour', {
-                        id: res.data._id
-                    }, {
-                        inherit: false
-                    });
                 });
+
+                if (!step.isPersisted()) {
+                    // create resource
+                    stepResource.$save(function (data, putResponseHeaders) {
+                        // success
+                        // TODO display indicator of success
+                        step._id = data._id;
+                        step.status = 'read-only';
+                    });
+                } else {
+                    // update resource
+                    stepResource.$update(function (data, putResponseHeaders) {
+                        // success
+                        // TODO display indicator of success
+                        step.status = 'read-only';
+                    });
+                }
             }
         };
-
         $scope.cityToName = function (city) {
             return geonames.cityToName(city);
         };

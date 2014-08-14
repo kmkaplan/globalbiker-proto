@@ -3,8 +3,6 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-var Step = require('../step/step.model');
-
 var TourSchema = new Schema({
     title: {
         type: String,
@@ -24,9 +22,6 @@ var TourSchema = new Schema({
             type: String,
             required: 'Please fill country code'
         }
-    },
-    steps: {
-        type: [Step]
     }
 });
 

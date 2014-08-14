@@ -9,6 +9,10 @@ var StepSchema = new Schema({
         ref: 'TourSchema',
         required: 'Please fill tour'
     },
+    difficulty: {
+        type: Number,
+        required: 'Please fill difficulty'
+    },
     cityFrom: {
         geonameId: {
             type: Number,
@@ -17,6 +21,10 @@ var StepSchema = new Schema({
         name: {
             type: String,
             required: 'Please fill cityFrom name'
+        },
+        adminName1: {
+            type: String,
+            required: 'Please fill cityFrom adminName1'
         },
         latitude: {
             type: Number,
@@ -35,6 +43,10 @@ var StepSchema = new Schema({
         name: {
             type: String,
             required: 'Please fill cityTo name'
+        },
+        adminName1: {
+            type: String,
+            required: 'Please fill cityFrom adminName1'
         },
         latitude: {
             type: Number,
