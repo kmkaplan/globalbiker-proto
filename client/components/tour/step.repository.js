@@ -12,7 +12,8 @@ angular.module('bikeTouringMapApp')
                     }
                 },
                 update: {
-                    method: 'PUT'
+                    method: 'PUT',
+                     url: '/api/steps/:id'
                 },
                 getByTour: {
                     method: 'GET',

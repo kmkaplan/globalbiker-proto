@@ -1,10 +1,29 @@
 'use strict';
 
+
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
+/*var PointSchema = new Schema({
+    latitude: {
+        type: Number,
+        required: 'Please fill latitude'
+    },
+    longitude: {
+        type: Number,
+        required: 'Please fill longitude'
+    },
+    elevation: {
+        type: Number
+    }
+});*/
+
 var StepSchema = new Schema({
-    tour: {
+    creationTime: {
+        type: Date,
+        default: Date.now
+    },
+    tourId: {
         type: Schema.ObjectId,
         ref: 'TourSchema',
         required: 'Please fill tour'
@@ -56,7 +75,20 @@ var StepSchema = new Schema({
             type: Number,
             required: 'Please fill cityTo longitude'
         }
-    }
+    },
+    points: [{
+        latitude: {
+            type: Number,
+            required: 'Please fill latitude'
+        },
+        longitude: {
+            type: Number,
+            required: 'Please fill longitude'
+        },
+        elevation: {
+            type: Number
+        }
+}]
 });
 
 module.exports = mongoose.model('Step', StepSchema);

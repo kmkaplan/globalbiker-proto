@@ -2,6 +2,7 @@
   "name": "bike-touring-map",
   "version": "0.0.0",
   "dependencies": {
+    "ng-file-upload-shim": "~1.6.5",
     "angular": ">=1.2.*",
     "json3": "~3.3.1",
     "es5-shim": "~3.0.1",
@@ -17,7 +18,9 @@
     "angular-socket-io": "~0.6.0",
     "angular-ui-router": "~0.2.10",
     "angular-leaflet-directive": "~0.7.7",
-    "leaflet.draw": "~0.2.3"
+    "leaflet.draw": "~0.2.3",
+    "ng-file-upload": "~1.6.5",
+    "togeojson": "git://github.com/mapbox/togeojson.git#0.8.1"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

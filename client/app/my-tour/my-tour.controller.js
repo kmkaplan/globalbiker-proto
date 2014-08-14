@@ -217,7 +217,7 @@ angular.module('bikeTouringMapApp')
                 // create step resource
                 var stepResource = new StepRepository({
                     _id: step._id,
-                    tour: $scope.tour._id,
+                    tourId: $scope.tour._id,
                     difficulty: step.difficulty,
                     cityFrom: {
                         geonameId: step.cityFrom.geonameId,

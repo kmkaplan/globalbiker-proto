@@ -4,6 +4,10 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var TourSchema = new Schema({
+    creationTime: {
+        type: Date,
+        default: Date.now
+    },
     title: {
         type: String,
         required: 'Please fill tour title',

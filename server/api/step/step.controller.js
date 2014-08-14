@@ -3,6 +3,8 @@
 var _ = require('lodash');
 var Step = require('./step.model');
 
+var sys = require('sys');
+
 // Get list of steps
 exports.index = function (req, res) {
     Step.find(function (err, steps) {
@@ -21,7 +23,7 @@ exports.getByTour = function (req, res) {
     var tourId = req.params.tourId;
 
     Step.find({
-        'tour': tourId
+        'tourId': tourId
     }, function (err, steps) {
         if (err) {
             return handleError(res, err);
@@ -67,6 +69,12 @@ exports.update = function (req, res) {
             return res.send(404);
         }
         var updated = _.merge(step, req.body);
+
+        if (req.body.points) {
+            // FIXME this is a FIX because _.merge create all items with value of first one!!!
+            step.points = req.body.points;
+        }
+
         updated.save(function (err) {
             if (err) {
                 return handleError(res, err);
