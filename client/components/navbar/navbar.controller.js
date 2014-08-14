@@ -7,22 +7,13 @@ angular.module('bikeTouringMapApp')
                 'link': '/'
     },
             {
-<<<<<<< HEAD
+
                 'title': 'Landing page',
                 'link': '/home'
-    },
-            {
-                'title': 'Create a new tour',
-                'link': '/my-tour'
-    },
-            {
-                'title': 'Create a new route',
-                'link': '/route-details'
-=======
+    }, {
                 'title': 'My tours',
                 'link': '/my-tours'
->>>>>>> origin/master
-    }];
+            }];
 
         $scope.isCollapsed = true;
         $scope.isLoggedIn = Auth.isLoggedIn;

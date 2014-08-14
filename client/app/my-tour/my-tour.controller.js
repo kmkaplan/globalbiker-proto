@@ -45,6 +45,8 @@ angular.module('bikeTouringMapApp')
 
                         $scope.tour = tour;
 
+                        $scope.updateMap();
+
                         deffered.resolve(tour);
                     });
 
@@ -72,7 +74,6 @@ angular.module('bikeTouringMapApp')
                 });
             }
 
-            $scope.updateMap();
         };
 
         $scope.saveStep = function (step) {
@@ -250,6 +251,21 @@ angular.module('bikeTouringMapApp')
 
         $scope.countryToName = function (country) {
             return geonames.countryToName(country);
+        };
+
+        $scope.deleteStep = function (step) {
+
+            if (confirm('Are you sure do you want to delete this step ?')) {
+
+                Step.remove({
+                    id: step._id
+                });
+                angular.forEach($scope.tour.steps, function (t, i) {
+                    if (t === step) {
+                        $scope.tour.steps.splice(i, 1);
+                    }
+                });
+            }
         };
 
         return $scope.init();

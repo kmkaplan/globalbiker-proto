@@ -7,7 +7,7 @@
     <table class="table table-hover">
         <tr ng-repeat="tour in tours">
             <td class="col-md-1">
-                <a ng-click="deleteTour(tour)" class="btn btn-danger edit-step-button"><i class="fa fa-trash-o"></i></a>
+                <a ng-click="deleteTour(tour)" class="btn btn-danger delete-tour-button"><i class="fa fa-trash-o"></i></a>
             </td>
             <td class="tour-title" ng-click="viewTour(tour)">{{ tour.title }}</td>
         </tr>
