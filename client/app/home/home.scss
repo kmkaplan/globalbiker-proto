@@ -1,0 +1,178 @@
+.container {
+    max-width: 1000px;
+}
+.footer {
+    text-align: center;
+    padding: 30px 0;
+    margin-top: 50px;
+    border-top: 1px solid #E5E5E5;
+}
+/* general styles */
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    padding-top: 45px;
+}
+/* vertical-centered text */
+
+/* additional sections */
+
+.panel-default > .panel-heading {
+    background-color: $baseColor1;
+
+    h2 {
+        color: white;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        font-size: 20px;
+    }
+}
+.panel-default {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+}
+.panel-heading {
+    border-radius: 5px 5px 0 0;
+}
+.panel-body {
+
+}
+
+.btn-welcome {
+    background-image: linear-gradient(to bottom, white 0px, rgb(200, 200, 200) 100%);
+    background-repeat: repeat-x;
+    width : 150px;
+    margin : 15px;
+}
+.btn-welcome:active{
+    background-image: linear-gradient(to bottom, white 0px, rgb(200, 200, 200) 100%);
+    background-repeat: repeat-x;
+    width : 150px;
+}
+
+
+form p {
+    font-size: 0.8em;
+}
+.section {
+    &.welcome-page {
+        background:url(/assets/images/mer.jpg) no-repeat center center fixed;
+        display:table;
+        height:100%;
+        position:relative;
+        width:100%;
+        -webkit-background-size:cover;
+        -moz-background-size:cover;
+        -o-background-size:cover;
+        background-size:cover;
+        .carte {
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.62);
+            background-color: white;
+            border: 5px solid white;
+        }
+    }
+    &.prepare-page {
+        background:url(/assets/images/rencontre.jpg) no-repeat center center fixed;
+        display:table;
+        height:100%;
+        position:relative;
+        width:100%;
+        -webkit-background-size:cover;
+        -moz-background-size:cover;
+        -o-background-size:cover;
+        background-size:cover;
+    }
+    .container {
+        margin: 10px auto 10px auto;
+    }
+    .welcome {
+        min-height : 550px;
+        padding : 50px 0px;
+        text-align : center;
+        font-weight : bold;
+        width : 1000px;
+        .panel {
+            background-color: transparent;
+            color : white;
+        }
+    }
+    &.intro {
+        background:  none repeat scroll 0 0 $baseColor1;
+        top: 0;
+        display: table;
+        position: fixed;
+        border-bottom: 1px;
+        border-color: #fff0d1;
+        width: 100%;
+        height: 50px;
+        margin-bottom: 0px;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        .logo {
+            margin-right: 5px;
+            margin-top: 5px;
+            margin-bottom: 8px;
+            img {
+                height: 40px;
+                margin-right: 0px;
+                margin-top: -8px;
+            }
+            .global {
+                color: white;
+            }
+            .biker {
+                color: white;
+            }
+            .slogan {
+                color: white;
+                font-size: 12px;
+                font-weight: 200;
+                line-height: 1.4;
+                margin-top: 5px;
+                margin-bottom: 0px;
+            }
+        }
+        .contacts {
+            margin-top : 20px;
+            padding : 0 0 0 0;
+            text-align: right;
+        }
+        .logo-container {
+            padding : 0 0 0 0;
+        }
+    }
+    &.cover1 {
+        padding: 20px 0;
+        font-size: 21px;
+    }
+    label {
+        color: black;
+        font-weight: normal;
+    }
+    .btn-success {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .glyphicon-star {
+        color: #fce42b;
+    }
+
+    .btn-success {
+        background-color: $baseColor2;
+        border-color: lighten($baseColor2, 10%);
+    }
+
+    .btn-success:hover {
+        background-color: lighten($baseColor2, 10%);
+        border-color: darken($baseColor2, 10%);
+    }
+    .licence{
+        font-size: 0.6em;
+        vertical-align: top;
+
+    }
+}

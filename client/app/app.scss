@@ -15,10 +15,21 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
     padding: 0.2em 0;
 }
 
+// orange/brown
+$baseColor1: #ff731c;
+
+// green
+$baseColor2: #5e8c15;
+
+/**
+ * App-wide Styles
+ */
+
 // Component styles are injected through grunt
 // injector
 @import 'account/login/login.scss';
 @import 'admin/admin.scss';
+@import 'home/home.scss';
 @import 'main/main.scss';
 @import 'my-tour/my-tour.scss';
 @import 'route-details/route-details.scss';

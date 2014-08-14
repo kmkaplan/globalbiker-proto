@@ -7,6 +7,10 @@ angular.module('bikeTouringMapApp')
                 'link': '/'
     },
             {
+                'title': 'Landing page',
+                'link': '/home'
+    },
+            {
                 'title': 'Create a new tour',
                 'link': '/my-tour'
     },
