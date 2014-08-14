@@ -31,25 +31,29 @@
                 <table class="table" ng-show="tour.isPersisted()">
                     <thead>
                         <tr>
+                            <th class="col-md-1"></th>
                             <th class="col-md-1">Day</th>
                             <th class="col-md-4">From</th>
                             <th class="col-md-4">To</th>
-                            <th class="col-md-2">Difficulty</th>
+                            <th class="col-md-1">Difficulty</th>
                             <th class="col-md-1"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="step in tour.steps ">
+                            <td class="col-md-1">
+                                <a ng-show="step.isPersisted()" ng-click="deleteStep(step)" class="btn btn-danger delete-step-button"><i class="fa fa-trash-o"></i></a>
+                            </td>
                             <td>{{ $index + 1 }}</td>
                             <td>
                                 <div class="form-group">
-                                    <input typeahead-min-length="2" ng-readonly="step.status == 'read-only'" ng-model="step.cityFrom" placeholder="City of departure" typeahead="city as city.label for city in getCity($viewValue)" typeahead-on-select="onCityFromSelected(step, $item, $model, $label)" typeahead-loading="place.cityFromLoading" typeahead-input-formatter="cityToName($model)" class="form-control">
+                                    <input typeahead-min-length="2" ng-readonly="step.status == 'read-only'" ng-model="step.cityFrom" placeholder="City of departure" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityFromLoading" typeahead-input-formatter="cityToName($model)" typeahead-on-select="updateMap()" class="form-control">
                                     <i ng-show="place.cityFromLoading" class="glyphicon glyphicon-refresh"></i>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
-                                    <input typeahead-min-length="2" ng-readonly="step.status == 'read-only'" ng-show="step.isValidCityFrom()" ng-model="step.cityTo" placeholder="City of arrival" typeahead="city as city.label for city in getCity($viewValue)" typeahead-on-select="onCityToSelected(step, $item, $model, $label)" typeahead-loading="place.cityToLoading" typeahead-input-formatter="cityToName($model)" class="form-control">
+                                    <input typeahead-min-length="2" ng-readonly="step.status == 'read-only'" ng-show="step.isValidCityFrom()" ng-model="step.cityTo" placeholder="City of arrival" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityToLoading" typeahead-input-formatter="cityToName($model)" typeahead-on-select="updateMap()" class="form-control">
                                     <i ng-show="place.cityToLoading" class="glyphicon glyphicon-refresh"></i>
                                 </div>
                             </td>

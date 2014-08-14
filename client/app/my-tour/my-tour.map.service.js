@@ -28,9 +28,22 @@ angular.module('bikeTouringMapApp')
                     return output;
                 }, []);
 
+                var isDeparture = true;
+                
                 var polylines = tour.steps.reduce(function (output, item) {
 
                     if (item.isValid()) {
+                        
+                        if (isDeparture){
+                            // add a marker for departure
+                            markers.push({
+                                type: 'marker',
+                                latitude: item.cityFrom.latitude,
+                                longitude: item.cityFrom.longitude
+                            });
+                            isDeparture = false;
+                        }
+                        
                         // display route line
                         output.push({
                             type: 'polyline',

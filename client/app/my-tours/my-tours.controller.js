@@ -23,15 +23,17 @@ angular.module('bikeTouringMapApp')
 
         $scope.deleteTour = function (tour) {
 
-            Tour.remove({
-                id: tour._id
-            });
-            angular.forEach($scope.tours, function (t, i) {
-                if (t === tour) {
-                    $scope.tours.splice(i, 1);
-                }
-            });
+            if (confirm('Are you sure do you want to delete the tour "' + tour.title + '" ?')) {
 
+                Tour.remove({
+                    id: tour._id
+                });
+                angular.forEach($scope.tours, function (t, i) {
+                    if (t === tour) {
+                        $scope.tours.splice(i, 1);
+                    }
+                });
+            }
         };
 
 
