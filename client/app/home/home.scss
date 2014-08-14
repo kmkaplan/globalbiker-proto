@@ -58,7 +58,7 @@ form p {
         background:url(/assets/images/mer.jpg) no-repeat center center fixed;
         display:table;
         height:100%;
-        position:relative;
+        position:top;
         width:100%;
         -webkit-background-size:cover;
         -moz-background-size:cover;
@@ -69,35 +69,75 @@ form p {
             background-color: white;
             border: 5px solid white;
         }
+        .welcome {
+            min-height : 550px;
+            padding : 180px 0px;
+            text-align : center;
+            font-weight : bold;
+            width : 1000px;
+            .panel {
+                background-color: transparent;
+                color : white;
+            }
+        }
     }
     &.prepare-page {
-        background:url(/assets/images/rencontre.jpg) no-repeat center center fixed;
-        display:table;
-        height:100%;
-        position:relative;
-        width:100%;
-        -webkit-background-size:cover;
-        -moz-background-size:cover;
-        -o-background-size:cover;
-        background-size:cover;
+        background-image: url('/assets/images/bannerprepare.png');
+        background-repeat: repeat-y;
+    }
+    &.partager-page {
+        background-image: url('/assets/images/bannerpartager.png');
+        background-repeat: repeat-y;
+    }
+    &.decouvrir-page {
+        display: table;
+        height: 800px;
+        position: relative;
+        width: 100%;
+        .panel-body {
+            padding: 0 0 15px 0;
+            background-color: white;
+        }
+        .decouvrir {
+            min-height : 550px;
+            padding : 0px;
+            font-weight : bold;
+            width : 900px;
+            margin-top: 200px;
+            back
+            h3 {
+                color : $baseColor2;
+            }
+            .panel {
+                box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.62);
+            }
+            .row {
+                width: auto;
+                margin : auto;
+                padding: 20px
+            }
+            .title {
+                background-color: white;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                border-bottom: 1px;
+                padding: 10px 15px;
+                h2 {
+                    padding : 5px;
+                    margin: 5px;
+                    color : $baseColor1;
+                }
+            }
+        }
     }
     .container {
         margin: 10px auto 10px auto;
     }
-    .welcome {
-        min-height : 550px;
-        padding : 50px 0px;
-        text-align : center;
-        font-weight : bold;
-        width : 1000px;
-        .panel {
-            background-color: transparent;
-            color : white;
-        }
-    }
+
     &.intro {
         background:  none repeat scroll 0 0 $baseColor1;
         top: 0;
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.62);
         display: table;
         position: fixed;
         border-bottom: 1px;
@@ -126,7 +166,7 @@ form p {
             }
             .slogan {
                 color: white;
-                font-size: 12px;
+                font-size: 16px;
                 font-weight: 200;
                 line-height: 1.4;
                 margin-top: 5px;
