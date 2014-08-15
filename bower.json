@@ -21,7 +21,8 @@
     "leaflet.draw": "~0.2.3",
     "ng-file-upload": "~1.6.5",
     "togeojson": "git://github.com/mapbox/togeojson.git#0.8.1",
-    "Leaflet.GeometryUtil": "https://github.com/makinacorpus/Leaflet.GeometryUtil.git#~0.3.2"
+    "Leaflet.GeometryUtil": "https://github.com/makinacorpus/Leaflet.GeometryUtil.git#~0.3.2",
+    "Leaflet.awesome-markers": "~2.0.2"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
