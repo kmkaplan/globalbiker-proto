@@ -14,6 +14,7 @@
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/leaflet-dist/leaflet.css" />
+      <link rel="stylesheet" href="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css" />
       <!-- endbower -->
       <link rel="stylesheet" href="bower_components/leaflet.draw/dist/leaflet.draw.css" />
     <!-- endbuild -->
@@ -64,8 +65,10 @@
       <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
       <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
       <script src="bower_components/togeojson/togeojson.js"></script>
+      <script src="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
       <!-- endbower -->
       <script src="bower_components/leaflet.draw/dist/leaflet.draw.js"></script>
+      <script src="bower_components/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
     <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
@@ -98,8 +101,6 @@
           <script src="app/my-tour/my-tour.viewmodel.tour.js"></script>
           <script src="app/my-tours/my-tours.controller.js"></script>
           <script src="app/my-tours/my-tours.js"></script>
-          <script src="app/route-details/route-details.controller.js"></script>
-          <script src="app/route-details/route-details.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>
           <script src="components/mongoose-error/mongoose-error.directive.js"></script>

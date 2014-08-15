@@ -14,14 +14,21 @@ angular.module('bikeTouringMapApp')
                             output.push({
                                 type: 'marker',
                                 latitude: item.cityFrom.latitude,
-                                longitude: item.cityFrom.longitude
+                                longitude: item.cityFrom.longitude,
+                                icon: {
+                                    name: 'glyphicon-record',
+                                    spin: true
+                                }
                             });
                         }
                         if (item.cityTo && item.cityTo.geonameId) {
                             output.push({
                                 type: 'marker',
                                 latitude: item.cityTo.latitude,
-                                longitude: item.cityTo.longitude
+                                longitude: item.cityTo.longitude,
+                                icon: {
+                                    name: 'glyphicon-record'
+                                }
                             });
                         }
                     }
@@ -29,21 +36,25 @@ angular.module('bikeTouringMapApp')
                 }, []);
 
                 var isDeparture = true;
-                
+
                 var polylines = tour.steps.reduce(function (output, item) {
 
                     if (item.isValid()) {
-                        
-                        if (isDeparture){
+
+                        if (isDeparture) {
                             // add a marker for departure
                             markers.push({
                                 type: 'marker',
                                 latitude: item.cityFrom.latitude,
-                                longitude: item.cityFrom.longitude
+                                longitude: item.cityFrom.longitude,
+                                icon: {
+                                    name: 'glyphicon-record',
+                                    markerColor: 'green'
+                                }
                             });
                             isDeparture = false;
                         }
-                        
+
                         // display route line
                         output.push({
                             type: 'polyline',
@@ -54,12 +65,13 @@ angular.module('bikeTouringMapApp')
                                 latitude: item.cityTo.latitude,
                                 longitude: item.cityTo.longitude
                         }]
+
                         });
                     }
                     return output;
                 }, []);
 
-               mapConfig.drawnItems = {
+                mapConfig.drawnItems = {
                     routesCities: {
                         items: markers
                     },

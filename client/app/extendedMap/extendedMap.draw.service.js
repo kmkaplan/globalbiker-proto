@@ -5,7 +5,7 @@ angular.module('bikeTouringMapApp')
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         return {
-            
+
             enableDrawing: function (eMap) {
 
                 var map = eMap.map;
@@ -40,14 +40,18 @@ angular.module('bikeTouringMapApp')
                     var type = e.layerType;
                     var layer = e.layer;
 
-                    // TODO remove (or make it an option)
-                    // drawLayer.addLayer(layer);
-                    layer.addTo(map);
+                    if (typeof (eMap.config.callbacks) !== 'undefined' && typeof (eMap.config.callbacks['draw:created']) === 'function') {
 
-                    if (typeof (callbacks) !== 'undefined' && typeof (callbacks['draw:created']) === 'function') {
-                        var points = thisService.getPointsFromLayer(layer);
+                        if (type === 'marker') {
+                            var point = thisService.getSinglePointFromLayer(layer);
 
-                        callbacks['draw:created'](eMap, points, e);
+                            eMap.config.callbacks['draw:created'](eMap, point, e);
+                        } else if (type === 'polyline') {
+                            var points = thisService.getPointsFromLayer(layer);
+
+                            eMap.config.callbacks['draw:created'](eMap, points, e);
+                        }
+
                     }
 
                 });
@@ -56,25 +60,33 @@ angular.module('bikeTouringMapApp')
                     var layers = e.layers;
 
                     layers.eachLayer(function (layer) {
-                        if (typeof (callbacks) !== 'undefined' && typeof (callbacks['draw:edited']) === 'function') {
-                            var points = thisService.getPointsFromLayer(layer);
+                        if (typeof (eMap.config.callbacks) !== 'undefined' && typeof (eMap.config.callbacks['draw:edited']) === 'function') {
+                            if (type === 'polyline') {
+                                var points = thisService.getPointsFromLayer(layer);
 
-                            callbacks['draw:edited'](eMap, points, e);
+                                eMap.config.callbacks['draw:edited'](eMap, points, e);
+                            }
                         }
                     });
                 });
 
                 map.on('draw:deleted', function (e) {
-                    if (typeof (callbacks) !== 'undefined' && typeof (callbacks['draw:deleted']) === 'function') {
-                        var points = thisService.getPointsFromLayer(e.layer);
+                    var layers = e.layers;
 
-                        callbacks['draw:deleted'](eMap, points, e);
-                    }
+                    layers.eachLayer(function (layer) {
+                        if (typeof (eMap.config.callbacks) !== 'undefined' && typeof (eMap.config.callbacks['draw:deleted']) === 'function') {
+                            if (type === 'polyline') {
+                                var points = thisService.getPointsFromLayer(layer);
+
+                                eMap.config.callbacks['draw:deleted'](eMap, points, e);
+                            }
+                        }
+                    });
                 });
 
             },
 
-           getPointsFromLayer: function (layer) {
+            getPointsFromLayer: function (layer) {
                 var points = layer.getLatLngs().reduce(function (output, item) {
                     output.push({
                         latitude: item.lat,
@@ -85,8 +97,16 @@ angular.module('bikeTouringMapApp')
 
                 return points;
             },
+            getSinglePointFromLayer: function (layer) {
+                var latLng = layer.getLatLng();
+                var point = {
+                    latitude: latLng.lat,
+                    longitude: latLng.lng
+                };
 
-            
+                return point;
+            },
+
         }
 
     });

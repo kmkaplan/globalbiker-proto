@@ -54,8 +54,31 @@ angular.module('bikeTouringMapApp')
                     return;
                 }
 
-                // draw the marker
-                var markerLayer = L.marker([marker.latitude, marker.longitude]);
+                var markerOptions = {};
+
+                if (marker.icon) {
+
+                    var iconOptions = {
+                    };
+
+                    if (marker.icon.name) {
+                        if (marker.icon.name.indexOf('fa-') == 0) {
+                            iconOptions.prefix = 'fa';
+                            iconOptions.icon = marker.icon.name.substr('fa'.length + 1);
+                        } else {
+                            iconOptions.prefix = 'glyphicon';
+                            iconOptions.icon = marker.icon.name.substr('glyphicon'.length + 1);
+                        }
+                    }
+                    angular.extend(iconOptions, marker.icon);
+
+                    // configure the marker
+                    var markerIcon = L.AwesomeMarkers.icon(iconOptions);
+                    markerOptions.icon = markerIcon;
+                    
+                }
+
+                var markerLayer = L.marker([marker.latitude, marker.longitude], markerOptions).addTo(map);
 
                 // add it to the layer
                 this.addToLayer(eMap, layerName, markerLayer, marker);
