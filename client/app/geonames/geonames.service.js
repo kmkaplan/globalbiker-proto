@@ -40,9 +40,10 @@ angular.module('bikeTouringMapApp')
                 var deffered = $q.defer();
 
                 // build URL
-                var url = 'http://api.geonames.org/searchJSON?cities=cities1000&maxRows=10';
-                url += '&name_startsWith=' + startsWith;
+                var url = 'http://api.geonames.org/searchJSON?maxRows=10';
+                url += '&featureClass=P';
                 url += '&country=' + countryCode;
+                url += '&name_startsWith=' + startsWith;
                 url += '&username=' + this._username;
 
                 // request geonames

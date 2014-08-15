@@ -4,6 +4,7 @@ angular.module('bikeTouringMapApp').factory('MyTourViewModelCity', function (geo
         angular.extend(this, {
             geonameId: null,
             name: null,
+            toponymName: null,
             adminName1: null,
             latitude: null,
             longitude: null,

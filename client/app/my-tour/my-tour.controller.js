@@ -156,7 +156,7 @@ angular.module('bikeTouringMapApp')
                 return cities.reduce(function (output, item) {
                     var city = new MyTourViewModelCity({
                         geonameId: item.geonameId,
-                        name: item.name,
+                        name: item.toponymName,
                         adminName1: item.adminName1,
                         latitude: item.lat,
                         longitude: item.lng
