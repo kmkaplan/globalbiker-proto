@@ -75,9 +75,22 @@ form p {
             text-align : center;
             font-weight : bold;
             width : 1000px;
+            .slogan-welcome {
+                margin-top : 5px;
+            }
             .panel {
                 background-color: transparent;
                 color : white;
+            }
+            .mailing {
+                padding : 25px 200px;
+                .signup-btn {
+                    color : black;
+                     background-image: linear-gradient(to bottom, white 0px, rgb(200, 200, 200) 100%);
+                }
+                .signup-btn:active {
+                    background-image: linear-gradient(to bottom, white 0px, rgb(229, 229, 229) 100%);
+                }
             }
         }
     }
