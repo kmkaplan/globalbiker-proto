@@ -76,6 +76,7 @@ var StepSchema = new Schema({
             required: 'Please fill cityTo longitude'
         }
     },
+    distance: Number,
     points: [{
         latitude: {
             type: Number,

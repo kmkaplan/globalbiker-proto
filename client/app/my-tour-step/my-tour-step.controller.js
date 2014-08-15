@@ -34,20 +34,64 @@ angular.module('bikeTouringMapApp')
                         return output;
                     }, []);
 
-                    if (points.length > 1) {
-
-                        var stepRepository = new StepRepository({
-                            _id: $scope.step._id,
-                            points: points
-                        })
-                        stepRepository.$update(function () {
-                            $scope.step.points = points;
-                        });
-
-                    }
+                    $scope.updatePoints(points);
                 };
                 reader.readAsText(file);
             }
+        };
+
+        $scope.calculateDistanceFromPoints = function (points) {
+
+            var latLngs = points.reduce(function (output, point) {
+                output.push(L.latLng(
+                    point.latitude,
+                    point.longitude
+                ))
+                return output;
+
+            }, []);
+
+            return L.GeometryUtil.length(latLngs);
+        };
+
+        $scope.updatePoints = function (points) {
+            var stepRepository;
+            if (points.length > 1) {
+                var distance = $scope.calculateDistanceFromPoints(points);
+
+                stepRepository = new StepRepository({
+                    _id: $scope.step._id,
+                    points: points,
+                    distance: distance
+                })
+            } else {
+                stepRepository = new StepRepository({
+                    _id: $scope.step._id,
+                    points: [],
+                    distance: 0
+                })
+            }
+            stepRepository.$update(function (step) {
+                $scope.step.points = points;
+                $scope.step.distance = distance;
+                $scope.step.readableDistance = L.GeometryUtil.readableDistance(distance, 'metric');
+            });
+
+        };
+
+        $scope.updatePointsFromMapEditor = function (points) {
+            var stepPoints = points.reduce(function (output, item) {
+
+                output.push({
+                    latitude: item.latitude,
+                    longitude: item.longitude
+                });
+
+                return output;
+            }, []);
+
+            $scope.updatePoints(stepPoints);
+            return stepPoints;
         };
 
         $scope.init = function () {
@@ -58,13 +102,38 @@ angular.module('bikeTouringMapApp')
                     polyline: true
                 },
                 callbacks: {
-                    'map:created': function (map) {
-
+                    'map:created': function (eMap) {
                         $scope.$watch('step.points', function (newPoints, oldPoints) {
 
                             $scope.updateMap();
                         });
 
+                    },
+                    'draw:created': function (eMap, points, e) {
+
+                        if ($scope.step.points && $scope.step.points.length != 0) {
+                            if (!confirm('Are you sure do you want to replace the existing trace with the new one?')) {
+                                return;
+                            }
+                        }
+
+                        $scope.updatePointsFromMapEditor(points);
+                    },
+                    'draw:edited': function (eMap, points, e) {
+
+                        if (!confirm('Are you sure do you want to update the existing trace?')) {
+                            return;
+                        }
+
+                        $scope.updatePointsFromMapEditor(points);
+                    },
+                    'draw:deleted': function (eMap, points, e) {
+
+                        if (!confirm('Are you sure do you want to remove existing trace?')) {
+                            return;
+                        }
+
+                        $scope.updatePointsFromMapEditor([]);
                     }
                 }
             };

@@ -105,7 +105,7 @@ angular.module('bikeTouringMapApp')
         $scope.mapConfig = {
             class: 'my-tour-map',
             callbacks: {
-                'map:created': function (map) {
+                'map:created': function (eMap) {
 
                     $scope.$watch('tour.country', function (newCountry, oldCountry) {
 
