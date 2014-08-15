@@ -36,61 +36,9 @@ angular.module('bikeTouringMapApp')
 
                     if (points.length > 1) {
 
-                        // TODO REMOVE $scope.step.cityFrom.name = 'Toulouse';
-
                         var stepRepository = new StepRepository({
                             _id: $scope.step._id,
-                            // TODO REMOVE  cityFrom: $scope.step.cityFrom
                             points: points
-                            /*[{
-                                "elevation": 472,
-                                "longitude": 2.008438,
-                                "latitude": 45.047295
-                            }, {
-                                "elevation": 471,
-                                "longitude": 2.008347,
-                                "latitude": 45.047709
-                            }, {
-                                "elevation": 468,
-                                "longitude": 2.008261,
-                                "latitude": 45.048645
-                            }, {
-                                "elevation": 468,
-                                "longitude": 2.008229,
-                                "latitude": 45.048842
-                            }, {
-                                "elevation": 467,
-                                "longitude": 2.008073,
-                                "latitude": 45.04905
-                            }, {
-                                "elevation": 468,
-                                "longitude": 2.007789,
-                                "latitude": 45.049456
-                            }, {
-                                "elevation": 470,
-                                "longitude": 2.007623,
-                                "latitude": 45.049948
-                            }, {
-                                "elevation": 470,
-                                "longitude": 2.007542,
-                                "latitude": 45.050369
-                            }, {
-                                "elevation": 470,
-                                "longitude": 2.007376,
-                                "latitude": 45.050559
-                            }, {
-                                "elevation": 466,
-                                "longitude": 2.006394,
-                                "latitude": 45.051385
-                            }, {
-                                "elevation": 466,
-                                "longitude": 2.006212,
-                                "latitude": 45.051544
-                            }, {
-                                "elevation": 466,
-                                "longitude": 2.006105,
-                                "latitude": 45.051749
-                            }]*/
                         })
                         stepRepository.$update(function () {
                             $scope.step.points = points;
@@ -106,6 +54,9 @@ angular.module('bikeTouringMapApp')
 
             $scope.mapConfig = {
                 class: 'my-tour-step-map',
+                drawingOptions: {
+                    polyline: true
+                },
                 callbacks: {
                     'map:created': function (map) {
 

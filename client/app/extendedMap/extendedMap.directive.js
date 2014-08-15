@@ -30,8 +30,8 @@ angular.module('bikeTouringMapApp')
                     if (!$scope.config.class) {
                         $scope.config.class = '';
                     }
-                    
-                    $scope.config.class +=' default-extended-map';
+
+                    $scope.config.class += ' default-extended-map';
 
                     if (!$scope.config.drawnItems) {
                         // drawnItems is an object in order to let group items by category ('buildings', 'roads', 'forests', ...).
@@ -54,6 +54,12 @@ angular.module('bikeTouringMapApp')
                         },
                         center: $scope.config.initialCenter,
                     });
+                    $scope.eMap = {
+                        mapId: $scope.mapId,
+                        config: $scope.config,
+                        eLayersMap: {}
+                    };
+
                 },
                 post: function postLink($scope, $element, $attrs) {
 
@@ -61,12 +67,13 @@ angular.module('bikeTouringMapApp')
                             leafletData.getMap($scope.mapId).then(callback);
                         };*/
 
-                    leafletData.getMap($scope.mapId).then(function (map) {
+                    leafletData.getMap($scope.eMap.mapId).then(function (map) {
 
+                        $scope.eMap.map = map;
 
                         if (typeof ($scope.config.callbacks) !== 'undefined' && typeof ($scope.config.callbacks['map:created']) === 'function') {
                             // map creation callback
-                            $scope.config.callbacks['map:created'](map);
+                            $scope.config.callbacks['map:created']($scope.eMap);
                         }
 
                         /*$scope.$watch('config.polygons', function (newPolygons, oldPolygons) {
@@ -80,17 +87,17 @@ angular.module('bikeTouringMapApp')
                             }, true);*/
 
                         if ($scope.config.drawingOptions) {
-                            extendedMapService.enableDrawing(map, $scope.config.drawingOptions, $scope.config.callbacks);
+                            extendedMapService.enableDrawing($scope.eMap);
                         }
 
                         $scope.$watch('config.drawnItems', function (newItems, oldItems) {
 
-                            console.info('Redraw items of map %s', $scope.mapId);
+                            console.info('Redraw items of map %s', $scope.eMap.mapId);
 
-                            extendedMapService.redrawItems(map, newItems, oldItems);
+                            extendedMapService.redrawItems($scope.eMap, newItems, oldItems);
 
                             if (typeof ($scope.config.callbacks) !== 'undefined' && typeof ($scope.config.callbacks['items:redraw']) === 'function') {
-                                $scope.config.callbacks['items:redraw'](map, newItems, oldItems);
+                                $scope.config.callbacks['items:redraw']($scope.eMap, newItems, oldItems);
                             }
 
                         }, false);
