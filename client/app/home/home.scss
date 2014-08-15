@@ -40,13 +40,13 @@ body {
 .btn-welcome {
     background-image: linear-gradient(to bottom, white 0px, rgb(200, 200, 200) 100%);
     background-repeat: repeat-x;
-    width : 150px;
+    width : 250px;
     margin : 15px;
 }
 .btn-welcome:active{
-    background-image: linear-gradient(to bottom, white 0px, rgb(200, 200, 200) 100%);
+    background-image: linear-gradient(to bottom, white 0px, rgb(229, 229, 229) 100%);
     background-repeat: repeat-x;
-    width : 150px;
+    width : 250px;
 }
 
 
@@ -94,15 +94,12 @@ form p {
         height: 800px;
         position: relative;
         width: 100%;
-        .panel-body {
-            padding: 0 0 15px 0;
-            background-color: white;
-        }
+
         .decouvrir {
             min-height : 550px;
             padding : 0px;
             font-weight : bold;
-            width : 900px;
+            width : 800px;
             margin-top: 200px;
             back
             h3 {
@@ -111,11 +108,7 @@ form p {
             .panel {
                 box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.62);
             }
-            .row {
-                width: auto;
-                margin : auto;
-                padding: 20px
-            }
+    .action-row
             .title {
                 background-color: white;
                 border-top-left-radius: 3px;
@@ -182,17 +175,9 @@ form p {
             padding : 0 0 0 0;
         }
     }
-    &.cover1 {
-        padding: 20px 0;
-        font-size: 21px;
-    }
     label {
         color: black;
         font-weight: normal;
-    }
-    .btn-success {
-        font-weight: bold;
-        font-size: 20px;
     }
     .glyphicon-star {
         color: #fce42b;
