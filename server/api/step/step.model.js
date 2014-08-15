@@ -89,6 +89,20 @@ var StepSchema = new Schema({
         elevation: {
             type: Number
         }
+}],
+    markers: [{
+        latitude: {
+            type: Number,
+            required: 'Please fill latitude'
+        },
+        longitude: {
+            type: Number,
+            required: 'Please fill longitude'
+        },
+        type: {
+            type: String,
+            required: 'Please fill type'
+        }
 }]
 });
 

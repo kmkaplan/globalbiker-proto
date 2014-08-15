@@ -75,6 +75,11 @@ exports.update = function (req, res) {
             step.points = req.body.points;
         }
 
+        if (req.body.markers) {
+            // FIXME this is a FIX because _.merge create all items with value of first one!!!
+            step.markers = req.body.markers;
+        }
+
         updated.save(function (err) {
             if (err) {
                 return handleError(res, err);

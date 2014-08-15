@@ -105,25 +105,69 @@ angular.module('bikeTouringMapApp')
             $scope.mapConfig = {
                 class: 'my-tour-step-map',
                 drawingOptions: {
-                    polyline: true
+                    polyline: true,
+                    marker: true
                 },
                 callbacks: {
                     'map:created': function (eMap) {
                         $scope.$watch('step.points', function (newPoints, oldPoints) {
 
+                            // TODO only update trace
                             $scope.updateMap();
                         });
 
                     },
                     'draw:created': function (eMap, points, e) {
 
-                        if ($scope.step.points && $scope.step.points.length != 0) {
-                            if (!confirm('Are you sure do you want to replace the existing trace with the new one?')) {
-                                return;
-                            }
-                        }
+                        if (e.layerType === 'marker') {
 
-                        $scope.updatePointsFromMapEditor(points);
+                            var markers = $scope.step.markers.slice();
+
+                            var type;
+
+                            switch ($scope.step.markers.length % 4) {
+                            case 0:
+                                type = 'interest';
+                                break;
+                            case 1:
+                                type = 'bike-shops';
+                                break;
+                            case 2:
+                                type = 'food';
+                                break;
+                            case 3:
+                                type = 'danger';
+                                break;
+                            }
+
+                            markers.push({
+                                latitude: points.latitude,
+                                longitude: points.longitude,
+                                type: type
+                            });
+
+                            var stepRepository = new StepRepository({
+                                _id: $scope.step._id,
+                                markers: markers
+                            });
+                            stepRepository.$update(function (step) {
+                                $scope.step.markers = markers;
+
+                                // TODO only update markers
+                                $scope.updateMap();
+                            });
+
+
+                        } else if (e.layerType === 'polyline') {
+
+                            if ($scope.step.points && $scope.step.points.length != 0) {
+                                if (!confirm('Are you sure do you want to replace the existing trace with the new one?')) {
+                                    return;
+                                }
+                            }
+                            $scope.updatePointsFromMapEditor(points);
+
+                        }
                     },
                     'draw:edited': function (eMap, points, e) {
 

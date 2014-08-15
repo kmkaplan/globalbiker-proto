@@ -75,6 +75,7 @@ angular.module('bikeTouringMapApp')
                     // configure the marker
                     var markerIcon = L.AwesomeMarkers.icon(iconOptions);
                     markerOptions.icon = markerIcon;
+                    
                 }
 
                 var markerLayer = L.marker([marker.latitude, marker.longitude], markerOptions).addTo(map);
