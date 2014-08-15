@@ -70,7 +70,7 @@ form p {
             border: 5px solid white;
         }
         .welcome {
-            min-height : 550px;
+            height : 750px;
             padding : 180px 0px;
             text-align : center;
             font-weight : bold;
@@ -92,32 +92,39 @@ form p {
     &.decouvrir-page {
         display: table;
         height: 800px;
-        position: relative;
         width: 100%;
-
         .decouvrir {
             min-height : 550px;
             padding : 0px;
             font-weight : bold;
-            width : 800px;
-            margin-top: 200px;
-            back
+            width : 700px;
+            margin-top: 150px;
+            text-align: center;
+            margin-left: 500px;
+            .cadre {
+                background-color : transparent;
+                border: 0px;
+            }
             h3 {
                 color : $baseColor2;
+                margin-bottom: 30px;
             }
-            .panel {
+/*            .panel {
                 box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.62);
+            }*/
+            .action {
+                text-align: center;
+                padding : 40px 60px;
             }
-    .action-row
             .title {
-                background-color: white;
+                background-color: transparent;
                 border-top-left-radius: 3px;
                 border-top-right-radius: 3px;
                 border-bottom: 1px;
-                padding: 10px 15px;
+                text-align: center;
                 h2 {
-                    padding : 5px;
-                    margin: 5px;
+                    padding : 0px;
+                    margin: 0px;
                     color : $baseColor1;
                 }
             }
