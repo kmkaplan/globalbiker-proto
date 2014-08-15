@@ -2,5 +2,12 @@
 
 angular.module('bikeTouringMapApp')
   .controller('HomeCtrl', function ($scope) {
-    $scope.message = 'Hello';
+        $scope.addMail = function() {
+            alert("OUI");
+            var mailingRepository;
+            mailingRepository = new MailingRepository({
+
+                })
+            mailingRepository.addMail();
+        }
   });
