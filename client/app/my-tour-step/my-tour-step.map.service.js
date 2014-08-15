@@ -48,6 +48,8 @@ angular.module('bikeTouringMapApp')
 
                     mapConfig.control.fitBounds(bounds);
 
+                }else{
+                    mapConfig.drawnItems = {};
                 }
 
             }

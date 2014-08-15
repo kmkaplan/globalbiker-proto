@@ -54,6 +54,11 @@ angular.module('bikeTouringMapApp')
             return L.GeometryUtil.length(latLngs);
         };
 
+
+        $scope.deleteTrace = function () {
+            $scope.updatePoints([]);
+        };
+
         $scope.updatePoints = function (points) {
             var stepRepository;
             if (points.length > 1) {
@@ -75,6 +80,7 @@ angular.module('bikeTouringMapApp')
                 $scope.step.points = points;
                 $scope.step.distance = distance;
                 $scope.step.readableDistance = L.GeometryUtil.readableDistance(distance, 'metric');
+                $scope.step.isTraceInEdition = false;
             });
 
         };
