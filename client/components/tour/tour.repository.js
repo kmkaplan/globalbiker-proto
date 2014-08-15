@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .factory('Tour', function ($resource) {
+    .factory('TourRepository', function ($resource) {
         return $resource('/api/tours/:id/:controller', {
             id: '@_id'
         }, {

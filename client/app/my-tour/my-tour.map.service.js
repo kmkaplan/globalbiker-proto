@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .service('myTourMap', function () {
+    .service('MyTourMapService', function () {
         // AngularJS will instantiate a singleton by calling "new" on this function
         return {
             updateMap: function (mapConfig, tour) {

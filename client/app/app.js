@@ -7,7 +7,8 @@ angular.module('bikeTouringMapApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'leaflet-directive'
+  'leaflet-directive',
+  'angularFileUpload'
 ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
         $urlRouterProvider

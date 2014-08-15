@@ -50,6 +50,7 @@
     <!-- build:js(client) app/vendor.js -->
       <!-- bower:js -->
       <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/ng-file-upload-shim/angular-file-upload-shim.js"></script>
       <script src="bower_components/angular/angular.js"></script>
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -60,6 +61,8 @@
       <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
       <script src="bower_components/leaflet-dist/leaflet.js"></script>
       <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+      <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
+      <script src="bower_components/togeojson/togeojson.js"></script>
       <!-- endbower -->
       <script src="bower_components/leaflet.draw/dist/leaflet.draw.js"></script>
     <!-- endbuild -->
@@ -80,12 +83,16 @@
           <script src="app/home/home.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="app/my-tour-step/my-tour-step.controller.js"></script>
+          <script src="app/my-tour-step/my-tour-step.js"></script>
+          <script src="app/my-tour-step/my-tour-step.map.service.js"></script>
+          <script src="app/my-tour-step/my-tour-step.viewmodel.step.js"></script>
           <script src="app/my-tour/my-tour.controller.js"></script>
           <script src="app/my-tour/my-tour.js"></script>
           <script src="app/my-tour/my-tour.map.service.js"></script>
-          <script src="app/my-tour/my-tour.model.MyTour.js"></script>
-          <script src="app/my-tour/my-tour.model.MyTourStep.js"></script>
-          <script src="app/my-tour/my-tour.model.MyTourStepCity.js"></script>
+          <script src="app/my-tour/my-tour.viewmodel.city.js"></script>
+          <script src="app/my-tour/my-tour.viewmodel.step.js"></script>
+          <script src="app/my-tour/my-tour.viewmodel.tour.js"></script>
           <script src="app/my-tours/my-tours.controller.js"></script>
           <script src="app/my-tours/my-tours.js"></script>
           <script src="app/route-details/route-details.controller.js"></script>
@@ -96,8 +103,8 @@
           <script src="components/navbar/navbar.controller.js"></script>
           <script src="components/smooth-page-scroll/smooth-page-scroll.js"></script>
           <script src="components/socket/socket.service.js"></script>
-          <script src="components/tour/step.service.js"></script>
-          <script src="components/tour/tour.service.js"></script>
+          <script src="components/tour/step.repository.js"></script>
+          <script src="components/tour/tour.repository.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
 </body>

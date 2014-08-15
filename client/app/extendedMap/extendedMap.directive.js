@@ -28,8 +28,10 @@ angular.module('bikeTouringMapApp')
                     }
 
                     if (!$scope.config.class) {
-                        $scope.config.class = 'default-extended-map';
+                        $scope.config.class = '';
                     }
+                    
+                    $scope.config.class +=' default-extended-map';
 
                     if (!$scope.config.drawnItems) {
                         // drawnItems is an object in order to let group items by category ('buildings', 'roads', 'forests', ...).

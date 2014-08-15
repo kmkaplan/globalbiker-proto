@@ -1,4 +1,4 @@
-angular.module('bikeTouringMapApp').factory('MyTourStep', function (MyTourStepCity) {
+angular.module('bikeTouringMapApp').factory('MyTourViewModelStep', function (MyTourViewModelCity) {
     return function (data) {
         //set defaults properties and functions
         angular.extend(this, {
@@ -15,11 +15,11 @@ angular.module('bikeTouringMapApp').factory('MyTourStep', function (MyTourStepCi
             isValid: function () {
                 return this.difficulty && this.isValidCityFrom() && this.isValidCityTo();
             },
-            isReadyToSave: function () {
-                return this.status === 'edit' && this.isValid();
-            },
-            isEditable: function () {
+            isReadyToEdit: function () {
                 return this.status === 'read-only';
+            },
+            isInEdition: function () {
+                return (this.status === 'edit');
             },
             isPersisted: function () {
                 return typeof (this._id) !== 'undefined';
@@ -28,10 +28,10 @@ angular.module('bikeTouringMapApp').factory('MyTourStep', function (MyTourStepCi
         });
         if (data) {
             if (data.cityFrom) {
-                data.cityFrom = new MyTourStepCity(data.cityFrom);
+                data.cityFrom = new MyTourViewModelCity(data.cityFrom);
             }
             if (data.cityTo) {
-                data.cityTo = new MyTourStepCity(data.cityTo);
+                data.cityTo = new MyTourViewModelCity(data.cityTo);
             }
         }
         angular.extend(this, data);
