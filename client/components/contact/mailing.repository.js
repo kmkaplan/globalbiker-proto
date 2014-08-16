@@ -2,14 +2,13 @@
 
 angular.module('bikeTouringMapApp')
     .factory('MailingRepository', function ($resource) {
-        return $resource('/api/mailing/:id/:controller', {
-                mail: '@_email'
+        return $resource('/api/mailings/:id/:controller', {
+                id: '@_id'
             }, {
-                addMail: {
-                    method: 'POST',
-                    url: '/api/mailing/',
+                get: {
+                    method: 'GET',
                     params: {
-                        email: 'blabla@gmail.com'
+                        id: 'me'
                     }
                 }
             }
