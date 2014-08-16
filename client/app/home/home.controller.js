@@ -7,6 +7,6 @@ angular.module('bikeTouringMapApp')
             mailingRepository = new MailingRepository( {
                 email : "gaudetmatthieu@gmail.com"
             });
-            mailingRepository.addMail();
+            mailingRepository.save();
         }
   });
