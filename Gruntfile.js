@@ -332,7 +332,25 @@ module.exports = function (grunt) {
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
-        files: [{
+        files: [
+            /* FIXME temporary fix for images: find a better solution to avoid naming conflicts (subfolders in assets/images?) */
+            {
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.client %>/bower_components/Leaflet.awesome-markers/dist/images',
+          dest: '<%= yeoman.dist %>/public/app/images',
+          src: [
+            '*'
+          ]
+        },{
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.client %>/bower_components/leaflet.draw/dist/images',
+          dest: '<%= yeoman.dist %>/public/app/images',
+          src: [
+            '*'
+          ]
+        },{
           expand: true,
           dot: true,
           cwd: '<%= yeoman.client %>',
