@@ -5,12 +5,8 @@ angular.module('bikeTouringMapApp')
         $scope.menu = [{
                 'title': 'Home',
                 'link': '/'
-    },
-            {
-
-                'title': 'Landing page',
-                'link': '/home'
-    }, {
+            },
+                       {
                 'title': 'My tours',
                 'link': '/my-tours'
             }];
