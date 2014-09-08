@@ -111,11 +111,12 @@ angular.module('bikeTouringMapApp')
                 callbacks: {
                     'map:created': function (eMap) {
                         $scope.$watch('step.points', function (newPoints, oldPoints) {
-
-                            // TODO only update trace
-                            $scope.updateMap();
+                            MyTourStepMapService.updateTrace($scope.mapConfig, $scope.step);
+                            eMap.config.control.fitBoundsFromPoints(newPoints);
                         });
-
+                        $scope.$watch('step.markers', function (newPoints, oldPoints) {
+                            MyTourStepMapService.updateMarkers($scope.mapConfig, $scope.step);
+                        });
                     },
                     'draw:created': function (eMap, points, e) {
 
@@ -153,8 +154,7 @@ angular.module('bikeTouringMapApp')
                             stepRepository.$update(function (step) {
                                 $scope.step.markers = markers;
 
-                                // TODO only update markers
-                                $scope.updateMap();
+                                MyTourStepMapService.updateMarkers($scope.mapConfig, $scope.step);
                             });
 
 
@@ -224,10 +224,10 @@ angular.module('bikeTouringMapApp')
 
             };
         };
-
-        $scope.updateMap = function () {
-            MyTourStepMapService.updateMap($scope.mapConfig, $scope.step);
-        };
-
+    
+    $scope.updateMarker = function(marker){
+        marker.isInEdition = false;
+    };
+       
         return $scope.init();
     });

@@ -61,7 +61,7 @@ angular.module('bikeTouringMapApp')
 
                     layers.eachLayer(function (layer) {
                         if (typeof (eMap.config.callbacks) !== 'undefined' && typeof (eMap.config.callbacks['draw:edited']) === 'function') {
-                            if (type === 'polyline') {
+                            if (layer.item && layer.item.type === 'polyline') {
                                 var points = thisService.getPointsFromLayer(layer);
 
                                 eMap.config.callbacks['draw:edited'](eMap, points, e);
@@ -75,7 +75,7 @@ angular.module('bikeTouringMapApp')
 
                     layers.eachLayer(function (layer) {
                         if (typeof (eMap.config.callbacks) !== 'undefined' && typeof (eMap.config.callbacks['draw:deleted']) === 'function') {
-                            if (type === 'polyline') {
+                            if (layer.item && layer.item.type === 'polyline') {
                                 var points = thisService.getPointsFromLayer(layer);
 
                                 eMap.config.callbacks['draw:deleted'](eMap, points, e);

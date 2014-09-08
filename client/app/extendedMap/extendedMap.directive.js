@@ -2,7 +2,7 @@
 
 
 angular.module('bikeTouringMapApp')
-    .directive('extendedMap', function ($http, extendedMapService, leafletData) {
+    .directive('extendedMap', function ($http, $timeout, extendedMapService, leafletData) {
         return {
             templateUrl: 'app/extendedMap/extendedMap.html',
             restrict: 'EA',
@@ -41,15 +41,56 @@ angular.module('bikeTouringMapApp')
                     $scope.config.control = {
                         fitBounds: function (bounds) {
                             leafletData.getMap($scope.mapId).then(function (map) {
-                                map.fitBounds(bounds);
+                                $timeout(function () {
+                                    map.fitBounds(bounds)
+                                }, 200);
                             });
+                        },
+                        fitBoundsFromPoints: function (points) {
+
+                            if (points) {
+                                var bounds = [[null, null], [null, null]];
+
+                                points.reduce(function (output, p) {
+
+                                    if (!p.latitude) {
+                                        console.warn('Invalid point latitude.');
+                                    }
+
+                                    if (!p.longitude) {
+                                        console.warn('Invalid point longitude.');
+                                    }
+
+                                    if (bounds[0][0] === null || bounds[0][0] > p.latitude) {
+                                        bounds[0][0] = p.latitude;
+                                    }
+
+                                    if (bounds[1][0] === null || bounds[1][0] < p.latitude) {
+                                        bounds[1][0] = p.latitude;
+                                    }
+
+                                    if (bounds[0][1] === null || bounds[0][1] > p.longitude) {
+                                        bounds[0][1] = p.longitude;
+                                    }
+
+                                    if (bounds[1][1] === null || bounds[1][1] < p.longitude) {
+                                        bounds[1][1] = p.longitude;
+                                    }
+                                    return output;
+                                }, []);
+
+                                this.fitBounds(bounds);
+                            }
                         }
                     };
 
                     angular.extend($scope, {
                         mapId: $scope.mapId,
                         defaults: {
+                            // tileLayer: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
                             tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
+                            // tileLayer: 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
+                            // tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
                             scrollWheelZoom: true
                         },
                         center: $scope.config.initialCenter,

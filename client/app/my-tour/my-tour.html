@@ -75,8 +75,8 @@
                                 <rating readonly="step.status == 'read-only'" ng-show="step.isValidCityTo()" ng-model="step.difficulty" max="4" on-leave="overStar = null"></rating>
                             </td>
                             <td>
-                                <div ng-show="step.isInEdition() && step.isValid()">
-                                    <a ng-click="saveStep(step)" class="btn btn-success save-step-button"><i class="fa fa-check"></i></a>
+                                <div ng-show="step.isInEdition()">
+                                    <a ng-disabled="!step.isValid()" ng-click="saveStep(step)" class="btn btn-success save-step-button"><i class="fa fa-check"></i></a>
                                 </div>
                                 <div ng-show="step.isReadyToEdit()">
                                     <a ng-click="editStep(step)" class="btn btn-default edit-step-button"><i class="fa fa-pencil-square-o"></i></a>
