@@ -41,9 +41,44 @@
                             Or draw it manually using the tools in the map!
                         </div>
                     </div>
-
                 </section>
-
+                <section class="form-section points-of-interest">
+                    <h3>Points of interest</h3>
+                    <div class="form-group point-of-interest {{ marker.type }}" ng-class="{ 'in-edition': marker.isInEdition }" ng-repeat="marker in step.markers">
+                        <div ng-hide="marker.isInEdition">
+                            <a ng-click="marker.isInEdition = true" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i></a>
+                        </div>
+                        <div ng-show="marker.isInEdition">
+                            <a ng-click="updateMarker(marker)" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
+                        </div>
+                        <h4 ng-switch="marker.type">
+                            <span ng-switch-when="interest">
+                                <i class="icon glyphicon glyphicon-eye-open"></i> Interest
+                            </span>
+                            <span ng-switch-when="bike-shops">
+                                <i class="icon glyphicon glyphicon-wrench"></i> Bike shop
+                            </span>
+                            <span ng-switch-when="food">
+                                <i class="icon glyphicon glyphicon-cutlery"></i> Food
+                            </span>
+                            <span ng-switch-when="danger">
+                                <i class="icon fa fa-exclamation-triangle"></i> Danger
+                            </span>
+                            <span ng-switch-default>                               
+                                <i class="icon glyphicon glyphicon-question-sign"></i> Other
+                            </span>
+                            <span ng-show="marker.name">"{{ marker.name }}"</span>
+                        </h4>
+                        <div class="form-group" ng-show="marker.isInEdition">
+                            <label>Name</label>
+                            <input ng-model="marker.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
+                        </div>
+                        <div class="form-group" ng-show="marker.isInEdition">
+                            <label>Description</label>
+                            <input ng-model="marker.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
+                        </div>
+                    </div>
+                </section>
             </form>
         </div>
     </div>

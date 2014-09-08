@@ -4,9 +4,10 @@ angular.module('bikeTouringMapApp')
     .service('MyTourStepMapService', function () {
         // AngularJS will instantiate a singleton by calling "new" on this function
         return {
-            updateMap: function (mapConfig, step) {
-
-                var drawnItems = {};
+            updateTrace: function (mapConfig, step) {
+                var trace = {
+                    items: []
+                };
 
                 if (step && step.points && step.points.length > 1) {
 
@@ -38,22 +39,63 @@ angular.module('bikeTouringMapApp')
 
 
 
-                    drawnItems.trace = {
-                        items: [{
-                            type: 'polyline',
-                            points: points
-                                    }]
+                    trace.items = [{
+                        type: 'polyline',
+                        points: points
+                        }];
 
+                } else {
+                    if (step && step.cityFrom && step.cityTo) {
 
-                    };
+                        trace.items.push({
+                            type: 'marker',
+                            latitude: step.cityFrom.latitude,
+                            longitude: step.cityFrom.longitude,
+                            icon: {
+                                name: 'glyphicon-home',
+                                markerColor: 'green'
+                            }
+                        });
 
-                    mapConfig.control.fitBounds(bounds);
+                        trace.items.push({
+                            type: 'marker',
+                            latitude: step.cityTo.latitude,
+                            longitude: step.cityTo.longitude,
+                            icon: {
+                                name: 'glyphicon-record',
+                                markerColor: 'red'
+                            }
+                        });
+                    }
 
                 }
 
+                // create a new object to be able to trigger the changes to angular scope (without have to $watch the whole array of objects)
+                var drawnItems = {};
+
+                if (mapConfig.drawnItems) {
+                    for (var key in mapConfig.drawnItems) {
+                        if (mapConfig.drawnItems.hasOwnProperty(key)) {
+                            drawnItems[key] = mapConfig.drawnItems[key];
+                        }
+                    }
+                }
+
+                drawnItems.trace = trace;
+
+                // trigger changes
+                mapConfig.drawnItems = drawnItems;
+
+            },
+            updateMarkers: function (mapConfig, step) {
+
+                var markers = {
+                    items: []
+                };
+
                 if (step && step.markers && step.markers.length > 0) {
 
-                    var markers = step.markers.reduce(function (output, marker) {
+                    markers.items = step.markers.reduce(function (output, marker) {
 
                         var iconName;
                         var markerColor;
@@ -96,14 +138,22 @@ angular.module('bikeTouringMapApp')
                         return output;
 
                     }, []);
-
-
-
-                    drawnItems.markers = {
-                        items: markers
-                    };
                 }
 
+                 // create a new object to be able to trigger the changes to angular scope (without have to $watch the whole array of objects)
+                var drawnItems = {};
+
+                if (mapConfig.drawnItems) {
+                    for (var key in mapConfig.drawnItems) {
+                        if (mapConfig.drawnItems.hasOwnProperty(key)) {
+                            drawnItems[key] = mapConfig.drawnItems[key];
+                        }
+                    }
+                }
+
+                drawnItems.markers = markers;
+
+                // trigger changes
                 mapConfig.drawnItems = drawnItems;
 
             }

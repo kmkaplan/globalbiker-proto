@@ -35,6 +35,14 @@ Run a mongoDB image with shared directory:
 
     docker run -d \
         --link=mongodb:mongodb \
-        -p 8080:80 \
+        -p 80:8080 \
         -v /home/toub/dev/globalbiker/bike-touring-map:/app \
         --name globalbiker.org  bike-touring-map-ci
+
+or
+
+    docker run -d \
+        --link=mongodb:mongodb \
+        -p 9209:8080 \
+        -v /opt/docker/jenkins/share/toulouse.globalbiker.org/deploy/:/app \
+        --name toulouse.globalbiker.org bike-touring-map-ci
