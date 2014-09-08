@@ -13,8 +13,7 @@ RUN gem install compass
 
 # clean apt
 RUN apt-get clean
- 
-# Define working directory.
+
 WORKDIR /app
 
 # Set instructions on build.
@@ -24,6 +23,7 @@ RUN npm install
 ADD bower.json /app/
 RUN bower install --allow-root
 
+# Define working directory.
 ADD . /app
 RUN grunt build
 
