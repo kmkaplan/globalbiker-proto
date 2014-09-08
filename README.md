@@ -3,13 +3,14 @@ bike-touring-map
 
 Map application to share bike tours itinaries.
 
-## Production deployment
+## Continuous integration deployment
 
 ### Docker build
 
 Build the docker image from sources:  
     
-    docker build -t="bike-touring-map" .
+    cd docker/ci
+    docker build -t="bike-touring-map-ci" .
     
 ### Pre-requisites
 
@@ -24,10 +25,16 @@ Run a mongoDB image with shared directory:
    
 ### Test the image
 
-    docker run --rm -i --link=mongodb:mongodb -t bike-touring-map /bin/bash
+    docker run --rm -i \
+        --link=mongodb:mongodb \
+        -p 8080:8080 \
+        -v /home/toub/dev/globalbiker/bike-touring-map:/app \
+        -t bike-touring-map-ci /bin/bash
    
 ### Run application
 
-    APP=$(docker run -d --link=mongodb:mongodb -p 8080:9209 --name globalbiker.org  bike-touring-map)
-    PORT=$(docker port $APP 9209 | awk -F: '{print $2}')
-    echo "Open http://localhost:$PORT/"
+    docker run -d \
+        --link=mongodb:mongodb \
+        -p 8080:80 \
+        -v /home/toub/dev/globalbiker/bike-touring-map:/app \
+        --name globalbiker.org  bike-touring-map-ci

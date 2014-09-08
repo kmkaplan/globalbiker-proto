@@ -16,24 +16,18 @@ RUN apt-get clean
 
 WORKDIR /app
 
-# Set instructions on build.
-ADD package.json /app/
-RUN npm install
+# Add scripts
+ADD build-app.sh /scripts/build-app.sh
+ADD start-app.sh /scripts/start-app.sh
+ADD run.sh /scripts/run.sh
+RUN chmod 755 /scripts/*.sh
 
-ADD bower.json /app/
-RUN bower install --allow-root
-
-# Define working directory.
-ADD . /app
-RUN grunt build
-
-WORKDIR /app/dist
-
-ENV NODE_ENV production
 ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
 
-# Define default command.
-CMD ["npm", "start"]
 # Expose ports.
 EXPOSE 8080
 
+# volumes
+VOLUME  ["/app"]
+
+CMD ["/scripts/run.sh"]
