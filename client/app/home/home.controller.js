@@ -2,11 +2,11 @@
 
 angular.module('bikeTouringMapApp')
   .controller('HomeCtrl', function ($scope, MailingRepository) {
-        $scope.addMail = function() {
+        $scope.addMail = function($email, $) {
             var mailingRepository;
             mailingRepository = new MailingRepository( {
-                email : "gaudetmatthieu@gmail.com"
+                email : $email
             });
-            mailingRepository.save();
+            mailingRepository.$save(function() {alert("Merci, votre adresse est bien enregistrée!")});
         }
   });
