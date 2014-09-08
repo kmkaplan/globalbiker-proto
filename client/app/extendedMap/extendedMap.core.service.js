@@ -62,7 +62,7 @@ angular.module('bikeTouringMapApp')
                     };
 
                     if (marker.icon.name) {
-                        if (marker.icon.name.indexOf('fa-') == 0) {
+                        if (marker.icon.name.indexOf('fa-') === 0) {
                             iconOptions.prefix = 'fa';
                             iconOptions.icon = marker.icon.name.substr('fa'.length + 1);
                         } else {
@@ -88,7 +88,7 @@ angular.module('bikeTouringMapApp')
                 var map = eMap.map;
 
                 // check input parameters
-                if (!Object.prototype.toString.call(polyline.points) === '[object Array]') {
+                if (Object.prototype.toString.call(polyline.points) !== '[object Array]') {
                     console.error('Polyline %s points are not defined or not an array.', polyline.extendedMapId);
                     return;
                 }
