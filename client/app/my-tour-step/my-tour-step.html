@@ -14,6 +14,41 @@
         </div>
 
         <div class="col-md-5">
+
+            <div class="modal fade" role="dialog" arial-hidden="true" id="new-point-of-interest-form">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                            </button>
+                            <h4 class="modal-title">New point of interest</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form">
+                                <section class="form-section">
+                                    <div class="form-group">
+                                        <label>Type</label>
+                                        <select class="form-control">
+                                            <option value="interest">interest</option>
+                                            <option value="bike-shops">bike-shops</option>
+                                            <option value="food">food</option>
+                                            <option value="interest">danger</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Name</label>
+                                        <input ng-model="newMarker.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <input ng-model="newMarker.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
+                                    </div>
+                                </section>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <form role="form">
                 <section class="form-section">
                     <div ng-show="step.hasTrace() && !step.isTraceInEdition">
@@ -44,6 +79,8 @@
                 </section>
                 <section class="form-section points-of-interest">
                     <h3>Points of interest</h3>
+                    <button class="btn btn-default" ng-click="open()">Create a new point of interest</button>
+
                     <div class="form-group point-of-interest {{ marker.type }}" ng-class="{ 'in-edition': marker.isInEdition }" ng-repeat="marker in step.markers">
                         <div ng-hide="marker.isInEdition">
                             <a ng-click="marker.isInEdition = true" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i></a>

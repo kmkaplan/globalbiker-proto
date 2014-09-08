@@ -224,10 +224,15 @@ angular.module('bikeTouringMapApp')
 
             };
         };
-    
-    $scope.updateMarker = function(marker){
-        marker.isInEdition = false;
-    };
-       
+
+        $scope.updateMarker = function (marker) {
+            marker.isInEdition = false;
+        };
+
+        $scope.open = function (size) {
+
+            $('#new-point-of-interest-form').modal('show')
+        };
+
         return $scope.init();
     });

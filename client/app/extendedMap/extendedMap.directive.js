@@ -40,11 +40,13 @@ angular.module('bikeTouringMapApp')
 
                     $scope.config.control = {
                         fitBounds: function (bounds) {
-                            leafletData.getMap($scope.mapId).then(function (map) {
-                                $timeout(function () {
-                                    map.fitBounds(bounds)
-                                }, 200);
+                             if (bounds && bounds.length === 2 && bounds[0].length === 2 && bounds[0][0] && bounds[1].length === 2){
+                                 leafletData.getMap($scope.mapId).then(function (map) {
+                                //$timeout(function () {
+                                    map.fitBounds(bounds);
+                               // }, 1000);
                             });
+                                        }
                         },
                         fitBoundsFromPoints: function (points) {
 
