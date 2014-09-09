@@ -32,6 +32,10 @@ var StepSchema = new Schema({
         type: Number,
         required: 'Please fill difficulty'
     },
+    interest: {
+        type: Number,
+        required: 'Please fill interest'
+    },
     cityFrom: {
         geonameId: {
             type: Number,

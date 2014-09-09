@@ -13,7 +13,7 @@ angular.module('bikeTouringMapApp').factory('MyTourViewModelStep', function (MyT
                 return this.cityTo && this.cityTo.geonameId;
             },
             isValid: function () {
-                return this.difficulty && this.isValidCityFrom() && this.isValidCityTo();
+                return this.difficulty && this.isValidCityFrom() && this.isValidCityTo() && this.interest;
             },
             isReadyToEdit: function () {
                 return this.status === 'read-only';
