@@ -54,10 +54,31 @@ angular.module('bikeTouringMapApp')
                             });
                             isDeparture = false;
                         }
+                        // for now, always blue
+                        var color = 'blue';
+                        /*switch (item.difficulty) {
+                        case 1:
+                            color = 'green';
+                            break;
+
+                        case 2:
+                            color = 'blue';
+                            break;
+
+                        case 3:
+                            color = 'red';
+                            break;
+
+                        case 4:
+                            color = 'black';
+                            break;
+
+                        }*/
 
                         // display route line
                         output.push({
                             type: 'polyline',
+                            color: color,
                             points: [{
                                 latitude: item.cityFrom.latitude,
                                 longitude: item.cityFrom.longitude

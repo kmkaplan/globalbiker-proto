@@ -118,10 +118,16 @@ angular.module('bikeTouringMapApp')
                     return;
                 }
 
-                // draw the polyline
-                var polylineLayer = L.polyline(latlngs, {
+                var options = {
                     color: 'red'
-                });
+                };
+                
+                if (polyline.color){
+                    options.color = polyline.color;
+                }
+                
+                // draw the polyline
+                var polylineLayer = L.polyline(latlngs, options);
 
                 // add it to the 'draw' layer
                 this.addToLayer(eMap, layerName, polylineLayer, polyline);

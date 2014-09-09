@@ -168,18 +168,11 @@ angular.module('bikeTouringMapApp')
             });
         };
 
-        $scope.updateTitle = function () {
-            if ($scope.tourId !== null) {
-                // update the title
-                // TODO PUT after a delay (only if title is valid)
-            }
-        };
-
-        $scope.addTour = function () {
-            if ($scope.tour.isValid()) {
+        $scope.submitCreateTour = function (form) {
+            if (form.$valid) {
 
                 var user = Auth.getCurrentUser();
-                
+
                 // create tour resource
                 var newTour = new TourRepository({
                     userId: user._id,
@@ -222,6 +215,7 @@ angular.module('bikeTouringMapApp')
                     _id: step._id,
                     tourId: $scope.tour._id,
                     difficulty: step.difficulty,
+                    interest: step.interest,
                     cityFrom: {
                         geonameId: step.cityFrom.geonameId,
                         name: step.cityFrom.name,

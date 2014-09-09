@@ -9,91 +9,97 @@
         <li ng-hide="tour.isPersisted()" class="active">Create a new tour</li>
         <li ng-show="tour.isPersisted()" class="active">{{ tour.title }}</li>
     </ol>
-
-    <form role="form">
-
+    <form novalidate role="form" name="createTourForm" ng-submit="submitCreateTour(createTourForm)">
         <div class="row">
             <div class="col-md-5">
-                <div class="form-group" ng-hide="tour.isPersisted()">
+                <div class="form-group required" ng-class="{ 'has-error':  createTourForm.title.$dirty && createTourForm.title.$invalid, 'has-success': createTourForm.title.$dirty && createTourForm.title.$valid }" ng-hide="tour.isPersisted()">
                     <label for="tourTitle">Tour title</label>
-                    <input ng-model="tour.title" ng-change="updateTitle()" type="text" class="form-control" id="tourTitle" placeholder="Enter the name of your tour... (e.g. 'Canal du Midi from Toulouse to Narbonne')">
+                    <input required name="title" ng-model="tour.title" type="text" class="form-control" id="tourTitle" placeholder="Enter the name of your tour... (e.g. 'Canal du Midi from Toulouse to Narbonne')">
                 </div>
                 <div ng-show="tour.isPersisted()">
                     <h2>{{ tour.title }}</h2>
                 </div>
             </div>
             <div class="col-md-2">
-                <div ng-show="tour.isReadyToCreate()">
-                    <a ng-click="addTour()" class="btn btn-success create-tour-button"><i class="fa fa-check"></i> Create tour</a>
+                <div>
+                    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+                    <a ng-disabled="createTourForm.$invalid" ng-click="submitCreateTour(createTourForm)" class="btn btn-success create-tour-button"><i class="fa fa-check"></i> Create tour</a>
                 </div>
+
             </div>
             <div class="col-md-5">
                 <div class="form-group">
                     <label for="tourCountry">Tour country</label>
-                    <input typeahead-min-length="2" id="tourCountry" readonly="true" ng-model="tour.country" placeholder="Country of departure" typeahead="country as country.label for country in getCountry($viewValue)" typeahead-loading="countryLoading" typeahead-input-formatter="countryToName($model)" class="form-control">
+                    <input required typeahead-min-length="2" id="tourCountry" readonly="true" ng-model="tour.country" placeholder="Country of departure" typeahead="country as country.label for country in getCountry($viewValue)" typeahead-loading="countryLoading" typeahead-input-formatter="countryToName($model)" class="form-control">
                     <i ng-show="countryLoading" class="glyphicon glyphicon-refresh"></i>
                 </div>
             </div>
+
         </div>
-
-        <div class="row">
-            <div class="col-md-7">
-
-                <table class="table" ng-show="tour.isPersisted()">
-                    <thead>
-                        <tr>
-                            <th class="col-md-1"></th>
-                            <th class="col-md-1">Day</th>
-                            <th class="col-md-4">From</th>
-                            <th class="col-md-4">To</th>
-                            <th class="col-md-1">Difficulty</th>
-                            <th class="col-md-1"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="step in tour.steps">
-                            <td class="col-md-1">
-                                <a title="Delete daily step" ng-show="step.isInEdition() && step.isPersisted()" ng-click="deleteStep(step)" class="btn btn-danger delete-step-button"><i class="fa fa-trash-o"></i></a>
-                                <a title="Edit daily step details" ng-show="!step.isInEdition() && step.isPersisted()" ng-click="editStepDetails(step)" class="btn btn-primary delete-step-button"><i class="fa fa-bars"></i></a>
-                            </td>
-                            <td>{{ $index + 1 }}</td>
-                            <td class="city city-from">
-                                <div class="form-group" ng-show="step.isInEdition()">
-                                    <input typeahead-min-length="2" ng-model="step.cityFrom" placeholder="City of departure" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityFromLoading" typeahead-input-formatter="cityToName($model)" typeahead-on-select="updateMap()" class="form-control">
-                                    <i ng-show="place.cityFromLoading" class="glyphicon glyphicon-refresh"></i>
-                                </div>
-                                <div ng-hide="step.isInEdition()">{{ step.cityFrom.name }}</div>
-                            </td>
-                            <td>
-                                <div class="form-group" ng-show="step.isInEdition()">
-                                    <input typeahead-min-length="2" ng-show="step.isValidCityFrom()" ng-model="step.cityTo" placeholder="City of arrival" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityToLoading" typeahead-input-formatter="cityToName($model)" typeahead-on-select="updateMap()" class="form-control">
-                                    <i ng-show="place.cityToLoading" class="glyphicon glyphicon-refresh"></i>
-                                </div>
-                                <div ng-hide="step.isInEdition()">{{ step.cityTo.name }}</div>
-                            </td>
-                            <td>
-                                <rating readonly="step.status == 'read-only'" ng-show="step.isValidCityTo()" ng-model="step.difficulty" max="4" on-leave="overStar = null"></rating>
-                            </td>
-                            <td>
-                                <div ng-show="step.isInEdition()">
-                                    <a ng-disabled="!step.isValid()" ng-click="saveStep(step)" class="btn btn-success save-step-button"><i class="fa fa-check"></i></a>
-                                </div>
-                                <div ng-show="step.isReadyToEdit()">
-                                    <a ng-click="editStep(step)" class="btn btn-default edit-step-button"><i class="fa fa-pencil-square-o"></i></a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-            </div>
-
-            <div class="col-md-5">
-                <div extended-map config="mapConfig"></div>
-            </div>
-        </div>
-
     </form>
+
+    <div class="row">
+        <div class="col-md-7">
+
+            <table class="table" ng-show="tour.isPersisted()">
+                <thead>
+                    <tr>
+                        <th class="col-md-1"></th>
+                        <th class="col-md-1">Day</th>
+                        <th class="col-md-3">From</th>
+                        <th class="col-md-3">To</th>
+                        <th class="col-md-1">Difficulty</th>
+                        <th class="col-md-2">Interest</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="step in tour.steps">
+                        <td class="col-md-1">
+                            <a title="Delete daily step" ng-show="step.isInEdition() && step.isPersisted()" ng-click="deleteStep(step)" class="btn btn-danger delete-step-button"><i class="fa fa-trash-o"></i></a>
+                            <a title="Edit daily step details" ng-show="!step.isInEdition() && step.isPersisted()" ng-click="editStepDetails(step)" class="btn btn-primary delete-step-button"><i class="fa fa-bars"></i></a>
+                        </td>
+                        <td>{{ $index + 1 }}</td>
+                        <td class="city city-from">
+                            <div class="form-group" ng-show="step.isInEdition()">
+                                <input typeahead-min-length="2" ng-model="step.cityFrom" placeholder="City of departure" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityFromLoading" typeahead-input-formatter="cityToName($model)" typeahead-on-select="updateMap()" class="form-control">
+                                <i ng-show="place.cityFromLoading" class="glyphicon glyphicon-refresh"></i>
+                            </div>
+                            <div ng-hide="step.isInEdition()">{{ step.cityFrom.name }}</div>
+                        </td>
+                        <td>
+                            <div class="form-group" ng-show="step.isInEdition()">
+                                <input typeahead-min-length="2" ng-show="step.isValidCityFrom()" ng-model="step.cityTo" placeholder="City of arrival" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityToLoading" typeahead-input-formatter="cityToName($model)" typeahead-on-select="updateMap()" class="form-control">
+                                <i ng-show="place.cityToLoading" class="glyphicon glyphicon-refresh"></i>
+                            </div>
+                            <div ng-hide="step.isInEdition()">{{ step.cityTo.name }}</div>
+                        </td>
+                        <td>
+                            <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="step.status == 'read-only'" ng-show="step.isValidCityTo()" ng-model="step.difficulty" max="3" on-leave="overStar = null"></rating>
+                        </td>
+                        <td>
+                            <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="step.status == 'read-only'" ng-show="step.isValidCityTo() && step.difficulty" ng-model="step.interest" max="5" on-leave="overStar = null"></rating>
+                        </td>
+                        <td>
+                            <div ng-show="step.isInEdition()">
+                                <a ng-disabled="!step.isValid()" ng-click="saveStep(step)" class="btn btn-success save-step-button"><i class="fa fa-check"></i></a>
+                            </div>
+                            <div ng-show="step.isReadyToEdit()">
+                                <a ng-click="editStep(step)" class="btn btn-default edit-step-button"><i class="fa fa-pencil-square-o"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="col-md-5">
+            <div extended-map config="mapConfig"></div>
+        </div>
+    </div>
+
+
 
 
 </div>
