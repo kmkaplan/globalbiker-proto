@@ -5,8 +5,8 @@
             <div class="col-sm-8 logo-container">
                 <h1 class="logo">
                     <img src="/assets/images/bike.png" title="bike logo provided by http://buzz.icons8.com" />
-                    <span class="global">Global</span><span class="biker">Bikers</span>
-                    <p class="slogan" translate="home.main.slogan"></p>
+                    <span class="global">Global</span><span class="biker">Biker</span>
+                    <p class="slogan" translate="home.main.slogan">Ride Global, Ride GlobalBiker</p>
                 </h1>
             </div>
             <div class="col-sm-4 contacts">
@@ -28,26 +28,28 @@
                             <img src="assets/images/cartewelcome.png" alt="Votre blog" class="carte">
                         </div>
                         <div class="col-sm-5">
-                            <h2 class="slogan-welcome txt-shadow">Rejoignez GlobalBiker</h2>
-                            <h3 class="txt-shadow">la première communauté de voyageurs à vélo</h3>
+                            <h2 class="slogan-welcome txt-shadow" translate="home.intro.invit">GlobalBiker</h2>
+                            <h3 class="txt-shadow" translate="home.intro.description">First bike tourers' community</h3>
                             <div>
-                                <button class="btn btn-lg btn-default btn-welcome" type="button" onclick="smoothScroll('prepare'); smoothScroll('partager', 20000);">Découvrez GlobalBiker</button>
+                                <button class="btn btn-lg btn-default btn-welcome" type="button" onclick="smoothScroll('prepare'); smoothScroll('partager', 20000);"
+                                    translate="home.intro.discover_btn">Discover GlobalBiker</button>
                             </div>
                             <div>
-                                <a href="my-tours"><button class="btn btn-lg btn-default btn-welcome" type="button" >Tester la version Beta</button></a>
+                                <a href="my-tours"><button class="btn btn-lg btn-default btn-welcome" type="button"
+                                    translate="home.intro.beta_test">Test the prototype!</button></a>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 mailing">
-                            <h3 class="txt-shadow">Entrez votre e-mail pour être tenu au courant de l'évolution du projet</h3>
+                            <h3 class="txt-shadow" translate="home.intro.invit_mailing">Join us and follow the progress of the project!</h3>
                             <form name="mailingForm" ng-submit="addMail(emailMailing)" class="mailing-form">
                                 <div class="input-group input-group-lg">
-                                    <input class="form-control transparent-form email-input" type="email" placeholder="Email" name="email"
+                                    <input class="form-control transparent-form email-input" type="email" placeholder="{{ 'home.intro.email_placeh' | translate }}"  name="email"
                                         ng-model="emailMailing">
                                     <span class="input-group-btn">
                                     <button class="btn signup-btn" type="submit">
-                                        <span>Go</span>
+                                        <span translate="home.intro.email_btn">Go</span>
                                     </button>
                                     </span>
                                 </div>
@@ -61,30 +63,30 @@
         <div class="decouvrir">
             <div class="cadre">
                 <div class="title">
-                    <h2>Préparez votre voyage à vélo</h2>
+                    <h2 translate="home.prepare.title">Prepare your bike tour</h2>
                 </div>
-                <h3>Bénéficiez de l'expérience des GlobalBikers</h3>
+                <h3 translate="home.prepare.slogan">Benefit from the GlobalBikers' experience</h3>
                 <div class="row">
-                    <div class="col-sm-6 action">
-                        Recherchez des itinéraires dans le monde entier
+                    <div class="col-sm-6 action" translate="home.prepare.search_road">
+                        Look out for tours in the whole world
                     </div>
-                    <div class="col-sm-6 action">
-                        Consultez le tracé, les points d’intérêt sur la carte et les informations pratiques
+                    <div class="col-sm-6 action" translate="home.prepare.interest_map">
+                        Check out the tour track, the points of interest on the map and all the practical information
                     </div>
                 </div>
                 <div class="row action-row">
-                    <div class="col-sm-6 action">
-                        Partez l’esprit libre grâce aux conseils des GlobalBiker
+                    <div class="col-sm-6 action" translate="home.prepare.free_mind">
+                        Travel without a care thanks to the advices of GlobalBikers
                     </div>
-                    <div class="col-sm-6 action">
-                        Découvrez un formidable moyen de voyager!
+                    <div class="col-sm-6 action" translate="home.prepare.discover_way">
+                        Enjoy a great way to travel!
                     </div>
                 </div>
                 <ul class="list-group">
-                    <li class="list-group-item">Un réseau communautaire de voyageurs à vélo, international et non commercial</li>
-                    <li class="list-group-item">Un site Internet gratuit et open-source <span class="licence">(<a href="https://www.gnu.org/licenses/why-affero-gpl.html">AGPL</a>)</span>
+                    <li class="list-group-item" translate="home.prepare.network">A community network of bicycle travellers, international and non-commercial</li>
+                    <li class="list-group-item" translate="home.prepare.free_opensrc">A free and open-source website<span class="licence">(<a href="https://www.gnu.org/licenses/why-affero-gpl.html">AGPL</a>)</span>
                     </li>
-                    <li class="list-group-item">Des données ré-utilisables sur votre blog <span class="licence">(<a href="http://opendatacommons.org/licenses/odbl/">ODbL</a>, <a href="http://creativecommons.org/">Creative Commons</a>)</span>
+                    <li class="list-group-item" translate="home.prepare.blog">Data re-use on your blog<span class="licence">(<a href="http://opendatacommons.org/licenses/odbl/">ODbL</a>, <a href="http://creativecommons.org/">Creative Commons</a>)</span>
                     </li>
                 </ul>
             </div>
@@ -94,27 +96,27 @@
         <div class="decouvrir">
             <div class="cadre">
                 <div class="title">
-                    <h2>Partagez votre expérience</h2>
+                    <h2 translate="home.share.title">Share your experience</h2>
                 </div>
-                <h3>Racontez-nous votre voyage!</h3>
+                <h3 translate="home.share.slogan">Tell us about your trip!</h3>
                 <div class="row action-row">
-                    <div class="col-sm-6 action">
-                        Publiez la carte interactive de votre voyage sur votre blog
+                    <div class="col-sm-6 action" translate="home.share.publish">
+                        Publish the interactive map of your trip on your blog
                     </div>
-                    <div class="col-sm-6 action">
-                        Complétez les fiches pratiques des pays/régions parcourus
+                    <div class="col-sm-6 action" translate="home.share.complete">
+                        Complete the practical sheets about the country and region travelled
                     </div>
                 </div>
                 <div class="row action-row">
-                    <div class="col-sm-6 action">
-                        Ajoutez de nouveaux parcours
+                    <div class="col-sm-6 action" translate="home.share.add_track">
+                        Add new tours
                     </div>
-                    <div class="col-sm-6 action">
-                        Conseillez à votre tour a communauté GlobalBiker
+                    <div class="col-sm-6 action" translate="home.share.advice">
+                        Give advices to the community
                     </div>
                 </div>
-                  <a href="my-tours"><button class="btn btn-lg btn-default btn-welcome" type="button" >Tester la version Beta</button></a>
+                  <a href="my-tours"><button class="btn btn-lg btn-default btn-welcome" type="button" translate="home.share.test_beta">Test the prototype!</button></a>
             </div>
         </div>
     </section>
-    </div>
+</div>
