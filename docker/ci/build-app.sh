@@ -6,7 +6,7 @@ set -x
 
 rm -rf /app/*
 
-cp /deploy /app
+cp -r /deploy/. /app/
 
 cd /app
 
