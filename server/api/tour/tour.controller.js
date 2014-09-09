@@ -13,7 +13,6 @@ exports.index = function (req, res) {
         }
         return res.json(200, tours);
     });
-
 };
 
 // Get a single tour
@@ -99,3 +98,4 @@ exports.destroy = function (req, res) {
 function handleError(res, err) {
     return res.send(500, err);
 }
+
