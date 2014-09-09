@@ -18,6 +18,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/bikelane/bikelane.socket').register(socket);
   require('../api/interest/interest.socket').register(socket);
   require('../api/mailing/mailing.socket').register(socket);
   require('../api/step/step.socket').register(socket);

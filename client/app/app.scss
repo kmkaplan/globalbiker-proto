@@ -28,6 +28,7 @@ $baseColor2: #5e8c15;
 // Component styles are injected through grunt
 // injector
 @import 'account/login/login.scss';
+@import 'admin-data/admin-data.scss';
 @import 'admin/admin.scss';
 @import 'extendedMap/extendedMap.scss';
 @import 'home/home.scss';
