@@ -4,15 +4,15 @@
     "home" : {
         "nav-bar_name"      : "Acceuil",
         "main" : {
-            "slogan"        : "Roulez, voyagez, partagez"
+            "slogan"        : "Ride Global, Ride GlobalBiker"
         },
         "intro" : {
-            "invit"         : "Rejoignez GlobalBiker",
-            "description"   : "la première communauté de voyageurs à vélo",
+            "invit"         : "GlobalBiker",
+            "description"   : "Première communauté de voyageurs à vélo",
             "discover_btn"  : "Découvrez GlobalBiker",
-            "beta_test"     : "Tester la version Beta",
-            "invit_mailing" : "Entrez votre e-mail pour être tenu au courant de l'évolution du projet",
-            "email_placeh"  : "Email",
+            "beta_test"     : "Testez le prototype!",
+            "invit_mailing" : "Rejoignez-nous et suivez l'avancement du projet!",
+            "email_placeh"  : "Votre e-mail",
             "email_btn"     : "Go"
         },
         "prepare" : {
@@ -20,7 +20,7 @@
             "slogan"        : "Bénéficiez de l'expérience des GlobalBikers",
             "search_road"   : "Recherchez des itinéraires dans le monde entier",
             "interest_map"  : "Consultez le tracé, les points d’intérêt sur la carte et les informations pratiques",
-            "free_mind"     : "Partez l’esprit libre grâce aux conseils des GlobalBiker",
+            "free_mind"     : "Partez l’esprit libre grâce aux conseils des GlobalBikers",
             "discover_way"  : "Découvrez un formidable moyen de voyager!",
             "network"       : "Un réseau communautaire de voyageurs à vélo, international et non commercial",
             "free_opensrc"  : "Un site Internet gratuit et open-source",
@@ -30,10 +30,10 @@
             "title"         : "Partagez votre expérience",
             "slogan"        : "Racontez-nous votre voyage!",
             "publish"       : "Publiez la carte interactive de votre voyage sur votre blog",
-            "complete"      : "Complétez les fiches pratiques des pays/régions parcourus",
+            "complete"      : "Complétez les fiches pratiques des pays ou régions parcourus",
             "add_track"     : "Ajoutez de nouveaux parcours",
-            "advice"        : "Conseillez à votre tour a communauté GlobalBiker",
-            "test_beta"     : "Tester la version Beta"
+            "advice"        : "Conseillez à votre tour la communauté",
+            "test_beta"     : "Testez le prototype!"
         }
     },
     "mytours" : {
@@ -42,7 +42,7 @@
         "edit" : {
             "title"         : "Nom du parcours",
             "country"       : "Pays du parcours",
-            "titre_placeh"  : "Le nom de votre parcours (ex : Canal du midi depuis Toulouse",
+            "titre_placeh"  : "Le nom de votre parcours (ex : Canal du midi depuis Toulouse)",
             "create"        : "Créer le parcours",
             "day"           : "Jour",
             "from"          : "de",
@@ -58,7 +58,7 @@
             "iti_trace"     : "Le tracé de votre itinéraire",
             "update_trace"  : "Mettre à jour votre tracé",
             "updload_gps"   : "Charger votre tracé GPS (fichier *.kml)",
-            "draw"          : "Ou dessiner le manuellement en utilisant les outils de la carte!"
+            "draw"          : "Ou dessiner manuellement votre tracé en utilisant les outils de la carte!"
         }
     }
 }

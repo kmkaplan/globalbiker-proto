@@ -5,7 +5,6 @@
     <ol class="breadcrumb">
         <li class="active">My tours</li>
     </ol>
-    
     <table ng-show="tours.length" class="table table-hover">
         <tr ng-repeat="tour in tours">
             <td class="col-md-1">
@@ -14,10 +13,14 @@
             <td class="tour-title" ng-click="viewTour(tour)">{{ tour.title }}</td>
         </tr>
     </table>
-    
+
     <div ng-hide="tours.length" class="alert alert-info" role="alert">Create your first tour now by clicking on <strong>"Create a new tour"</strong> button bellow.</div>
-    
+
     <a ng-click="createTour()" class="btn btn-success edit-step-button"><i class="fa fa-plus-square"></i> Create a new tour</a>
-    
+
+    <div ng-hide="tours.length" class="alert alert-info" role="alert">Create your first tour now by clicking on <strong>"Create a new tour"</strong> button bellow.</div>
+
+    <a ng-click="createTour()" class="btn btn-success edit-step-button"><i class="fa fa-plus-square"></i> Create a new tour</a>
+
 </div>
 

@@ -2,7 +2,7 @@
 
 angular.module('bikeTouringMapApp')
     .controller('MyToursCtrl', function ($scope, $state, TourRepository, Auth) {
- 
+
         Auth.isLoggedInAsync(function (loggedIn) {
             if (Auth.isAdmin()) {
 

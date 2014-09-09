@@ -21,10 +21,15 @@ angular.module('bikeTouringMapApp', [
             prefix: '/i18n/',
             suffix: '.json'
         });
-        var preferredLanguage = $translateProvider.determinePreferredLanguage();
-        if (!preferredLanguage) {
-            $translateProvider.preferredLanguage('en');
-        }
+
+        $translateProvider.determinePreferredLanguage(function() {
+            if (navigator.language.lastIndexOf("fr", 0) === 0) {
+                return "fr";
+            } else {
+                return "en";
+            }
+        });
+
     })
 
 .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {

@@ -1,0 +1,64 @@
+{
+    "signup"                : "Sign up",
+    "login"                 : "Log in",
+    "home" : {
+        "nav-bar_name"      : "Home",
+        "main" : {
+            "slogan"        : "Ride Global, Ride GlobalBiker"
+        },
+        "intro" : {
+            "invit"         : "GlobalBiker",
+            "description"   : "First bike tourers' community",
+            "discover_btn"  : "Discover GlobalBiker",
+            "beta_test"     : "Test the prototype!",
+            "invit_mailing" : "Join us and follow the progress of the project!",
+            "email_placeh"  : "Your e-mail",
+            "email_btn"     : "Go"
+        },
+        "prepare" : {
+            "title"         : "Prepare your bike tour",
+            "slogan"        : "Benefit from the GlobalBikers' experience",
+            "search_road"   : "Look out for tours in the whole world",
+            "interest_map"  : "Check out the tour track, the points of interest on the map and all the practical information",
+            "free_mind"     : "Travel without a care thanks to the advices of GlobalBikers",
+            "discover_way"  : "Enjoy a great way to travel!",
+            "network"       : "A community network of bicycle travellers, international and non-commercial",
+            "free_opensrc"  : "A free and open-source website",
+            "blog"          : "Data re-use on your blog"
+        },
+        "share" : {
+            "title"         : "Share your experience",
+            "slogan"        : "Tell us about your trip!",
+            "publish"       : "Publish the interactive map of your trip on your blog",
+            "complete"      : "Complete the practical sheets about the country and region travelled",
+            "add_track"     : "Add new tours",
+            "advice"        : "Give advices to the community",
+            "test_beta"     : "Test the prototype!"
+        }
+    },
+    "mytours" : {
+        "nav-bar_name"      : "My tours",
+        "create"            : "Create a new tour",
+        "edit" : {
+            "title"         : "Tour title",
+            "country"       : "Tour country",
+            "titre_placeh"  : "Tour title (eg : Canal du midi from Toulouse)",
+            "create"        : "Create the tour",
+            "day"           : "Day",
+            "from"          : "from",
+            "to"            : "to",
+            "difficulty"    : "Difficulty",
+            "departure"     : "Departure city",
+            "arrival"       : "Arrival city",
+            "edit_daily"    : "Edit the detail of the day's stage"
+        },
+        "steps" : {
+            "From"          : "From",
+            "to"            : "to",
+            "iti_trace"     : "Your tour track",
+            "update_trace"  : "Update your track",
+            "updload_gps"   : "Upload your GPS track (*.kml files)",
+            "draw"          : "Or draw it manually using the map tools!"
+        }
+    }
+}

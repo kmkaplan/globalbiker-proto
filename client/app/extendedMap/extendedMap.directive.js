@@ -97,7 +97,7 @@ angular.module('bikeTouringMapApp')
                         },
                         center: $scope.config.initialCenter
                     };
-                    
+
                     angular.extend($scope, initialConfig);
                     $scope.eMap = {
                         mapId: $scope.mapId,

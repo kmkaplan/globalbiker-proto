@@ -16,7 +16,7 @@ angular.module('bikeTouringMapApp')
     $scope.loginOauth = function(provider) {
       $window.location.href = '/auth/' + provider;
     };
-    
+
     $scope.connect = function(email, password){
         Auth.login({
           email: email,

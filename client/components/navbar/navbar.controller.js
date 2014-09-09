@@ -1,16 +1,20 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('NavbarCtrl', function ($scope, $location, Auth) {
-        $scope.menu = [{
-                'title': 'Home',
+    .controller('NavbarCtrl', function ($scope, $location, Auth, $translate) {
+        var home;
+        $translate(['home.nav-bar_name','mytours.nav-bar_name']).then(function(trans) {
+            $scope.menu = [{
+                'title': trans['home.nav-bar_name'],
                 'link': '/'
             },
             {
-                'title': 'My tours',
+                'title': trans['mytours.nav-bar_name'],
                 'link': '/my-tours',
                 authenticate: true
             }];
+        });
+
 
         $scope.isCollapsed = true;
         $scope.isLoggedIn = Auth.isLoggedIn;
