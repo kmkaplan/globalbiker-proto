@@ -28,6 +28,6 @@ ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
 EXPOSE 8080
 
 # volumes
-VOLUME  ["/app"]
+VOLUME  ["/deploy", "/app"]
 
 CMD ["/scripts/run.sh"]

@@ -4,6 +4,10 @@ set -e
 
 set -x
 
+rm -rf /app
+
+cp /deploy /app
+
 cd /app
 
 # npm build
