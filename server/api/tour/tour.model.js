@@ -8,6 +8,11 @@ var TourSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    userId: {
+        type: Schema.ObjectId,
+        ref: 'UserSchema',
+        required: 'Please fill user id'
+    },
     title: {
         type: String,
         required: 'Please fill tour title',

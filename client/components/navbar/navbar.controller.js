@@ -6,9 +6,10 @@ angular.module('bikeTouringMapApp')
                 'title': 'Home',
                 'link': '/'
             },
-                       {
+            {
                 'title': 'My tours',
-                'link': '/my-tours'
+                'link': '/my-tours',
+                authenticate: true
             }];
 
         $scope.isCollapsed = true;

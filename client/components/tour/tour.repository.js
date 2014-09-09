@@ -10,6 +10,11 @@ angular.module('bikeTouringMapApp')
                 params: {
                     id: 'me'
                 }
+            },
+            getMines: {
+                method: 'GET',
+                isArray: true,
+                url: '/api/tours/mines'
             }
         });
     });
