@@ -6,6 +6,7 @@ angular.module('bikeTouringMapApp')
       .state('my-tour', {
         url: '/my-tour/:id',
         templateUrl: 'app/my-tour/my-tour.html',
-        controller: 'MyTourCtrl'
+        controller: 'MyTourCtrl',
+        authenticate: true
       });
   });

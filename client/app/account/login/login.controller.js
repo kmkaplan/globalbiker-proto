@@ -9,21 +9,25 @@ angular.module('bikeTouringMapApp')
       $scope.submitted = true;
 
       if(form.$valid) {
-        Auth.login({
-          email: $scope.user.email,
-          password: $scope.user.password
-        })
-        .then( function() {
-          // Logged in, redirect to home
-          $location.path('/');
-        })
-        .catch( function(err) {
-          $scope.errors.other = err.message;
-        });
+        $scope.connect($scope.user.email, $scope.user.password);
       }
     };
 
     $scope.loginOauth = function(provider) {
       $window.location.href = '/auth/' + provider;
+    };
+
+    $scope.connect = function(email, password){
+        Auth.login({
+          email: email,
+          password: password
+        })
+        .then( function() {
+          // Logged in, redirect to home
+          $location.path('/my-tours');
+        })
+        .catch( function(err) {
+          $scope.errors.other = err.message;
+        });
     };
   });

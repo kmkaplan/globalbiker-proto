@@ -2,9 +2,11 @@
 
 <div class="container my-tours-page">
 
-    <a ng-click="createTour()" class="btn btn-success edit-step-button"><i class="fa fa-plus-square"></i> Create a new tour</a>
+    <ol class="breadcrumb">
+        <li class="active">My tours</li>
+    </ol>
 
-    <table class="table table-hover">
+    <table ng-show="tours.length" class="table table-hover">
         <tr ng-repeat="tour in tours">
             <td class="col-md-1">
                 <a ng-click="deleteTour(tour)" class="btn btn-danger delete-tour-button"><i class="fa fa-trash-o"></i></a>
@@ -12,5 +14,10 @@
             <td class="tour-title" ng-click="viewTour(tour)">{{ tour.title }}</td>
         </tr>
     </table>
+
+    <div ng-hide="tours.length" class="alert alert-info" role="alert">Create your first tour now by clicking on <strong>"Create a new tour"</strong> button bellow.</div>
+
+    <a ng-click="createTour()" class="btn btn-success edit-step-button"><i class="fa fa-plus-square"></i> Create a new tour</a>
+
 </div>
 

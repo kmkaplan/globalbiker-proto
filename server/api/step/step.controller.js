@@ -91,7 +91,12 @@ exports.update = function (req, res) {
 
 // Deletes a step from the DB.
 exports.destroy = function (req, res) {
-    Step.findById(req.params.id, function (err, step) {
+    Step.findById(req.params.id, {
+        sort: {
+            // sort by id ASC
+            _id: 1
+        }
+    }, function (err, step) {
         if (err) {
             return handleError(res, err);
         }

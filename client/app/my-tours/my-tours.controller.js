@@ -1,9 +1,21 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyToursCtrl', function ($scope, $state, TourRepository) {
-        // Use the Tour $resource to fetch all tours
-        $scope.tours = TourRepository.query();
+    .controller('MyToursCtrl', function ($scope, $state, TourRepository, Auth) {
+
+        Auth.isLoggedInAsync(function (loggedIn) {
+            if (Auth.isAdmin()) {
+
+                // admin can edit all tours
+                $scope.tours = TourRepository.query();
+            } else {
+
+                // user can only edit its tours
+                $scope.tours = TourRepository.getMines();
+            }
+        });
+
+
 
         $scope.createTour = function () {
             $state.go('my-tour', {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, leafletData, TourRepository, StepRepository, MyTourViewModelTour, MyTourViewModelStep, MyTourViewModelCity, geonames, MyTourMapService) {
+    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, leafletData, TourRepository, StepRepository, MyTourViewModelTour, MyTourViewModelStep, MyTourViewModelCity, geonames, MyTourMapService, Auth) {
 
         $scope.init = function () {
 
@@ -178,8 +178,11 @@ angular.module('bikeTouringMapApp')
         $scope.addTour = function () {
             if ($scope.tour.isValid()) {
 
+                var user = Auth.getCurrentUser();
+
                 // create tour resource
                 var newTour = new TourRepository({
+                    userId: user._id,
                     title: $scope.tour.title,
                     country: {
                         geonameId: $scope.tour.country.geonameId,
