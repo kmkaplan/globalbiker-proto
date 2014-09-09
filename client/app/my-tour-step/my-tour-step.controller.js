@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, TourRepository, StepRepository, MyTourStepViewModelStep, MyTourStepMapService) {
+    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, TourRepository, StepRepository, InterestRepository, MyTourStepViewModelStep, MyTourStepMapService) {
 
         $scope.onFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
@@ -114,49 +114,17 @@ angular.module('bikeTouringMapApp')
                             MyTourStepMapService.updateTrace($scope.mapConfig, $scope.step);
                             eMap.config.control.fitBoundsFromPoints(newPoints);
                         });
-                        $scope.$watch('step.markers', function (newPoints, oldPoints) {
-                            MyTourStepMapService.updateMarkers($scope.mapConfig, $scope.step);
-                        });
                     },
                     'draw:created': function (eMap, points, e) {
 
                         if (e.layerType === 'marker') {
 
-                            var markers = $scope.step.markers.slice();
-
-                            var type;
-
-                            switch ($scope.step.markers.length % 4) {
-                            case 0:
-                                type = 'interest';
-                                break;
-                            case 1:
-                                type = 'bike-shops';
-                                break;
-                            case 2:
-                                type = 'food';
-                                break;
-                            case 3:
-                                type = 'danger';
-                                break;
-                            }
-
-                            markers.push({
+                            $scope.newMarker = {
                                 latitude: points.latitude,
-                                longitude: points.longitude,
-                                type: type
-                            });
+                                longitude: points.longitude
+                            };
 
-                            var stepRepository = new StepRepository({
-                                _id: $scope.step._id,
-                                markers: markers
-                            });
-                            stepRepository.$update(function (step) {
-                                $scope.step.markers = markers;
-
-                                MyTourStepMapService.updateMarkers($scope.mapConfig, $scope.step);
-                            });
-
+                            $scope.openCreateMarkerForm();
 
                         } else if (e.layerType === 'polyline') {
 
@@ -200,24 +168,41 @@ angular.module('bikeTouringMapApp')
 
                 $scope.stepId = $stateParams.id;
 
-                // TODO manage errors
-
+                // retrieve step
                 StepRepository.get({
                     id: $scope.stepId
                 }, function (step) {
 
-                    // TODO manage errors
-
+                    // retrieve tour
                     TourRepository.get({
                         id: step.tourId
                     }, function (tour) {
-                        var stepViewModel = new MyTourStepViewModelStep(step, tour);
 
-                        $scope.step = stepViewModel;
+                        // retrieve interests
+                        InterestRepository.getByStep({
+                            stepId: $scope.stepId
+                        }, function (interests) {
+                            
+                            var stepViewModel = new MyTourStepViewModelStep(step, tour, interests);
 
-                        deffered.resolve(tour);
+                            $scope.step = stepViewModel;
+                            
+                            MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+
+                            deffered.resolve($scope.step);
+                        }, function () {
+                            console.error('Unexpected error while retrieving interests of step %s', $scope.stepId);
+                            deffered.reject('Unexpected error while retrieving interests of step.');
+                        });
+
+                    }, function () {
+                        console.error('Unexpected error while retrieving tour %s', step.tourId);
+                        deffered.reject('Unexpected error while retrieving tour.');
                     });
 
+                }, function () {
+                    console.error('Unexpected error while retrieving step %s', $scope.stepId);
+                    deffered.reject('Unexpected error while retrieving step.');
                 });
 
                 return deffered.promise;
@@ -229,7 +214,31 @@ angular.module('bikeTouringMapApp')
             marker.isInEdition = false;
         };
 
-        $scope.open = function (size) {
+        $scope.submitCreatePointForm = function (form) {
+
+            if (form.$valid) {
+
+                var interest = new InterestRepository({
+                    stepId: $scope.step._id,
+                    latitude: $scope.newMarker.latitude,
+                    longitude: $scope.newMarker.longitude,
+                    type: $scope.newMarker.type,
+                    name: $scope.newMarker.name,
+                    description: $scope.newMarker.description
+                });
+                interest.$save(function(u, putResponseHeader){
+                    
+                    $('#new-point-of-interest-form').modal('hide')
+                    
+                    $scope.step.interests.push(interest);
+                
+                    MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+                });
+               
+            }
+        };
+
+        $scope.openCreateMarkerForm = function (size) {
 
             $('#new-point-of-interest-form').modal('show')
         };

@@ -1,6 +1,6 @@
 
 angular.module('bikeTouringMapApp').factory('MyTourStepViewModelStep', function () {
-    return function (step, tour) {
+    return function (step, tour, interests) {
         //set defaults properties and functions
         angular.extend(this, {
             tour: null,
@@ -10,6 +10,7 @@ angular.module('bikeTouringMapApp').factory('MyTourStepViewModelStep', function 
             distance: null,
             readableDistance: null,
             points: [],
+            interests: interests,
             isTraceInEdition: false,
             isPersisted: function () {
                 return typeof (this._id) !== 'undefined';

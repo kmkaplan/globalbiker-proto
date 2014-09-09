@@ -77,8 +77,15 @@ angular.module('bikeTouringMapApp')
                     markerOptions.icon = markerIcon;
                     
                 }
-
+                
                 var markerLayer = L.marker([marker.latitude, marker.longitude], markerOptions).addTo(map);
+
+                if (marker.popup && marker.popup.content){
+                    markerLayer.bindPopup(marker.popup.content);
+                    if (marker.popup.open){
+                        markerLayer.openPopup();
+                    }
+                }
 
                 // add it to the layer
                 this.addToLayer(eMap, layerName, markerLayer, marker);

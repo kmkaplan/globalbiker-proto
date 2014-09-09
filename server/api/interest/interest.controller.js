@@ -20,6 +20,23 @@ exports.show = function(req, res) {
   });
 };
 
+/**
+ * Get interests by step.
+ */
+exports.getByStep = function (req, res) {
+
+    var stepId = req.params.stepId;
+
+    Interest.find({
+        'stepId': stepId
+    }, function (err, interests) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(200, interests);
+    });
+};
+
 // Creates a new interest in the DB.
 exports.create = function(req, res) {
   Interest.create(req.body, function(err, interest) {

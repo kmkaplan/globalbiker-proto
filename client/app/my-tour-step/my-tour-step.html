@@ -24,24 +24,29 @@
                             <h4 class="modal-title">New point of interest</h4>
                         </div>
                         <div class="modal-body">
-                            <form role="form">
+                            <form novalidate role="form" name="createPointForm" ng-submit="submitCreatePointForm(createPointForm)">
                                 <section class="form-section">
-                                    <div class="form-group">
-                                        <label>Type</label>
-                                        <select class="form-control">
+                                    <div class="form-group required" ng-class="{ 'has-error':  createPointForm.type.$invalid, 'has-success':createPointForm.type.$valid }">
+                                        <label class="control-label">Type</label>
+                                        <select required name="type" ng-model="newMarker.type" class="form-control">
                                             <option value="interest">interest</option>
                                             <option value="bike-shops">bike-shops</option>
                                             <option value="food">food</option>
-                                            <option value="interest">danger</option>
+                                            <option value="danger">danger</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input ng-model="newMarker.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
+                                    <div class="form-group required" ng-class="{ 'has-error':  createPointForm.name.$dirty && createPointForm.name.$invalid, 'has-success': createPointForm.name.$dirty && createPointForm.name.$valid }">
+                                        <label class="control-label">Name</label>
+                                        <input required name="name" ng-model="newMarker.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
+                                        <label class="error-label" ng-show="createPointForm.name.$invalid && createPointForm.name.$dirty">The name is required.</label>
+                                   </div>
+                                    <div class="form-group required" ng-class="{ 'has-error':  createPointForm.description.$dirty && createPointForm.description.$invalid, 'has-success': createPointForm.description.$dirty && createPointForm.description.$valid }">
+                                        <label accesskey=""class="control-label">Description</label>
+                                        <input required name="description" ng-model="newMarker.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
+                                        <label class="error-label" ng-show="createPointForm.description.$invalid && createPointForm.description.$dirty">The description is required.</label>
                                     </div>
                                     <div class="form-group">
-                                        <label>Description</label>
-                                        <input ng-model="newMarker.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
+                                        <a ng-disabled="createPointForm.$invalid" class="btn btn-primary" ng-click="submitCreatePointForm(createPointForm)"><i class="icon fa fa-plus-square"></i> Add to the map</a>
                                     </div>
                                 </section>
                             </form>
@@ -77,10 +82,11 @@
                         </div>
                     </div>
                 </section>
-                <section class="form-section points-of-interest">
+               <!-- <section class="form-section points-of-interest">
                     <h3>Points of interest</h3>
-                    <button class="btn btn-default" ng-click="open()">Create a new point of interest</button>
-
+                    <div class="form-group">
+                        <a class="btn btn-primary" ng-click="open()"><i class="icon fa fa-plus-square"></i>  Create a new point of interest</a>
+                    </div>
                     <div class="form-group point-of-interest {{ marker.type }}" ng-class="{ 'in-edition': marker.isInEdition }" ng-repeat="marker in step.markers">
                         <div ng-hide="marker.isInEdition">
                             <a ng-click="marker.isInEdition = true" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i></a>
@@ -115,7 +121,7 @@
                             <input ng-model="marker.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
                         </div>
                     </div>
-                </section>
+                </section>-->
             </form>
         </div>
     </div>

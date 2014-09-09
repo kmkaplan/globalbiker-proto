@@ -87,15 +87,15 @@ angular.module('bikeTouringMapApp')
                 mapConfig.drawnItems = drawnItems;
 
             },
-            updateMarkers: function (mapConfig, step) {
+            updateInterests: function (mapConfig, step) {
 
                 var markers = {
                     items: []
                 };
 
-                if (step && step.markers && step.markers.length > 0) {
+                if (step && step.interests && step.interests.length > 0) {
 
-                    markers.items = step.markers.reduce(function (output, marker) {
+                    markers.items = step.interests.reduce(function (output, marker) {
 
                         var iconName;
                         var markerColor;
@@ -132,6 +132,9 @@ angular.module('bikeTouringMapApp')
                                 name: iconName,
                                 markerColor: markerColor,
                                 spin: spin
+                            },
+                            popup: {
+                                content: '<h3>' + marker.name + '</h3>' + '<p>' + marker.description + '</p>'
                             }
                         });
 

@@ -16,7 +16,7 @@ exports.index = function (req, res) {
 };
 
 /**
- * Get photos.
+ * Get steps by tour.
  */
 exports.getByTour = function (req, res) {
 
