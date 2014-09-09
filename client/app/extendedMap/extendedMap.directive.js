@@ -86,7 +86,7 @@ angular.module('bikeTouringMapApp')
                         }
                     };
 
-                    angular.extend($scope, {
+                    var initialConfig = {
                         mapId: $scope.mapId,
                         defaults: {
                             // tileLayer: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
@@ -95,8 +95,10 @@ angular.module('bikeTouringMapApp')
                             // tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
                             scrollWheelZoom: true
                         },
-                        center: $scope.config.initialCenter,
-                    });
+                        center: $scope.config.initialCenter
+                    };
+                    
+                    angular.extend($scope, initialConfig);
                     $scope.eMap = {
                         mapId: $scope.mapId,
                         config: $scope.config,
