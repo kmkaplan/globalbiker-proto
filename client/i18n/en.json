@@ -1,6 +1,8 @@
 {
     "signup"                : "Sign up",
     "login"                 : "Log in",
+	"hello"					: "Hello",
+	"logout"				: "Log out"
     "home" : {
         "nav-bar_name"      : "Home",
         "main" : {

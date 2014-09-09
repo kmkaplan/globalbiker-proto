@@ -1,6 +1,8 @@
 {
     "signup"                : "S'inscrire",
     "login"                 : "Se connecter",
+	"hello"					: "Bonjour",
+	"logout"				: "Se déconnecter",
     "home" : {
         "nav-bar_name"      : "Acceuil",
         "main" : {
