@@ -4,7 +4,7 @@ set -e
 
 set -x
 
-rm -rf /app
+rm -rf /app/*
 
 cp /deploy /app
 
