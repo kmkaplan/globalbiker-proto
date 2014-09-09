@@ -353,6 +353,14 @@ module.exports = function (grunt) {
         },{
           expand: true,
           dot: true,
+          cwd: '<%= yeoman.client %>/i18n',
+          dest: '<%= yeoman.dist %>/public/i18n',
+          src: [
+            '*'
+          ]
+        },{
+          expand: true,
+          dot: true,
           cwd: '<%= yeoman.client %>',
           dest: '<%= yeoman.dist %>/public',
           src: [
