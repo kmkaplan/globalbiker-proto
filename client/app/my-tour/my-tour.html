@@ -4,17 +4,17 @@
 
 
     <ol class="breadcrumb">
-        <li><a href="/my-tours">My tours</a>
+        <li><a href="/my-tours" translate="mytours.nav-bar_name">My tours</a>
         </li>
-        <li ng-hide="tour.isPersisted()" class="active">Create a new tour</li>
+        <li ng-hide="tour.isPersisted()" class="active"  translate="mytours.create">Create a new tour</li>
         <li ng-show="tour.isPersisted()" class="active">{{ tour.title }}</li>
     </ol>
     <form novalidate role="form" name="createTourForm" ng-submit="submitCreateTour(createTourForm)">
         <div class="row">
             <div class="col-md-5">
                 <div class="form-group required" ng-class="{ 'has-error':  createTourForm.title.$dirty && createTourForm.title.$invalid, 'has-success': createTourForm.title.$dirty && createTourForm.title.$valid }" ng-hide="tour.isPersisted()">
-                    <label for="tourTitle">Tour title</label>
-                    <input required name="title" ng-model="tour.title" type="text" class="form-control" id="tourTitle" placeholder="Enter the name of your tour... (e.g. 'Canal du Midi from Toulouse to Narbonne')">
+                    <label for="tourTitle" translate="mytours.edit.title">Tour title</label>
+                    <input required name="title" ng-model="tour.title" type="text" class="form-control" id="tourTitle" placeholder="{{'mytours.edit.title' | translate}}">
                 </div>
                 <div ng-show="tour.isPersisted()">
                     <h2>{{ tour.title }}</h2>
@@ -23,13 +23,13 @@
             <div class="col-md-2">
                 <div>
                     <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
-                    <a ng-disabled="createTourForm.$invalid" ng-click="submitCreateTour(createTourForm)" class="btn btn-success create-tour-button"><i class="fa fa-check"></i> Create tour</a>
+                    <a ng-disabled="createTourForm.$invalid" ng-click="submitCreateTour(createTourForm)" class="btn btn-success create-tour-button"><i class="fa fa-check"></i> {{ "mytours.edit.create" | translate}}</a>
                 </div>
 
             </div>
             <div class="col-md-5">
                 <div class="form-group">
-                    <label for="tourCountry">Tour country</label>
+                    <label for="tourCountry"  translate="mytours.edit.country">Tour country</label>
                     <input required typeahead-min-length="2" id="tourCountry" readonly="true" ng-model="tour.country" placeholder="Country of departure" typeahead="country as country.label for country in getCountry($viewValue)" typeahead-loading="countryLoading" typeahead-input-formatter="countryToName($model)" class="form-control">
                     <i ng-show="countryLoading" class="glyphicon glyphicon-refresh"></i>
                 </div>
@@ -45,11 +45,11 @@
                 <thead>
                     <tr>
                         <th class="col-md-1"></th>
-                        <th class="col-md-1">Day</th>
-                        <th class="col-md-3">From</th>
-                        <th class="col-md-3">To</th>
-                        <th class="col-md-1">Difficulty</th>
-                        <th class="col-md-2">Interest</th>
+                        <th class="col-md-1" translate="mytours.edit.day">Day</th>
+                        <th class="col-md-3" translate="mytours.edit.from">From</th>
+                        <th class="col-md-3" translate="mytours.edit.to">To</th>
+                        <th class="col-md-1" translate="mytours.edit.difficulty">Difficulty</th>
+                        <th class="col-md-2" translate="mytours.edit.interest">Interest</th>
                         <th class="col-md-1"></th>
                     </tr>
                 </thead>

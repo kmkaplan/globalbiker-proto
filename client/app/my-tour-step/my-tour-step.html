@@ -1,13 +1,13 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="container my-tour-step-page">
     <ol class="breadcrumb">
-        <li><a href="/my-tours">My tours</a>
+        <li><a href="/my-tours" translate="mytours.nav-bar_name">My tours</a>
         </li>
         <li><a href="/my-tour/{{ step.tour._id }}">{{ step.tour.title }}</a>
         </li>
-        <li class="active">From {{ step.cityFrom.name }} to {{ step.cityTo.name }}</li>
+        <li class="active">{{"mytours.steps.from}} {{ step.cityFrom.name }} {{"mytours.steps.to}} {{ step.cityTo.name }}</li>
     </ol>
-    <h2>From {{ step.cityFrom.name }} to {{ step.cityTo.name }}</h2>
+    <h2>{{"mytours.steps.from}} {{ step.cityFrom.name }} {{"mytours.steps.to}} {{ step.cityTo.name }}</h2>
     <div class="row">
         <div class="col-md-7">
             <div extended-map config="mapConfig"></div>
@@ -21,7 +21,7 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                             </button>
-                            <h4 class="modal-title">New point of interest</h4>
+                            <h4 class="modal-title" translate="points_interest.new">New point of interest</h4>
                         </div>
                         <div class="modal-body">
                             <form novalidate role="form" name="createPointForm" ng-submit="submitCreatePointForm(createPointForm)">
@@ -29,24 +29,24 @@
                                     <div class="form-group required" ng-class="{ 'has-error':  createPointForm.type.$invalid, 'has-success':createPointForm.type.$valid }">
                                         <label class="control-label">Type</label>
                                         <select required name="type" ng-model="newMarker.type" class="form-control">
-                                            <option value="interest">interest</option>
-                                            <option value="bike-shops">bike-shops</option>
-                                            <option value="food">food</option>
-                                            <option value="danger">danger</option>
+                                            <option value="interest" translate="points_interest.interest">interest</option>
+                                            <option value="bike-shops" translate="points_interest.bike-shop">bike-shop</option>
+                                            <option value="food" translate="points_interest.food">food</option>
+                                            <option value="danger" translate="points_interest.danger">danger</option>
                                         </select>
                                     </div>
                                     <div class="form-group required" ng-class="{ 'has-error':  createPointForm.name.$dirty && createPointForm.name.$invalid, 'has-success': createPointForm.name.$dirty && createPointForm.name.$valid }">
-                                        <label class="control-label">Name</label>
+                                        <label class="control-label" translate="points_interest.name">Name</label>
                                         <input required name="name" ng-model="newMarker.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
-                                        <label class="error-label" ng-show="createPointForm.name.$invalid && createPointForm.name.$dirty">The name is required.</label>
+                                        <label class="error-label" ng-show="createPointForm.name.$invalid && createPointForm.name.$dirty" translate="points_interest.name_warn">The name is required.</label>
                                    </div>
                                     <div class="form-group required" ng-class="{ 'has-error':  createPointForm.description.$dirty && createPointForm.description.$invalid, 'has-success': createPointForm.description.$dirty && createPointForm.description.$valid }">
-                                        <label accesskey=""class="control-label">Description</label>
+                                        <label accesskey=""class="control-label" translate="points_interest.description">Description</label>
                                         <input required name="description" ng-model="newMarker.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
-                                        <label class="error-label" ng-show="createPointForm.description.$invalid && createPointForm.description.$dirty">The description is required.</label>
+                                        <label class="error-label" ng-show="createPointForm.description.$invalid && createPointForm.description.$dirty" translate="points_interest.description_warn">The description is required.</label>
                                     </div>
                                     <div class="form-group">
-                                        <a ng-disabled="createPointForm.$invalid" class="btn btn-primary" ng-click="submitCreatePointForm(createPointForm)"><i class="icon fa fa-plus-square"></i> Add to the map</a>
+                                        <a ng-disabled="createPointForm.$invalid" class="btn btn-primary" ng-click="submitCreatePointForm(createPointForm)"><i class="icon fa fa-plus-square"></i> {{"points_interest.add_to_map" | translate"}}</a>
                                     </div>
                                 </section>
                             </form>

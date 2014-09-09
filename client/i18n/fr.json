@@ -50,17 +50,30 @@
             "from"          : "de",
             "to"            : "à",
             "difficulty"    : "difficulté",
+			"interest"		: "Intérêt",
             "departure"     : "Ville de départ",
             "arrival"       : "Ville d'arrivée",
             "edit_daily"    : "Editer le détail de l'étape du jour"
         },
         "steps" : {
-            "From"          : "De",
+            "from"          : "De",
             "to"            : "à",
             "iti_trace"     : "Le tracé de votre itinéraire",
             "update_trace"  : "Mettre à jour votre tracé",
             "updload_gps"   : "Charger votre tracé GPS (fichier *.kml)",
             "draw"          : "Ou dessiner manuellement votre tracé en utilisant les outils de la carte!"
         }
-    }
+    },
+	"points_interest" : {
+		"new"			: "Nouveau point d'intérêt",
+		"interest"		: "intérêt",
+		"bike-shop"		: "magasin de vélo",
+		"food"			: "nourriture",
+		"danger"		: "danger",
+		"name"			: "name",
+		"name_warn"		: "Le nom est requis.",
+		"description"	: "description",
+		"description_warn" : "La description est requise.",
+		"add_to_map"	: "Ajouter à la carte."
+	}
 }

@@ -45,22 +45,35 @@
             "title"         : "Tour title",
             "country"       : "Tour country",
             "titre_placeh"  : "Tour title (eg : Canal du midi from Toulouse)",
-            "create"        : "Create the tour",
+            "create"        : "Create tour",
             "day"           : "Day",
             "from"          : "from",
             "to"            : "to",
             "difficulty"    : "Difficulty",
+			"interest"		: "Interest",
             "departure"     : "Departure city",
             "arrival"       : "Arrival city",
             "edit_daily"    : "Edit the detail of the day's stage"
         },
         "steps" : {
-            "From"          : "From",
+            "from"          : "From",
             "to"            : "to",
             "iti_trace"     : "Your tour track",
             "update_trace"  : "Update your track",
             "updload_gps"   : "Upload your GPS track (*.kml files)",
             "draw"          : "Or draw it manually using the map tools!"
         }
-    }
+    },
+	"points_interest" : {
+		"new"			: "New point of interest",
+		"interest"		: "interest",
+		"bike-shop"		: "bike-shop",
+		"food"			: "food",
+		"danger"		: "danger",
+		"name"			: "name",
+		"name_warn"		: "The name is required.",
+		"description"	: "description",
+		"description_warn" : "The description is required.",
+		"add_to_map"	: "Add to the map."
+	}
 }
