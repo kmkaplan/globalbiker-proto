@@ -58,8 +58,7 @@ angular.module('bikeTouringMapApp')
 
                 if (marker.icon) {
 
-                    var iconOptions = {
-                    };
+                    var iconOptions = {};
 
                     if (marker.icon.name) {
                         if (marker.icon.name.indexOf('fa-') === 0) {
@@ -75,14 +74,14 @@ angular.module('bikeTouringMapApp')
                     // configure the marker
                     var markerIcon = L.AwesomeMarkers.icon(iconOptions);
                     markerOptions.icon = markerIcon;
-                    
+
                 }
-                
+
                 var markerLayer = L.marker([marker.latitude, marker.longitude], markerOptions).addTo(map);
 
-                if (marker.popup && marker.popup.content){
+                if (marker.popup && marker.popup.content) {
                     markerLayer.bindPopup(marker.popup.content);
-                    if (marker.popup.open){
+                    if (marker.popup.open) {
                         markerLayer.openPopup();
                     }
                 }
@@ -121,11 +120,19 @@ angular.module('bikeTouringMapApp')
                 var options = {
                     color: 'red'
                 };
-                
-                if (polyline.color){
+
+                if (polyline.color) {
                     options.color = polyline.color;
                 }
+                if (polyline.weight) {
+                    options.weight = polyline.weight;
+                }
+                if (polyline.opacity) {
+                    options.opacity = polyline.opacity;
+                }
                 
+                
+
                 // draw the polyline
                 var polylineLayer = L.polyline(latlngs, options);
 
@@ -140,6 +147,7 @@ angular.module('bikeTouringMapApp')
                 if (!eLayer) {
                     // create layer
                     var layer = new L.LayerGroup();
+
                     map.addLayer(layer);
 
                     eLayer = {

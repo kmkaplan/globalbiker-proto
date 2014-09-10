@@ -40,13 +40,13 @@ angular.module('bikeTouringMapApp')
 
                     $scope.config.control = {
                         fitBounds: function (bounds) {
-                             if (bounds && bounds.length === 2 && bounds[0].length === 2 && bounds[0][0] && bounds[1].length === 2){
-                                 leafletData.getMap($scope.mapId).then(function (map) {
-                                //$timeout(function () {
+                            if (bounds && bounds.length === 2 && bounds[0].length === 2 && bounds[0][0] && bounds[1].length === 2) {
+                                leafletData.getMap($scope.mapId).then(function (map) {
+                                    //$timeout(function () {
                                     map.fitBounds(bounds);
-                               // }, 1000);
-                            });
-                                        }
+                                    // }, 1000);
+                                });
+                            }
                         },
                         fitBoundsFromPoints: function (points) {
 
@@ -86,6 +86,24 @@ angular.module('bikeTouringMapApp')
                         }
                     };
 
+/*
+                    L.CRS.EPSG3943 = // EPSG:102012 served by TMS with bounds (-5401501.0, 4065283.0, 4402101.0, 39905283.0)
+new L.Proj.CRS.TMS('EPSG:102012',
+    '+proj=lcc +lat_1=30 +lat_2=62 +lat_0=0 +lon_0=105 +x_0=0 +y_0=0 '
+    + '+ellps=WGS84 +datum=WGS84 +units=m +no_defs',
+    [-5401501.0, 4065283.0, 4402101.0, 39905283.0],
+    {
+        resolutions: [
+           140000.0000000000,
+            70000.0000000000,
+            35000.0000000000,
+            17500.0000000000
+        ]
+    }
+);
+*/
+
+
                     var initialConfig = {
                         mapId: $scope.mapId,
                         defaults: {
@@ -93,7 +111,8 @@ angular.module('bikeTouringMapApp')
                             tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
                             // tileLayer: 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
                             // tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
-                            scrollWheelZoom: true
+                            scrollWheelZoom: true,
+                          //  crs: 'EPSG3943',tms: true
                         },
                         center: $scope.config.initialCenter
                     };
