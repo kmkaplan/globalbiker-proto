@@ -2,7 +2,7 @@
     <!-- landing page -->
     <nav class="intro section navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="col-sm-8 logo-container">
+            <div class="col-sm-7 logo-container">
                 <h1 class="logo">
                     <img src="/assets/images/bike.png" title="bike logo provided by http://buzz.icons8.com" />
                     <span class="global">Global</span><span class="biker">Biker</span>
@@ -10,11 +10,24 @@
                 </h1>
             </div>
             <div class="col-sm-4 contacts">
+
                 <img src="/assets/images/contact.png" title="e-mail" />
                 <img src="/assets/images/facebook.png" title="facebook" />
                 <a href="https://twitter.com/a_GlobalBiker" target="_blank">
                     <img src="/assets/images/twitter.png" title="twitter" />
                 </a>
+            </div>
+            <div class="col-sm-1 contacts dropdown">
+                <a href data-toggle="dropdown" class="dropdown-toggle">
+                   <img ng-src="{{languageSelection.current.img}}"></img>
+                </a>
+                <ul class="dropdown-menu">
+                    <li role="presentation" ng-repeat="lang in languageSelection.others" >
+                        <a href="" ng-click="switchLanguage(lang.code)">
+                            <img ng-src="{{lang.img}}"></img> {{lang.name}}
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

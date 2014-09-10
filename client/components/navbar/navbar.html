@@ -18,12 +18,25 @@
         <li ng-show="isAdmin()" ng-class="{active: isActive('/admin-data')}"><a href="/admin-data">Admin data</a></li>
       </ul>
 
-      <ul class="nav navbar-nav navbar-right">
+
+     <ul class="nav navbar-nav navbar-right">
         <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href="/signup" translate="signup">Sign up</a></li>
         <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href="/login" translate="login">Login</a></li>
         <li ng-show="isLoggedIn()"><p class="navbar-text">{{"hello"|translate}} {{ getCurrentUser().name }}</p> </li>
         <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li>
         <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()" translate="logout">Logout</a></li>
+        <li class="dropdown">
+            <a href data-toggle="dropdown" class="dropdown-toggle">
+               <img ng-src="{{languageSelection.current.img}}"></img>
+            </a>
+            <ul class="dropdown-menu">
+                <li role="presentation" ng-repeat="lang in languageSelection.others" >
+                    <a href="" ng-click="switchLanguage(lang.code)">
+                        <img ng-src="{{lang.img}}"></img> {{lang.name}}
+                    </a>
+                </li>
+            </ul>
+        </li>
       </ul>
     </div>
   </div>
