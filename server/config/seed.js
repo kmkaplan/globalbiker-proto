@@ -9,6 +9,7 @@
 var Tour = require('../api/tour/tour.model');
 var User = require('../api/user/user.model');
 
+/*
 
 User.find({}).remove(function () {
     User.create({
@@ -57,3 +58,4 @@ User.find({}).remove(function () {
 
     });
 });
+*/
