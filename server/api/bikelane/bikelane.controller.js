@@ -121,7 +121,7 @@ exports.upload = function (req, res) {
 
             Bikelane.create(bikelanes, function (err, bikelane) {
                 if (err) {
-                    console.log('Error reading file: ' + err);
+                    console.log('Error creating bikelanes: ' + err);
                     return handleError(res, err);
                 }
                 console.log('%d bikelane have been created.', bikelanes.length);

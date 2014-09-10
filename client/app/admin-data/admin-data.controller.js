@@ -23,71 +23,12 @@ angular.module('bikeTouringMapApp')
                     $scope.bikelanesUploadProgress = null;
                 });
 
-
-                //  return;
-
-                /*
-
-                var reader = new FileReader();
-                reader.onloadend = function () {
-                    content = reader.result;
-
-                    var geojsonContent = angular.fromJson(content);
-
-                    var count = 0;
-
-                    var bikelanes = geojsonContent.features.reduce(function (bikelanesOutput, currentFeature) {
-
-                        if (count++ > 1) {
-                            return bikelanesOutput;
-                        }
-
-                        var points = currentFeature.geometry.coordinates.reduce(function (pointsOutput, c) {
-
-                            var latitude = c[1];
-                            var longitude = c[0];
-
-                            pointsOutput.push({
-                                latitude: latitude,
-                                longitude: longitude
-                            });
-                            return pointsOutput;
-
-                        }, []);
-
-                        var p = currentFeature.properties;
-
-                        var bikelane = new BikelaneRepository({
-                            name: p['Nom_voie'],
-                            type: p['obs_type'],
-                            surface: p['Revetement'],
-                            inseeCode: p['code_insee'],
-                            points: points
-                        });
-
-                        bikelane.$save();
-
-                        bikelanesOutput.push(bikelane);
-
-                        return bikelanesOutput;
-
-                    }, []);
-
-                    // TODO traitement à faire côté serveur
-
-                    console.log('%d bikelane have been created.', bikelanes.length);
-
-                };
-
-                reader.readAsText(file);
-*/
-
             }
         };
 
-
         proj4.defs["EPSG:3943"] = "+proj=lcc +lat_1=42.25 +lat_2=43.75 +lat_0=43 +lon_0=3 +x_0=1700000 +y_0=2200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs";
         $scope.converter = proj4(proj4.defs["EPSG:3943"]);
+        
         $scope.init = function () {
 
             $scope.bikelanesUploadProgress = null;

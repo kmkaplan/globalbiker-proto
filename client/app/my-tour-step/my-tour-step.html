@@ -5,9 +5,9 @@
         </li>
         <li><a href="/my-tour/{{ step.tour._id }}">{{ step.tour.title }}</a>
         </li>
-        <li class="active">{{"mytours.steps.from}} {{ step.cityFrom.name }} {{"mytours.steps.to}} {{ step.cityTo.name }}</li>
+        <li class="active">{{mytours.steps.from}} {{ step.cityFrom.name }} {{mytours.steps.to}} {{ step.cityTo.name }}</li>
     </ol>
-    <h2>{{"mytours.steps.from}} {{ step.cityFrom.name }} {{"mytours.steps.to}} {{ step.cityTo.name }}</h2>
+    <h2>{{ "mytours.steps.from" | translate }} {{ step.cityFrom.name }} {{ "mytours.steps.to" | translate }} {{ step.cityTo.name }}</h2>
     <div class="row">
         <div class="col-md-7">
             <div extended-map config="mapConfig"></div>
@@ -39,14 +39,14 @@
                                         <label class="control-label" translate="points_interest.name">Name</label>
                                         <input required name="name" ng-model="newMarker.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
                                         <label class="error-label" ng-show="createPointForm.name.$invalid && createPointForm.name.$dirty" translate="points_interest.name_warn">The name is required.</label>
-                                   </div>
+                                    </div>
                                     <div class="form-group required" ng-class="{ 'has-error':  createPointForm.description.$dirty && createPointForm.description.$invalid, 'has-success': createPointForm.description.$dirty && createPointForm.description.$valid }">
-                                        <label accesskey=""class="control-label" translate="points_interest.description">Description</label>
+                                        <label accesskey="" class="control-label" translate="points_interest.description">Description</label>
                                         <input required name="description" ng-model="newMarker.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
                                         <label class="error-label" ng-show="createPointForm.description.$invalid && createPointForm.description.$dirty" translate="points_interest.description_warn">The description is required.</label>
                                     </div>
                                     <div class="form-group">
-                                        <a ng-disabled="createPointForm.$invalid" class="btn btn-primary" ng-click="submitCreatePointForm(createPointForm)"><i class="icon fa fa-plus-square"></i> {{"points_interest.add_to_map" | translate"}}</a>
+                                        <a ng-disabled="createPointForm.$invalid" class="btn btn-primary" ng-click="submitCreatePointForm(createPointForm)"><i class="icon fa fa-plus-square"></i> {{ "points_interest.add_to_map" | translate}}</a>
                                     </div>
                                 </section>
                             </form>
@@ -56,25 +56,27 @@
             </div>
             <form role="form">
                 <section class="form-section">
-                    <div ng-show="step.hasTrace() && !step.isTraceInEdition">
+                    <div ng-show="steppoints.length && !step.isTraceInEdition">
                         <a ng-click="step.isTraceInEdition = true" class="btn btn-default edit-step-trace-button pull-right"><i class="fa fa-pencil-square-o"></i></a>
                     </div>
                     <div ng-show="step.isTraceInEdition">
                         <a ng-click="step.isTraceInEdition = false" class="btn btn-success leave-edit-step-trace-button pull-right"><i class="fa fa-check"></i></a>
                     </div>
                     <h3>Your itinary trace</h3>
-                    <div ng-show="step.hasTrace()">
+                    <div ng-show="steppoints.length">
                         <h4>Trace resume</h4>
-                        Your trace has {{ step.points.length }} points. Distance: {{ step.readableDistance }}.
+                        Your trace has {{ steppoints.length }} points. Distance: {{ step.readableDistance }}.
                         <div ng-show="step.isTraceInEdition">
                             <a title="Delete current trace" ng-click="deleteTrace()" class="btn btn-danger delete-step-button"><i class="fa fa-trash-o"></i> delete current trace</a>
                         </div>
                     </div>
-                    <div ng-hide="step.hasTrace() && !step.isTraceInEdition">
+                    <div ng-hide="steppoints.length && !step.isTraceInEdition">
                         <h4>Update your trace</h4>
                         <div class="form-group">
-                            Upload your GPS trace (*.kml file):
-                            <input type="file" ng-file-select="onFileSelect($files)">
+                            <div class="file-upload btn btn-primary">
+                                <span translate="points_interest.select_gps_file">Sélectionner un fichier de trace GPS (*.kml file):</span>
+                                <input type="file" class="upload" ng-file-select="onFileSelect($files)" />
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -82,7 +84,7 @@
                         </div>
                     </div>
                 </section>
-               <!-- <section class="form-section points-of-interest">
+                <!-- <section class="form-section points-of-interest">
                     <h3>Points of interest</h3>
                     <div class="form-group">
                         <a class="btn btn-primary" ng-click="open()"><i class="icon fa fa-plus-square"></i>  Create a new point of interest</a>

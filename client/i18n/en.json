@@ -74,6 +74,7 @@
 		"name_warn"		: "The name is required.",
 		"description"	: "description",
 		"description_warn" : "The description is required.",
-		"add_to_map"	: "Add to the map."
+		"add_to_map"	: "Add to the map.",
+        "select_gps_file": "Select a GPS trace (*.kml file)"
 	}
 }

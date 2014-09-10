@@ -21,10 +21,11 @@ exports.index = function (req, res) {
 exports.getByTour = function (req, res) {
 
     var tourId = req.params.tourId;
-
     Step.find({
         'tourId': tourId
-    }, function (err, steps) {
+    }).sort({
+        'stepIndex': 1
+    }).exec(function (err, steps) {
         if (err) {
             return handleError(res, err);
         }
@@ -70,7 +71,7 @@ exports.update = function (req, res) {
         }
         var updated = _.merge(step, req.body);
 
-        if (req.body.points) {
+/*        if (req.body.points) {
             // FIXME this is a FIX because _.merge create all items with value of first one!!!
             step.points = req.body.points;
         }
@@ -78,7 +79,7 @@ exports.update = function (req, res) {
         if (req.body.markers) {
             // FIXME this is a FIX because _.merge create all items with value of first one!!!
             step.markers = req.body.markers;
-        }
+        }*/
 
         updated.save(function (err) {
             if (err) {
@@ -91,25 +92,21 @@ exports.update = function (req, res) {
 
 // Deletes a step from the DB.
 exports.destroy = function (req, res) {
-    Step.findById(req.params.id, {
-        sort: {
-            // sort by id ASC
-            _id: 1
-        }
-    }, function (err, step) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!step) {
-            return res.send(404);
-        }
-        step.remove(function (err) {
+    Step.findById(req.params.id,
+        function (err, step) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.send(204);
+            if (!step) {
+                return res.send(404);
+            }
+            step.remove(function (err) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                return res.send(204);
+            });
         });
-    });
 };
 
 function handleError(res, err) {

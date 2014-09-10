@@ -4,14 +4,14 @@ angular.module('bikeTouringMapApp')
     .service('MyTourStepMapService', function () {
         // AngularJS will instantiate a singleton by calling "new" on this function
         return {
-            updateTrace: function (mapConfig, step) {
+            updateTrace: function (mapConfig, step, steppoints) {
                 var trace = {
                     items: []
                 };
 
-                if (step && step.points && step.points.length > 1) {
+                if (steppoints.length > 1) {
 
-                    var points = step.points.reduce(function (output, p) {
+                    var points = steppoints.reduce(function (output, p) {
 
                         output.push({
                             latitude: p.latitude,
@@ -19,11 +19,33 @@ angular.module('bikeTouringMapApp')
                         });
                         return output;
                     }, []);
-                    
+
                     trace.items = [{
                         type: 'polyline',
                         points: points
                         }];
+                    var first = steppoints[0];
+                    trace.items.push({
+                        type: 'marker',
+                        latitude: first.latitude,
+                        longitude: first.longitude,
+                        icon: {
+                            name: 'glyphicon-home',
+                            markerColor: 'green'
+                        }
+                    });
+
+                    var last = steppoints[steppoints.length - 1];
+
+                    trace.items.push({
+                        type: 'marker',
+                        latitude: last.latitude,
+                        longitude: last.longitude,
+                        icon: {
+                            name: 'glyphicon-record',
+                            markerColor: 'red'
+                        }
+                    });
 
                 } else {
                     if (step && step.cityFrom && step.cityTo) {
@@ -124,7 +146,7 @@ angular.module('bikeTouringMapApp')
                     }, []);
                 }
 
-                 // create a new object to be able to trigger the changes to angular scope (without have to $watch the whole array of objects)
+                // create a new object to be able to trigger the changes to angular scope (without have to $watch the whole array of objects)
                 var drawnItems = {};
 
                 if (mapConfig.drawnItems) {
