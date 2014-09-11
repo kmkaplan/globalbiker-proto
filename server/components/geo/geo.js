@@ -4,7 +4,9 @@ var Q = require('q');
 var fs = require('fs');
 var DOMParser = require('xmldom').DOMParser;
 var togeojson = require('togeojson');
-    
+var tcx = require('tcx');
+var S = require('string');
+
 exports.buildLine = function (coordinates) {
 
     var line = coordinates.reduce(function (pointsOutput, c) {
@@ -33,28 +35,39 @@ exports.readTracesFromFile = function (file) {
     fs.readFile(file.path, 'utf8', function (err, data) {
         if (err) {
             console.log(err);
-            deffered.reject(err);
+            return deffered.reject(err);
         }
 
         var dom = (new DOMParser()).parseFromString(data, 'text/xml');
 
-        var geojsonContent = togeojson.gpx(dom);
+        var geojsonContent;
+
+        var fileName = S(file.originalname);
+
+        if (fileName.endsWith('.tcx')) {
+            geojsonContent = tcx(dom);
+        } else if (fileName.endsWith('.gpx')) {
+            geojsonContent = togeojson.gpx(dom);
+        } else {
+            console.log('Unsuported extension for file "%s".', file.originalName);
+            return deffered.reject('Unsuported file extension.');
+        }
 
         var linesCount = 0;
-        
+
         var traces = geojsonContent.features.reduce(function (tracesOutput, currentFeature) {
 
             var lines;
 
             if (currentFeature.geometry.type === 'LineString') {
                 // single line
-                lines = [exports.buildLine(currentFeature.geometry.coordinates)];
-
+                 console.log(currentFeature.geometry);
+                    lines = [exports.buildLine(currentFeature.geometry.coordinates)];
             } else if (currentFeature.geometry.type === 'MultiLineString') {
                 // multiple lines
                 lines = currentFeature.geometry.coordinates.reduce(function (linesOutput, coordinates) {
                     linesOutput.push(exports.buildLine(coordinates));
-                    return linesOutput;
+                   return linesOutput;
                 }, []);
 
             } else {
@@ -62,7 +75,7 @@ exports.readTracesFromFile = function (file) {
             }
 
             linesCount += lines.length;
-            
+
             tracesOutput.push({
                 properties: currentFeature.properties,
                 lines: lines
@@ -73,7 +86,7 @@ exports.readTracesFromFile = function (file) {
         }, []);
 
         console.log('%d trace(s) (%d lines) have been read.', traces.length, linesCount);
-        
+
         deffered.resolve(traces);
 
     });

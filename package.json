@@ -30,6 +30,7 @@
     "socket.io": "~1.0.6",
     "socketio-jwt": "^2.0.2",
     "static-favicon": "~1.0.1",
+    "tcx": "git+https://github.com/mapbox/tcx.git",
     "togeojson": "^0.8.0",
     "xmldom": "^0.1.19"
   },

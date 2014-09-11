@@ -43,7 +43,7 @@ exports.create = function (req, res) {
 // Creates a new bikelane in the DB.
 exports.upload = function (req, res) {
 
-    /* console.log(req.body)
+/*   console.log(req.body)
     console.log(req.files)*/
 
     var stepId = req.body.stepId;
