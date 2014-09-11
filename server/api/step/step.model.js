@@ -80,34 +80,7 @@ var StepSchema = new Schema({
             required: 'Please fill cityTo longitude'
         }
     },
-    distance: Number,
-    points: [{
-        latitude: {
-            type: Number,
-            required: 'Please fill latitude'
-        },
-        longitude: {
-            type: Number,
-            required: 'Please fill longitude'
-        },
-        elevation: {
-            type: Number
-        }
-}],
-    markers: [{
-        latitude: {
-            type: Number,
-            required: 'Please fill latitude'
-        },
-        longitude: {
-            type: Number,
-            required: 'Please fill longitude'
-        },
-        type: {
-            type: String,
-            required: 'Please fill type'
-        }
-}]
+    distance: Number
 });
 
 module.exports = mongoose.model('Step', StepSchema);

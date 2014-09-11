@@ -1,42 +1,34 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, TourRepository, StepRepository, InterestRepository, MyTourStepViewModelStep, MyTourStepMapService) {
+    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService) {
 
         $scope.onFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
             for (var i = 0; i < $files.length; i++) {
                 var file = $files[i];
 
-                var reader = new FileReader();
-                reader.onloadend = function () {
-                    content = reader.result;
+                $scope.steppointsUploadProgress = 0;
 
-                    if (typeof content == 'string') {
-                        content = (new window.DOMParser()).parseFromString(content, "text/xml");
-                    }
+                $scope.upload = $upload.upload({
+                    url: '/api/steppoints/upload',
+                    data: {
+                        stepId: $scope.stepId
+                    },
+                    file: file,
+                }).progress(function (evt) {
+                    $scope.steppointsUploadProgress = (100 * evt.loaded / evt.total);
+                }).success(function (data, status, headers, config) {
+                    // update points
+                    $scope.loadSteppoints();
+                    // update step (distance has been updated)
+                    $scope.loadStep();
+                    $scope.steppointsUploadProgress = null;
+                }).error(function (msg) {
+                    alert(msg);
+                    $scope.steppointsUploadProgress = null;
+                });
 
-                    var geojsonContent = toGeoJSON.gpx(content);
-
-                    var coordinates = geojsonContent.features[0].geometry.coordinates;
-
-                    var points = coordinates.reduce(function (output, c) {
-
-                        var latitude = c[1];
-                        var longitude = c[0];
-                        var elevation = c[2];
-
-                        output.push({
-                            latitude: latitude,
-                            longitude: longitude,
-                            elevation: elevation
-                        });
-                        return output;
-                    }, []);
-
-                    $scope.updatePoints(points);
-                };
-                reader.readAsText(file);
             }
         };
 
@@ -56,33 +48,106 @@ angular.module('bikeTouringMapApp')
 
 
         $scope.deleteTrace = function () {
-            $scope.updatePoints([]);
+
+            SteppointRepository.deleteByStep({
+                stepId: $scope.stepId
+            }, function () {
+                $scope.steppoints = [];
+            }, function () {});
+
+        };
+
+        $scope.loadStep = function () {
+            var deffered = $q.defer();
+
+            // retrieve step
+            StepRepository.get({
+                id: $scope.stepId
+            }, function (step) {
+
+                // retrieve tour
+                TourRepository.get({
+                    id: step.tourId
+                }, function (tour) {
+
+                    // retrieve interests
+                    InterestRepository.getByStep({
+                        stepId: $scope.stepId
+                    }, function (interests) {
+
+                        var stepViewModel = new MyTourStepViewModelStep(step, tour, interests);
+
+                        $scope.step = stepViewModel;
+
+                        MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+
+                        deffered.resolve($scope.step);
+                    }, function () {
+                        console.error('Unexpected error while retrieving interests of step %s', $scope.stepId);
+                        deffered.reject('Unexpected error while retrieving interests of step.');
+                    });
+
+                }, function () {
+                    console.error('Unexpected error while retrieving tour %s', step.tourId);
+                    deffered.reject('Unexpected error while retrieving tour.');
+                });
+
+            }, function () {
+                console.error('Unexpected error while retrieving step %s', $scope.stepId);
+                deffered.reject('Unexpected error while retrieving step.');
+            });
+
+            return deffered.promise;
+        }
+
+        $scope.loadSteppoints = function () {
+            var deffered = $q.defer();
+
+            $scope.steppointsLoading = true;
+
+            SteppointRepository.getByStep({
+                    stepId: $scope.stepId
+                }, function (steppoints) {
+                    $scope.steppoints = steppoints;
+
+                    $scope.steppointsLoading = false;
+
+                    deffered.resolve(steppoints);
+                },
+                function () {
+                    $scope.steppointsLoading = false;
+                    console.error('Unexpected error while retrieving steppoints of step %s', $scope.stepId);
+                    deffered.reject('Unexpected error while retrieving steppoints.');
+                });
+
+            return deffered.promise;
         };
 
         $scope.updatePoints = function (points) {
+            var deffered = $q.defer();
+
             var stepRepository;
             if (points.length > 1) {
-                var distance = $scope.calculateDistanceFromPoints(points);
 
-                stepRepository = new StepRepository({
-                    _id: $scope.step._id,
-                    points: points,
-                    distance: distance
-                })
+                SteppointRepository.updateByStep({
+                        stepId: $scope.stepId,
+                        points: points
+                    }, function () {
+
+                        $scope.loadStep();
+                        deffered.resolve($scope.loadSteppoints());
+                    },
+                    function () {
+                        console.error('Unexpected error while updating steppoints of step %s', $scope.stepId);
+                        deffered.reject('Unexpected error while updating steppoints.');
+                    });
+
+
             } else {
-                stepRepository = new StepRepository({
-                    _id: $scope.step._id,
-                    points: [],
-                    distance: 0
-                })
+                effered.reject('Invalid size.');
             }
-            stepRepository.$update(function (step) {
-                $scope.step.points = points;
-                $scope.step.distance = distance;
-                $scope.step.readableDistance = L.GeometryUtil.readableDistance(distance, 'metric');
-                $scope.step.isTraceInEdition = false;
-            });
 
+            return deffered.promise;
         };
 
         $scope.updatePointsFromMapEditor = function (points) {
@@ -102,112 +167,78 @@ angular.module('bikeTouringMapApp')
 
         $scope.init = function () {
 
-            $scope.mapConfig = {
-                class: 'my-tour-step-map',
-                drawingOptions: {
-                    polyline: true,
-                    marker: true
-                },
-                callbacks: {
-                    'map:created': function (eMap) {
-                        $scope.$watch('step.points', function (newPoints, oldPoints) {
-                            MyTourStepMapService.updateTrace($scope.mapConfig, $scope.step);
-                            eMap.config.control.fitBoundsFromPoints(newPoints);
-                        });
-                    },
-                    'draw:created': function (eMap, points, e) {
-
-                        if (e.layerType === 'marker') {
-
-                            $scope.newMarker = {
-                                latitude: points.latitude,
-                                longitude: points.longitude
-                            };
-
-                            $scope.openCreateMarkerForm();
-
-                        } else if (e.layerType === 'polyline') {
-
-                            if ($scope.step.points && $scope.step.points.length != 0) {
-                                if (!confirm('Are you sure do you want to replace the existing trace with the new one?')) {
-                                    return;
-                                }
-                            }
-                            $scope.updatePointsFromMapEditor(points);
-
-                        }
-                    },
-                    'draw:edited': function (eMap, points, e) {
-
-                        if (!confirm('Are you sure do you want to update the existing trace?')) {
-                            return;
-                        }
-
-                        $scope.updatePointsFromMapEditor(points);
-                    },
-                    'draw:deleted': function (eMap, points, e) {
-
-                        if (!confirm('Are you sure do you want to remove existing trace?')) {
-                            return;
-                        }
-
-                        $scope.updatePointsFromMapEditor([]);
-                    }
-                }
-            };
-
             if (!$stateParams.id) {
                 // redirect to 'my tours' page
                 $state.go('my-tours', {}, {
                     inherit: false
                 });
             } else {
-                var deffered = $q.defer();
-
                 // existing step
 
                 $scope.stepId = $stateParams.id;
 
-                // retrieve step
-                StepRepository.get({
-                    id: $scope.stepId
-                }, function (step) {
+                $scope.mapConfig = {
+                    class: 'my-tour-step-map',
+                    drawingOptions: {
+                        polyline: true,
+                        marker: true
+                    },
+                    callbacks: {
+                        'map:created': function (eMap) {
+                            $scope.$watch('steppoints', function (steppoints, old) {
+                                if (steppoints) {
+                                    MyTourStepMapService.updateTrace($scope.mapConfig, $scope.step, steppoints);
+                                    eMap.config.control.fitBoundsFromPoints(steppoints);
+                                }
+                            });
+                        },
+                        'draw:created': function (eMap, points, e) {
 
-                    // retrieve tour
-                    TourRepository.get({
-                        id: step.tourId
-                    }, function (tour) {
+                            if (e.layerType === 'marker') {
 
-                        // retrieve interests
-                        InterestRepository.getByStep({
-                            stepId: $scope.stepId
-                        }, function (interests) {
-                            
-                            var stepViewModel = new MyTourStepViewModelStep(step, tour, interests);
+                                $scope.newMarker = {
+                                    latitude: points.latitude,
+                                    longitude: points.longitude
+                                };
 
-                            $scope.step = stepViewModel;
-                            
-                            MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+                                $scope.openCreateMarkerForm();
 
-                            deffered.resolve($scope.step);
-                        }, function () {
-                            console.error('Unexpected error while retrieving interests of step %s', $scope.stepId);
-                            deffered.reject('Unexpected error while retrieving interests of step.');
-                        });
+                            } else if (e.layerType === 'polyline') {
 
-                    }, function () {
-                        console.error('Unexpected error while retrieving tour %s', step.tourId);
-                        deffered.reject('Unexpected error while retrieving tour.');
-                    });
+                                if ($scope.steppoints && $scope.steppoints.length != 0) {
+                                    if (!confirm('Are you sure do you want to replace the existing trace with the new one?')) {
+                                        return;
+                                    }
+                                }
+                                $scope.updatePointsFromMapEditor(points);
 
-                }, function () {
-                    console.error('Unexpected error while retrieving step %s', $scope.stepId);
-                    deffered.reject('Unexpected error while retrieving step.');
+                            }
+                        },
+                        'draw:edited': function (eMap, points, e) {
+
+                            if (!confirm('Are you sure do you want to update the existing trace?')) {
+                                return;
+                            }
+
+                            $scope.updatePointsFromMapEditor(points);
+                        },
+                        'draw:deleted': function (eMap, points, e) {
+
+                            if (!confirm('Are you sure do you want to remove existing trace?')) {
+                                return;
+                            }
+
+                            $scope.updatePointsFromMapEditor([]);
+                        }
+                    }
+                };
+                $scope.loadStep().then(function () {
+                    $scope.loadSteppoints();
                 });
 
-                return deffered.promise;
 
-            };
+            }
+
         };
 
         $scope.updateMarker = function (marker) {
@@ -226,15 +257,15 @@ angular.module('bikeTouringMapApp')
                     name: $scope.newMarker.name,
                     description: $scope.newMarker.description
                 });
-                interest.$save(function(u, putResponseHeader){
-                    
+                interest.$save(function (u, putResponseHeader) {
+
                     $('#new-point-of-interest-form').modal('hide')
-                    
+
                     $scope.step.interests.push(interest);
-                
+
                     MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
                 });
-               
+
             }
         };
 
