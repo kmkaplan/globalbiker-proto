@@ -3,6 +3,16 @@ bike-touring-map
 
 Map application to share bike tours itinaries.
 
+## Import / Export database
+
+Export from prod database:
+
+    mongodump -d biketouringmap -o ./dumps
+    
+Import to dev database:
+
+    mongorestore --db biketouringmap-dev ./dumps
+
 ## Continuous integration deployment
 
 ### Docker build
