@@ -2,7 +2,10 @@
 
 var _ = require('lodash');
 var Tour = require('./tour.model');
+var stepController = require('../step/step.controller');
 var auth = require('../../auth/auth.service');
+
+var Q = require('q');
 
 // Get list of tours
 exports.index = function (req, res) {
@@ -79,18 +82,41 @@ exports.update = function (req, res) {
 
 // Deletes a tour from the DB.
 exports.destroy = function (req, res) {
-    Tour.findById(req.params.id, function (err, tour) {
+    var tourId = req.params.id;
+
+    Tour.findById(tourId, function (err, tour) {
         if (err) {
             return handleError(res, err);
         }
         if (!tour) {
             return res.send(404);
         }
-        tour.remove(function (err) {
-            if (err) {
+
+        // remove steps
+        Step.find({
+            tourId: tour._id
+        }).exec(function (err, steps) {
+
+            var defferedArray = steps.reduce(function (output, step) {
+
+                output.push(stepController.removeWithChildren(step.id));
+                return output;
+            }, []);
+
+            return Q.all(defferedArray).then(function () {
+
+                // remove tour
+                tour.remove(function (err) {
+                    if (err) {
+                        return handleError(res, err);
+                    }
+                    return res.send(204);
+                });
+
+            }, function () {
                 return handleError(res, err);
-            }
-            return res.send(204);
+            });
+
         });
     });
 };
@@ -98,4 +124,3 @@ exports.destroy = function (req, res) {
 function handleError(res, err) {
     return res.send(500, err);
 }
-

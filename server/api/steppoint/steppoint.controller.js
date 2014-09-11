@@ -4,11 +4,8 @@ var _ = require('lodash');
 var Steppoint = require('./steppoint.model');
 var gpsUtil = require('gps-util');
 var Step = require('../step/step.model');
-var togeojson = require('togeojson'),
-    fs = require('fs');
-
-var DOMParser = require('xmldom').DOMParser;
-
+var Q = require('q');
+var geo = require('../../components/geo/geo');
 
 // Get list of steppoints
 exports.index = function (req, res) {
@@ -66,46 +63,64 @@ exports.upload = function (req, res) {
             return res.send(400, 'File "file" is missing.');
         }
 
-        fs.readFile(file.path, 'utf8', function (err, data) {
-            if (err) {
-                console.log('Error reading file: ' + err);
-                return res.send(500, err);
-            }
-
-            var dom = (new DOMParser()).parseFromString(data, 'text/xml');
-
-            var geojsonContent = togeojson.gpx(dom);
-
-            if (geojsonContent.features.length !== 1) {
-                console.log('Unexpected number of feautres in GPS trace: %d.', geojsonContent.features.length);
-                return res.send(400, 'Unexpected number of feautres in GPS trace.');
-            }
-
-            var coordinates = geojsonContent.features[0].geometry.coordinates;
+        geo.readTracesFromFile(file).then(function (traces) {
 
             var stepIndex = 0;
+            var lineIndex = 0;
 
-            var steppoints = coordinates.reduce(function (output, c) {
+            // feature => trace
+            var steppoints = traces.reduce(function (steppointsOutput, trace) {
 
-                var latitude = c[1];
-                var longitude = c[0];
-                var elevation = c[2];
+                var properties = trace.properties;
+                var lines = trace.lines;
 
-                output.push({
-                    stepId: stepId,
-                    stepIndex: stepIndex++,
-                    latitude: latitude,
-                    longitude: longitude,
-                    elevation: elevation
-                });
-                return output;
+                // feature.coordinates => trace.lines
+                trace.lines.reduce(function (steppointsOutput, points) {
+
+                    // feature.coordinates.points => trace.lines.points
+                    points.reduce(function (steppointsOutput, point) {
+
+                        steppointsOutput.push({
+                            stepId: stepId,
+                            stepIndex: stepIndex++,
+                            lineIndex: lineIndex,
+                            latitude: point.latitude,
+                            longitude: point.longitude,
+                            elevation: point.elevation
+                        });
+                        return steppointsOutput;
+
+                    }, steppointsOutput);
+
+                    lineIndex++;
+
+                    return steppointsOutput;
+
+                }, steppointsOutput);
+
+                console.log('lines %d - %d', trace.lines.length, lineIndex);
+
+                return steppointsOutput;
+
             }, []);
 
 
+            if (steppoints.length === 0) {
+                console.log('Trace without any point');
+                return res.send(400, 'Trace without any point');
+            } else {
+                console.log('Trace with %d point(s).', steppoints.length);
+            }
+
             return exports._replacePoints(step, steppoints, req, res);
 
-        });
+        }, function (err) {
+            console.log(err);
+            return res.send(400, err);
+        }).done();
+
     });
+
 };
 
 exports._replacePoints = function (step, steppoints, req, res) {
@@ -152,7 +167,7 @@ exports.updateByStep = function (req, res) {
 
     var stepId = req.params.stepId;
     var points = req.body.points;
-    
+
     console.log(req);
 
     Step.findById(stepId, function (err, step) {
