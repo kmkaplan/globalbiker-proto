@@ -12,7 +12,7 @@ angular.module('bikeTouringMapApp')
                 },
                 {
                     'title': "Toulouse",
-                    'link': '/Toulouse'
+                    'link': '/toulouse'
                 },
                 {
                     'title': trans['mytours.nav-bar_name'],
