@@ -5,10 +5,14 @@ angular.module('bikeTouringMapApp')
         var home;
 
         $scope.initMenu = function() {
-            $translate(['home.nav-bar_name','mytours.nav-bar_name']).then(function(trans) {
+            $translate(['mytours.nav-bar_name']).then(function(trans) {
                 $scope.menu = [{
-                    'title': trans['home.nav-bar_name'],
+                    'title': "GlobalBikers",
                     'link': '/'
+                },
+                {
+                    'title': "Toulouse",
+                    'link': '/Toulouse'
                 },
                 {
                     'title': trans['mytours.nav-bar_name'],
