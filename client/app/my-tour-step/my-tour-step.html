@@ -63,7 +63,7 @@
                         <a ng-click="step.isTraceInEdition = false" class="btn btn-success leave-edit-step-trace-button pull-right"><i class="fa fa-check"></i></a>
                     </div>
                     <h3 translate="mytourstep.your_itinary_trace">Your itinary trace</h3>
-                    <div ng-show="steppoints.length">
+                    <div class="trace-resume-area" ng-show="steppoints.length">
                         <h4 translate="mytourstep.trace_resume">Trace resume</h4>
 
                         <table class="table table-striped">
@@ -72,15 +72,15 @@
                                     <th translate="mytourstep.total_distance">Total distance</th>
                                     <td>{{ step.readableDistance }}</td>
                                 </tr>
-                                 <tr  ng-show="step.readablePositiveElevationGain">
-                                   <th translate="mytourstep.positive_elevation_gain">Positive elevation gain</th>
+                                <tr ng-show="step.readablePositiveElevationGain">
+                                    <th translate="mytourstep.positive_elevation_gain">Positive elevation gain</th>
                                     <td>{{ step.readablePositiveElevationGain }}</td>
                                 </tr>
-                                 <tr ng-show="step.readableNegativeElevationGain">
+                                <tr ng-show="step.readableNegativeElevationGain">
                                     <th translate="mytourstep.negative_elevation_gain">Negative elevation gain</th>
                                     <td>{{ step.readableNegativeElevationGain }}</td>
                                 </tr>
-                                 <tr>
+                                <tr>
                                     <th translate="mytourstep.points_number">Number of points</th>
                                     <td>{{ steppoints.length }}</td>
                                 </tr>
