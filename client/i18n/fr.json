@@ -59,7 +59,6 @@
             "to"            : "à",
             "iti_trace"     : "Le tracé de votre itinéraire",
             "update_trace"  : "Mettre à jour votre tracé",
-            "updload_gps"   : "Charger votre tracé GPS (fichier *.gpx)",
             "draw"          : "Ou dessiner manuellement votre tracé en utilisant les outils de la carte!"
         }
     },
@@ -80,6 +79,10 @@
 		"description"	: "description",
 		"description_warn" : "La description est requise.",
 		"add_to_map"	: "Ajouter à la carte.",
-        "select_gps_file": "Sélectionner une trace GPS (fichier *.gpx)"
+        "select_gps_file": "Envoyer une trace GPS (*.gpx, *.tcx)",
+        "update_your_trace": "Mettre à jour la trace GPS",
+        "draw_it_manually": "Ou dessinez la via les outils de la carte!",
+        "delete_your_trace": "Supprimer la trace",
+        "delete_current_trace": "Supprimer"
 	}
 }

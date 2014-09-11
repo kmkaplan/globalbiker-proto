@@ -88,26 +88,24 @@
                         </table>
                     </div>
                     <div ng-hide="steppoints.length && !step.isTraceInEdition">
-                        <h4>Update your trace</h4>
+                        <h4 translate="mytourstep.update_your_trace">Update your trace</h4>
                         <div class="form-group">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="file-upload btn btn-primary">
-                                        <span translate="mytourstep.select_gps_file">Sélectionner un fichier de trace GPS (*.kml file):</span>
-                                        <input type="file" class="upload" ng-file-select="onFileSelect($files)" />
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div ng-show="step.isTraceInEdition">
-                                        <a title="Delete current trace" ng-click="deleteTrace()" class="btn btn-danger delete-step-button"><i class="fa fa-trash-o"></i> delete current trace</a>
-                                    </div>
-                                </div>
+                            <div class="file-upload btn btn-primary">
+                                <span translate="mytourstep.select_gps_file">Sélectionner un fichier de trace GPS (*.kml file):</span>
+                                <input type="file" class="upload" ng-file-select="onFileSelect($files)" />
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" translate="mytourstep.draw_it_manually">
                             Or draw it manually using the tools in the map!
                         </div>
+                        <h4 translate="mytourstep.delete_your_trace">Delete your trace</h4>
+                        <div class="form-group">
+                            <div ng-show="step.isTraceInEdition">
+                                <a title="Delete current trace" ng-click="deleteTrace()" class="btn btn-danger delete-step-button"><i class="fa fa-trash-o"></i> {{ "mytourstep.delete_current_trace" | translate }}</a>
+                            </div>
+                        </div>
                     </div>
+
                 </section>
                 <!-- <section class="form-section points-of-interest">
                     <h3>Points of interest</h3>

@@ -59,7 +59,6 @@
             "to"            : "to",
             "iti_trace"     : "Your tour track",
             "update_trace"  : "Update your track",
-            "updload_gps"   : "Upload your GPS track (*.gpx files)",
             "draw"          : "Or draw it manually using the map tools!"
         }
     },
@@ -80,6 +79,10 @@
 		"description"	: "description",
 		"description_warn" : "The description is required.",
 		"add_to_map"	: "Add to the map.",
-        "select_gps_file": "Select a GPS trace (*.gpx file)"
+        "select_gps_file": "Select a GPS trace (*.gpx, *.tcx)",
+        "update_your_trace": "Update your trace",
+        "draw_it_manually": "Or draw it manually using the tools in the map!",
+        "delete_your_trace": "Delete your trace",
+        "delete_current_trace": "Delete current trace"
 	}
 }
