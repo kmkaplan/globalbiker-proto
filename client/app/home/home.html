@@ -18,10 +18,10 @@
                 </a>
             </div>
             <div class="col-sm-1 contacts dropdown">
-                <a href data-toggle="dropdown" class="dropdown-toggle">
-                   <img ng-src="{{languageSelection.current.img}}"></img>
+                <a href type="button" data-toggle="dropdown">
+                   <img ng-src="{{languageSelection.current.img}}" />
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" role="menu">
                     <li role="presentation" ng-repeat="lang in languageSelection.others" >
                         <a href="" ng-click="switchLanguage(lang.code)">
                             <img ng-src="{{lang.img}}"></img> {{lang.name}}

@@ -30,5 +30,5 @@ angular.module('bikeTouringMapApp')
           $scope.errors.other = err.message;
         });
     };
-    
+
   });

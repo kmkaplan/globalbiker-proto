@@ -1,18 +1,25 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('NavbarCtrl', function ($scope, $location, Auth, $translate) {
+    .controller('NavbarCtrl', function ($rootScope, $scope, $location, Auth, $translate) {
         var home;
-        $translate(['home.nav-bar_name','mytours.nav-bar_name']).then(function(trans) {
-            $scope.menu = [{
-                'title': trans['home.nav-bar_name'],
-                'link': '/'
-            },
-            {
-                'title': trans['mytours.nav-bar_name'],
-                'link': '/my-tours',
-                authenticate: true
-            }];
+
+        $scope.initMenu = function() {
+            $translate(['home.nav-bar_name','mytours.nav-bar_name']).then(function(trans) {
+                $scope.menu = [{
+                    'title': trans['home.nav-bar_name'],
+                    'link': '/'
+                },
+                {
+                    'title': trans['mytours.nav-bar_name'],
+                    'link': '/my-tours',
+                    authenticate: true
+                }];
+            });
+        }
+
+        $rootScope.$on('$translateChangeSuccess', function () {
+            $scope.initMenu();
         });
 
         $scope.languageApp = [
@@ -46,7 +53,7 @@ angular.module('bikeTouringMapApp')
         $scope.languageSelection = $scope.languageSelectionApp($translate.use());
 
         $scope.switchLanguage = function($code) {
-            $translate.use($code);
+            $translate.use($code).then($scope.initMenu);
             $scope.languageSelection = $scope.languageSelectionApp($code);
         };
 
@@ -64,4 +71,6 @@ angular.module('bikeTouringMapApp')
         $scope.isActive = function (route) {
             return route === $location.path();
         };
+
+        $scope.initMenu();
     });
