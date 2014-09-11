@@ -4,7 +4,6 @@
 	"hello"					: "Hello",
 	"logout"				: "Log out",
     "home" : {
-        "nav-bar_name"      : "Home",
         "main" : {
             "slogan"        : "Ride Global, Ride GlobalBiker"
         },
