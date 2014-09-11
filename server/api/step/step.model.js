@@ -80,7 +80,9 @@ var StepSchema = new Schema({
             required: 'Please fill cityTo longitude'
         }
     },
-    distance: Number
+    distance: Number,
+    positiveElevationGain: Number,
+    negativeElevationGain: Number
 });
 
 module.exports = mongoose.model('Step', StepSchema);

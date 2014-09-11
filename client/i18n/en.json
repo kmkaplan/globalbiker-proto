@@ -64,7 +64,13 @@
             "draw"          : "Or draw it manually using the map tools!"
         }
     },
-	"points_interest" : {
+	"mytourstep" : {
+		"your_itinary_trace": "Your itinary trace",
+		"trace_resume": "Trace resume",
+		"total_distance": "Total distance",
+		"positive_elevation_gain": "Positive elevation gain",
+		"negative_elevation_gain": "Negative elevation gain",
+		"points_number": "Number of points",
 		"new"			: "New point of interest",
 		"interest"		: "interest",
 		"bike-shop"		: "bike-shop",
@@ -75,6 +81,6 @@
 		"description"	: "description",
 		"description_warn" : "The description is required.",
 		"add_to_map"	: "Add to the map.",
-        "select_gps_file": "Select a GPS trace (*.kml file)"
+        "select_gps_file": "Select a GPS trace (*.gpx file)"
 	}
 }

@@ -60,11 +60,17 @@
             "to"            : "à",
             "iti_trace"     : "Le tracé de votre itinéraire",
             "update_trace"  : "Mettre à jour votre tracé",
-            "updload_gps"   : "Charger votre tracé GPS (fichier *.kml)",
+            "updload_gps"   : "Charger votre tracé GPS (fichier *.gpx)",
             "draw"          : "Ou dessiner manuellement votre tracé en utilisant les outils de la carte!"
         }
     },
-	"points_interest" : {
+	"mytourstep" : {
+        "your_itinary_trace": "Tracé de votre itinéraire",
+		"trace_resume": "Trace resume",
+        "total_distance": "Distance totale",
+		"positive_elevation_gain": "Dénivelé positif",
+		"negative_elevation_gain": "Dénivelé négatif",
+		"points_number": "Nombre de points",
 		"new"			: "Nouveau point d'intérêt",
 		"interest"		: "intérêt",
 		"bike-shop"		: "magasin de vélo",

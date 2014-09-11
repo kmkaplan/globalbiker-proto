@@ -25,6 +25,13 @@ angular.module('bikeTouringMapApp').factory('MyTourStepViewModelStep', function 
             this.readableDistance = L.GeometryUtil.readableDistance(this.distance, 'metric');
         }
         
+        if (this.positiveElevationGain){
+            this.readablePositiveElevationGain = L.GeometryUtil.readableDistance(this.positiveElevationGain, 'metric');
+        }
+        if (this.negativeElevationGain){
+            this.readableNegativeElevationGain = L.GeometryUtil.readableDistance(this.negativeElevationGain, 'metric');
+        }
+        
         this.tour = tour;
     };
 });

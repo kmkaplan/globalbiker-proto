@@ -135,20 +135,43 @@ exports._replacePoints = function (step, steppoints, req, res) {
                 console.log('Error creating steppoints: ' + err);
                 return handleError(res, err);
             }
-            console.log('%d steppoints have been created.', steppoints.length);
 
             // calculate total distance
-
-           /* var pointsForGeodist = steppoints.reduce(function (output, sp) {
-
-                output.push({
-                    lat: sp.latitude,
-                    lng: sp.longitude
-                });
-                return output;
-            }, []);
-*/
             step.distance = geolib.getPathLength(steppoints);
+
+            var elevationGain = steppoints.reduce(function (elevationGain, point) {
+
+                if (point.elevation) {
+                    if (elevationGain.lastElevation !== null) {
+                        
+                        var gain = point.elevation - elevationGain.lastElevation;
+
+                        if (gain > 0) {
+                            elevationGain.positive += gain;
+                        } else {
+                            elevationGain.negative += gain;
+                        }
+                    }
+                    elevationGain.lastElevation = point.elevation;
+                }
+
+                return elevationGain;
+
+            }, {
+                lastElevation: null,
+                positive: 0,
+                negative: 0
+            });
+
+            if (elevationGain.lastElevation != null) {
+                console.log('%d steppoints have been created (distance: %d, elevation gain: %d, %d).', steppoints.length, step.distance, elevationGain.positive, elevationGain.negative);
+                step.positiveElevationGain = elevationGain.positive;
+                step.negativeElevationGain = elevationGain.negative;
+            } else {
+                console.log('%d steppoints have been created (distance: %d).', steppoints.length, step.distance);
+                step.positiveElevationGain = null;
+                step.negativeElevationGain = null;
+            }
 
             step.save(function (err) {
                 if (err) {
@@ -187,6 +210,7 @@ exports.updateByStep = function (req, res) {
             output.push({
                 stepId: stepId,
                 stepIndex: stepIndex++,
+                lineIndex: 0,
                 latitude: latitude,
                 longitude: longitude,
                 elevation: elevation
