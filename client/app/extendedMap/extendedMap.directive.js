@@ -110,7 +110,7 @@ new L.Proj.CRS.TMS('EPSG:102012',
                             // tileLayer: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
                             tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
                             // tileLayer: 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
-                            // tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
+                             // tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
                             scrollWheelZoom: true,
                           //  crs: 'EPSG3943',tms: true
                         },

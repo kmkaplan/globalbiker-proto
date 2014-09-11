@@ -33,7 +33,10 @@ angular.module('bikeTouringMapApp')
                                 // define trace
                                 trace.items.push({
                                     type: 'polyline',
-                                    points: points
+                                    points: points,
+                                    color: 'green',
+                                    weight: 6,
+                                    opacity: 0.3
                                 });
                             } else {
                                 console.info('No points for step %d.', step._id);

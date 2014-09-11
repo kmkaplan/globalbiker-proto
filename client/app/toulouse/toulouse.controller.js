@@ -8,7 +8,7 @@ angular.module('bikeTouringMapApp')
             initialCenter: {
                 lat: 43.6220,
                 lng: 1.3850,
-                zoom: 8
+                zoom: 9
             },
             callbacks: {
                 'map:created': function (eMap) {
