@@ -15,14 +15,14 @@ angular.module('bikeTouringMapApp', [
         $urlRouterProvider
             .otherwise('/');
 
-         $locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(true);
         $httpProvider.interceptors.push('authInterceptor');
         $translateProvider.useStaticFilesLoader({
             prefix: '/i18n/',
             suffix: '.json'
         });
 
-        $translateProvider.determinePreferredLanguage(function() {
+        $translateProvider.determinePreferredLanguage(function () {
             if (navigator.language.lastIndexOf("fr", 0) === 0) {
                 return "fr";
             } else {
@@ -37,7 +37,7 @@ angular.module('bikeTouringMapApp', [
         // Add authorization token to headers
         request: function (config) {
             config.headers = config.headers || {};
-            if ($cookieStore.get('token') && (!config || !config.url || !config.url.startsWith || !config.url.startsWith('http://api.geonames.org'))){
+            if ($cookieStore.get('token') && (!config || !config.url || !config.url.indexOf || config.url.indexOf('http://api.geonames.org') !== 0)) {
                 config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
             }
             return config;

@@ -2,6 +2,9 @@
 
 var _ = require('lodash');
 var Step = require('./step.model');
+var Steppoint = require('../steppoint/steppoint.model');
+var Interest = require('../interest/interest.model');
+var Q = require('q');
 
 var sys = require('sys');
 
@@ -71,7 +74,7 @@ exports.update = function (req, res) {
         }
         var updated = _.merge(step, req.body);
 
-/*        if (req.body.points) {
+        /*        if (req.body.points) {
             // FIXME this is a FIX because _.merge create all items with value of first one!!!
             step.points = req.body.points;
         }
@@ -90,23 +93,51 @@ exports.update = function (req, res) {
     });
 };
 
-// Deletes a step from the DB.
-exports.destroy = function (req, res) {
-    Step.findById(req.params.id,
-        function (err, step) {
+exports.removeWithChildren = function (stepId) {
+
+    var deffered = Q.defer();
+
+    // remove steppoints
+    Steppoint.find({
+        stepId: stepId
+    }).remove(function (err, step) {
+        if (err) {
+            deffered.reject(err);
+        }
+
+        // remove interests
+        Interest.find({
+            stepId: stepId
+        }).remove(function (err) {
+
             if (err) {
-                return handleError(res, err);
+                deffered.reject(err);
             }
-            if (!step) {
-                return res.send(404);
-            }
+
+            // remove step
             step.remove(function (err) {
                 if (err) {
-                    return handleError(res, err);
+                    deffered.reject(err);
                 }
-                return res.send(204);
+                deffered.resolve(step);
             });
         });
+    });
+
+    return deffered.promise;
+
+}
+
+// Deletes a step from the DB.
+exports.destroy = function (req, res) {
+    var stepId = req.params.id;
+
+    exports.removeWithChildren(stepId).then(function (step) {
+        return res.send(204);
+    }, function (err) {
+        return handleError(res, err);
+    });
+
 };
 
 function handleError(res, err) {

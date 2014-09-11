@@ -75,6 +75,6 @@
 		"description"	: "description",
 		"description_warn" : "La description est requise.",
 		"add_to_map"	: "Ajouter à la carte.",
-        "select_gps_file": "Sélectionner un fichier de trace GPS (*.kml)"
+        "select_gps_file": "Sélectionner une trace GPS (fichier *.gpx)"
 	}
 }

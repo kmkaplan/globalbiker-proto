@@ -17,6 +17,10 @@ var SteppointSchema = new Schema({
         type: Number,
         required: 'Please fill stepIndex'
     },
+    lineIndex: {
+        type: Number,
+        required: 'Please fill lineIndex'
+    },
     latitude: {
         type: Number,
         required: 'Please fill latitude'

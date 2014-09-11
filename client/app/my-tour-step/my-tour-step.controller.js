@@ -19,10 +19,14 @@ angular.module('bikeTouringMapApp')
                 }).progress(function (evt) {
                     $scope.steppointsUploadProgress = (100 * evt.loaded / evt.total);
                 }).success(function (data, status, headers, config) {
+
+                    $scope.autozoom = true;
+
                     // update points
                     $scope.loadSteppoints();
                     // update step (distance has been updated)
                     $scope.loadStep();
+
                     $scope.steppointsUploadProgress = null;
                 }).error(function (msg) {
                     alert(msg);
@@ -53,6 +57,10 @@ angular.module('bikeTouringMapApp')
                 stepId: $scope.stepId
             }, function () {
                 $scope.steppoints = [];
+                if ($scope.eMap) {
+                    // zoom to cityFrom/cityTo
+                    $scope.eMap.config.control.fitBoundsFromPoints([$scope.step.cityFrom, $scope.step.cityTo]);
+                }
             }, function () {});
 
         };
@@ -167,6 +175,8 @@ angular.module('bikeTouringMapApp')
 
         $scope.init = function () {
 
+            $scope.autozoom = true;
+
             if (!$stateParams.id) {
                 // redirect to 'my tours' page
                 $state.go('my-tours', {}, {
@@ -185,11 +195,31 @@ angular.module('bikeTouringMapApp')
                     },
                     callbacks: {
                         'map:created': function (eMap) {
+
+                            $scope.eMap = eMap;
+
                             $scope.$watch('steppoints', function (steppoints, old) {
                                 if (steppoints) {
                                     MyTourStepMapService.updateTrace($scope.mapConfig, $scope.step, steppoints);
-                                    eMap.config.control.fitBoundsFromPoints(steppoints);
+                                    if ($scope.autozoom) {
+                                        // zoom to trace
+                                        eMap.config.control.fitBoundsFromPoints(steppoints);
+
+                                        $scope.autozoom = false;
+                                    }
                                 }
+
+                            });
+
+                            // load data
+                            $scope.loadStep().then(function (step) {
+                                $scope.loadSteppoints().then(function (steppoints) {
+                                    if (steppoints.length === 0) {
+                                        // zoom to cityFrom/cityTo
+                                        eMap.config.control.fitBoundsFromPoints([step.cityFrom, step.cityTo]);
+                                        $scope.autozoom = false;
+                                    }
+                                });
                             });
                         },
                         'draw:created': function (eMap, points, e) {
@@ -232,10 +262,6 @@ angular.module('bikeTouringMapApp')
                         }
                     }
                 };
-                $scope.loadStep().then(function () {
-                    $scope.loadSteppoints();
-                });
-
 
             }
 
