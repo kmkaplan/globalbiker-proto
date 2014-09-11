@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 var Steppoint = require('./steppoint.model');
-//var gpsUtil = require('gps-util');
+var geolib = require('geolib');
 var Step = require('../step/step.model');
 var Q = require('q');
 var geo = require('../../components/geo/geo');
@@ -139,7 +139,7 @@ exports._replacePoints = function (step, steppoints, req, res) {
 
             // calculate total distance
 
-            var pointsForGeodist = steppoints.reduce(function (output, sp) {
+           /* var pointsForGeodist = steppoints.reduce(function (output, sp) {
 
                 output.push({
                     lat: sp.latitude,
@@ -147,8 +147,8 @@ exports._replacePoints = function (step, steppoints, req, res) {
                 });
                 return output;
             }, []);
-
-            // step.distance = gpsUtil.getTotalDistance(pointsForGeodist);
+*/
+            step.distance = geolib.getPathLength(steppoints);
 
             step.save(function (err) {
                 if (err) {
