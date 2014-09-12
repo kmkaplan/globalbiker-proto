@@ -115,7 +115,7 @@ exports.removeWithChildren = function (stepId) {
             }
 
             // remove step
-            step.remove(function (err) {
+            Step.findById(stepId).remove(function (err) {
                 if (err) {
                     deffered.reject(err);
                 }

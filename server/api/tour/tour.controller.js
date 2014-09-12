@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Tour = require('./tour.model');
+var Step = require('../step/step.model');
 var stepController = require('../step/step.controller');
 var auth = require('../../auth/auth.service');
 
