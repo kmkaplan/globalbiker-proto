@@ -11,16 +11,21 @@ RUN apt-get install -q -y ruby-compass ruby-sass
 
 RUN gem install compass
 
+# install libvips
+RUN apt-get install -q -y libvips-dev
+
 # clean apt
 RUN apt-get clean
 
 WORKDIR /app
 
 # Add scripts
-ADD build-app.sh /scripts/build-app.sh
-ADD start-app.sh /scripts/start-app.sh
+ADD build.sh /scripts/build.sh
 ADD run.sh /scripts/run.sh
 RUN chmod 755 /scripts/*.sh
+
+ADD ../.. /app
+RUN /scripts/build.sh
 
 ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
 

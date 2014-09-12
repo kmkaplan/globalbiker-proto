@@ -1,7 +1,6 @@
 #!/bin/bash
 
-set -e
+cd /app/dist
 
-. /scripts/build-app.sh
-
-. /scripts/start-app.sh
+export NODE_ENV=production
+npm start
