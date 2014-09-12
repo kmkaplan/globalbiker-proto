@@ -118,10 +118,10 @@ angular.module('bikeTouringMapApp')
                     return;
                 }
                 
-                var imageBounds = [[image.latitude, image.longitude + 0.02], [image.latitude - 0.02, image.longitude - 0.02]];
+                var imageBounds = [[image.latitude, image.longitude], [image.latitude, image.longitude]];
 
                 // create image layer
-                var imageLayer = L.imageOverlay(image.url, imageBounds, {opacity: 1});
+                var imageLayer = L.fixedImage(image.url, imageBounds, {opacity: 1});
 
                 // add it to the parent layer
                 this.addToLayer(eMap, layerName, imageLayer, image);

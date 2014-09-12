@@ -6,9 +6,9 @@ angular.module('bikeTouringMapApp')
         $scope.mapConfig = {
             class: 'toulouse-map',
             initialCenter: {
-                lat: 43.6220,
-                lng: 1.3850,
-                zoom: 9
+                lat: 43.6,
+                lng: 1.45,
+                zoom: 10
             },
             callbacks: {
                 'map:created': function (eMap) {
