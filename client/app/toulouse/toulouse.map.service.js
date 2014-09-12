@@ -50,6 +50,10 @@ angular.module('bikeTouringMapApp')
 
                                 markers.items = step.interests.reduce(function (output, interest) {
 
+                                    if (interest.priority !== 1){
+                                        return output;
+                                    }
+                                    
                                     var iconName;
                                     var markerColor;
                                     var spin = false;

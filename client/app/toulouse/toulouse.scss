@@ -1,11 +1,25 @@
 .toulouse-page {
     .images-bar {
         text-align: center;
-        
     }
     .toulouse-map-area {
         .toulouse-map {
-            height: 500px;
+            height: 200px;
+            @media all and (min-height: 450px) {
+                height: 250px;
+            }
+            @media all and (min-height: 500px) {
+                height: 300px;
+            }
+            @media all and (min-height: 500px) {
+                height: 300px;
+            }
+            @media all and (min-height: 600px) {
+                height: 350px;
+            }
+            @media all and (min-height: 700px) {
+                height: 450px;
+            }
         }
         .alert {
             margin: 0;

@@ -335,7 +335,8 @@ angular.module('bikeTouringMapApp')
                     longitude: $scope.newMarker.longitude,
                     type: $scope.newMarker.type,
                     name: $scope.newMarker.name,
-                    description: $scope.newMarker.description
+                    description: $scope.newMarker.description,
+                    priority: $scope.newMarker.priority
                 });
                 interest.$save(function (u, putResponseHeader) {
 
@@ -362,7 +363,8 @@ angular.module('bikeTouringMapApp')
                     longitude: $scope.selectedPointOfInterest.longitude,
                     type: $scope.selectedPointOfInterest.type,
                     name: $scope.selectedPointOfInterest.name,
-                    description: $scope.selectedPointOfInterest.description
+                    description: $scope.selectedPointOfInterest.description,
+                    priority: $scope.selectedPointOfInterest.priority
                 });
                 interest.$update({
                     id: $scope.selectedPointOfInterest._id
