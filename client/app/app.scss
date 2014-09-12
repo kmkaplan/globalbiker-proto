@@ -1,8 +1,8 @@
 $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 $fa-font-path: "/bower_components/font-awesome/fonts";
 
-@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
-@import 'font-awesome/scss/font-awesome';
+@import "bootstrap-sass-official/vendor/assets/stylesheets/bootstrap";
+@import "font-awesome/scss/font-awesome";
 
 /**
  * App-wide Styles
@@ -37,3 +37,11 @@ $baseColor2: #5e8c15;
 @import 'my-tours/my-tours.scss';
 @import 'toulouse/toulouse.scss';
 // endinjector
+
+img.smart-photo {
+    height: 110px;
+    background-color: white;
+    box-shadow: 1px 3px 5px #555;
+    padding: 4px;
+    margin: 2px;
+}

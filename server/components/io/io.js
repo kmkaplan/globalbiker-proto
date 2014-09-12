@@ -15,3 +15,8 @@ exports.copyFile = function (inputPath, outputPath) {
         fs.createReadStream(inputPath).pipe(fs.createWriteStream(outputPath));
     });
 };
+
+exports.removeFile = function (path, callback) {
+
+    fs.unlink(path, callback);
+};

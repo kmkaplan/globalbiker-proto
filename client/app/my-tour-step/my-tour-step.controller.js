@@ -90,6 +90,17 @@ angular.module('bikeTouringMapApp')
 
         };
 
+        $scope.removePhoto = function (interest, photo) {
+            if (interest && interest._id && photo && photo._id) {
+                InterestRepository.deletePhoto({
+                    id: interest._id,
+                    photoId: photo._id
+                }, function (interest) {
+                    $scope.loadStep();
+                });
+            }
+        };
+
         $scope.loadStep = function () {
             var deffered = $q.defer();
 
@@ -107,6 +118,17 @@ angular.module('bikeTouringMapApp')
                     InterestRepository.getByStep({
                         stepId: $scope.stepId
                     }, function (interests) {
+
+                        if ($scope.selectedPointOfInterest && $scope.selectedPointOfInterest._id) {
+                            $scope.selectedPointOfInterest = interests.reduce(function (output, interest) {
+                                if ($scope.selectedPointOfInterest._id === interest._id) {
+                                    // update selected interest
+                                    return interest;
+                                }
+                                return output;
+                            }, null);
+                        }
+
 
                         var stepViewModel = new MyTourStepViewModelStep(step, tour, interests);
 

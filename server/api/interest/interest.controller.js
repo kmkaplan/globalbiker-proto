@@ -47,7 +47,6 @@ exports.getByStep = function (req, res) {
 };
 
 
-// Creates a new bikelane in the DB.
 exports.upload = function (req, res) {
 
     var interestId = req.params.id;
@@ -67,15 +66,15 @@ exports.upload = function (req, res) {
             return res.send(400, 'File "file" is missing.');
         }
 
-        var newPath ='/photos/interests/' + interestId + '/' + path.basename(file.path);
-        
+        var newPath = '/photos/interests/' + interestId + '/' + path.basename(file.path);
+
         // copy file
-        IO.copyFile(file.path,  'server/' + newPath);
-        
+        IO.copyFile(file.path, 'server/' + newPath);
+
         interest.photos.push({
             url: newPath
         });
-        
+
         interest.save(function (err) {
             if (err) {
                 return handleError(res, err);
@@ -83,6 +82,57 @@ exports.upload = function (req, res) {
             return res.json(200, interest);
         });
     })
+};
+
+
+exports.deletePhoto = function (req, res) {
+
+
+    var interestId = req.params.id;
+    var photoId = req.param("photoId");
+
+    Interest.findById(interestId, function (err, interest) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!interest) {
+            console.log('Interest "%s" does not exists.', interestId);
+            return res.send(404);
+        }
+
+        var photoToDelete = interest.photos.reduce(function (output, photo) {
+            if (("" + photo._id) === photoId) {
+                return photo;
+            } else {
+                console.log(photo._id);
+                console.log(typeof (photo._id));
+                console.log(typeof (photoId));
+            }
+            return output;
+        }, null);
+
+        if (photoToDelete === null) {
+            console.log('Photo "%s" does not exists.', photoId);
+            return res.send(404);
+        }
+
+        var index = interest.photos.indexOf(photoToDelete);
+        if (index > -1) {
+            interest.photos.splice(index, 1);
+            interest.save(function (err) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                IO.removeFile(photoToDelete.url, function (err) {
+                    return res.json(204, interest);
+                });
+
+            });
+        }
+
+    });
+
+
 };
 
 // Creates a new interest in the DB.

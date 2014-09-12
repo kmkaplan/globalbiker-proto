@@ -6,5 +6,6 @@ client/bower_components
 dist
 /server/config/local.env.js
 /.brackets.json
-uploads
+server/uploads
+server/photos
 /npm-debug.log

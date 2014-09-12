@@ -1,13 +1,7 @@
 .toulouse-page {
     .images-bar {
         text-align: center;
-        img {
-            height: 110px;
-            background-color: white;
-            box-shadow: 1px 3px 5px #555;
-            padding: 4px;
-            margin: 2px;
-        }
+        
     }
     .toulouse-map-area {
         .toulouse-map {
@@ -15,6 +9,7 @@
         }
         .alert {
             margin: 0;
+            border-radius: 0px;
         }
         border: 10px solid #555;
         border-radius: 10px;

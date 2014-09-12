@@ -136,7 +136,7 @@
                             </span>
                             <span ng-show="selectedPointOfInterest.name">"{{ selectedPointOfInterest.name }}"</span>
                         </h4>
-                    <div ng-hide="editSelectedPointOfInterest">
+                    <div ng-hide="editSelectedPointOfInterest" class="photos-area">
                         <p ng-if="selectedPointOfInterest.description">{{ selectedPointOfInterest.description }}</p>
                         <h4>Add a photo</h4>
                         <div class="form-group">
@@ -149,74 +149,38 @@
                                 <progressbar max="100" value="photoUploadProgress"></progressbar>
                             </div>
                         </div>
+
+                        <div class="row" ng-if="selectedPointOfInterest.photos.length">
+                            <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
+                                <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
+                                <img class="smart-photo" alt="-" ng-src="{{ photo.url }}" />
+                            </div>
+                        </div>
+
                     </div>
                     <div ng-show="editSelectedPointOfInterest">
-                        <section class="form-section">
-                            <div class="form-group required" ng-class="{ 'has-error':  editPointForm.type.$invalid, 'has-success':editPointForm.type.$valid }">
-                                <label class="control-label">Type</label>
-                                <select required name="type" ng-model="selectedPointOfInterest.type" class="form-control">
-                                    <option value="interest" translate="mytourstep.interest">interest</option>
-                                    <option value="bike-shops" translate="mytourstep.bike-shop">bike-shop</option>
-                                    <option value="food" translate="mytourstep.food">food</option>
-                                    <option value="danger" translate="mytourstep.danger">danger</option>
-                                </select>
-                            </div>
-                            <div class="form-group required" ng-class="{ 'has-error':  editPointForm.name.$dirty && editPointForm.name.$invalid, 'has-success': editPointForm.name.$dirty && editPointForm.name.$valid }">
-                                <label class="control-label" translate="mytourstep.name">Name</label>
-                                <input required name="name" ng-model="selectedPointOfInterest.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
-                                <label class="error-label" ng-show="editPointForm.name.$invalid && editPointForm.name.$dirty" translate="mytourstep.name_warn">The name is required.</label>
-                            </div>
-                            <div class="form-group required" ng-class="{ 'has-error':  editPointForm.description.$dirty && editPointForm.description.$invalid, 'has-success': editPointForm.description.$dirty && editPointForm.description.$valid }">
-                                <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
-                                <input required name="description" ng-model="selectedPointOfInterest.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
-                                <label class="error-label" ng-show="editPointForm.description.$invalid && editPointForm.description.$dirty" translate="mytourstep.description_warn">The description is required.</label>
-                            </div>
-                        </section>
+                        <div class="form-group required" ng-class="{ 'has-error':  editPointForm.type.$invalid, 'has-success':editPointForm.type.$valid }">
+                            <label class="control-label">Type</label>
+                            <select required name="type" ng-model="selectedPointOfInterest.type" class="form-control">
+                                <option value="interest" translate="mytourstep.interest">interest</option>
+                                <option value="bike-shops" translate="mytourstep.bike-shop">bike-shop</option>
+                                <option value="food" translate="mytourstep.food">food</option>
+                                <option value="danger" translate="mytourstep.danger">danger</option>
+                            </select>
+                        </div>
+                        <div class="form-group required" ng-class="{ 'has-error':  editPointForm.name.$dirty && editPointForm.name.$invalid, 'has-success': editPointForm.name.$dirty && editPointForm.name.$valid }">
+                            <label class="control-label" translate="mytourstep.name">Name</label>
+                            <input required name="name" ng-model="selectedPointOfInterest.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
+                            <label class="error-label" ng-show="editPointForm.name.$invalid && editPointForm.name.$dirty" translate="mytourstep.name_warn">The name is required.</label>
+                        </div>
+                        <div class="form-group required" ng-class="{ 'has-error':  editPointForm.description.$dirty && editPointForm.description.$invalid, 'has-success': editPointForm.description.$dirty && editPointForm.description.$valid }">
+                            <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
+                            <input required name="description" ng-model="selectedPointOfInterest.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
+                            <label class="error-label" ng-show="editPointForm.description.$invalid && editPointForm.description.$dirty" translate="mytourstep.description_warn">The description is required.</label>
+                        </div>
                     </div>
                 </form>
             </section>
-
-
-            <!-- <section class="form-section points-of-interest">
-                    <h3>Points of interest</h3>
-                    <div class="form-group">
-                        <a class="btn btn-primary" ng-click="open()"><i class="icon fa fa-plus-square"></i>  Create a new point of interest</a>
-                    </div>
-                    <div class="form-group point-of-interest {{ marker.type }}" ng-class="{ 'in-edition': marker.isInEdition }" ng-repeat="marker in step.markers">
-                        <div ng-hide="marker.isInEdition">
-                            <a ng-click="marker.isInEdition = true" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i></a>
-                        </div>
-                        <div ng-show="marker.isInEdition">
-                            <a ng-click="updateMarker(marker)" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
-                        </div>
-                        <h4 ng-switch="marker.type">
-                            <span ng-switch-when="interest">
-                                <i class="icon glyphicon glyphicon-eye-open"></i> Interest
-                            </span>
-                            <span ng-switch-when="bike-shops">
-                                <i class="icon glyphicon glyphicon-wrench"></i> Bike shop
-                            </span>
-                            <span ng-switch-when="food">
-                                <i class="icon glyphicon glyphicon-cutlery"></i> Food
-                            </span>
-                            <span ng-switch-when="danger">
-                                <i class="icon fa fa-exclamation-triangle"></i> Danger
-                            </span>
-                            <span ng-switch-default>                               
-                                <i class="icon glyphicon glyphicon-question-sign"></i> Other
-                            </span>
-                            <span ng-show="marker.name">"{{ marker.name }}"</span>
-                        </h4>
-                        <div class="form-group" ng-show="marker.isInEdition">
-                            <label>Name</label>
-                            <input ng-model="marker.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
-                        </div>
-                        <div class="form-group" ng-show="marker.isInEdition">
-                            <label>Description</label>
-                            <input ng-model="marker.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
-                        </div>
-                    </div>
-                </section>-->
 
         </div>
     </div>
