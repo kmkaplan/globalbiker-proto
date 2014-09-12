@@ -45,8 +45,8 @@ Import to dev database:
 
 Build the docker image from sources:  
     
-    cd docker/ci
-    docker build -t="bike-touring-map-ci" .
+    sudo docker build -t="globalbiker/bike-touring-map" .
+
     
 ### Pre-requisites
 
@@ -55,18 +55,17 @@ Run a mongoDB image with shared directory:
     mkdir -p /opt/docker/mongodb/data
 
     sudo docker run -d \
-        -p 27017:27017 \
+        -p 27019:27017 \
         -v /opt/docker/mongodb/data:/data/db \
         --name mongodb dockerfile/mongodb
    
 ### Test the image
 
-    docker run --rm -i \
+    sudo docker run --rm -i \
         --link=mongodb:mongodb \
         -p 8080:8080 \
-        -v /opt/docker/jenkins/share/globalbiker.org/deploy/:/deploy \
         -v /opt/docker/jenkins/share/globalbiker.org/app/:/app \
-        -t bike-touring-map-ci /bin/bash
+        -t globalbiker/bike-touring-map /bin/bash
    
 ### Run application
 
@@ -74,7 +73,7 @@ Run a mongoDB image with shared directory:
         --link=mongodb:mongodb \
         -p 80:8080 \
         -v /bike-touring-map:/deploy \
-        --name globalbiker.org  bike-touring-map-ci
+        --name globalbiker.org  globalbiker/bike-touring-map
 
 or
 

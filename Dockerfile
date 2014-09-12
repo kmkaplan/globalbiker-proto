@@ -12,27 +12,26 @@ RUN apt-get install -q -y ruby-compass ruby-sass
 RUN gem install compass
 
 # install libvips
-RUN apt-get install -q -y libvips-dev
+# RUN apt-get install -q -y libvips-dev
 
 # clean apt
 RUN apt-get clean
 
 WORKDIR /app
 
-# Add scripts
-ADD build.sh /scripts/build.sh
-ADD run.sh /scripts/run.sh
-RUN chmod 755 /scripts/*.sh
+ADD package.json /app/
+RUN npm install
 
-ADD ../.. /app
-RUN /scripts/build.sh
+ADD bower.json /app/
+RUN bower install --allow-root
+
+ADD . /app
+RUN chmod 755 /app/scripts/*.sh
+RUN /app/scripts/build.sh
 
 ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
 
+CMD ["/app/scripts/run.sh"]
+
 # Expose ports.
 EXPOSE 8080
-
-# volumes
-VOLUME  ["/deploy", "/app"]
-
-CMD ["/scripts/run.sh"]
