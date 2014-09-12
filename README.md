@@ -64,12 +64,20 @@ Run a mongoDB image with shared directory:
     sudo docker run --rm -i \
         --link=mongodb:mongodb \
         -p 8080:8080 \
-        -v /opt/docker/jenkins/share/globalbiker.org/app/:/app \
         -t globalbiker/bike-touring-map /bin/bash
    
 ### Run application
 
+Create shared directories to avoid loosing your data:
+
+    mkdir -p /opt/docker/jenkins/share/globalbiker.org/upload
+    mkdir -p /opt/docker/jenkins/share/globalbiker.org/photos
+
+Start a new container
+
     docker run -d \
         --link=mongodb:mongodb \
+        --volume=/opt/docker/jenkins/share/globalbiker.org/upload:/app/server/upload \
+        --volume=/opt/docker/jenkins/share/globalbiker.org/photos:/app/server/photos \
         -p 9209:8080 \
         --name globalbiker.org -t globalbiker/bike-touring-map
