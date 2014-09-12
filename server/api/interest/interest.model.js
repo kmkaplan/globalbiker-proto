@@ -34,7 +34,15 @@ var InterestSchema = new Schema({
     type: {
         type: String,
         required: 'Please fill type'
+    },
+    priority: Number,
+    photos: [{
+            url: {
+                type: String,
+                required: 'Please fill url'
+            }
     }
+    ]
 });
 
 module.exports = mongoose.model('Interest', InterestSchema);

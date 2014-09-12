@@ -3,21 +3,30 @@
 var _ = require('lodash');
 var Interest = require('./interest.model');
 
+var IO = require('../../components/io/io');
+var path = require('path');
+
 // Get list of interests
-exports.index = function(req, res) {
-  Interest.find(function (err, interests) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, interests);
-  });
+exports.index = function (req, res) {
+    Interest.find(function (err, interests) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(200, interests);
+    });
 };
 
 // Get a single interest
-exports.show = function(req, res) {
-  Interest.findById(req.params.id, function (err, interest) {
-    if(err) { return handleError(res, err); }
-    if(!interest) { return res.send(404); }
-    return res.json(interest);
-  });
+exports.show = function (req, res) {
+    Interest.findById(req.params.id, function (err, interest) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!interest) {
+            return res.send(404);
+        }
+        return res.json(interest);
+    });
 };
 
 /**
@@ -37,40 +46,95 @@ exports.getByStep = function (req, res) {
     });
 };
 
+
+// Creates a new bikelane in the DB.
+exports.upload = function (req, res) {
+
+    var interestId = req.params.id;
+
+    Interest.findById(interestId, function (err, interest) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!interest) {
+            console.log('Interest "%s" does not exists.', interestId);
+            return res.send(404);
+        }
+        var file = req.files.file;
+
+        if (!file) {
+            console.log('File "file" is missing.');
+            return res.send(400, 'File "file" is missing.');
+        }
+
+        var newPath ='/photos/interests/' + interestId + '/' + path.basename(file.path);
+        
+        // copy file
+        IO.copyFile(file.path,  'server/' + newPath);
+        
+        interest.photos.push({
+            url: newPath
+        });
+        
+        interest.save(function (err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            return res.json(200, interest);
+        });
+    })
+};
+
 // Creates a new interest in the DB.
-exports.create = function(req, res) {
-  Interest.create(req.body, function(err, interest) {
-    if(err) { return handleError(res, err); }
-    return res.json(201, interest);
-  });
+exports.create = function (req, res) {
+    Interest.create(req.body, function (err, interest) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(201, interest);
+    });
 };
 
 // Updates an existing interest in the DB.
-exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-  Interest.findById(req.params.id, function (err, interest) {
-    if (err) { return handleError(res, err); }
-    if(!interest) { return res.send(404); }
-    var updated = _.merge(interest, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.json(200, interest);
+exports.update = function (req, res) {
+    if (req.body._id) {
+        delete req.body._id;
+    }
+    Interest.findById(req.params.id, function (err, interest) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!interest) {
+            return res.send(404);
+        }
+        var updated = _.merge(interest, req.body);
+        updated.save(function (err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            return res.json(200, interest);
+        });
     });
-  });
 };
 
 // Deletes a interest from the DB.
-exports.destroy = function(req, res) {
-  Interest.findById(req.params.id, function (err, interest) {
-    if(err) { return handleError(res, err); }
-    if(!interest) { return res.send(404); }
-    interest.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.send(204);
+exports.destroy = function (req, res) {
+    Interest.findById(req.params.id, function (err, interest) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!interest) {
+            return res.send(404);
+        }
+        interest.remove(function (err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            return res.send(204);
+        });
     });
-  });
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+    return res.send(500, err);
 }

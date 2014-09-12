@@ -3,6 +3,31 @@
 angular.module('bikeTouringMapApp')
     .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService) {
 
+
+        $scope.onPhotoSelect = function ($files) {
+            //$files: an array of files selected, each file has name, size, and type.
+            for (var i = 0; i < $files.length; i++) {
+                var file = $files[i];
+
+                $scope.photoUploadProgress = 0;
+
+                $scope.upload = $upload.upload({
+                    url: '/api/interests/' + $scope.selectedPointOfInterest._id + '/upload',
+                    data: {},
+                    file: file,
+                }).progress(function (evt) {
+                    $scope.photoUploadProgress = (100 * evt.loaded / evt.total);
+                }).success(function (data, status, headers, config) {
+                    $scope.photoUploadProgress = null;
+                    $scope.loadStep();
+                }).error(function (msg) {
+                    alert(msg);
+                    $scope.photoUploadProgress = null;
+                });
+
+            }
+        };
+
         $scope.onFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
             for (var i = 0; i < $files.length; i++) {
@@ -175,6 +200,8 @@ angular.module('bikeTouringMapApp')
 
         $scope.init = function () {
 
+            $scope.photoUploadProgress = null;
+
             $scope.autozoom = true;
 
             if (!$stateParams.id) {
@@ -259,6 +286,11 @@ angular.module('bikeTouringMapApp')
                             }
 
                             $scope.updatePointsFromMapEditor([]);
+                        },
+                        'interest:clicked': function (marker, eMap, item, itemLayer, e) {
+                            $scope.selectedPointOfInterest = marker;
+                            $scope.editSelectedPointOfInterest = false;
+                            $scope.$apply();
                         }
                     }
                 };
@@ -290,10 +322,43 @@ angular.module('bikeTouringMapApp')
                     $scope.step.interests.push(interest);
 
                     MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+
+                    $scope.selectedPointOfInterest = interest;
+                    $scope.editSelectedPointOfInterest = false;
                 });
 
             }
         };
+
+        $scope.submitEditPointForm = function (form) {
+
+            if (form.$valid) {
+
+                var interest = new InterestRepository({
+                    stepId: $scope.step._id,
+                    latitude: $scope.selectedPointOfInterest.latitude,
+                    longitude: $scope.selectedPointOfInterest.longitude,
+                    type: $scope.selectedPointOfInterest.type,
+                    name: $scope.selectedPointOfInterest.name,
+                    description: $scope.selectedPointOfInterest.description
+                });
+                interest.$update({
+                    id: $scope.selectedPointOfInterest._id
+                }, function (u, putResponseHeader) {
+
+                    $('#new-point-of-interest-form').modal('hide')
+
+                    $scope.step.interests.push(interest);
+
+                    MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+
+                    $scope.editSelectedPointOfInterest = false;
+                });
+
+            }
+        };
+
+
 
         $scope.openCreateMarkerForm = function (size) {
 

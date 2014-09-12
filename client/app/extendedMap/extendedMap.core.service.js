@@ -17,6 +17,8 @@ angular.module('bikeTouringMapApp')
             },
             drawItem: function (eMap, layerName, item) {
 
+                var thisService = this;
+
                 if (!item.extendedMapId) {
                     // new marker: generate an internal id
                     item.extendedMapId = this._getRandomId();
@@ -24,16 +26,28 @@ angular.module('bikeTouringMapApp')
                     // TODO is it possible to use internal _leafletId_ instead? (unique for map or for layerGroup?)
                 }
 
+                var itemLayer;
+
                 switch (item.type) {
                 case 'marker':
-                    this.drawMarker(eMap, layerName, item);
+                    itemLayer = this.drawMarker(eMap, layerName, item);
                     break;
                 case 'polyline':
-                    this.drawPolyline(eMap, layerName, item);
+                    itemLayer = this.drawPolyline(eMap, layerName, item);
+                    break;
+                case 'image':
+                    itemLayer = this.drawImage(eMap, layerName, item);
                     break;
                 default:
                     console.error('Unknown type %s.', item.type);
+                    return;
                     break;
+                }
+
+                if (typeof (item.callbacks) !== 'undefined' && typeof (item.callbacks['click']) === 'function') {
+                    itemLayer.on('click', function (e) {
+                        item.callbacks['click'](eMap, item, itemLayer, e);
+                    });
                 }
 
             },
@@ -88,6 +102,31 @@ angular.module('bikeTouringMapApp')
 
                 // add it to the layer
                 this.addToLayer(eMap, layerName, markerLayer, marker);
+
+                return markerLayer;
+            },
+            drawImage: function (eMap, layerName, image) {
+                var map = eMap.map;
+
+                // check input parameters
+                if (!image.latitude) {
+                    console.error('Image latitude is not defined.');
+                    return;
+                }
+                if (!image.longitude) {
+                    console.error('Image longitude is not defined.');
+                    return;
+                }
+                
+                var imageBounds = [[image.latitude, image.longitude + 0.02], [image.latitude - 0.02, image.longitude - 0.02]];
+
+                // create image layer
+                var imageLayer = L.imageOverlay(image.url, imageBounds, {opacity: 1});
+
+                // add it to the parent layer
+                this.addToLayer(eMap, layerName, imageLayer, image);
+
+                return imageLayer;
             },
 
             drawPolyline: function (eMap, layerName, polyline) {
@@ -130,14 +169,13 @@ angular.module('bikeTouringMapApp')
                 if (polyline.opacity) {
                     options.opacity = polyline.opacity;
                 }
-                
-                
-
                 // draw the polyline
                 var polylineLayer = L.polyline(latlngs, options);
 
                 // add it to the 'draw' layer
                 this.addToLayer(eMap, layerName, polylineLayer, polyline);
+
+                return polylineLayer;
             },
 
             ensureLayerExists: function (eMap, layerName) {

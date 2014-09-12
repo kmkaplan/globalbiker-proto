@@ -1,3 +1,10 @@
-.default-extended-map{
+.default-extended-map {
     height: 300px;
+}
+
+.leaflet-image-layer {
+    background-color: white;
+    box-shadow: 1px 3px 5px #555;
+    padding: 3px;
+    margin: 2px;
 }

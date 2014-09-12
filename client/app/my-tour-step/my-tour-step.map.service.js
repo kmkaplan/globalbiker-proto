@@ -98,12 +98,12 @@ angular.module('bikeTouringMapApp')
 
                 if (step && step.interests && step.interests.length > 0) {
 
-                    markers.items = step.interests.reduce(function (output, marker) {
+                    markers.items = step.interests.reduce(function (output, interest) {
 
                         var iconName;
                         var markerColor;
                         var spin = false;
-                        switch (marker.type) {
+                        switch (interest.type) {
                         case 'interest':
                             iconName = 'glyphicon-eye-open';
                             markerColor = 'green';
@@ -127,19 +127,37 @@ angular.module('bikeTouringMapApp')
                             break;
                         }
 
+                        if (interest.photos.length > 0) {
+                            output.push({
+                                type: 'image',
+                                latitude: interest.latitude,
+                                longitude: interest.longitude,
+                                url: interest.photos[0].url,
+                                callbacks: {
+                                    click: function (eMap, item, itemLayer, e) {
+                                        alert("totot");
+                                        mapConfig.callbacks['interest:clicked'](interest, eMap, item, itemLayer, e);
+                                    }
+                                }
+                            });
+
+                        }
                         output.push({
                             type: 'marker',
-                            latitude: marker.latitude,
-                            longitude: marker.longitude,
+                            latitude: interest.latitude,
+                            longitude: interest.longitude,
                             icon: {
                                 name: iconName,
                                 markerColor: markerColor,
                                 spin: spin
                             },
-                            popup: {
-                                content: '<h3>' + marker.name + '</h3>' + '<p>' + marker.description + '</p>'
+                            callbacks: {
+                                click: function (eMap, item, itemLayer, e) {
+                                    mapConfig.callbacks['interest:clicked'](interest, eMap, item, itemLayer, e);
+                                }
                             }
                         });
+
 
                         return output;
 

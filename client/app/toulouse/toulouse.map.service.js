@@ -48,15 +48,15 @@ angular.module('bikeTouringMapApp')
 
                             if (step.interests && step.interests.length > 0) {
 
-                                markers.items = step.interests.reduce(function (output, marker) {
+                                markers.items = step.interests.reduce(function (output, interest) {
 
                                     var iconName;
                                     var markerColor;
                                     var spin = false;
 
-                                    if (marker.type === 'interest') {
+                                    if (interest.type === 'interest') {
 
-                                        switch (marker.type) {
+                                        switch (interest.type) {
                                         case 'interest':
                                             iconName = 'glyphicon-eye-open';
                                             markerColor = 'green';
@@ -67,19 +67,37 @@ angular.module('bikeTouringMapApp')
                                             break;
                                         }
 
-                                        trace.items.push({
-                                            type: 'marker',
-                                            latitude: marker.latitude,
-                                            longitude: marker.longitude,
-                                            icon: {
-                                                name: iconName,
-                                                markerColor: markerColor,
-                                                spin: spin
-                                            },
-                                            popup: {
-                                                content: '<h3>' + marker.name + '</h3>' + '<p>' + marker.description + '</p>'
-                                            }
-                                        });
+                                        if (interest.photos.length > 0) {
+                                            trace.items.push({
+                                                type: 'image',
+                                                latitude: interest.latitude,
+                                                longitude: interest.longitude,
+                                                url: interest.photos[0].url,
+                                                callbacks: {
+                                                    click: function (eMap, item, itemLayer, e) {
+                                                        alert("totot");
+                                                        mapConfig.callbacks['interest:clicked'](interest, eMap, item, itemLayer, e);
+                                                    }
+                                                }
+                                            });
+
+                                        } else {
+
+                                            trace.items.push({
+                                                type: 'marker',
+                                                latitude: interest.latitude,
+                                                longitude: interest.longitude,
+                                                icon: {
+                                                    name: iconName,
+                                                    markerColor: markerColor,
+                                                    spin: spin
+                                                },
+                                                popup: {
+                                                    content: '<h3>' + interest.name + '</h3>' + '<p>' + interest.description + '</p>'
+                                                }
+                                            });
+
+                                        }
                                     }
 
                                     return output;

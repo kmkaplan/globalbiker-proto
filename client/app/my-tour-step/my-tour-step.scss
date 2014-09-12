@@ -1,11 +1,9 @@
 .my-tour-step-page {
-
-    .trace-resume-area{
-        td{
+    .trace-resume-area {
+        td {
             text-align: right;
         }
     }
-    
     .my-tour-step-map {
         height: 600px;
     }
@@ -24,38 +22,29 @@
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
         margin-bottom: 20px;
     }
-    .points-of-interest {
-        a .icon {
-            margin-right: 6px;
+    .selected-point-of-interest .interest-type {
+       .icon {
+            font-size: 14px;
+            background-color: blue;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
         }
-        .point-of-interest {
-            .icon {
-                font-size: 14px;
-                background-color: blue;
-                color: white;
-                padding: 5px;
-                border-radius: 5px;
-            }
-            &.interest .icon {
-                // green
-                background-color: #6fac25;
-            }
-            &.bike-shops .icon {
-                // pink
-                background-color: #ff90e9;
-            }
-            &.food .icon {
-                // black
-                background-color: #303030;
-            }
-            &.danger .icon {
-                // red
-                background-color: #d53e2a;
-            }
-            &.in-edition {
-                padding: 10px;
-                border: 1px solid #555;
-            }
+        &.interest .icon {
+            // green
+            background-color: #6fac25;
+        }
+        &.bike-shops .icon {
+            // pink
+            background-color: #ff90e9;
+        }
+        &.food .icon {
+            // black
+            background-color: #303030;
+        }
+        &.danger .icon {
+            // red
+            background-color: #d53e2a;
         }
     }
     .form-group.required .control-label:after {

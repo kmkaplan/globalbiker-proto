@@ -86,7 +86,7 @@ angular.module('bikeTouringMapApp')
                         }
                     };
 
-/*
+                    /*
                     L.CRS.EPSG3943 = // EPSG:102012 served by TMS with bounds (-5401501.0, 4065283.0, 4402101.0, 39905283.0)
 new L.Proj.CRS.TMS('EPSG:102012',
     '+proj=lcc +lat_1=30 +lat_2=62 +lat_0=0 +lon_0=105 +x_0=0 +y_0=0 '
@@ -110,9 +110,9 @@ new L.Proj.CRS.TMS('EPSG:102012',
                             // tileLayer: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
                             tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
                             // tileLayer: 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
-                             // tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
+                            // tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
                             scrollWheelZoom: true,
-                          //  crs: 'EPSG3943',tms: true
+                            //  crs: 'EPSG3943',tms: true
                         },
                         center: $scope.config.initialCenter
                     };
@@ -159,6 +159,8 @@ new L.Proj.CRS.TMS('EPSG:102012',
                             console.info('Redraw items of map %s', $scope.eMap.mapId);
 
                             extendedMapService.redrawItems($scope.eMap, newItems, oldItems);
+
+
 
                             if (typeof ($scope.config.callbacks) !== 'undefined' && typeof ($scope.config.callbacks['items:redraw']) === 'function') {
                                 $scope.config.callbacks['items:redraw']($scope.eMap, newItems, oldItems);
