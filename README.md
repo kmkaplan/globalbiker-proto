@@ -77,7 +77,7 @@ Start a new container
 
     docker run -d \
         --link=mongodb:mongodb \
-        --volume=/opt/docker/jenkins/share/globalbiker.org/upload:/app/server/upload \
-        --volume=/opt/docker/jenkins/share/globalbiker.org/photos:/app/server/photos \
+        --volume=/opt/docker/jenkins/share/globalbiker.org/upload:/app/dist/server/upload \
+        --volume=/opt/docker/jenkins/share/globalbiker.org/photos:/app/dist/server/photos \
         -p 9209:8080 \
         --name globalbiker.org -t globalbiker/bike-touring-map

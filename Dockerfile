@@ -31,8 +31,8 @@ RUN /app/scripts/build.sh
 
 ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
 
-VOLUME ["/app/server/upload"]
-VOLUME ["/app/server/photos"]
+VOLUME ["/app/server/dist/upload"]
+VOLUME ["/app/server/dist/photos"]
 
 CMD ["/app/scripts/run.sh"]
 
