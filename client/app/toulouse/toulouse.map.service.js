@@ -12,11 +12,16 @@ angular.module('bikeTouringMapApp')
                     items: []
                 };
 
+
+
                 tours.reduce(function (output1, tour) {
 
+                    var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    
                     if (tour.steps) {
 
                         tour.steps.reduce(function (output2, step) {
+
 
                             if (step.points && step.points.length > 1) {
 
@@ -34,12 +39,21 @@ angular.module('bikeTouringMapApp')
                                 trace.items.push({
                                     type: 'polyline',
                                     points: points,
-                                    color: 'green',
+                                    color: color,
                                     weight: 6,
-                                    opacity: 0.3
+                                    opacity: 0.5
                                 });
                             } else {
                                 console.info('No points for step %d.', step._id);
+                                // define trace from cityFrom to cityTo
+                                trace.items.push({
+                                    type: 'polyline',
+                                    points: [step.cityFrom, step.cityTo],
+                                    color: color,
+                                    weight: 6,
+                                    opacity: 0.5,
+                                    dashArray: '3 10'
+                                });
                             }
 
                             var markers = {

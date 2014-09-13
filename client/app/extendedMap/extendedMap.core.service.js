@@ -179,6 +179,10 @@ angular.module('bikeTouringMapApp')
                 if (polyline.opacity) {
                     options.opacity = polyline.opacity;
                 }
+                if (polyline.dashArray) {
+                    options.dashArray = polyline.dashArray;
+                }
+                
                 // draw the polyline
                 var polylineLayer = L.polyline(latlngs, options);
 
