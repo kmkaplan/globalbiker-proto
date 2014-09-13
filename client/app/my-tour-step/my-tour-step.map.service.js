@@ -135,7 +135,6 @@ angular.module('bikeTouringMapApp')
                                 url: interest.photos[0].url,
                                 callbacks: {
                                     click: function (eMap, item, itemLayer, e) {
-                                        alert("totot");
                                         mapConfig.callbacks['interest:clicked'](interest, eMap, item, itemLayer, e);
                                     }
                                 }

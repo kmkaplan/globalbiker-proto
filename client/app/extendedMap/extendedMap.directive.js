@@ -86,31 +86,13 @@ angular.module('bikeTouringMapApp')
                         }
                     };
 
-                    /*
-                    L.CRS.EPSG3943 = // EPSG:102012 served by TMS with bounds (-5401501.0, 4065283.0, 4402101.0, 39905283.0)
-new L.Proj.CRS.TMS('EPSG:102012',
-    '+proj=lcc +lat_1=30 +lat_2=62 +lat_0=0 +lon_0=105 +x_0=0 +y_0=0 '
-    + '+ellps=WGS84 +datum=WGS84 +units=m +no_defs',
-    [-5401501.0, 4065283.0, 4402101.0, 39905283.0],
-    {
-        resolutions: [
-           140000.0000000000,
-            70000.0000000000,
-            35000.0000000000,
-            17500.0000000000
-        ]
-    }
-);
-*/
-
-
                     var initialConfig = {
                         mapId: $scope.mapId,
                         defaults: {
-                            // tileLayer: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
-                            tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
-                            // tileLayer: 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
-                            // tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
+                           //  tileLayer: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
+                           tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
+                           //  tileLayer: 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
+                           //   tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
                             scrollWheelZoom: true,
                             //  crs: 'EPSG3943',tms: true
                         },
@@ -127,10 +109,6 @@ new L.Proj.CRS.TMS('EPSG:102012',
                 },
                 post: function postLink($scope, $element, $attrs) {
 
-                    /* $scope.config.whenMapReady = function (callback) {
-                            leafletData.getMap($scope.mapId).then(callback);
-                        };*/
-
                     leafletData.getMap($scope.eMap.mapId).then(function (map) {
 
                         $scope.eMap.map = map;
@@ -139,16 +117,6 @@ new L.Proj.CRS.TMS('EPSG:102012',
                             // map creation callback
                             $scope.config.callbacks['map:created']($scope.eMap);
                         }
-
-                        /*$scope.$watch('config.polygons', function (newPolygons, oldPolygons) {
-
-                                var polygonLayers = extendedMapService.redrawPolygons(map, newPolygons);
-
-                                if (typeof ($scope.config.onRedraw) === 'function') {
-                                    $scope.config.onRedraw(map, newPolygons, polygonLayers);
-                                }
-
-                            }, true);*/
 
                         if ($scope.config.drawingOptions) {
                             extendedMapService.enableDrawing($scope.eMap);
@@ -167,19 +135,6 @@ new L.Proj.CRS.TMS('EPSG:102012',
                             }
 
                         }, false);
-
-
-                        // configure legend
-                        /*var leafletLegend = L.control({
-                                position: 'topright'
-                            });
-
-                            leafletLegend.onAdd = function (legendData, legendClass) {
-                                var divs = iElement.find('div');
-                                var legendDiv = divs[divs.length - 1];
-                                return legendDiv;
-                            };
-                            leafletLegend.addTo(map);*/
                     });
                 }
             }

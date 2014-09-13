@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('ToulouseCtrl', function ($scope, $q, TourRepository, StepRepository, SteppointRepository, InterestRepository, ToulouseMapService) {
+    .controller('ToulouseCtrl', function ($scope, $q, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, ToulouseMapService) {
 
         $scope.mapConfig = {
             class: 'toulouse-map',
@@ -17,9 +17,35 @@ angular.module('bikeTouringMapApp')
                         if (tours) {
                             ToulouseMapService.updateTours($scope.mapConfig, tours);
                         }
-
                     });
 
+                    $scope.$watch('mapConfig.configuration', function (configuration, old) {
+                        if ($scope.tours) {
+                            ToulouseMapService.updateTours($scope.mapConfig, $scope.tours);
+                        }
+                    }, true);
+                },
+                'interest:clicked': function (interest, eMap, item, itemLayer, e) {
+                    if (Auth.isAdmin()) {
+                        if (interest.priority === 1) {
+                            interest.priority = 0;
+                        } else {
+                            interest.priority = 1;
+                        }
+                        interest.$update(function () {
+                            ToulouseMapService.updateTours($scope.mapConfig, $scope.tours);
+                        });
+                    }
+                }
+            },
+            configuration: {
+                interests: {
+                    visible: {
+                        show: true
+                    },
+                    invisible: {
+                        show: false
+                    }
                 }
             }
         };
@@ -123,6 +149,7 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.init = function () {
+            $scope.isAdmin = Auth.isAdmin;
             $scope.loadTours();
         }
 

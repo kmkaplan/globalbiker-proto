@@ -50,58 +50,99 @@ angular.module('bikeTouringMapApp')
 
                                 markers.items = step.interests.reduce(function (output, interest) {
 
-                                    if (interest.priority !== 1){
+                                    var showInterest = false;
+                                    if (interest.priority === 1) {
+                                        // visible items
+                                        if (mapConfig.configuration.interests.visible.show) {
+                                            showInterest = true;
+                                        }
+                                    } else {
+                                        // invisible items
+                                        if (mapConfig.configuration.interests.invisible.show) {
+                                            showInterest = true;
+                                        }
+                                    }
+
+                                    if (!showInterest) {
                                         return output;
                                     }
-                                    
+
                                     var iconName;
                                     var markerColor;
                                     var spin = false;
 
-                                    if (interest.type === 'interest') {
 
-                                        switch (interest.type) {
-                                        case 'interest':
-                                            iconName = 'glyphicon-eye-open';
-                                            markerColor = 'green';
-                                            break;
-                                        default:
-                                            iconName = 'glyphicon-question-sign';
-                                            markerColor = 'black';
-                                            break;
-                                        }
+                                    switch (interest.type) {
+                                    case 'interest':
+                                        iconName = 'glyphicon-eye-open';
+                                        markerColor = 'green';
+                                        break;
+                                    case 'bike-shops':
+                                        iconName = 'glyphicon-wrench';
+                                        markerColor = 'pink';
+                                        break;
+                                    case 'food':
+                                        iconName = 'glyphicon-cutlery';
+                                        markerColor = 'black';
+                                        break;
+                                    case 'danger':
+                                        iconName = 'fa-exclamation-triangle';
+                                        markerColor = 'red';
+                                        spin = true;
+                                        break;
+                                    default:
+                                        iconName = 'glyphicon-question-sign';
+                                        markerColor = 'black';
+                                        break;
+                                    }
 
-                                        if (interest.photos.length > 0) {
-                                            trace.items.push({
-                                                type: 'image',
-                                                latitude: interest.latitude,
-                                                longitude: interest.longitude,
-                                                url: interest.photos[0].url,
-                                                callbacks: {
-                                                    click: function (eMap, item, itemLayer, e) {
-                                                        alert("totot");
-                                                        mapConfig.callbacks['interest:clicked'](interest, eMap, item, itemLayer, e);
-                                                    }
+                                    var opacity;
+                                    if (interest.priority === 1) {
+                                        // visible
+                                        opacity = 1;
+                                    } else {
+                                        // invisible
+                                        opacity = 0.5;
+                                    }
+
+
+                                    if (interest.photos.length > 0) {
+                                        trace.items.push({
+                                            type: 'image',
+                                            latitude: interest.latitude,
+                                            longitude: interest.longitude,
+                                            url: interest.photos[0].url,
+                                            opacity: opacity,
+                                            callbacks: {
+                                                click: function (eMap, item, itemLayer, e) {
+                                                    mapConfig.callbacks['interest:clicked'](interest, eMap, item, itemLayer, e);
                                                 }
-                                            });
+                                            }
+                                        });
 
-                                        } else {
+                                    } else {
 
-                                            trace.items.push({
-                                                type: 'marker',
-                                                latitude: interest.latitude,
-                                                longitude: interest.longitude,
-                                                icon: {
-                                                    name: iconName,
-                                                    markerColor: markerColor,
-                                                    spin: spin
-                                                },
-                                                popup: {
-                                                    content: '<h3>' + interest.name + '</h3>' + '<p>' + interest.description + '</p>'
+                                        trace.items.push({
+                                            type: 'marker',
+                                            latitude: interest.latitude,
+                                            longitude: interest.longitude,
+                                            icon: {
+                                                name: iconName,
+                                                markerColor: markerColor,
+                                                spin: spin
+                                            },
+                                            popup: {
+                                                content: '<h3>' + interest.name + '</h3>' + '<p>' + interest.description + '</p>'
+                                            },
+                                            opacity: opacity,
+                                            callbacks: {
+                                                click: function (eMap, item, itemLayer, e) {
+                                                    mapConfig.callbacks['interest:clicked'](interest, eMap, item, itemLayer, e);
                                                 }
-                                            });
+                                            }
+                                        });
 
-                                        }
+
                                     }
 
                                     return output;

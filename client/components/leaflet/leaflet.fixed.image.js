@@ -77,7 +77,15 @@ L.FixedImage = L.Class.extend({
     },
 
     _initImage: function () {
+       var self = this;
+        
         this._image = L.DomUtil.create('img', 'leaflet-image-layer');
+        
+        L.DomEvent
+            .addListener(this._image, 'click', function () {
+                // propagate click event to layer
+                self.fire('click');
+            })
 
         if (this._map.options.zoomAnimation && L.Browser.any3d) {
             L.DomUtil.addClass(this._image, 'leaflet-zoom-animated');
@@ -121,7 +129,7 @@ L.FixedImage = L.Class.extend({
 
         if (this._map.getZoom() < 10) {
             image.style.display = 'none';
-        }else{
+        } else {
             image.style.display = 'inline';
         }
 

@@ -90,6 +90,10 @@ angular.module('bikeTouringMapApp')
                     markerOptions.icon = markerIcon;
 
                 }
+                
+                if (marker.opacity){
+                    markerOptions.opacity=marker.opacity;
+                }
 
                 var markerLayer = L.marker([marker.latitude, marker.longitude], markerOptions).addTo(map);
 
@@ -120,8 +124,14 @@ angular.module('bikeTouringMapApp')
                 
                 var imageBounds = [[image.latitude, image.longitude], [image.latitude, image.longitude]];
 
+                var options = {};
+                
+                if (image.opacity){
+                    options.opacity = image.opacity;
+                };
+                
                 // create image layer
-                var imageLayer = L.fixedImage(image.url, imageBounds, {opacity: 1});
+                var imageLayer = L.fixedImage(image.url, imageBounds, options);
 
                 // add it to the parent layer
                 this.addToLayer(eMap, layerName, imageLayer, image);
