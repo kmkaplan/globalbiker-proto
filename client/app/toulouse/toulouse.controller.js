@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('ToulouseCtrl', function ($scope, $q, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, ToulouseMapService) {
+    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, ToulouseMapService) {
 
         $scope.mapConfig = {
             class: 'toulouse-map',
@@ -36,6 +36,13 @@ angular.module('bikeTouringMapApp')
                             ToulouseMapService.updateTours($scope.mapConfig, $scope.tours);
                         });
                     }
+                },
+                'step:clicked': function (step, eMap, item, itemLayer, e) {
+                    $state.go('tour-details', {
+                        id: step.tourId
+                    }, {
+                        inherit: false
+                    });
                 }
             },
             configuration: {

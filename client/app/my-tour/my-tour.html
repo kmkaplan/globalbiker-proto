@@ -6,30 +6,33 @@
     <ol class="breadcrumb">
         <li><a href="/my-tours" translate="mytours.nav-bar_name">My tours</a>
         </li>
-        <li ng-hide="tour.isPersisted()" class="active"  translate="mytours.create">Create a new tour</li>
+        <li ng-hide="tour.isPersisted()" class="active" translate="mytours.create">Create a new tour</li>
         <li ng-show="tour.isPersisted()" class="active">{{ tour.title }}</li>
     </ol>
     <form novalidate role="form" name="createTourForm" ng-submit="submitCreateTour(createTourForm)">
         <div class="row">
-            <div class="col-md-5">
+            <div ng-class="{ 'col-md-5': !tour.isPersisted(),  'col-md-7': tour.isPersisted() }">
                 <div class="form-group required" ng-class="{ 'has-error':  createTourForm.title.$dirty && createTourForm.title.$invalid, 'has-success': createTourForm.title.$dirty && createTourForm.title.$valid }" ng-hide="tour.isPersisted()">
                     <label for="tourTitle" translate="mytours.edit.title">Tour title</label>
                     <input required name="title" ng-model="tour.title" type="text" class="form-control" id="tourTitle" placeholder="{{'mytours.edit.title' | translate}}">
                 </div>
                 <div ng-show="tour.isPersisted()">
+                    <a class="pull-right" href="/tour-details/{{ tour._id }}">
+                        <i class="fa fa-eye"></i> {{ 'my-tour.see-the-tour' | translate }}
+                    </a>
                     <h2>{{ tour.title }}</h2>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" ng-hide="tour.isPersisted()">
                 <div>
-                    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+                    <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" />
                     <a ng-disabled="createTourForm.$invalid" ng-click="submitCreateTour(createTourForm)" class="btn btn-success create-tour-button"><i class="fa fa-check"></i> {{ "mytours.edit.create" | translate}}</a>
                 </div>
 
             </div>
             <div class="col-md-5">
                 <div class="form-group">
-                    <label for="tourCountry"  translate="mytours.edit.country">Tour country</label>
+                    <label for="tourCountry" translate="mytours.edit.country">Tour country</label>
                     <input required typeahead-min-length="2" id="tourCountry" readonly="true" ng-model="tour.country" placeholder="Country of departure" typeahead="country as country.label for country in getCountry($viewValue)" typeahead-loading="countryLoading" typeahead-input-formatter="countryToName($model)" class="form-control">
                     <i ng-show="countryLoading" class="glyphicon glyphicon-refresh"></i>
                 </div>
@@ -74,10 +77,10 @@
                             </div>
                             <div ng-hide="step.isInEdition()">{{ step.cityTo.name }}</div>
                         </td>
-                        <td>
+                        <td class="tour-step-rating">
                             <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="step.status == 'read-only'" ng-show="step.isValidCityTo()" ng-model="step.difficulty" max="3" on-leave="overStar = null"></rating>
                         </td>
-                        <td>
+                        <td class="tour-step-rating">
                             <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="step.status == 'read-only'" ng-show="step.isValidCityTo() && step.difficulty" ng-model="step.interest" max="5" on-leave="overStar = null"></rating>
                         </td>
                         <td>

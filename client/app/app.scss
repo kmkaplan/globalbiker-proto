@@ -36,6 +36,7 @@ $baseColor2: #5e8c15;
 @import 'my-tour/my-tour.scss';
 @import 'my-tours/my-tours.scss';
 @import 'toulouse/toulouse.scss';
+@import 'tour-details/tour-details.scss';
 // endinjector
 
 img.smart-photo {
@@ -44,4 +45,32 @@ img.smart-photo {
     box-shadow: 1px 3px 5px #555;
     padding: 4px;
     margin: 2px;
+}
+
+.smart-map-area {
+    border: 10px solid #555;
+    border-radius: 10px;
+}
+
+.tour-step-rating {
+    .fa-bicycle {
+        margin: 1px 1px;
+        &.selected {
+            color: #e31414;
+        }
+        &.unselected {
+            color: #777;
+        }
+    }
+    .glyphicon-star {
+        &.selected {
+            color: #2a8010;
+        }
+        &.unselected {
+            color: #777;
+        }
+    }
+    .glyphicon-star-empty {
+        color: #2a8010;
+    }
 }

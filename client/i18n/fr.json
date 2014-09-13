@@ -1,88 +1,95 @@
 {
-    "signup"                : "S'inscrire",
-    "login"                 : "Se connecter",
-	"hello"					: "Bonjour",
-	"logout"				: "Se déconnecter",
-    "home" : {
-        "main" : {
-            "slogan"        : "Ride Global, Ride GlobalBiker"
+    "signup": "S'inscrire",
+    "login": "Se connecter",
+    "hello": "Bonjour",
+    "logout": "Se déconnecter",
+    "home": {
+        "main": {
+            "slogan": "Ride Global, Ride GlobalBiker"
         },
-        "intro" : {
-            "invit"         : "GlobalBiker",
-            "description"   : "Première communauté de voyageurs à vélo",
-            "discover_btn"  : "Découvrez GlobalBiker",
-            "beta_test"     : "Testez le prototype!",
-            "invit_mailing" : "Rejoignez-nous et suivez l'avancement du projet!",
-            "email_placeh"  : "Votre e-mail",
-            "email_btn"     : "Go"
+        "intro": {
+            "invit": "GlobalBiker",
+            "description": "Première communauté de voyageurs à vélo",
+            "discover_btn": "Découvrez GlobalBiker",
+            "beta_test": "Testez le prototype!",
+            "invit_mailing": "Rejoignez-nous et suivez l'avancement du projet!",
+            "email_placeh": "Votre e-mail",
+            "email_btn": "Go"
         },
-        "prepare" : {
-            "title"         : "Préparez votre voyage à vélo",
-            "slogan"        : "Bénéficiez de l'expérience des GlobalBikers",
-            "search_road"   : "Recherchez des itinéraires dans le monde entier",
-            "interest_map"  : "Consultez le tracé, les points d’intérêt sur la carte et les informations pratiques",
-            "free_mind"     : "Partez l’esprit libre grâce aux conseils des GlobalBikers",
-            "discover_way"  : "Découvrez un formidable moyen de voyager!",
-            "network"       : "Un réseau communautaire de voyageurs à vélo, international et non commercial",
-            "free_opensrc"  : "Un site Internet gratuit et open-source",
-            "blog"          : "Des données ré-utilisables sur votre blog"
+        "prepare": {
+            "title": "Préparez votre voyage à vélo",
+            "slogan": "Bénéficiez de l'expérience des GlobalBikers",
+            "search_road": "Recherchez des itinéraires dans le monde entier",
+            "interest_map": "Consultez le tracé, les points d’intérêt sur la carte et les informations pratiques",
+            "free_mind": "Partez l’esprit libre grâce aux conseils des GlobalBikers",
+            "discover_way": "Découvrez un formidable moyen de voyager!",
+            "network": "Un réseau communautaire de voyageurs à vélo, international et non commercial",
+            "free_opensrc": "Un site Internet gratuit et open-source",
+            "blog": "Des données ré-utilisables sur votre blog"
         },
-        "share" : {
-            "title"         : "Partagez votre expérience",
-            "slogan"        : "Racontez-nous votre voyage!",
-            "publish"       : "Publiez la carte interactive de votre voyage sur votre blog",
-            "complete"      : "Complétez les fiches pratiques des pays ou régions parcourus",
-            "add_track"     : "Ajoutez de nouveaux parcours",
-            "advice"        : "Conseillez à votre tour la communauté",
-            "test_beta"     : "Testez le prototype!"
+        "share": {
+            "title": "Partagez votre expérience",
+            "slogan": "Racontez-nous votre voyage!",
+            "publish": "Publiez la carte interactive de votre voyage sur votre blog",
+            "complete": "Complétez les fiches pratiques des pays ou régions parcourus",
+            "add_track": "Ajoutez de nouveaux parcours",
+            "advice": "Conseillez à votre tour la communauté",
+            "test_beta": "Testez le prototype!"
         }
     },
-    "mytours" : {
-        "nav-bar_name"      : "Mes parcours",
-        "create"            : "Créer un nouveau parcours",
-        "edit" : {
-            "title"         : "Nom du parcours",
-            "country"       : "Pays du parcours",
-            "titre_placeh"  : "Le nom de votre parcours (ex : Canal du midi depuis Toulouse)",
-            "create"        : "Créer le parcours",
-            "day"           : "Jour",
-            "from"          : "de",
-            "to"            : "à",
-            "difficulty"    : "difficulté",
-			"interest"		: "Intérêt",
-            "departure"     : "Ville de départ",
-            "arrival"       : "Ville d'arrivée",
-            "edit_daily"    : "Editer le détail de l'étape du jour"
+    "mytours": {
+        "nav-bar_name": "Mes parcours",
+        "create": "Créer un nouveau parcours",
+        "edit": {
+            "title": "Nom du parcours",
+            "country": "Pays du parcours",
+            "titre_placeh": "Le nom de votre parcours (ex : Canal du midi depuis Toulouse)",
+            "create": "Créer le parcours",
+            "day": "Jour",
+            "from": "de",
+            "to": "à",
+            "difficulty": "difficulté",
+            "interest": "Intérêt",
+            "departure": "Ville de départ",
+            "arrival": "Ville d'arrivée",
+            "edit_daily": "Editer le détail de l'étape du jour"
         },
-        "steps" : {
-            "from"          : "De",
-            "to"            : "à",
-            "iti_trace"     : "Le tracé de votre itinéraire",
-            "update_trace"  : "Mettre à jour votre tracé",
-            "draw"          : "Ou dessiner manuellement votre tracé en utilisant les outils de la carte!"
+        "steps": {
+            "from": "De",
+            "to": "à",
+            "iti_trace": "Le tracé de votre itinéraire",
+            "update_trace": "Mettre à jour votre tracé",
+            "draw": "Ou dessiner manuellement votre tracé en utilisant les outils de la carte!"
         }
     },
-	"mytourstep" : {
+    "my-tour": {
+        "see-the-tour": "voir le tour"
+    },
+    "mytourstep": {
         "your_itinary_trace": "Tracé de votre itinéraire",
-		"trace_resume": "Trace resume",
+        "trace_resume": "Trace resume",
         "total_distance": "Distance totale",
-		"positive_elevation_gain": "Dénivelé positif",
-		"negative_elevation_gain": "Dénivelé négatif",
-		"points_number": "Nombre de points",
-		"new"			: "Nouveau point d'intérêt",
-		"interest"		: "intérêt",
-		"bike-shop"		: "magasin de vélo",
-		"food"			: "nourriture",
-		"danger"		: "danger",
-		"name"			: "name",
-		"name_warn"		: "Le nom est requis.",
-		"description"	: "description",
-		"description_warn" : "La description est requise.",
-		"add_to_map"	: "Ajouter à la carte.",
+        "positive_elevation_gain": "Dénivelé positif",
+        "negative_elevation_gain": "Dénivelé négatif",
+        "points_number": "Nombre de points",
+        "new": "Nouveau point d'intérêt",
+        "interest": "intérêt",
+        "bike-shop": "magasin de vélo",
+        "food": "nourriture",
+        "danger": "danger",
+        "name": "name",
+        "name_warn": "Le nom est requis.",
+        "description": "description",
+        "description_warn": "La description est requise.",
+        "add_to_map": "Ajouter à la carte.",
         "select_gps_file": "Envoyer une trace GPS (*.gpx, *.tcx)",
         "update_your_trace": "Mettre à jour la trace GPS",
         "draw_it_manually": "Ou dessinez la via les outils de la carte!",
         "delete_your_trace": "Supprimer la trace",
         "delete_current_trace": "Supprimer"
-	}
+    },
+    "tour-details": {
+        "step": "Etape",
+        "edit-the-tour": "modifier le tour"
+    }
 }

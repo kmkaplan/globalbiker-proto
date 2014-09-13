@@ -1,0 +1,36 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container tour-details-page">
+
+    <ol class="breadcrumb">
+        <li><a href="/toulouse" translate="mytours.nav-bar_name">Tours</a>
+        </li>
+        <li class="active">{{ tour.title }}</li>
+    </ol>
+    <a ng-if="isAllowedToEdit(tour)" class="pull-right" href="/my-tour/{{ tour._id }}">
+        <i class="fa fa-edit"></i> {{ 'tour-details.edit-the-tour' | translate }}
+    </a>
+    <h1>{{ tour.title }}</h1>
+    <div ng-repeat="step in steps">
+        <h2>{{ 'tour-details.step' | translate }} {{ $index + 1 }}: {{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</h2>
+       <div class="row">
+            <div class="col-md-6">
+                <div class="row tour-step-rating">
+                    <div class="col-md-6">
+                        <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="step.difficulty" max="3"></rating>
+                    </div>
+                    <div class="col-md-6">
+                        <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="step-map-area smart-map-area">
+                    <div extended-map config="step.mapConfig"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

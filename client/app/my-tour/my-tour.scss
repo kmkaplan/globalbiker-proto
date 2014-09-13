@@ -1,24 +1,4 @@
 .my-tour-page {
-    .fa-bicycle {
-        margin: 1px 1px;
-        &.selected{
-            color: #e31414;
-        }
-        &.unselected{
-            color: #777;
-        }
-    }
-    .glyphicon-star {
-        &.selected{
-            color: #2a8010;
-        }
-        &.unselected{
-            color: #777;
-        }
-    }
-    .glyphicon-star-empty {
-        color: #2a8010;
-    }
     .dropdown-menu {
         z-index: 5000;
     }

@@ -5,7 +5,7 @@
         </li>
         <li><a href="/my-tour/{{ step.tour._id }}">{{ step.tour.title }}</a>
         </li>
-        <li class="active">{{mytours.steps.from}} {{ step.cityFrom.name }} {{mytours.steps.to}} {{ step.cityTo.name }}</li>
+        <li class="active">{{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</li>
     </ol>
     <h2>{{ "mytours.steps.from" | translate }} {{ step.cityFrom.name }} {{ "mytours.steps.to" | translate }} {{ step.cityTo.name }}</h2>
     <div class="row">

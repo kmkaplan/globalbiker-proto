@@ -17,7 +17,7 @@ angular.module('bikeTouringMapApp')
                 tours.reduce(function (output1, tour) {
 
                     var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                    
+
                     if (tour.steps) {
 
                         tour.steps.reduce(function (output2, step) {
@@ -41,7 +41,12 @@ angular.module('bikeTouringMapApp')
                                     points: points,
                                     color: color,
                                     weight: 6,
-                                    opacity: 0.5
+                                    opacity: 0.5,
+                                    callbacks: {
+                                        click: function (eMap, item, itemLayer, e) {
+                                            mapConfig.callbacks['step:clicked'](step, eMap, item, itemLayer, e);
+                                        }
+                                    }
                                 });
                             } else {
                                 console.info('No points for step %d.', step._id);
@@ -52,7 +57,12 @@ angular.module('bikeTouringMapApp')
                                     color: color,
                                     weight: 6,
                                     opacity: 0.5,
-                                    dashArray: '3 10'
+                                    dashArray: '3 10',
+                                    callbacks: {
+                                        click: function (eMap, item, itemLayer, e) {
+                                            mapConfig.callbacks['step:clicked'](step, eMap, item, itemLayer, e);
+                                        }
+                                    }
                                 });
                             }
 
