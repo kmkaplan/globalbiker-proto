@@ -40,6 +40,7 @@ angular.module('bikeTouringMapApp')
 
                     $scope.config.control = {
                         fitBounds: function (bounds) {
+                            console.info('Fit to bounds.');
                             if (bounds && bounds.length === 2 && bounds[0].length === 2 && bounds[0][0] && bounds[1].length === 2) {
                                 leafletData.getMap($scope.mapId).then(function (map) {
                                     //$timeout(function () {
@@ -48,7 +49,8 @@ angular.module('bikeTouringMapApp')
                                 });
                             }
                         },
-                        fitBoundsFromPoints: function (points) {
+                        fitBoundsFromPoints: function (points, margin) {
+                            console.info('Fit to bounds from points.');
 
                             if (points) {
                                 var bounds = [[null, null], [null, null]];
@@ -81,6 +83,16 @@ angular.module('bikeTouringMapApp')
                                     return output;
                                 }, []);
 
+                                if (margin) {
+                                    var latitudeMargin = (bounds[1][0] - bounds[0][0]) * margin;
+                                    bounds[0][0] -= latitudeMargin;
+                                    bounds[1][0] += latitudeMargin
+                                    
+                                    var longitudeMargin = (bounds[1][1] - bounds[0][1]) * margin;
+                                    bounds[0][1] -= longitudeMargin;
+                                    bounds[1][1] += longitudeMargin
+                                }
+
                                 this.fitBounds(bounds);
                             }
                         }
@@ -89,10 +101,10 @@ angular.module('bikeTouringMapApp')
                     var initialConfig = {
                         mapId: $scope.mapId,
                         defaults: {
-                           //  tileLayer: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
-                           tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
-                           //  tileLayer: 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
-                           //   tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
+                            //  tileLayer: 'http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png',
+                            tileLayer: 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg',
+                            //  tileLayer: 'http://{s}.tile.thunderforest.com/outdoors/{z}/{x}/{y}.png',
+                            //   tileLayer: 'http://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png',
                             scrollWheelZoom: true,
                             //  crs: 'EPSG3943',tms: true
                         },
