@@ -17,6 +17,9 @@ RUN gem install compass
 # clean apt
 RUN apt-get clean
 
+# pre-install main dependencies (to save time)
+npm install karma karma-phantomjs-launcher grunt-contrib-imagemin grunt-google-cdn grunt-protractor-runner
+
 WORKDIR /app
 
 ADD package.json /app/
