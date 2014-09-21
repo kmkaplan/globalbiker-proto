@@ -1,9 +1,46 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .service('ToulouseMapService', function () {
+    .service('ToulouseMapService', function ( GeoConverter) {
 
         return {
+            updateBikelanes: function (mapConfig, bikelanes) {
+                if (bikelanes) {
+
+                    var bikelanesPolylines = bikelanes.reduce(function (polylines, bikelane) {
+
+                        var points = GeoConverter.toLatLng(bikelane.points);
+
+                        polylines.push({
+                            type: 'polyline',
+                            color: '#82c17d',
+                            weight: 3,
+                            opacity: 0.5,
+                            points: points
+                        });
+
+                        return polylines;
+                    }, []);
+
+                                        // create a new object to be able to trigger the changes to angular scope (without have to $watch the whole array of objects)
+                    var drawnItems = {};
+
+                    if (mapConfig.drawnItems) {
+                        for (var key in mapConfig.drawnItems) {
+                            if (mapConfig.drawnItems.hasOwnProperty(key)) {
+                                drawnItems[key] = mapConfig.drawnItems[key];
+                            }
+                        }
+                    }
+
+                    drawnItems.bikelanes = {
+                        items: bikelanesPolylines
+                    };
+
+                    // trigger changes
+                    mapConfig.drawnItems = drawnItems;
+                }
+            },
             updateTours: function (mapConfig, tours) {
 
                 console.info('Update map.');
@@ -11,8 +48,6 @@ angular.module('bikeTouringMapApp')
                 var trace = {
                     items: []
                 };
-
-
 
                 tours.reduce(function (output1, tour) {
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('AdminDataCtrl', function ($scope, $upload, BikelaneRepository) {
+    .controller('AdminDataCtrl', function ($scope, $upload, BikelaneRepository, GeoConverter) {
 
         $scope.onFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
@@ -26,8 +26,8 @@ angular.module('bikeTouringMapApp')
             }
         };
 
-        proj4.defs["EPSG:3943"] = "+proj=lcc +lat_1=42.25 +lat_2=43.75 +lat_0=43 +lon_0=3 +x_0=1700000 +y_0=2200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs";
-        $scope.converter = proj4(proj4.defs["EPSG:3943"]);
+       /* proj4.defs["EPSG:3943"] = "+proj=lcc +lat_1=42.25 +lat_2=43.75 +lat_0=43 +lon_0=3 +x_0=1700000 +y_0=2200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs";
+        $scope.converter = proj4(proj4.defs["EPSG:3943"]);*/
 
         $scope.init = function () {
 
@@ -55,17 +55,7 @@ angular.module('bikeTouringMapApp')
                                     }*/
 
 
-                                    var points = bikelane.points.reduce(function (output, p) {
-
-                                        var transformed = $scope.converter.inverse([p.longitude, p.latitude]);
-
-                                        output.push({
-                                            latitude: transformed[1],
-                                            longitude: transformed[0]
-                                        });
-                                        return output;
-
-                                    }, []);
+                                    var points = GeoConverter.toLatLng(bikelane.points);
 
                                     var color = 'red';
                                     if (['réseau vert', 'reseau vert', 'couloir bus', 'piste', 'voie verte', 'couloir bus', 'bandes'].indexOf(bikelane.type) !== -1) {

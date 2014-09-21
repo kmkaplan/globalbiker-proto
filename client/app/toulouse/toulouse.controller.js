@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, ToulouseMapService) {
+    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, ToulouseMapService, BikelaneRepository) {
 
         $scope.mapConfig = {
             class: 'toulouse-map',
@@ -18,6 +18,14 @@ angular.module('bikeTouringMapApp')
                             ToulouseMapService.updateTours($scope.mapConfig, tours);
                         }
                     });
+
+                    $scope.$watch('bikelanes', function (bikelanes, old) {
+                        if (bikelanes) {
+                            ToulouseMapService.updateBikelanes($scope.mapConfig, bikelanes);
+                        }
+                    });
+
+
 
                     $scope.$watch('mapConfig.configuration', function (configuration, old) {
                         if ($scope.tours) {
@@ -146,6 +154,8 @@ angular.module('bikeTouringMapApp')
 
                 $scope.loadToursSteps(tours).then(function () {
                         $scope.tours = tours;
+
+                        deffered.resolve(tours);
                     },
                     function (err) {
                         deffered.reject(err);
@@ -155,9 +165,23 @@ angular.module('bikeTouringMapApp')
             return deffered.promise;
         };
 
+        $scope.loadBikelanes = function () {
+            $scope.bikelanesLoading = true;
+            BikelaneRepository.query(function (bikelanes) {
+
+                $scope.bikelanes = bikelanes;
+
+                $scope.bikelanesLoading = false;
+            }, function () {
+                $scope.bikelanesLoading = false;
+            });
+        };
+
         $scope.init = function () {
             $scope.isAdmin = Auth.isAdmin;
-            $scope.loadTours();
+            $scope.loadTours().then(function () {
+                $scope.loadBikelanes();
+            });
         }
 
         $scope.init();
