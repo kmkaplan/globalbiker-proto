@@ -14,9 +14,9 @@ exports.index = function (req, res) {
                 $geometry: {
                     type: "Point",
                     coordinates: [1.44, 43.61]
-                }
-            },
-            $maxDistance: 4000
+                },
+                $maxDistance: 4000
+            }
         }
     }).exec(function (err, bikelanes) {
         if (err) {
