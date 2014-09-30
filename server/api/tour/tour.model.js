@@ -18,6 +18,10 @@ var TourSchema = new Schema({
         required: 'Please fill tour title',
         trim: true
     },
+    description: {
+        type: String,
+        trim: true
+    },
     country: {
         geonameId: {
             type: Number,

@@ -11,6 +11,10 @@ angular.module('bikeTouringMapApp')
                     id: 'me'
                 }
             },
+            update: {
+                method: 'PUT',
+                url: '/api/tours/:id'
+            },
             getMines: {
                 method: 'GET',
                 isArray: true,

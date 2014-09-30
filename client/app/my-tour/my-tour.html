@@ -95,6 +95,11 @@
                 </tbody>
             </table>
 
+            <div class="form-group">
+                <label>Description</label>
+                <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-change="saveDescription()" ng-model="tour.originalModel.description" type="text" class="form-control"></textarea>
+            </div>
+
         </div>
 
         <div class="col-md-5">

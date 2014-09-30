@@ -17,7 +17,8 @@ angular.module('bikeTouringMapApp').factory('MyTourStepViewModelStep', function 
             },
             hasTrace: function(){
                 return this.points && this.points.length !== 0;
-            }
+            },
+            originalModel: step
         });
         angular.extend(this, step);
         

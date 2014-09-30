@@ -13,7 +13,8 @@ angular.module('bikeTouringMapApp').factory('MyTourViewModelTour', function () {
             },
             isPersisted: function () {
                 return typeof (this._id) !== 'undefined';
-            }
+            },
+            originalModel: data
         });
         angular.extend(this, data);
     };

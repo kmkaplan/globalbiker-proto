@@ -11,6 +11,8 @@
         <i class="fa fa-edit"></i> {{ 'tour-details.edit-the-tour' | translate }}
     </a>
     <h1>{{ tour.title }}</h1>
+    <div class="alert tour-description" ng-if="tour.description" ng-bind-html="tour.description"></div>
+    
     <div ng-repeat="step in steps">
         <h2>{{ 'tour-details.step' | translate }} {{ $index + 1 }}: {{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</h2>
        <div class="row">
@@ -23,6 +25,7 @@
                         <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>
                     </div>
                 </div>
+                <div class="alert step-description" ng-if="step.description" ng-bind-html="step.description"></div>
             </div>
             <div class="col-md-6">
                 <div class="step-map-area smart-map-area">

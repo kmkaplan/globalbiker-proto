@@ -28,6 +28,10 @@ var StepSchema = new Schema({
         ref: 'TourSchema',
         required: 'Please fill tour'
     },
+    description: {
+        type: String,
+        trim: true
+    },
     difficulty: {
         type: Number,
         required: 'Please fill difficulty'

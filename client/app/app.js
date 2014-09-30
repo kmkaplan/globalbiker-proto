@@ -9,7 +9,8 @@ angular.module('bikeTouringMapApp', [
   'ui.bootstrap',
   'leaflet-directive',
   'angularFileUpload',
-  'pascalprecht.translate'
+  'pascalprecht.translate',
+  'ui.tinymce'
 ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider) {
         $urlRouterProvider

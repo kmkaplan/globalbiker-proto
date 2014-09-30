@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService) {
+    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService) {
 
 
         $scope.onPhotoSelect = function ($files) {
@@ -155,6 +155,26 @@ angular.module('bikeTouringMapApp')
             return deffered.promise;
         }
 
+         $scope.saveDescription = function () {
+            if ($scope.step && $scope.step.originalModel) {
+
+                if ($scope.step.saveDescriptionTimeout) {
+                    // cancel previous timer
+                $timeout.cancel($scope.step.saveDescriptionTimeout);
+                }
+
+                $scope.step.saveDescriptionTimeout = $timeout(function () {
+
+                    // save after a short delay
+                $scope.step.originalModel.$update(function (data, putResponseHeaders) {
+                        console.info('Step updated.');
+                    });
+                }, 500); // delay 500 ms
+
+
+            }
+        };
+        
         $scope.loadSteppoints = function () {
             var deffered = $q.defer();
 

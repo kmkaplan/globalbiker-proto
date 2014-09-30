@@ -15,6 +15,11 @@
 
         <div class="col-md-5">
 
+            <div class="form-group">
+                <label>Description</label>
+                <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-change="saveDescription()" ng-model="step.originalModel.description" type="text" class="form-control"></textarea>
+            </div>
+           
             <div class="modal fade" role="dialog" arial-hidden="true" id="new-point-of-interest-form">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
