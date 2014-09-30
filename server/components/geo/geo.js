@@ -6,6 +6,28 @@ var DOMParser = require('xmldom').DOMParser;
 var togeojson = require('togeojson');
 var tcx = require('tcx');
 var S = require('string');
+var proj4 = require('proj4');
+
+exports.projections = {
+    'EPSG:3943': '+proj=lcc +lat_1=42.25 +lat_2=43.75 +lat_0=43 +lon_0=3 +x_0=1700000 +y_0=2200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+};
+
+/* convert 'EPSG:3943' coordinates to WGS84 */
+exports.convertCoordinatesToWGS84 = function (coordinates) {
+
+    var converter = proj4(exports.projections['EPSG:3943']);
+
+    var convertedPoints = coordinates.reduce(function (output, p) {
+
+        var transformed = converter.inverse(p);
+
+        output.push(transformed);
+        
+        return output;
+
+    }, []);
+    return convertedPoints;
+};
 
 exports.buildLine = function (coordinates) {
 
@@ -61,13 +83,13 @@ exports.readTracesFromFile = function (file) {
 
             if (currentFeature.geometry.type === 'LineString') {
                 // single line
-                 console.log(currentFeature.geometry);
-                    lines = [exports.buildLine(currentFeature.geometry.coordinates)];
+                console.log(currentFeature.geometry);
+                lines = [exports.buildLine(currentFeature.geometry.coordinates)];
             } else if (currentFeature.geometry.type === 'MultiLineString') {
                 // multiple lines
                 lines = currentFeature.geometry.coordinates.reduce(function (linesOutput, coordinates) {
                     linesOutput.push(exports.buildLine(coordinates));
-                   return linesOutput;
+                    return linesOutput;
                 }, []);
 
             } else {

@@ -3,11 +3,24 @@
 var fs = require('fs');
 var _ = require('lodash');
 var Bikelane = require('./bikelane.model');
+var geo = require('../../components/geo/geo');
 
 // Get list of bikelanes
 exports.index = function (req, res) {
-    Bikelane.find(function (err, bikelanes) {
+
+    Bikelane.find({
+        geometry: {
+            $near: {
+                $geometry: {
+                    type: "Point",
+                    coordinates: [1.44, 43.61]
+                }
+            },
+            $maxDistance: 4000
+        }
+    }).exec(function (err, bikelanes) {
         if (err) {
+            console.error(err);
             return handleError(res, err);
         }
         return res.json(200, bikelanes);
@@ -37,19 +50,15 @@ exports.create = function (req, res) {
     });
 };
 
-exports.buildBikelane = function (properties, coordinates) {
-    var points = coordinates.reduce(function (pointsOutput, c) {
+exports.buildBikelane = function (type, coordinates, properties) {
 
-        var latitude = c[1];
-        var longitude = c[0];
+    // convert coordinates
+    var coordinates = geo.convertCoordinatesToWGS84(coordinates);
 
-        pointsOutput.push({
-            latitude: latitude,
-            longitude: longitude
-        });
-        return pointsOutput;
-
-    }, []);
+    var geometry = {
+        type: type,
+        coordinates: coordinates
+    };
 
     var p = properties;
 
@@ -58,7 +67,7 @@ exports.buildBikelane = function (properties, coordinates) {
         type: p['obs_type'],
         surface: p['Revetement'],
         inseeCode: p['code_insee'],
-        points: points
+        geometry: geometry
     };
 
     return bikelane;
@@ -94,22 +103,30 @@ exports.upload = function (req, res) {
 
             if (currentFeature.geometry.type === 'LineString') {
 
-                var bikelane = exports.buildBikelane(currentFeature.properties, currentFeature.geometry.coordinates);
+                var bikelane = exports.buildBikelane('LineString', currentFeature.geometry.coordinates, currentFeature.properties);
 
                 bikelanesOutput.push(bikelane);
 
             } else if (currentFeature.geometry.type === 'MultiLineString') {
-                // split MultiLineString bikelane in several LineString bikelanes
-                for (var i = 0; i < currentFeature.geometry.coordinates.length; i++) {
-                    var coordinates = currentFeature.geometry.coordinates[i];
-                    var bikelane = exports.buildBikelane(currentFeature.properties, coordinates);
+
+                currentFeature.geometry.coordinates.reduce(function (notUsed, currentCoordinates) {
+
+                    // convert to several LineString as MultiLineString is not supported in mongo 2.4 (new in 2.6)
+
+                    var bikelane = exports.buildBikelane('LineString', currentCoordinates, currentFeature.properties);
 
                     bikelanesOutput.push(bikelane);
-                }
+
+
+                }, null);
 
             } else {
-                console.log('Unexpected feature geometry type "%s".', currentFeature.geometry.type);
+                // error type not supported
+                console.error('Type %s is not supported', feature.geometry.type);
             }
+
+
+
 
             return bikelanesOutput;
 

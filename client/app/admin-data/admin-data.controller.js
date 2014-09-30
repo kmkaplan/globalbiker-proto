@@ -7,42 +7,18 @@ angular.module('bikeTouringMapApp')
             url: '/api/bikelanes/upload',
             filename: 'Pistes_Cyclables.json',
             callbacks: {
-                success: function(data) {
+                success: function (data) {
                     $scope.loadBikelanes();
                 }
             }
         };
-    
-       /* $scope.onFileSelect = function ($files) {
-            //$files: an array of files selected, each file has name, size, and type.
-            for (var i = 0; i < $files.length; i++) {
-                var file = $files[i];
-
-                $scope.bikelanesUploadProgress = 0;
-
-                $scope.upload = $upload.upload({
-                    url: '/api/bikelanes/upload',
-                    file: file,
-                }).progress(function (evt) {
-                    $scope.bikelanesUploadProgress = (100 * evt.loaded / evt.total);
-                }).success(function (data, status, headers, config) {
-                    $scope.loadBikelanes();
-                    $scope.bikelanesUploadProgress = null;
-                }).error(function (msg) {
-                    alert(msg);
-                    $scope.bikelanesUploadProgress = null;
-                });
-
-            }
-        };*/
 
         $scope.init = function () {
 
-          /*  $scope.bikelanesUploadProgress = null;*/
+            $scope.bikelines = 0;
 
-           // $scope.loadBikelanes();
-$scope.bikelines = 0;
-            
+            $scope.loadBikelanes();
+
             $scope.mapConfig = {
                 class: 'bikelanes-map',
                 initialCenter: {
@@ -56,35 +32,29 @@ $scope.bikelines = 0;
 
                             if (bikelanes) {
 
-                                var polylines = bikelanes.reduce(function (polylines, bikelane) {
+                                bikelanes.reduce(function (features, bikelane) {
 
-                                    var points = GeoConverter.toLatLng(bikelane.points);
+                                    var geojsonFeature = {
+                                        "type": "Feature",
+                                        "properties": {
+                                            "name": "Coors Field",
+                                            "amenity": "Baseball Stadium",
+                                            "popupContent": "This is where the Rockies play!"
+                                        },
+                                        "geometry": bikelane.geometry
+                                    };
 
-                                    var color = 'red';
-                                    if (['réseau vert', 'reseau vert', 'couloir bus', 'piste', 'voie verte', 'couloir bus', 'bandes'].indexOf(bikelane.type) !== -1) {
-                                        color = 'green';
-                                    } else if (['trottoir', 'passage inferieur', 'bande a contresens', 'contre allee', 'escalier', 'passerelle', undefined].indexOf(bikelane.type) !== -1) {
-                                        color = 'blue';
-                                    } else {
-                                        console.warn('Unknown type "%s".', bikelane.type);
-                                    }
+                                    L.geoJson(geojsonFeature, {
+                                        style: function (feature) {
+                                            return {
+                                                color: '#236d15'
+                                            };
+                                        }
+                                    }).addTo(eMap.map);
 
-                                    polylines.push({
-                                        type: 'polyline',
-                                        color: color,
-                                        weight: 3,
-                                        opacity: 0.7,
-                                        points: points
-                                    });
 
-                                    return polylines;
-                                }, []);
 
-                                $scope.mapConfig.drawnItems = {
-                                    bikelines: {
-                                        items: polylines
-                                    }
-                                };
+                                }, null);
                             }
 
                         });
@@ -92,7 +62,6 @@ $scope.bikelines = 0;
                     }
                 }
             };
-
 
 
         };

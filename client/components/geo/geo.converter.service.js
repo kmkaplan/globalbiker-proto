@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .factory('GeoConverter', function (socketFactory) {
+    .factory('GeoConverter', function () {
 
         return {
             projections: {

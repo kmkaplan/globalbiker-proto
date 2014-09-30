@@ -34,16 +34,10 @@ var BikelaneSchema = new Schema({
         //required: 'Please fill name',
         trim: true
     },
-    points: [{
-        latitude: {
-            type: Number,
-            required: 'Please fill latitude'
-        },
-        longitude: {
-            type: Number,
-            required: 'Please fill longitude'
-        }
-                    }],
+    geometry: {
+        type: Object,
+        index: '2dsphere'
+    }
 });
 
 module.exports = mongoose.model('Bikelane', BikelaneSchema);
