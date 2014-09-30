@@ -13,6 +13,10 @@ angular.module('bikeTouringMapApp', [
   'ui.tinymce'
 ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider) {
+
+
+        tinyMCE.baseURL = '/bower_components/tinymce';
+
         $urlRouterProvider
             .otherwise('/');
 

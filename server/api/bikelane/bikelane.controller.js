@@ -73,6 +73,7 @@ exports.buildBikelane = function (type, coordinates, properties) {
     return bikelane;
 
 }
+
 // Creates a new bikelane in the DB.
 exports.upload = function (req, res) {
 
@@ -124,10 +125,6 @@ exports.upload = function (req, res) {
                 // error type not supported
                 console.error('Type %s is not supported', feature.geometry.type);
             }
-
-
-
-
             return bikelanesOutput;
 
         }, []);

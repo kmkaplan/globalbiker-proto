@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('AdminDataCtrl', function ($scope, $upload, BikelaneRepository, GeoConverter) {
+    .controller('AdminDataCtrl', function ($scope, $upload, InterestRepository, BikelaneRepository, GeoConverter) {
 
         $scope.bikemapFileupload = {
             url: '/api/bikelanes/upload',
@@ -13,11 +13,22 @@ angular.module('bikeTouringMapApp')
             }
         };
 
+        $scope.waterpointsUpload = {
+            url: '/api/interests/upload',
+            filename: 'fontaines_a_boire.json',
+            callbacks: {
+                success: function (data) {
+                    $scope.loadPointsOfInterests();
+                }
+            }
+        };
+
         $scope.init = function () {
 
             $scope.bikelines = 0;
 
             $scope.loadBikelanes();
+            $scope.loadPointsOfInterests();
 
             $scope.mapConfig = {
                 class: 'bikelanes-map',
@@ -36,11 +47,7 @@ angular.module('bikeTouringMapApp')
 
                                     var geojsonFeature = {
                                         "type": "Feature",
-                                        "properties": {
-                                            "name": "Coors Field",
-                                            "amenity": "Baseball Stadium",
-                                            "popupContent": "This is where the Rockies play!"
-                                        },
+                                        "properties": {},
                                         "geometry": bikelane.geometry
                                     };
 
@@ -58,6 +65,32 @@ angular.module('bikeTouringMapApp')
                             }
 
                         });
+                        $scope.$watch('interests', function (interests, old) {
+
+                            if (interests) {
+
+                                interests.reduce(function (features, interest) {
+                                    if (interest.geometry) {
+                                        var geojsonFeature = {
+                                            "type": "Feature",
+                                            "properties": {},
+                                            "geometry": interest.geometry
+                                        };
+
+                                        L.geoJson(geojsonFeature, {
+                                            style: function (feature) {
+                                                return {
+                                                    color: 'red'
+                                                };
+                                            }
+                                        }).addTo(eMap.map);
+
+                                    }
+
+                                }, null);
+                            }
+
+                        });
 
                     }
                 }
@@ -70,6 +103,16 @@ angular.module('bikeTouringMapApp')
             $scope.loadingInProgress = true;
             BikelaneRepository.query(function (bikelanes) {
                 $scope.bikelanes = bikelanes;
+                $scope.loadingInProgress = false;
+            }, function () {
+                $scope.loadingInProgress = false;
+            });
+        };
+
+        $scope.loadPointsOfInterests = function () {
+            $scope.loadingInProgress = true;
+            InterestRepository.query(function (interests) {
+                $scope.interests = interests;
                 $scope.loadingInProgress = false;
             }, function () {
                 $scope.loadingInProgress = false;

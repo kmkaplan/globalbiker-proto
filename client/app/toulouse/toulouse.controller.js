@@ -166,7 +166,7 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.loadBikelanes = function () {
-            $scope.bikelanesLoading = true;
+            /*$scope.bikelanesLoading = true;
             BikelaneRepository.query(function (bikelanes) {
 
                 $scope.bikelanes = bikelanes;
@@ -174,7 +174,7 @@ angular.module('bikeTouringMapApp')
                 $scope.bikelanesLoading = false;
             }, function () {
                 $scope.bikelanesLoading = false;
-            });
+            });*/
         };
 
         $scope.init = function () {

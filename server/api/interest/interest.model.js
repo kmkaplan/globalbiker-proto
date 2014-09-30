@@ -30,6 +30,10 @@ var InterestSchema = new Schema({
         type: Number,
         required: 'Please fill longitude'
     },
+    geometry: {
+        type: Object,
+        index: '2dsphere'
+    },
     type: {
         type: String,
         required: 'Please fill type'

@@ -12,7 +12,7 @@ angular.module('bikeTouringMapApp')
                 $scope.photoUploadProgress = 0;
 
                 $scope.upload = $upload.upload({
-                    url: '/api/interests/' + $scope.selectedPointOfInterest._id + '/upload',
+                    url: '/api/interests/' + $scope.selectedPointOfInterest._id + '/upload-photo',
                     data: {},
                     file: file,
                 }).progress(function (evt) {

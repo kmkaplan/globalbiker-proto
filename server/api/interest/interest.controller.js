@@ -5,10 +5,23 @@ var Interest = require('./interest.model');
 
 var IO = require('../../components/io/io');
 var path = require('path');
+var fs = require('fs');
+var geo = require('../../components/geo/geo');
+
+
 
 // Get list of interests
 exports.index = function (req, res) {
-    Interest.find(function (err, interests) {
+    Interest.find({
+        geometry: {
+            $near: {
+                $geometry: {
+                    type: "Point",
+                    coordinates: [1.44, 43.61]
+                }
+            }
+        }
+    }, function (err, interests) {
         if (err) {
             return handleError(res, err);
         }
@@ -47,7 +60,91 @@ exports.getByStep = function (req, res) {
 };
 
 
+exports.buildInterest = function (type, coordinates, properties) {
+
+    // convert coordinates
+    var coordinates = geo.convertPointCoordinatesToWGS84(coordinates);
+
+    var geometry = {
+        type: type,
+        coordinates: coordinates
+    };
+
+    var p = properties;
+
+    var interest = {
+        name: p['TYPE'],
+        description: p['LOCALISATION'],
+        latitude: coordinates[1],
+        longitude: coordinates[0],
+        geometry: geometry,
+        type: 'water-point',
+        source: 'upload',
+        priority: 1
+    };
+
+    return interest;
+
+}
+
+// Creates a new bikelane in the DB.
 exports.upload = function (req, res) {
+
+    console.log(req.body);
+    console.log(req.files);
+
+    var file = req.files.file;
+
+    if (!file) {
+        console.log('File "file" is missing.');
+        return res.send(400, 'File "file" is missing.');
+    }
+
+    if (file.originalname !== 'fontaines_a_boire.json') {
+        console.log('Unexpected file name: "%s" instead of "fontaines_a_boire.json".', file.originalname);
+        return res.send(400, 'Unexpected file name. "fontaines_a_boire.json" expected.');
+    }
+
+    fs.readFile(file.path, 'utf8', function (err, data) {
+        if (err) {
+            console.log('Error reading file: ' + err);
+            return res.send(500, err);
+        }
+
+        var geojsonContent = JSON.parse(data);
+
+        var interests = geojsonContent.features.reduce(function (interests, currentFeature) {
+
+            var interest = exports.buildInterest('Point', currentFeature.geometry.coordinates, currentFeature.properties);
+
+            interests.push(interest);
+
+            return interests;
+
+        }, []);
+
+        // replace existing bikelanes
+
+        Interest.find({
+            type: 'water-point',
+            source: 'upload'
+        }).remove(function () {
+
+            Interest.create(interests, function (err, interest) {
+                if (err) {
+                    console.log('Error creating interests: ' + err);
+                    return handleError(res, err);
+                }
+                console.log('%d interests have been created.', interests.length);
+                return res.json(201, interests);
+            });
+
+        });
+
+    });
+};
+
+exports.uploadPhoto = function (req, res) {
 
     var interestId = req.params.id;
 
@@ -137,8 +234,15 @@ exports.deletePhoto = function (req, res) {
 
 // Creates a new interest in the DB.
 exports.create = function (req, res) {
+
+    req.body.geometry = {
+        type: 'Point',
+        coordinates: [req.body.longitude, req.body.latitude]
+    }
+
     Interest.create(req.body, function (err, interest) {
         if (err) {
+            console.error(err);
             return handleError(res, err);
         }
         return res.json(201, interest);
