@@ -20,8 +20,7 @@ var InterestSchema = new Schema({
     },
     stepId: {
         type: Schema.ObjectId,
-        ref: 'StepSchema',
-        required: 'Please fill step id'
+        ref: 'StepSchema'
     },
     latitude: {
         type: Number,
@@ -34,6 +33,9 @@ var InterestSchema = new Schema({
     type: {
         type: String,
         required: 'Please fill type'
+    },
+    source: {
+        type: String
     },
     priority: Number,
     photos: [{

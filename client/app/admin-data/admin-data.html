@@ -7,36 +7,11 @@
 
         <div class="col-md-10">
             <div extended-map config="mapConfig"></div>
-            <div ng-show="bikelanesLoading">
+            <div ng-show="loadingInProgress">
                 <div class="alert alert-warning"><i class="fa fa-spinner fa-spin"></i> Chargement en cours...</div>
-            </div>
-            <div ng-hide="bikelanesLoading">
-                <div class="alert alert-info">
-                    <div class="row">
-                        <div class="col-md-6">
-                           <div ng-if="bikelanesUploadProgress !== null">
-                                <i class="fa fa-spinner fa-spin"></i> Mise à jour en cours...
-                            </div>
-                            <div ng-if="bikelanesUploadProgress === null">
-                                Nombre de pistes: {{ bikelanes.length }}
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div ng-if="bikelanesUploadProgress !== null">
-                                <progressbar max="100" value="bikelanesUploadProgress"></progressbar>
-                            </div>
-                            <div ng-if="bikelanesUploadProgress === null">
-                                <div class="file-upload btn btn-primary">
-                                    <span>Sélectionner un fichier "Pistes_Cyclables.json"</span>
-                                    <input type="file" class="upload" ng-file-select="onFileSelect($files)" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
+            </div>{{ loadingInProgress }}
+            <div ng-hide="loadingInProgress">
+                <div file-upload="bikemapFileupload"></div>
             </div>
         </div>
         <div class="col-md-2">

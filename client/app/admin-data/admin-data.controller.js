@@ -3,7 +3,17 @@
 angular.module('bikeTouringMapApp')
     .controller('AdminDataCtrl', function ($scope, $upload, BikelaneRepository, GeoConverter) {
 
-        $scope.onFileSelect = function ($files) {
+        $scope.bikemapFileupload = {
+            url: '/api/bikelanes/upload',
+            filename: 'Pistes_Cyclables.json',
+            callbacks: {
+                success: function(data) {
+                    $scope.loadBikelanes();
+                }
+            }
+        };
+    
+       /* $scope.onFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
             for (var i = 0; i < $files.length; i++) {
                 var file = $files[i];
@@ -24,17 +34,15 @@ angular.module('bikeTouringMapApp')
                 });
 
             }
-        };
-
-       /* proj4.defs["EPSG:3943"] = "+proj=lcc +lat_1=42.25 +lat_2=43.75 +lat_0=43 +lon_0=3 +x_0=1700000 +y_0=2200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs";
-        $scope.converter = proj4(proj4.defs["EPSG:3943"]);*/
+        };*/
 
         $scope.init = function () {
 
-            $scope.bikelanesUploadProgress = null;
+          /*  $scope.bikelanesUploadProgress = null;*/
 
-            $scope.loadBikelanes();
-
+           // $scope.loadBikelanes();
+$scope.bikelines = 0;
+            
             $scope.mapConfig = {
                 class: 'bikelanes-map',
                 initialCenter: {
@@ -49,11 +57,6 @@ angular.module('bikeTouringMapApp')
                             if (bikelanes) {
 
                                 var polylines = bikelanes.reduce(function (polylines, bikelane) {
-
-                                    /* if (polylines.length > 1000){
-                                        return polylines;
-                                    }*/
-
 
                                     var points = GeoConverter.toLatLng(bikelane.points);
 
@@ -95,12 +98,12 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.loadBikelanes = function () {
-            $scope.bikelanesLoading = true;
+            $scope.loadingInProgress = true;
             BikelaneRepository.query(function (bikelanes) {
                 $scope.bikelanes = bikelanes;
-                $scope.bikelanesLoading = false;
+                $scope.loadingInProgress = false;
             }, function () {
-                $scope.bikelanesLoading = false;
+                $scope.loadingInProgress = false;
             });
         };
 
