@@ -6,6 +6,9 @@ angular.module('bikeTouringMapApp')
         return {
             updateTrace: function (mapConfig, step, steppoints) {
                 var trace = {
+                    layerOptions: {
+                        name: 'draw'
+                    },
                     items: []
                 };
 
@@ -93,6 +96,9 @@ angular.module('bikeTouringMapApp')
             updateInterests: function (mapConfig, step) {
 
                 var markers = {
+                    layerOptions: {
+                        name: 'draw'
+                    },
                     items: []
                 };
 

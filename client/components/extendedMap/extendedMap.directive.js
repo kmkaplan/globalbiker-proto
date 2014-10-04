@@ -118,11 +118,13 @@ angular.module('bikeTouringMapApp')
                         eLayersMap: {}
                     };
 
-                    $scope.eMap.addItemsToGroup = function (groupName, items, replaceAll) {
+                    $scope.eMap.addItemsToGroup = function (items, layerOptions, replaceAll) {
 
                         // var drawnItems = angular.copy($scope.config.drawnItems);
 
                         // FIXME angular.copy fails when running simultaneous copies (or too eavy ones?) so the following is faster, but does it work as angular.watch old items will be the same?
+
+                        var groupName = layerOptions.name;
 
                         var drawnItems = {};
 
@@ -136,15 +138,16 @@ angular.module('bikeTouringMapApp')
 
                         if (!drawnItems[groupName]) {
                             drawnItems[groupName] = {
+                                layerOptions: layerOptions,
                                 items: []
                             };
                         }
-                        if (replaceAll && replaceAll === true) {
-                            console.debug('Replace %d items by %d ones to group "%s" of map %s', drawnItems[groupName].items.length, items.length, groupName, $scope.eMap.mapId);
-                            drawnItems[groupName].items = items;
-                        } else {
+                        if (!replaceAll || replaceAll === false) {
                             console.debug('Add %d items to group "%s" of map %s', items.length, groupName, $scope.eMap.mapId);
                             drawnItems[groupName].items = drawnItems[groupName].items.concat(items);
+                        } else {
+                            console.debug('Replace %d items by %d ones to group "%s" of map %s', drawnItems[groupName].items.length, items.length, groupName, $scope.eMap.mapId);
+                            drawnItems[groupName].items = items;
                         }
 
                         // trigger change
@@ -169,7 +172,7 @@ angular.module('bikeTouringMapApp')
 
                         $scope.$watch('config.drawnItems', function (newItems, oldItems) {
 
-                            console.info('Redraw items of map %s (%d groups vs %d ones before)', $scope.eMap.mapId, _.keys(newItems).length ,_.keys(oldItems).length);
+                            console.info('Redraw items of map %s (%d groups vs %d ones before)', $scope.eMap.mapId, _.keys(newItems).length, _.keys(oldItems).length);
 
                             extendedMapService.redrawItems($scope.eMap, newItems, oldItems);
 

@@ -5,17 +5,17 @@ angular.module('bikeTouringMapApp')
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         return {
-            removeItem: function (eMap, layerName, item) {
+            removeItem: function (eMap, layerOptions, item) {
                 if (!item.layer) {
                     console.warn('Item has no layer.');
                     return;
                 }
 
                 // remove it from the layer
-                this.removeFromLayer(eMap, layerName, item);
+                this.removeFromLayer(eMap, layerOptions, item);
 
             },
-            drawItem: function (eMap, layerName, item) {
+            drawItem: function (eMap, layerOptions, item) {
 
                 var thisService = this;
 
@@ -30,16 +30,16 @@ angular.module('bikeTouringMapApp')
 
                 switch (item.type.toLowerCase()) {
                 case 'marker':
-                    itemLayer = this.drawMarker(eMap, layerName, item);
+                    itemLayer = this.drawMarker(eMap, layerOptions, item);
                     break;
                 case 'polyline':
-                    itemLayer = this.drawPolyline(eMap, layerName, item);
+                    itemLayer = this.drawPolyline(eMap, layerOptions, item);
                     break;
                 case 'image':
-                    itemLayer = this.drawImage(eMap, layerName, item);
+                    itemLayer = this.drawImage(eMap, layerOptions, item);
                     break;
                 case 'feature':
-                    itemLayer = this.drawFeature(eMap, layerName, item);
+                    itemLayer = this.drawFeature(eMap, layerOptions, item);
                     break;
                 default:
                     console.error('Unknown type %s.', item.type);
@@ -58,7 +58,7 @@ angular.module('bikeTouringMapApp')
                 // TODO store the id to be sure to never generate twice the same
                 return Math.floor((Math.random() * 6) + 1);
             },
-            drawFeature: function (eMap, layerName, feature) {
+            drawFeature: function (eMap, layerOptions, feature) {
                 var map = eMap.map;
 
                 // check input parameters
@@ -78,11 +78,11 @@ angular.module('bikeTouringMapApp')
                 var featureLayer = L.geoJson(feature, feature.properties.options);
 
                 // add it to the layer
-                this.addToLayer(eMap, layerName, featureLayer, feature);
+                this.addToLayer(eMap, layerOptions, featureLayer, feature);
 
                 return featureLayer;
             },
-            drawMarker: function (eMap, layerName, marker) {
+            drawMarker: function (eMap, layerOptions, marker) {
                 var map = eMap.map;
 
                 // check input parameters
@@ -132,11 +132,11 @@ angular.module('bikeTouringMapApp')
                 }
 
                 // add it to the layer
-                this.addToLayer(eMap, layerName, markerLayer, marker);
+                this.addToLayer(eMap, layerOptions, markerLayer, marker);
 
                 return markerLayer;
             },
-            drawImage: function (eMap, layerName, image) {
+            drawImage: function (eMap, layerOptions, image) {
                 var map = eMap.map;
 
                 // check input parameters
@@ -161,12 +161,12 @@ angular.module('bikeTouringMapApp')
                 var imageLayer = L.fixedImage(image.url, imageBounds, options);
 
                 // add it to the parent layer
-                this.addToLayer(eMap, layerName, imageLayer, image);
+                this.addToLayer(eMap, layerOptions, imageLayer, image);
 
                 return imageLayer;
             },
 
-            drawPolyline: function (eMap, layerName, polyline) {
+            drawPolyline: function (eMap, layerOptions, polyline) {
                 var map = eMap.map;
 
                 // check input parameters
@@ -214,31 +214,41 @@ angular.module('bikeTouringMapApp')
                 var polylineLayer = L.polyline(latlngs, options);
 
                 // add it to the 'draw' layer
-                this.addToLayer(eMap, layerName, polylineLayer, polyline);
+                this.addToLayer(eMap, layerOptions, polylineLayer, polyline);
 
                 return polylineLayer;
             },
 
-            ensureLayerExists: function (eMap, layerName) {
+            ensureLayerExists: function (eMap, layerOptions) {
                 var map = eMap.map;
 
-                var eLayer = eMap.eLayersMap[layerName];
+                var eLayer = eMap.eLayersMap[layerOptions.name];
                 if (!eLayer) {
                     // create layer
                     var layer = new L.LayerGroup();
 
-                    map.addLayer(layer);
+                    if (layerOptions.show) {
+                        map.addLayer(layer);
+                    }
+                    if (layerOptions.control) {
+                        // ensure layer control exists
+                        if (!eMap.layerControl) {
+                            eMap.layerControl = L.control.layers([], []);
+                            eMap.layerControl.addTo(map);
+                        }
+                        eMap.layerControl.addOverlay(layer, layerOptions.name);
+                    }
 
                     eLayer = {
                         layer: layer,
                         itemsMap: {}
                     };
 
-                    eMap.eLayersMap[layerName] = eLayer;
+                    eMap.eLayersMap[layerOptions.name] = eLayer;
                 }
                 return eLayer;
             },
-            addToLayer: function (eMap, parentLayerName, childLayer, childItem) {
+            addToLayer: function (eMap, layerOptions, childLayer, childItem) {
 
                 if (!childItem) {
                     console.error('Child item has not been set.');
@@ -251,7 +261,7 @@ angular.module('bikeTouringMapApp')
                 }
 
                 // retrieve or create the layer by name
-                var parentELayer = this.ensureLayerExists(eMap, parentLayerName);
+                var parentELayer = this.ensureLayerExists(eMap, layerOptions);
 
                 // add the item to the parent layer
                 parentELayer.layer.addLayer(childLayer);
@@ -266,7 +276,7 @@ angular.module('bikeTouringMapApp')
                 // return the parent eLayer
                 return parentELayer;
             },
-            removeFromLayer: function (eMap, parentLayerName, childItem) {
+            removeFromLayer: function (eMap, layerOptions, childItem) {
 
                 if (!childItem) {
                     console.error('Child item has not been set.');
@@ -279,7 +289,7 @@ angular.module('bikeTouringMapApp')
                 }
 
                 // retrieve or create the layer by name
-                var parentELayer = this.ensureLayerExists(eMap, parentLayerName);
+                var parentELayer = this.ensureLayerExists(eMap, layerOptions);
 
                 // remove the item from the parent layer
                 parentELayer.layer.removeLayer(childItem.layer);

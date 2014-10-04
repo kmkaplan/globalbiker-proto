@@ -41,12 +41,19 @@ angular.module('bikeTouringMapApp')
                     'map:created': function (eMap) {
                         $scope.$watch('bikelanes', function (bikelanes, old) {
                             if (bikelanes) {
-                                eMap.addItemsToGroup('bikelanes', bikeTourMapService.buildBikelanesFeatures(bikelanes), true);
+                                eMap.addItemsToGroup(bikeTourMapService.buildBikelanesFeatures(bikelanes), {
+                                    name: 'Pistes cyclables',
+                                    control: true,
+                                    show: false
+                                });
                             }
                         });
                         $scope.$watch('interests', function (interests, old) {
                             if (interests) {
-                                eMap.addItemsToGroup('interests', bikeTourMapService.buildInterestsFeatures(interests), true);
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(interests), {
+                                    name: 'Points d\'intérêt',
+                                    control: true
+                                });
                             }
                         });
 
@@ -61,7 +68,7 @@ angular.module('bikeTouringMapApp')
             $scope.loadingInProgress = true;
             BikelaneRepository.search({
                 latitude: 43.61,
-                longitude:1.44,
+                longitude: 1.44,
                 maxDistance: 4000
             }, function (bikelanes) {
                 $scope.bikelanes = bikelanes;
