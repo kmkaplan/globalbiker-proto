@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, ToulouseMapService, BikelaneRepository) {
+    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, ToulouseMapService, BikelaneRepository, bikeTourMapService) {
 
         $scope.mapConfig = {
             class: 'toulouse-map',
@@ -12,6 +12,28 @@ angular.module('bikeTouringMapApp')
             },
             callbacks: {
                 'map:created': function (eMap) {
+
+                    $scope.$watch('bikelanes', function (bikelanes, old) {
+                        if (bikelanes) {
+                            eMap.addItemsToGroup(bikeTourMapService.buildBikelanesFeatures(bikelanes), {
+                                name: 'Pistes cyclables',
+                                control: true,
+                                show: false
+                            });
+                        }
+                    });
+
+                    $scope.$watch('interests', function (interests, old) {
+                        if (interests) {
+                            eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(interests), {
+                                name: 'Points d\'intérêt',
+                                control: true,
+                                zoom: {
+                                    max: 7
+                                }
+                            });
+                        }
+                    });
 
                     $scope.$watch('tours', function (tours, old) {
                         if (tours) {
@@ -63,6 +85,16 @@ angular.module('bikeTouringMapApp')
                     }
                 }
             }
+        };
+
+        $scope.loadPointsOfInterests = function () {
+            $scope.loadingInProgress = true;
+            InterestRepository.query(function (interests) {
+                $scope.interests = interests;
+                $scope.loadingInProgress = false;
+            }, function () {
+                $scope.loadingInProgress = false;
+            });
         };
 
         $scope.loadStepsPoints = function (steps) {
@@ -166,20 +198,22 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.loadBikelanes = function () {
-            /*$scope.bikelanesLoading = true;
-            BikelaneRepository.query(function (bikelanes) {
-
+            $scope.loadingInProgress = true;
+            BikelaneRepository.search({
+                latitude: 43.61,
+                longitude: 1.44,
+                maxDistance: 4000
+            }, function (bikelanes) {
                 $scope.bikelanes = bikelanes;
-
-                $scope.bikelanesLoading = false;
+                $scope.loadingInProgress = false;
             }, function () {
-                $scope.bikelanesLoading = false;
-            });*/
+                $scope.loadingInProgress = false;
+            });
         };
-
         $scope.init = function () {
             $scope.isAdmin = Auth.isAdmin;
             $scope.loadTours().then(function () {
+                $scope.loadPointsOfInterests();
                 $scope.loadBikelanes();
             });
         }

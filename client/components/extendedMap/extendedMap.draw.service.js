@@ -13,6 +13,11 @@ angular.module('bikeTouringMapApp')
                 var thisService = this;
 
                 var drawLayer = new L.FeatureGroup();
+
+                drawLayer.layerOptions = {
+                    name: 'draw'
+                };
+
                 map.addLayer(drawLayer);
 
                 eMap.eLayersMap['draw'] = {

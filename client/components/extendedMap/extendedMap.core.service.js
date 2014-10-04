@@ -226,6 +226,8 @@ angular.module('bikeTouringMapApp')
                 if (!eLayer) {
                     // create layer
                     var layer = new L.LayerGroup();
+                    
+                    layer.layerOptions = layerOptions;
 
                     if (layerOptions.show) {
                         map.addLayer(layer);

@@ -12,6 +12,11 @@ angular.module('bikeTouringMapApp')
 
                 var features = items.reduce(function (features, item) {
 
+                    if (!item.geometry){
+                        console.warn('Item %d has no geometry.', item._id);
+                        return features;
+                    }
+                    
                     features.push({
                         "type": "Feature",
                         "properties": {

@@ -12,6 +12,15 @@ var geo = require('../../components/geo/geo');
 
 // Get list of interests
 exports.index = function (req, res) {
+    Interest.find(function (err, interests) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(200, interests);
+    });
+};
+
+exports.search = function (req, res) {
     Interest.find({
         geometry: {
             $near: {

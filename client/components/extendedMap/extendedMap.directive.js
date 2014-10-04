@@ -159,6 +159,30 @@ angular.module('bikeTouringMapApp')
 
                     leafletData.getMap($scope.eMap.mapId).then(function (map) {
 
+                        map.on('zoomend', function () {
+                            for (var key in $scope.eMap.eLayersMap) {
+                                if ($scope.eMap.eLayersMap.hasOwnProperty(key)) {
+                                    var layer = $scope.eMap.eLayersMap[key].layer;
+
+                                    if (layer.layerOptions && layer.layerOptions.zoom) {
+                                        if (!layer.layerOptions.zoom.min) {
+                                            layer.layerOptions.zoom.min = 0
+                                        }
+                                        if (!layer.layerOptions.zoom.max) {
+                                            layer.layerOptions.zoom.max = 20
+                                        }
+                                      /*  if (layer.layerOptions.zoom.min <= map.getZoom() && map.getZoom() <= layer.layerOptions.zoom.max) {
+                                            layer.show();
+                                        } else {
+                                            layer.hide();
+                                        }*/
+                                        // TODO
+                                    }
+                                }
+                            }
+
+                        });
+
                         $scope.eMap.map = map;
 
                         if (typeof ($scope.config.callbacks) !== 'undefined' && typeof ($scope.config.callbacks['map:created']) === 'function') {
