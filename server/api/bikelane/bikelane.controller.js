@@ -20,17 +20,23 @@ exports.index = function (req, res) {
 // Get list of bikelanes
 exports.search = function (req, res) {
 
-    console.error(req);
-
-    if (!req.query.longitude || !req.query.latitude) {
-        req.query.latitude = 43.61;
-        req.query.longitude = 1.44;
-    };
+    if (!req.query.longitude) {
+        return res.send(400, 'Parameter longitude is missing');
+    }
+    if (isNaN(req.query.longitude)) {
+        return res.send(400, 'Parameter longitude is not valid');
+    }
+    if (!req.query.latitude) {
+        return res.send(400, 'Parameter latitude is missing');
+    }
+    if (isNaN(req.query.latitude)) {
+        return res.send(400, 'Parameter latitude is not valid');
+    }
 
     var near = {
         $geometry: {
             type: "Point",
-            coordinates: [req.query.longitude, req.query.latitude]
+            coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)]
         }
     };
 

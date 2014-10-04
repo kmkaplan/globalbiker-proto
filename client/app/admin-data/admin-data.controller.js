@@ -60,6 +60,8 @@ angular.module('bikeTouringMapApp')
         $scope.loadBikelanes = function () {
             $scope.loadingInProgress = true;
             BikelaneRepository.search({
+                latitude: 43.61,
+                longitude:1.44,
                 maxDistance: 4000
             }, function (bikelanes) {
                 $scope.bikelanes = bikelanes;
