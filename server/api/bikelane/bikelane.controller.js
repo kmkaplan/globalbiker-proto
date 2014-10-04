@@ -8,15 +8,39 @@ var geo = require('../../components/geo/geo');
 // Get list of bikelanes
 exports.index = function (req, res) {
 
+    Bikelane.find().exec(function (err, bikelanes) {
+        if (err) {
+            console.error(err);
+            return handleError(res, err);
+        }
+        return res.json(200, bikelanes);
+    });
+};
+
+// Get list of bikelanes
+exports.search = function (req, res) {
+
+    console.error(req);
+
+    if (!req.query.longitude || !req.query.latitude) {
+        req.query.latitude = 43.61;
+        req.query.longitude = 1.44;
+    };
+
+    var near = {
+        $geometry: {
+            type: "Point",
+            coordinates: [req.query.longitude, req.query.latitude]
+        }
+    };
+
+    if (req.query.maxDistance && !isNaN(req.query.maxDistance)) {
+        near.$maxDistance = parseInt(req.query.maxDistance);
+    }
+
     Bikelane.find({
         geometry: {
-            $near: {
-                $geometry: {
-                    type: "Point",
-                    coordinates: [1.44, 43.61]
-                },
-                $maxDistance: 4000
-            }
+            $near: near
         }
     }).exec(function (err, bikelanes) {
         if (err) {
@@ -26,6 +50,7 @@ exports.index = function (req, res) {
         return res.json(200, bikelanes);
     });
 };
+
 
 // Get a single bikelane
 exports.show = function (req, res) {

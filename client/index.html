@@ -2,8 +2,11 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <base href="/">
@@ -12,19 +15,20 @@
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
-      <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/leaflet-dist/leaflet.css" />
-      <link rel="stylesheet" href="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css" />
-      <!-- endbower -->
-      <link rel="stylesheet" href="bower_components/leaflet.draw/dist/leaflet.draw.css" />
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/leaflet-dist/leaflet.css" />
+    <link rel="stylesheet" href="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css" />
+    <!-- endbower -->
+    <link rel="stylesheet" href="bower_components/leaflet.draw/dist/leaflet.draw.css" />
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
-      <!-- injector:css -->
-      <!-- endinjector -->
+    <!-- injector:css -->
+    <!-- endinjector -->
     <!-- endbuild -->
-  </head>
-  <body ng-app="bikeTouringMapApp">
+</head>
+
+<body ng-app="bikeTouringMapApp">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -32,10 +36,12 @@
     <!-- Add your site or application content here -->
     <div ui-view=""></div>
 
-   <p>Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"></p>
-   
-   + ajouter attribution geonames: http://www.geonames.org
-   
+    <footer>
+        <p>
+            OpenStreetMap Tiles Courtesy of <a href="http://www.mapquest.com" target="_blank">MapQuest</a>. 
+            Cities geolocation using <a href="http://www.geonames.org" target="_blank">Geonames</a>.
+        </p>
+    </footer>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID 
      <script>
        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -53,87 +59,89 @@
     <![endif]-->
     <script src="socket.io/socket.io.js"></script>
     <!-- build:js(client) app/vendor.js -->
-      <!-- bower:js -->
-      <script src="bower_components/jquery/dist/jquery.js"></script>
-      <script src="bower_components/ng-file-upload-shim/angular-file-upload-shim.js"></script>
-      <script src="bower_components/angular/angular.js"></script>
-      <script src="bower_components/angular-resource/angular-resource.js"></script>
-      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-      <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-      <script src="bower_components/angular-socket-io/socket.js"></script>
-      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-      <script src="bower_components/leaflet-dist/leaflet.js"></script>
-      <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
-      <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
-      <script src="bower_components/togeojson/togeojson.js"></script>
-      <script src="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
-      <script src="bower_components/angular-translate/angular-translate.js"></script>
-      <script src="bower_components/angular-translate-loader-url/angular-translate-loader-url.js"></script>
-      <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
-      <script src="bower_components/proj4/dist/proj4.js"></script>
-      <script src="bower_components/tinymce/tinymce.min.js"></script>
-      <script src="bower_components/angular-ui-tinymce/src/tinymce.js"></script>
-      <!-- endbower -->
-      <script src="bower_components/leaflet.draw/dist/leaflet.draw.js"></script>
-      <script src="bower_components/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
-      <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-      <script src="bower_components/proj4leaflet/src/proj4leaflet.js"></script>
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/ng-file-upload-shim/angular-file-upload-shim.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/angular-socket-io/socket.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/leaflet-dist/leaflet.js"></script>
+    <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+    <script src="bower_components/ng-file-upload/angular-file-upload.js"></script>
+    <script src="bower_components/togeojson/togeojson.js"></script>
+    <script src="bower_components/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
+    <script src="bower_components/angular-translate/angular-translate.js"></script>
+    <script src="bower_components/angular-translate-loader-url/angular-translate-loader-url.js"></script>
+    <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+    <script src="bower_components/proj4/dist/proj4.js"></script>
+    <script src="bower_components/tinymce/tinymce.min.js"></script>
+    <script src="bower_components/angular-ui-tinymce/src/tinymce.js"></script>
+    <!-- endbower -->
+    <script src="bower_components/leaflet.draw/dist/leaflet.draw.js"></script>
+    <script src="bower_components/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/proj4leaflet/src/proj4leaflet.js"></script>
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,client}) app/app.js -->
-        <script src="app/app.js"></script>
-          <!-- injector:js -->
-          <script src="app/account/account.js"></script>
-          <script src="app/account/login/login.controller.js"></script>
-          <script src="app/account/settings/settings.controller.js"></script>
-          <script src="app/account/signup/signup.controller.js"></script>
-          <script src="app/admin-data/admin-data.controller.js"></script>
-          <script src="app/admin-data/admin-data.js"></script>
-          <script src="app/admin/admin.controller.js"></script>
-          <script src="app/admin/admin.js"></script>
-          <script src="app/extendedMap/extendedMap.core.service.js"></script>
-          <script src="app/extendedMap/extendedMap.directive.js"></script>
-          <script src="app/extendedMap/extendedMap.draw.service.js"></script>
-          <script src="app/extendedMap/extendedMap.service.js"></script>
-          <script src="app/geonames/geonames.service.js"></script>
-          <script src="app/home/home.controller.js"></script>
-          <script src="app/home/home.js"></script>
-          <script src="app/my-tour-step/my-tour-step.controller.js"></script>
-          <script src="app/my-tour-step/my-tour-step.js"></script>
-          <script src="app/my-tour-step/my-tour-step.map.service.js"></script>
-          <script src="app/my-tour-step/my-tour-step.viewmodel.step.js"></script>
-          <script src="app/my-tour/my-tour.controller.js"></script>
-          <script src="app/my-tour/my-tour.js"></script>
-          <script src="app/my-tour/my-tour.map.service.js"></script>
-          <script src="app/my-tour/my-tour.viewmodel.city.js"></script>
-          <script src="app/my-tour/my-tour.viewmodel.step.js"></script>
-          <script src="app/my-tour/my-tour.viewmodel.tour.js"></script>
-          <script src="app/my-tours/my-tours.controller.js"></script>
-          <script src="app/my-tours/my-tours.js"></script>
-          <script src="app/toulouse/toulouse.controller.js"></script>
-          <script src="app/toulouse/toulouse.js"></script>
-          <script src="app/toulouse/toulouse.map.service.js"></script>
-          <script src="app/tour-details/tour-details.controller.js"></script>
-          <script src="app/tour-details/tour-details.js"></script>
-          <script src="app/tour-details/tour-details.map.service.js"></script>
-          <script src="components/auth/auth.service.js"></script>
-          <script src="components/auth/user.service.js"></script>
-          <script src="components/contact/mailing.repository.js"></script>
-          <script src="components/file-upload/file-upload.directive.js"></script>
-          <script src="components/geo/geo.converter.service.js"></script>
-          <script src="components/leaflet/leaflet.fixed.image.js"></script>
-          <script src="components/mongoose-error/mongoose-error.directive.js"></script>
-          <script src="components/navbar/navbar.controller.js"></script>
-          <script src="components/repositories/bikelane.repository.js"></script>
-          <script src="components/repositories/interest.repository.js"></script>
-          <script src="components/repositories/step.repository.js"></script>
-          <script src="components/repositories/steppoint.repository.js"></script>
-          <script src="components/repositories/tour.repository.js"></script>
-          <script src="components/smooth-page-scroll/smooth-page-scroll.js"></script>
-          <script src="components/socket/socket.service.js"></script>
-          <!-- endinjector -->
-        <!-- endbuild -->
+    <!-- build:js({.tmp,client}) app/app.js -->
+    <script src="app/app.js"></script>
+    <!-- injector:js -->
+    <script src="app/account/account.js"></script>
+    <script src="app/account/login/login.controller.js"></script>
+    <script src="app/account/settings/settings.controller.js"></script>
+    <script src="app/account/signup/signup.controller.js"></script>
+    <script src="app/admin-data/admin-data.controller.js"></script>
+    <script src="app/admin-data/admin-data.js"></script>
+    <script src="app/admin/admin.controller.js"></script>
+    <script src="app/admin/admin.js"></script>
+    <script src="app/geonames/geonames.service.js"></script>
+    <script src="app/home/home.controller.js"></script>
+    <script src="app/home/home.js"></script>
+    <script src="app/my-tour-step/my-tour-step.controller.js"></script>
+    <script src="app/my-tour-step/my-tour-step.js"></script>
+    <script src="app/my-tour-step/my-tour-step.map.service.js"></script>
+    <script src="app/my-tour-step/my-tour-step.viewmodel.step.js"></script>
+    <script src="app/my-tour/my-tour.controller.js"></script>
+    <script src="app/my-tour/my-tour.js"></script>
+    <script src="app/my-tour/my-tour.map.service.js"></script>
+    <script src="app/my-tour/my-tour.viewmodel.city.js"></script>
+    <script src="app/my-tour/my-tour.viewmodel.step.js"></script>
+    <script src="app/my-tour/my-tour.viewmodel.tour.js"></script>
+    <script src="app/my-tours/my-tours.controller.js"></script>
+    <script src="app/my-tours/my-tours.js"></script>
+    <script src="app/toulouse/toulouse.controller.js"></script>
+    <script src="app/toulouse/toulouse.js"></script>
+    <script src="app/toulouse/toulouse.map.service.js"></script>
+    <script src="app/tour-details/tour-details.controller.js"></script>
+    <script src="app/tour-details/tour-details.js"></script>
+    <script src="app/tour-details/tour-details.map.service.js"></script>
+    <script src="components/auth/auth.service.js"></script>
+    <script src="components/auth/user.service.js"></script>
+    <script src="components/bikeTourMap/bileTourMap.service.js"></script>
+    <script src="components/contact/mailing.repository.js"></script>
+    <script src="components/extendedMap/extendedMap.core.service.js"></script>
+    <script src="components/extendedMap/extendedMap.directive.js"></script>
+    <script src="components/extendedMap/extendedMap.draw.service.js"></script>
+    <script src="components/extendedMap/extendedMap.service.js"></script>
+    <script src="components/file-upload/file-upload.directive.js"></script>
+    <script src="components/geo/geo.converter.service.js"></script>
+    <script src="components/leaflet/leaflet.fixed.image.js"></script>
+    <script src="components/mongoose-error/mongoose-error.directive.js"></script>
+    <script src="components/navbar/navbar.controller.js"></script>
+    <script src="components/repositories/bikelane.repository.js"></script>
+    <script src="components/repositories/interest.repository.js"></script>
+    <script src="components/repositories/step.repository.js"></script>
+    <script src="components/repositories/steppoint.repository.js"></script>
+    <script src="components/repositories/tour.repository.js"></script>
+    <script src="components/smooth-page-scroll/smooth-page-scroll.js"></script>
+    <script src="components/socket/socket.service.js"></script>
+    <!-- endinjector -->
+    <!-- endbuild -->
 </body>
+
 </html>

@@ -15,6 +15,16 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
     padding: 0.2em 0;
 }
 
+footer{
+    margin-top: 50px;
+    text-align: center;
+    background: rgba(grey, 0.1);
+    padding: 10px 0;
+    font-size: 12px;
+    color: rgba(grey, 0.9);
+    font-style: italic;
+}
+
 // orange/brown
 $baseColor1: #ff731c;
 
@@ -30,13 +40,13 @@ $baseColor2: #5e8c15;
 @import 'account/login/login.scss';
 @import 'admin-data/admin-data.scss';
 @import 'admin/admin.scss';
-@import 'extendedMap/extendedMap.scss';
 @import 'home/home.scss';
 @import 'my-tour-step/my-tour-step.scss';
 @import 'my-tour/my-tour.scss';
 @import 'my-tours/my-tours.scss';
 @import 'toulouse/toulouse.scss';
 @import 'tour-details/tour-details.scss';
+@import 'extendedMap/extendedMap.scss';
 @import 'file-upload/file-upload.scss';
 // endinjector
 

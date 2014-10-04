@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('AdminDataCtrl', function ($scope, $upload, InterestRepository, BikelaneRepository, GeoConverter) {
+    .controller('AdminDataCtrl', function ($scope, $upload, InterestRepository, BikelaneRepository, bikeTourMapService) {
 
         $scope.bikemapFileupload = {
             url: '/api/bikelanes/upload',
@@ -31,7 +31,7 @@ angular.module('bikeTouringMapApp')
             $scope.loadPointsOfInterests();
 
             $scope.mapConfig = {
-                class: 'bikelanes-map',
+                class: 'admin-data-map',
                 initialCenter: {
                     lat: 43.61,
                     lng: 1.44,
@@ -40,56 +40,14 @@ angular.module('bikeTouringMapApp')
                 callbacks: {
                     'map:created': function (eMap) {
                         $scope.$watch('bikelanes', function (bikelanes, old) {
-
                             if (bikelanes) {
-
-                                bikelanes.reduce(function (features, bikelane) {
-
-                                    var geojsonFeature = {
-                                        "type": "Feature",
-                                        "properties": {},
-                                        "geometry": bikelane.geometry
-                                    };
-
-                                    L.geoJson(geojsonFeature, {
-                                        style: function (feature) {
-                                            return {
-                                                color: '#236d15'
-                                            };
-                                        }
-                                    }).addTo(eMap.map);
-
-
-
-                                }, null);
+                                eMap.addItemsToGroup('bikelanes', bikeTourMapService.buildBikelanesFeatures(bikelanes), true);
                             }
-
                         });
                         $scope.$watch('interests', function (interests, old) {
-
                             if (interests) {
-
-                                interests.reduce(function (features, interest) {
-                                    if (interest.geometry) {
-                                        var geojsonFeature = {
-                                            "type": "Feature",
-                                            "properties": {},
-                                            "geometry": interest.geometry
-                                        };
-
-                                        L.geoJson(geojsonFeature, {
-                                            style: function (feature) {
-                                                return {
-                                                    color: 'red'
-                                                };
-                                            }
-                                        }).addTo(eMap.map);
-
-                                    }
-
-                                }, null);
+                                eMap.addItemsToGroup('interests', bikeTourMapService.buildInterestsFeatures(interests), true);
                             }
-
                         });
 
                     }
@@ -101,7 +59,9 @@ angular.module('bikeTouringMapApp')
 
         $scope.loadBikelanes = function () {
             $scope.loadingInProgress = true;
-            BikelaneRepository.query(function (bikelanes) {
+            BikelaneRepository.search({
+                maxDistance: 4000
+            }, function (bikelanes) {
                 $scope.bikelanes = bikelanes;
                 $scope.loadingInProgress = false;
             }, function () {

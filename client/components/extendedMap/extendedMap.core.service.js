@@ -28,7 +28,7 @@ angular.module('bikeTouringMapApp')
 
                 var itemLayer;
 
-                switch (item.type) {
+                switch (item.type.toLowerCase()) {
                 case 'marker':
                     itemLayer = this.drawMarker(eMap, layerName, item);
                     break;
@@ -37,6 +37,9 @@ angular.module('bikeTouringMapApp')
                     break;
                 case 'image':
                     itemLayer = this.drawImage(eMap, layerName, item);
+                    break;
+                case 'feature':
+                    itemLayer = this.drawFeature(eMap, layerName, item);
                     break;
                 default:
                     console.error('Unknown type %s.', item.type);
@@ -54,6 +57,30 @@ angular.module('bikeTouringMapApp')
             _getRandomId: function () {
                 // TODO store the id to be sure to never generate twice the same
                 return Math.floor((Math.random() * 6) + 1);
+            },
+            drawFeature: function (eMap, layerName, feature) {
+                var map = eMap.map;
+
+                // check input parameters
+                if (!feature.geometry) {
+                    console.error('Feature geometry is not defined.');
+                    return;
+                }
+                if (!feature.properties) {
+                    console.warn('Feature properties is not defined.');
+                    feature.properties = {};
+                }
+
+                if (!feature.properties.options) {
+                    feature.properties.options = {};
+                }
+
+                var featureLayer = L.geoJson(feature, feature.properties.options);
+
+                // add it to the layer
+                this.addToLayer(eMap, layerName, featureLayer, feature);
+
+                return featureLayer;
             },
             drawMarker: function (eMap, layerName, marker) {
                 var map = eMap.map;
@@ -90,12 +117,12 @@ angular.module('bikeTouringMapApp')
                     markerOptions.icon = markerIcon;
 
                 }
-                
-                if (marker.opacity){
-                    markerOptions.opacity=marker.opacity;
+
+                if (marker.opacity) {
+                    markerOptions.opacity = marker.opacity;
                 }
 
-                var markerLayer = L.marker([marker.latitude, marker.longitude], markerOptions).addTo(map);
+                var markerLayer = L.marker([marker.latitude, marker.longitude], markerOptions); //.addTo(map);
 
                 if (marker.popup && marker.popup.content) {
                     markerLayer.bindPopup(marker.popup.content);
@@ -121,15 +148,15 @@ angular.module('bikeTouringMapApp')
                     console.error('Image longitude is not defined.');
                     return;
                 }
-                
+
                 var imageBounds = [[image.latitude, image.longitude], [image.latitude, image.longitude]];
 
                 var options = {};
-                
-                if (image.opacity){
+
+                if (image.opacity) {
                     options.opacity = image.opacity;
                 };
-                
+
                 // create image layer
                 var imageLayer = L.fixedImage(image.url, imageBounds, options);
 
@@ -182,7 +209,7 @@ angular.module('bikeTouringMapApp')
                 if (polyline.dashArray) {
                     options.dashArray = polyline.dashArray;
                 }
-                
+
                 // draw the polyline
                 var polylineLayer = L.polyline(latlngs, options);
 

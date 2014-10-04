@@ -5,6 +5,7 @@ var controller = require('./bikelane.controller');
 
 var router = express.Router();
 
+router.get('/search', controller.search);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.post('/', controller.create);

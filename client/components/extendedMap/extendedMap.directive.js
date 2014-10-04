@@ -4,7 +4,7 @@
 angular.module('bikeTouringMapApp')
     .directive('extendedMap', function ($http, $timeout, extendedMapService, leafletData) {
         return {
-            templateUrl: 'app/extendedMap/extendedMap.html',
+            templateUrl: 'components/extendedMap/extendedMap.html',
             restrict: 'EA',
             scope: {
                 config: '='
@@ -87,7 +87,7 @@ angular.module('bikeTouringMapApp')
                                     var latitudeMargin = (bounds[1][0] - bounds[0][0]) * margin;
                                     bounds[0][0] -= latitudeMargin;
                                     bounds[1][0] += latitudeMargin
-                                    
+
                                     var longitudeMargin = (bounds[1][1] - bounds[0][1]) * margin;
                                     bounds[0][1] -= longitudeMargin;
                                     bounds[1][1] += longitudeMargin
@@ -118,6 +118,39 @@ angular.module('bikeTouringMapApp')
                         eLayersMap: {}
                     };
 
+                    $scope.eMap.addItemsToGroup = function (groupName, items, replaceAll) {
+
+                        // var drawnItems = angular.copy($scope.config.drawnItems);
+
+                        // FIXME angular.copy fails when running simultaneous copies (or too eavy ones?) so the following is faster, but does it work as angular.watch old items will be the same?
+
+                        var drawnItems = {};
+
+                        if ($scope.config.drawnItems) {
+                            for (var key in $scope.config.drawnItems) {
+                                if ($scope.config.drawnItems.hasOwnProperty(key)) {
+                                    drawnItems[key] = $scope.config.drawnItems[key];
+                                }
+                            }
+                        }
+
+                        if (!drawnItems[groupName]) {
+                            drawnItems[groupName] = {
+                                items: []
+                            };
+                        }
+                        if (replaceAll && replaceAll === true) {
+                            console.debug('Replace %d items by %d ones to group "%s" of map %s', drawnItems[groupName].items.length, items.length, groupName, $scope.eMap.mapId);
+                            drawnItems[groupName].items = items;
+                        } else {
+                            console.debug('Add %d items to group "%s" of map %s', items.length, groupName, $scope.eMap.mapId);
+                            drawnItems[groupName].items = drawnItems[groupName].items.concat(items);
+                        }
+
+                        // trigger change
+                        $scope.config.drawnItems = drawnItems;
+                    }
+
                 },
                 post: function postLink($scope, $element, $attrs) {
 
@@ -136,7 +169,7 @@ angular.module('bikeTouringMapApp')
 
                         $scope.$watch('config.drawnItems', function (newItems, oldItems) {
 
-                            console.info('Redraw items of map %s', $scope.eMap.mapId);
+                            console.info('Redraw items of map %s (%d groups vs %d ones before)', $scope.eMap.mapId, _.keys(newItems).length ,_.keys(oldItems).length);
 
                             extendedMapService.redrawItems($scope.eMap, newItems, oldItems);
 

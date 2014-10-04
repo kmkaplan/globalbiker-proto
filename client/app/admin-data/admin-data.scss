@@ -1,19 +1,5 @@
 .admin-data-page {
-    .bikelanes-area {
-       
-        .legend {
-            ul {
-                color: #555;
-                font-style: italic;
-            }
-            .good {
-                font-weight: bold;
-                color: green;
-            }
-            .bad {
-                font-weight: bold;
-                color: blue;
-            }
-        }
+    .admin-data-map {
+        height: 500px;
     }
 }

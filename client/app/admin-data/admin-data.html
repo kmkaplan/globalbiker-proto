@@ -2,45 +2,25 @@
 
 <div class="container admin-data-page">
 
-   <h3>Fontaines à eau</h3>
-   
-   <div file-upload="waterpointsUpload"></div>
-   
-    <section class="form-section bikelanes-area">
-        <h3>Réseau cyclable et vert</h3>
+    <div extended-map config="mapConfig"></div>
 
-        <div class="col-md-10">
-            <div extended-map config="mapConfig"></div>
-            <div ng-show="loadingInProgress">
-                <div class="alert alert-warning"><i class="fa fa-spinner fa-spin"></i> Chargement en cours...</div>
-            </div>
-            <div ng-hide="loadingInProgress">
-                <div file-upload="bikemapFileupload"></div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="legend" ng-show="bikelanes.length">
-                <h4>Légende</h4>
-                <div><span class="good">En vert</span>
-                    <ul>
-                        <li>réseau vert</li>
-                        <li>couloir bus</li>
-                        <li>piste</li>
-                        <li>bandes</li>
-                    </ul>
-                    <div><span class="bad">En bleu</span>:
-                        <ul>
-                            <li>trottoir</li>
-                            <li>passage inferieur</li>
-                            <li>bande a contresens</li>
-                            <li>contre allee</li>
-                            <li>escalier</li>
-                            <li>passerelle</li>
-                            <li>non défini</li>
-                        </ul>
-                    </div>
+    <section class="form-section">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Réseau cyclable et vert</h3>
+                <div ng-hide="loadingInProgress">
+                    <div file-upload="bikemapFileupload"></div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <h3>Fontaines à eau</h3>
+                <div ng-hide="loadingInProgress">
+                    <div file-upload="waterpointsUpload"></div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="loadingInProgress">
+            <div class="alert alert-warning"><i class="fa fa-spinner fa-spin"></i> Chargement en cours...</div>
         </div>
     </section>
 

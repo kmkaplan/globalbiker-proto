@@ -3,18 +3,27 @@
 angular.module('bikeTouringMapApp')
     .factory('BikelaneRepository', function ($resource) {
         return $resource('/api/bikelanes/:id/:controller', {
-                id: '@_id'
-            }, {
-                get: {
-                    method: 'GET',
-                    params: {
-                        id: 'me'
-                    }
+            id: '@_id'
+        }, {
+            search: {
+                method: 'GET',
+                url: '/api/bikelanes/search',
+                params: {
+                    latitude: '@latitude',
+                    longitude: '@longitude',
+                    maxDistance: '@maxDistance'
                 },
-                update: {
-                    method: 'PUT',
-                     url: '/api/bikelanes/:id'
+                isArray: true
+            },
+            get: {
+                method: 'GET',
+                params: {
+                    id: 'me'
                 }
+            },
+            update: {
+                method: 'PUT',
+                url: '/api/bikelanes/:id'
             }
-        );
+        });
     });
