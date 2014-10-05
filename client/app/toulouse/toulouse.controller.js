@@ -41,12 +41,6 @@ angular.module('bikeTouringMapApp')
                         }
                     });
 
-                    $scope.$watch('bikelanes', function (bikelanes, old) {
-                        if (bikelanes) {
-                            ToulouseMapService.updateBikelanes($scope.mapConfig, bikelanes);
-                        }
-                    });
-
 
 
                     $scope.$watch('mapConfig.configuration', function (configuration, old) {

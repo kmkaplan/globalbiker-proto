@@ -216,6 +216,24 @@ angular.module('bikeTouringMapApp')
                 // add it to the 'draw' layer
                 this.addToLayer(eMap, layerOptions, polylineLayer, polyline);
 
+                polylineLayer._path.classList.add('path-start');
+
+                var totalLength = polylineLayer._path.getTotalLength();
+                polylineLayer._path.classList.add('path-start');
+                // This pair of CSS properties hides the line initially
+                // See http://css-tricks.com/svg-line-animation-works/
+                // for details on this trick.
+                polylineLayer._path.style.strokeDashoffset = totalLength;
+                polylineLayer._path.style.strokeDasharray = totalLength;
+                
+                setTimeout((function (path) {
+                    return function () {
+                        // setting the strokeDashoffset to 0 triggers
+                        // the animation.
+                        path.style.strokeDashoffset = 0;
+                    };
+                })(polylineLayer._path), 500);
+
                 return polylineLayer;
             },
 
@@ -226,7 +244,7 @@ angular.module('bikeTouringMapApp')
                 if (!eLayer) {
                     // create layer
                     var layer = new L.LayerGroup();
-                    
+
                     layer.layerOptions = layerOptions;
 
                     if (layerOptions.show) {

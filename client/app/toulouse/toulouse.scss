@@ -20,10 +20,22 @@
             @media all and (min-height: 700px) {
                 height: 450px;
             }
+           /*
+* The path-start class is added to each line
+* to manage its animation - this interpolates
+* between the starting and ending values for the
+* stroke-dashoffset css property
+*/
+            .path-start {
+                -webkit-transition: stroke-dashoffset 5s ease-in;
+                -moz-transition: stroke-dashoffset 5s ease-in;
+                -o-transition: stroke-dashoffset 5s ease-in;
+                transition: stroke-dashoffset 5s ease-in;
+            }
         }
         .alert {
             margin: 0;
             border-radius: 0px;
-        }        
+        }
     }
 }
