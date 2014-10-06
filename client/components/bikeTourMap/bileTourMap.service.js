@@ -52,14 +52,45 @@ angular.module('bikeTouringMapApp')
 
                 return features;
             },
-            buildStepTraceFeature: function (step) {
+            buildStepTraceFeature: function (step, options) {
+
+                var style = _.merge({
+                    color: '#236d15',
+                    opacity: 0.6,
+                    weight: 12
+                }, options);
+
+                if (!step.geometry) {
+                    step.geometry = {
+                        type: 'LineString',
+                        coordinates: [[step.cityFrom.longitude, step.cityFrom.latitude], [step.cityTo.longitude, step.cityTo.latitude]]
+                    };
+                    style.dashArray = '20 15';
+                }
+
+                var overStyle = angular.copy(style);
+                overStyle.opacity = 1;
+                overStyle.weight = 20;
+
                 var stepFeature = this._buildFeature(step, {
                     style: function () {
-                        return {
-                            color: '#236d15',
-                            opacity: 0.6,
-                            weight: 12
-                        };
+                        return style;
+                    },
+                    onEachFeature: function (feature, layer) {
+                        layer.on({
+                            mouseover: function () {
+                                layer.setStyle(overStyle);
+                            },
+                            mouseout: function () {
+                                layer.setStyle(style);
+                            },
+                            click: function () {
+
+                                if (typeof (options.callbacks) !== 'undefined' && typeof (options.callbacks['click']) === 'function') {
+                                    options.callbacks['click'](step);
+                                }
+                            }
+                        });
                     }
                 });
 
@@ -74,6 +105,37 @@ angular.module('bikeTouringMapApp')
                         };
                     }
                 });
+            },
+            buildToursStepTracesFeatures: function (tours, options) {
+                var self = this;
+                var stepTraceFeatures = tours.reduce(function (stepTraceFeatures, tour) {
+
+                    var tourOptions = angular.copy(options);
+
+                    if (!tourOptions.color) {
+                        if (tour.color) {
+                            tourOptions.color = tour.color;
+                        } else {
+                            tourOptions.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                        }
+                    }
+
+                    if (tour.steps) {
+
+                        tour.steps.reduce(function (stepTraceFeatures, step) {
+
+                            var feature = self.buildStepTraceFeature(step, tourOptions);
+                            if (feature) {
+                                stepTraceFeatures.push(feature);
+                            }
+                            return stepTraceFeatures;
+                        }, stepTraceFeatures);
+                    }
+
+                    return stepTraceFeatures;
+                }, []);
+
+                return stepTraceFeatures;
             },
             buildInterestsFeatures: function (interests, options) {
 

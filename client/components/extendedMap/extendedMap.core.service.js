@@ -80,6 +80,10 @@ angular.module('bikeTouringMapApp')
                 // add it to the layer
                 this.addToLayer(eMap, layerOptions, featureLayer, feature);
 
+                var polylineLayer = featureLayer.getLayers()[0];
+                
+                this._animate(polylineLayer);
+                
                 return featureLayer;
             },
             drawMarker: function (eMap, layerOptions, marker) {
@@ -235,6 +239,25 @@ angular.module('bikeTouringMapApp')
                 })(polylineLayer._path), 500);
 
                 return polylineLayer;
+            },
+            _animate: function(polylineLayer){
+                polylineLayer._path.classList.add('path-start');
+
+                var totalLength = polylineLayer._path.getTotalLength();
+                polylineLayer._path.classList.add('path-start');
+                // This pair of CSS properties hides the line initially
+                // See http://css-tricks.com/svg-line-animation-works/
+                // for details on this trick.
+                polylineLayer._path.style.strokeDashoffset = totalLength;
+                polylineLayer._path.style.strokeDasharray = totalLength;
+                
+                setTimeout((function (path) {
+                    return function () {
+                        // setting the strokeDashoffset to 0 triggers
+                        // the animation.
+                        path.style.strokeDashoffset = 0;
+                    };
+                })(polylineLayer._path), 500);
             },
 
             ensureLayerExists: function (eMap, layerOptions) {

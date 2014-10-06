@@ -75,9 +75,7 @@ exports.update = function (req, res) {
         }
 
         for (var key in req.body) {
-            console.log('--- %s', key);
             if (req.body.hasOwnProperty(key)) {
-                console.log('###### %s', key);
                 step[key] = req.body[key];
             }
         }

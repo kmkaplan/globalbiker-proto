@@ -37,11 +37,27 @@ angular.module('bikeTouringMapApp')
 
                     $scope.$watch('tours', function (tours, old) {
                         if (tours) {
-                            ToulouseMapService.updateTours($scope.mapConfig, tours);
+                            // ToulouseMapService.updateTours($scope.mapConfig, tours);
+
+                            var traceFeatures = bikeTourMapService.buildToursStepTracesFeatures(tours, {
+                                callbacks: {
+                                    'click': function (step) {
+                                        $state.go('tour-details', {
+                                            id: step.tourId
+                                        }, {
+                                            inherit: false
+                                        });
+                                    }
+                                }
+                            });
+
+                            eMap.addItemsToGroup(traceFeatures, {
+                                name: 'Tracés des itinéraires',
+                                control: true
+                            });
+
                         }
                     });
-
-
 
                     $scope.$watch('mapConfig.configuration', function (configuration, old) {
                         if ($scope.tours) {
@@ -98,7 +114,7 @@ angular.module('bikeTouringMapApp')
                 });
         };
 
-        $scope.loadStepsPoints = function (steps) {
+        /*  $scope.loadStepsPoints = function (steps) {
             var defferedArray = steps.reduce(function (defferedArray, step) {
 
                 var deffered = $q.defer();
@@ -121,7 +137,7 @@ angular.module('bikeTouringMapApp')
             }, []);
 
             return $q.all(defferedArray);
-        };
+        };*/
 
         /* $scope.loadStepsInterests = function (steps) {
             var defferedArray = steps.reduce(function (defferedArray, step) {
@@ -159,13 +175,13 @@ angular.module('bikeTouringMapApp')
                     function (steps) {
                         tour.steps = steps;
 
-                        $scope.loadStepsPoints(steps).then(function () {
+                        //   $scope.loadStepsPoints(steps).then(function () {
 
-                            //$scope.loadStepsInterests(steps).then(function () {
+                        //$scope.loadStepsInterests(steps).then(function () {
 
-                            deffered.resolve(steps);
-                            //   });
-                        });
+                        deffered.resolve(steps);
+                        //   });
+                        //    });
 
                     }, function (err) {
                         deffered.reject(err);

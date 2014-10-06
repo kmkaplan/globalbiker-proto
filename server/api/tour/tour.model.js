@@ -18,6 +18,12 @@ var TourSchema = new Schema({
         required: 'Please fill tour title',
         trim: true
     },
+    color: {
+        type: String,
+        required: 'Please fill tour color',
+        trim: true,
+        default: 'blue'
+    },
     description: {
         type: String,
         trim: true

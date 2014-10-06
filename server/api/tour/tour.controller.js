@@ -71,8 +71,13 @@ exports.update = function (req, res) {
         if (!tour) {
             return res.send(404);
         }
-        var updated = _.merge(tour, req.body);
-        updated.save(function (err) {
+       for (var key in req.body) {
+            if (req.body.hasOwnProperty(key)) {
+                tour[key] = req.body[key];
+            }
+        }
+        
+        tour.save(function (err) {
             if (err) {
                 return handleError(res, err);
             }
