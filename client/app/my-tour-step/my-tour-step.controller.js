@@ -122,7 +122,7 @@ angular.module('bikeTouringMapApp')
 
                         $scope.step = stepViewModel;
 
-                        MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+                        // FIXME à supprimer MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
 
                         deffered.resolve($scope.step);
                     }, function () {
@@ -225,7 +225,26 @@ angular.module('bikeTouringMapApp')
 
                             $scope.eMap = eMap;
 
-
+                            $scope.$watch('interests', function (interests, old) {
+                                if (interests) {
+                                    eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(interests, {
+                                        mode: 'normal',
+                                        callbacks: {
+                                            'click': function (interest, markerLayer) {
+                                                $scope.selectedPointOfInterest = interest;
+                                                $scope.editSelectedPointOfInterest = false;
+                                                $scope.$apply();
+                                            }
+                                        }
+                                    }), {
+                                        name: 'Principaux points d\'intérêt',
+                                        control: true,
+                                        zoom: {
+                                            max: 7
+                                        }
+                                    });
+                                }
+                            });
 
                             $scope.$watch('step', function (step, old) {
 
@@ -329,7 +348,7 @@ angular.module('bikeTouringMapApp')
 
                     $scope.step.interests.push(interest);
 
-                    MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+                    // FIXME à supprimer MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
 
                     $scope.selectedPointOfInterest = interest;
                     $scope.editSelectedPointOfInterest = false;
@@ -359,7 +378,7 @@ angular.module('bikeTouringMapApp')
 
                     $scope.step.interests.push(interest);
 
-                    MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
+                    // FIXME à supprimer  MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
 
                     $scope.editSelectedPointOfInterest = false;
                 });
