@@ -8,7 +8,7 @@ angular.module('bikeTouringMapApp')
             initialCenter: {
                 lat: 43.6,
                 lng: 1.45,
-                zoom: 10
+                zoom: 11
             },
             callbacks: {
                 'map:created': function (eMap) {
@@ -27,10 +27,16 @@ angular.module('bikeTouringMapApp')
                         if (interests) {
                             eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(interests), {
                                 name: 'Principaux points d\'intérêt',
-                                control: true,
-                                zoom: {
-                                    max: 7
-                                }
+                                control: true
+                            });
+                        }
+                    });
+                    
+                    $scope.$watch('waterPoints', function (waterPoints, old) {
+                        if (waterPoints) {
+                            eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints), {
+                                name: 'Points d\'eau potable',
+                                control: true
                             });
                         }
                     });
@@ -100,18 +106,31 @@ angular.module('bikeTouringMapApp')
         $scope.loadPointsOfInterests = function () {
             $scope.loadingInProgress = true;
             InterestRepository.search({
-                    priority: 1,
                     latitude: 43.61,
                     longitude: 1.44,
-                    maxDistance: 10000
+                    maxDistance: 10000,
+                    type: 'interest'
                 },
 
                 function (interests) {
                     $scope.interests = interests;
-                    $scope.loadingInProgress = false;
+                    InterestRepository.search({
+                            latitude: 43.61,
+                            longitude: 1.44,
+                            maxDistance: 10000,
+                            type: 'water-point'
+                        },
+
+                        function (waterPoints) {
+                            $scope.waterPoints = waterPoints;
+                            $scope.loadingInProgress = false;
+                        }, function () {
+                            $scope.loadingInProgress = false;
+                        });
                 }, function () {
                     $scope.loadingInProgress = false;
                 });
+
         };
 
         /*  $scope.loadStepsPoints = function (steps) {
@@ -219,7 +238,7 @@ angular.module('bikeTouringMapApp')
             BikelaneRepository.search({
                 latitude: 43.61,
                 longitude: 1.44,
-                maxDistance: 4000
+                maxDistance: 5000
             }, function (bikelanes) {
                 $scope.bikelanes = bikelanes;
                 $scope.loadingInProgress = false;

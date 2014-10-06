@@ -82,8 +82,9 @@ angular.module('bikeTouringMapApp')
 
                 var polylineLayer = featureLayer.getLayers()[0];
                 
-                this._animate(polylineLayer);
-                
+                if (feature.properties.animate){
+                    this._animate(polylineLayer);
+                }
                 return featureLayer;
             },
             drawMarker: function (eMap, layerOptions, marker) {

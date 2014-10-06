@@ -93,6 +93,9 @@ angular.module('bikeTouringMapApp')
                         });
                     }
                 });
+                
+                stepFeature.properties.animate= true;
+                    
 
                 return stepFeature;
             },
@@ -147,7 +150,7 @@ angular.module('bikeTouringMapApp')
                 }
                 if (options.mode == 'light') {
                     var geojsonMarkerOptions = {
-                        radius: 5,
+                        radius: 3,
                         fillColor: 'grey',
                         color: 'black',
                         weight: 1,

@@ -54,9 +54,13 @@ exports.search = function (req, res) {
         }
     };
 
-     if (req.query.priority){
-       searchCriteria.priority = parseInt(req.query.priority);
+    if (req.query.priority) {
+        searchCriteria.priority = parseInt(req.query.priority);
     }
+    if (req.query.type) {
+        searchCriteria.type = req.query.type;
+    }
+
     Interest.find(searchCriteria).exec(function (err, interests) {
         if (err) {
             console.error(err);

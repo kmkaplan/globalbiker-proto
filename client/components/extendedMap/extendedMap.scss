@@ -9,3 +9,17 @@
     margin: 2px;
     width: 50px;
 }
+
+
+  /*
+* The path-start class is added to each line
+* to manage its animation - this interpolates
+* between the starting and ending values for the
+* stroke-dashoffset css property
+*/
+.path-start {
+    -webkit-transition: stroke-dashoffset 3s ease-in;
+    -moz-transition: stroke-dashoffset 3s ease-in;
+    -o-transition: stroke-dashoffset 3s ease-in;
+    transition: stroke-dashoffset 3s ease-in;
+}
