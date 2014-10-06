@@ -2,7 +2,7 @@
 
 
 angular.module('bikeTouringMapApp')
-    .directive('extendedMap', function ($http, $timeout, extendedMapService, leafletData) {
+    .directive('extendedMap', function ($http, $timeout, extendedMapService, extendedMapMathsService, leafletData) {
         return {
             templateUrl: 'components/extendedMap/extendedMap.html',
             restrict: 'EA',
@@ -49,52 +49,22 @@ angular.module('bikeTouringMapApp')
                                 });
                             }
                         },
-                        fitBoundsFromPoints: function (points, margin) {
-                            console.info('Fit to bounds from points.');
+                        fitBoundsFromGeometry: function (geometry, margin) {
+                            var bounds = extendedMapMathsService.getBoundsFromGeometry(geometry, margin);
+                            if (bounds) {
 
-                            if (points) {
-                                var bounds = [[null, null], [null, null]];
-
-                                points.reduce(function (output, p) {
-
-                                    if (!p.latitude) {
-                                        console.warn('Invalid point latitude.');
-                                    }
-
-                                    if (!p.longitude) {
-                                        console.warn('Invalid point longitude.');
-                                    }
-
-                                    if (bounds[0][0] === null || bounds[0][0] > p.latitude) {
-                                        bounds[0][0] = p.latitude;
-                                    }
-
-                                    if (bounds[1][0] === null || bounds[1][0] < p.latitude) {
-                                        bounds[1][0] = p.latitude;
-                                    }
-
-                                    if (bounds[0][1] === null || bounds[0][1] > p.longitude) {
-                                        bounds[0][1] = p.longitude;
-                                    }
-
-                                    if (bounds[1][1] === null || bounds[1][1] < p.longitude) {
-                                        bounds[1][1] = p.longitude;
-                                    }
-                                    return output;
-                                }, []);
-
-                                if (margin) {
-                                    var latitudeMargin = (bounds[1][0] - bounds[0][0]) * margin;
-                                    bounds[0][0] -= latitudeMargin;
-                                    bounds[1][0] += latitudeMargin
-
-                                    var longitudeMargin = (bounds[1][1] - bounds[0][1]) * margin;
-                                    bounds[0][1] -= longitudeMargin;
-                                    bounds[1][1] += longitudeMargin
-                                }
-
+                                console.info('Fit to bounds from geometry.');
                                 this.fitBounds(bounds);
                             }
+                            return bounds;
+                        },
+                        fitBoundsFromPoints: function (points, margin) {
+                            var bounds = extendedMapMathsService.getBoundsFromPoints(points, margin);
+                            if (bounds) {
+                                console.info('Fit to bounds from points.');
+                                this.fitBounds(bounds);
+                            }
+                            return bounds;
                         }
                     };
 
@@ -120,21 +90,29 @@ angular.module('bikeTouringMapApp')
 
                     $scope.eMap.addItemsToGroup = function (items, layerOptions, replaceAll) {
 
+                        if (items instanceof Array === false) {
+                            console.error('Items %s is not an array.', items);
+                            return null;
+                        }
+                        
                         // var drawnItems = angular.copy($scope.config.drawnItems);
 
                         // FIXME angular.copy fails when running simultaneous copies (or too eavy ones?) so the following is faster, but does it work as angular.watch old items will be the same?
+                       
 
                         var groupName = layerOptions.name;
 
-                        var drawnItems = {};
+                        var drawnItems ;//= {};
 
-                        if ($scope.config.drawnItems) {
+                      /*  if ($scope.config.drawnItems) {
                             for (var key in $scope.config.drawnItems) {
                                 if ($scope.config.drawnItems.hasOwnProperty(key)) {
                                     drawnItems[key] = $scope.config.drawnItems[key];
                                 }
                             }
-                        }
+                        }*/
+                        
+                        drawnItems = _.clone($scope.config.drawnItems);
 
                         if (!drawnItems[groupName]) {
                             drawnItems[groupName] = {
@@ -142,12 +120,13 @@ angular.module('bikeTouringMapApp')
                                 items: []
                             };
                         }
-                        if (!replaceAll || replaceAll === false) {
-                            console.debug('Add %d items to group "%s" of map %s', items.length, groupName, $scope.eMap.mapId);
-                            drawnItems[groupName].items = drawnItems[groupName].items.concat(items);
-                        } else {
-                            console.debug('Replace %d items by %d ones to group "%s" of map %s', drawnItems[groupName].items.length, items.length, groupName, $scope.eMap.mapId);
+                        
+                        if (!replaceAll || replaceAll === true) {
+                            console.debug('Replace %d item(s) by %d in group "%s" of map %s', drawnItems[groupName].items.length, items.length, groupName, $scope.eMap.mapId);
                             drawnItems[groupName].items = items;
+                        } else {
+                            console.debug('Add %d item(s) in group "%s" of map %s', items.length, groupName, $scope.eMap.mapId);
+                            drawnItems[groupName].items = drawnItems[groupName].items.concat(items);
                         }
 
                         // trigger change
@@ -171,7 +150,7 @@ angular.module('bikeTouringMapApp')
                                         if (!layer.layerOptions.zoom.max) {
                                             layer.layerOptions.zoom.max = 20
                                         }
-                                      /*  if (layer.layerOptions.zoom.min <= map.getZoom() && map.getZoom() <= layer.layerOptions.zoom.max) {
+                                        /*  if (layer.layerOptions.zoom.min <= map.getZoom() && map.getZoom() <= layer.layerOptions.zoom.max) {
                                             layer.show();
                                         } else {
                                             layer.hide();

@@ -15,11 +15,21 @@
 
         <div class="col-md-5">
 
-            <div class="form-group">
-                <label>Description</label>
-                <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-change="saveDescription()" ng-model="step.originalModel.description" type="text" class="form-control"></textarea>
-            </div>
-           
+
+            <form role="form">
+                <section class="form-section">
+                    <div>
+                        <a ng-click="saveDescription()" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
+                    </div>
+
+                    <h3>Description</h3>
+
+                    <div class="form-group">
+                        <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="step.originalModel.description" type="text" class="form-control"></textarea>
+                    </div>
+                </section>
+            </form>
+
             <div class="modal fade" role="dialog" arial-hidden="true" id="new-point-of-interest-form">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
@@ -78,14 +88,14 @@
             </div>
             <form role="form">
                 <section class="form-section">
-                    <div ng-show="steppoints.length && !step.isTraceInEdition">
+                    <div ng-show="step.geometry.coordinates.length && !step.isTraceInEdition">
                         <a ng-click="step.isTraceInEdition = true" class="btn btn-default edit-step-trace-button pull-right"><i class="fa fa-pencil-square-o"></i></a>
                     </div>
                     <div ng-show="step.isTraceInEdition">
                         <a ng-click="step.isTraceInEdition = false" class="btn btn-success leave-edit-step-trace-button pull-right"><i class="fa fa-check"></i></a>
                     </div>
                     <h3 translate="mytourstep.your_itinary_trace">Your itinary trace</h3>
-                    <div class="trace-resume-area" ng-show="steppoints.length">
+                    <div class="trace-resume-area" ng-show="step.geometry.coordinates.length">
                         <h4 translate="mytourstep.trace_resume">Trace resume</h4>
 
                         <table class="table table-striped">
@@ -104,12 +114,12 @@
                                 </tr>
                                 <tr>
                                     <th translate="mytourstep.points_number">Number of points</th>
-                                    <td>{{ steppoints.length }}</td>
+                                    <td>{{ step.geometry.coordinates.length }}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div ng-hide="steppoints.length && !step.isTraceInEdition">
+                    <div ng-hide="step.geometry.coordinates.length && !step.isTraceInEdition">
                         <h4 translate="mytourstep.update_your_trace">Update your trace</h4>
                         <div class="form-group">
                             <div class="file-upload btn btn-primary">

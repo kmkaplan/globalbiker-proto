@@ -85,8 +85,15 @@ var StepSchema = new Schema({
         }
     },
     distance: Number,
+    elevationPoints: [{
+        type: Number
+    }],
     positiveElevationGain: Number,
-    negativeElevationGain: Number
+    negativeElevationGain: Number,
+    geometry: {
+        type: Object,
+        index: '2dsphere'
+    }
 });
 
 module.exports = mongoose.model('Step', StepSchema);

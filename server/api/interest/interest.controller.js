@@ -20,23 +20,52 @@ exports.index = function (req, res) {
     });
 };
 
+
+// Get list of bikelanes
 exports.search = function (req, res) {
-    Interest.find({
-        geometry: {
-            $near: {
-                $geometry: {
-                    type: "Point",
-                    coordinates: [1.44, 43.61]
-                }
-            }
+
+    if (!req.query.longitude) {
+        return res.send(400, 'Parameter longitude is missing');
+    }
+    if (isNaN(req.query.longitude)) {
+        return res.send(400, 'Parameter longitude is not valid');
+    }
+    if (!req.query.latitude) {
+        return res.send(400, 'Parameter latitude is missing');
+    }
+    if (isNaN(req.query.latitude)) {
+        return res.send(400, 'Parameter latitude is not valid');
+    }
+
+    var near = {
+        $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(req.query.longitude), parseFloat(req.query.latitude)]
         }
-    }, function (err, interests) {
+    };
+
+    if (req.query.maxDistance && !isNaN(req.query.maxDistance)) {
+        near.$maxDistance = parseInt(req.query.maxDistance);
+    }
+
+    var searchCriteria = {
+        geometry: {
+            $near: near
+        }
+    };
+
+     if (req.query.priority){
+       searchCriteria.priority = parseInt(req.query.priority);
+    }
+    Interest.find(searchCriteria).exec(function (err, interests) {
         if (err) {
+            console.error(err);
             return handleError(res, err);
         }
         return res.json(200, interests);
     });
 };
+
 
 // Get a single interest
 exports.show = function (req, res) {
@@ -89,7 +118,7 @@ exports.buildInterest = function (type, coordinates, properties) {
         geometry: geometry,
         type: 'water-point',
         source: 'upload',
-        priority: 1
+        priority: 3
     };
 
     return interest;

@@ -6,6 +6,7 @@ var Steppoint = require('../steppoint/steppoint.model');
 var Interest = require('../interest/interest.model');
 var Q = require('q');
 
+var geo = require('../../components/geo/geo');
 var sys = require('sys');
 
 // Get list of steps
@@ -72,25 +73,116 @@ exports.update = function (req, res) {
         if (!step) {
             return res.send(404);
         }
-        var updated = _.merge(step, req.body);
 
-        /*        if (req.body.points) {
-            // FIXME this is a FIX because _.merge create all items with value of first one!!!
-            step.points = req.body.points;
+        for (var key in req.body) {
+            console.log('--- %s', key);
+            if (req.body.hasOwnProperty(key)) {
+                console.log('###### %s', key);
+                step[key] = req.body[key];
+            }
         }
 
-        if (req.body.markers) {
-            // FIXME this is a FIX because _.merge create all items with value of first one!!!
-            step.markers = req.body.markers;
-        }*/
+        step.distance = geo.getTotalDistanceFromGeometry(step.geometry);
 
-        updated.save(function (err) {
+        if (step.geometry) {
+
+            var elevationGain = geo.getElevationGain(step.geometry.type, step.elevationPoints);
+
+            if (elevationGain.lastElevation != null) {
+                console.log('Trace has been uploaded (distance: %d, elevation gain: %d, %d).', step.distance, elevationGain.positive, elevationGain.negative);
+                step.positiveElevationGain = elevationGain.positive;
+                step.negativeElevationGain = elevationGain.negative;
+            } else {
+                console.log('Trace has been uploaded (distance: %d).', step.distance);
+                step.positiveElevationGain = null;
+                step.negativeElevationGain = null;
+            }
+        } else {
+                console.log('Trace has been uploaded (distance: %d).', step.distance);
+                step.positiveElevationGain = null;
+                step.negativeElevationGain = null;
+            }
+        
+
+        step.save(function (err) {
             if (err) {
                 return handleError(res, err);
             }
             return res.json(200, step);
         });
     });
+};
+
+exports.uploadTrace = function (req, res) {
+
+    var stepId = req.body.stepId;
+
+    Step.findById(stepId, function (err, step) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!step) {
+            console.log('Step "%s" does not exists.', stepId);
+            return res.send(404);
+        }
+        var file = req.files.file;
+
+        if (!file) {
+            console.log('File "file" is missing.');
+            return res.send(400, 'File "file" is missing.');
+        }
+
+        geo.readTracesFromFile(file).then(function (features) {
+
+                var feature;
+
+                if (features.length === 0) {
+                    console.log('Trace without any feature.');
+                    return res.send(400, 'Trace without any point');
+                } else if (features.length > 1) {
+                    console.log('Trace with %d features(s): first one will be used.', features.length);
+                }
+                feature = features[0];
+
+                // update step geometry
+                step.geometry = {
+                    coordinates: feature.xyzCoordinates.xy, //[[[0.951528735, 44.182434697], [0.951036299, 44.182579117]]],
+                    type: feature.geometry.type
+                };
+
+                step.elevationPoints = feature.xyzCoordinates.z;
+
+                step.distance = geo.getTotalDistanceFromGeometry(step.geometry);
+
+                var elevationGain = geo.getElevationGain(feature.geometry.type, step.elevationPoints);
+
+                if (elevationGain.lastElevation != null) {
+                    console.log('Trace has been uploaded (distance: %d, elevation gain: %d, %d).', step.distance, elevationGain.positive, elevationGain.negative);
+                    step.positiveElevationGain = elevationGain.positive;
+                    step.negativeElevationGain = elevationGain.negative;
+                } else {
+                    console.log('Trace has been uploaded (distance: %d).', step.distance);
+                    step.positiveElevationGain = null;
+                    step.negativeElevationGain = null;
+                }
+
+                step.save(function (err) {
+                    if (err) {
+                        console.error(err);
+                        return handleError(res, err);
+                    }
+                    return res.json(200, step);
+                });
+
+
+            },
+            function (err) {
+                console.log(err);
+                return res.send(400, err);
+            }).done();
+
+    });
+
 };
 
 exports.removeWithChildren = function (stepId) {

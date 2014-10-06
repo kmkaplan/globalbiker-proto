@@ -5,6 +5,7 @@ var controller = require('./step.controller');
 
 var router = express.Router();
 
+router.post('/upload/trace', controller.uploadTrace);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/tour/:tourId', controller.getByTour);

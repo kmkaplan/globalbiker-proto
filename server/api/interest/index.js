@@ -5,6 +5,7 @@ var controller = require('./interest.controller');
 
 var router = express.Router();
 
+router.get('/search', controller.search);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/step/:stepId', controller.getByStep);

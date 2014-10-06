@@ -17,7 +17,6 @@ exports.index = function (req, res) {
     });
 };
 
-// Get list of bikelanes
 exports.search = function (req, res) {
 
     if (!req.query.longitude) {

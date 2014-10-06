@@ -26,7 +26,7 @@ angular.module('bikeTouringMapApp')
                     $scope.$watch('interests', function (interests, old) {
                         if (interests) {
                             eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(interests), {
-                                name: 'Points d\'intérêt',
+                                name: 'Principaux points d\'intérêt',
                                 control: true,
                                 zoom: {
                                     max: 7
@@ -83,12 +83,19 @@ angular.module('bikeTouringMapApp')
 
         $scope.loadPointsOfInterests = function () {
             $scope.loadingInProgress = true;
-            InterestRepository.query(function (interests) {
-                $scope.interests = interests;
-                $scope.loadingInProgress = false;
-            }, function () {
-                $scope.loadingInProgress = false;
-            });
+            InterestRepository.search({
+                    priority: 1,
+                    latitude: 43.61,
+                    longitude: 1.44,
+                    maxDistance: 10000
+                },
+
+                function (interests) {
+                    $scope.interests = interests;
+                    $scope.loadingInProgress = false;
+                }, function () {
+                    $scope.loadingInProgress = false;
+                });
         };
 
         $scope.loadStepsPoints = function (steps) {
@@ -116,7 +123,7 @@ angular.module('bikeTouringMapApp')
             return $q.all(defferedArray);
         };
 
-        $scope.loadStepsInterests = function (steps) {
+        /* $scope.loadStepsInterests = function (steps) {
             var defferedArray = steps.reduce(function (defferedArray, step) {
 
                 var deffered = $q.defer();
@@ -140,7 +147,7 @@ angular.module('bikeTouringMapApp')
 
             return $q.all(defferedArray);
         };
-
+*/
         $scope.loadToursSteps = function (tours) {
             var defferedArray = tours.reduce(function (defferedArray, tour) {
 
@@ -154,10 +161,10 @@ angular.module('bikeTouringMapApp')
 
                         $scope.loadStepsPoints(steps).then(function () {
 
-                            $scope.loadStepsInterests(steps).then(function () {
+                            //$scope.loadStepsInterests(steps).then(function () {
 
-                                deffered.resolve(steps);
-                            });
+                            deffered.resolve(steps);
+                            //   });
                         });
 
                     }, function (err) {

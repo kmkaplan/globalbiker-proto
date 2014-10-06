@@ -5,6 +5,17 @@ angular.module('bikeTouringMapApp')
         return $resource('/api/interests/:id/:controller', {
             id: '@_id'
         }, {
+            search: {
+                method: 'GET',
+                url: '/api/interests/search',
+                params: {
+                    latitude: '@latitude',
+                    longitude: '@longitude',
+                    maxDistance: '@maxDistance',
+                    priority: '@priority'
+                },
+                isArray: true
+            },
             get: {
                 method: 'GET',
                 params: {

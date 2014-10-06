@@ -9,8 +9,34 @@
 var Tour = require('../api/tour/tour.model');
 var Step = require('../api/step/step.model');
 var User = require('../api/user/user.model');
+var Interest = require('../api/interest/interest.model');
 
 var Q = require('q');
+
+Interest.find({
+    geometry: null
+}, function (err, interests) {
+    if (err) {
+        console.error(err);
+    } else {
+        console.info('Convert %d interests without geometry.', interests.length);
+
+        interests.reduce(function (o, interest) {
+            interest.geometry = {
+                type: 'Point',
+                coordinates: [interest.longitude, interest.latitude]
+            };
+ 
+            interest.save(function (err) {
+                if (err) {
+                    console.error(err);
+                }
+            });
+        }, null);
+
+    }
+});
+return;
 
 var resetUsers = function () {
 
@@ -61,12 +87,12 @@ var createTour = function (user, name) {
     }).exec(function (err, tour) {
 
         if (tour !== null) {
-             Step.find({
-                    tourId: tour._id
-                }).remove();
-            
+            Step.find({
+                tourId: tour._id
+            }).remove();
+
             tour.remove();
-            
+
         };
 
         Tour.create({

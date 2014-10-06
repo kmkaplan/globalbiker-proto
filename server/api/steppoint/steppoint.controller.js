@@ -4,8 +4,8 @@ var _ = require('lodash');
 var Steppoint = require('./steppoint.model');
 var geolib = require('geolib');
 var Step = require('../step/step.model');
-var Q = require('q');
 var geo = require('../../components/geo/geo');
+var Q = require('q');
 
 // Get list of steppoints
 exports.index = function (req, res) {
@@ -63,9 +63,9 @@ exports.upload = function (req, res) {
             return res.send(400, 'File "file" is missing.');
         }
 
-        geo.readTracesFromFile(file).then(function (traces) {
-
-            var stepIndex = 0;
+        geo.readTracesFromFile(file).then(function (geojsonContent) {
+            
+            /*var stepIndex = 0;
             var lineIndex = 0;
 
             // feature => trace
@@ -102,8 +102,11 @@ exports.upload = function (req, res) {
 
                 return steppointsOutput;
 
-            }, []);
+            }, []);*/
 
+        //    geojsonContent.features
+            
+            
 
             if (steppoints.length === 0) {
                 console.log('Trace without any point');

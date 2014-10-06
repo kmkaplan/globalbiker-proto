@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService) {
+    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService, bikeTourMapService) {
 
 
         $scope.onPhotoSelect = function ($files) {
@@ -36,7 +36,7 @@ angular.module('bikeTouringMapApp')
                 $scope.steppointsUploadProgress = 0;
 
                 $scope.upload = $upload.upload({
-                    url: '/api/steppoints/upload',
+                    url: '/api/steps/upload/trace',
                     data: {
                         stepId: $scope.stepId
                     },
@@ -47,8 +47,6 @@ angular.module('bikeTouringMapApp')
 
                     $scope.autozoom = true;
 
-                    // update points
-                    $scope.loadSteppoints();
                     // update step (distance has been updated)
                     $scope.loadStep();
 
@@ -59,20 +57,6 @@ angular.module('bikeTouringMapApp')
                 });
 
             }
-        };
-
-        $scope.calculateDistanceFromPoints = function (points) {
-
-            var latLngs = points.reduce(function (output, point) {
-                output.push(L.latLng(
-                    point.latitude,
-                    point.longitude
-                ))
-                return output;
-
-            }, []);
-
-            return L.GeometryUtil.length(latLngs);
         };
 
 
@@ -114,10 +98,14 @@ angular.module('bikeTouringMapApp')
                     id: step.tourId
                 }, function (tour) {
 
+                    $scope.tour = tour;
+
                     // retrieve interests
                     InterestRepository.getByStep({
                         stepId: $scope.stepId
                     }, function (interests) {
+
+                        $scope.interests = interests;
 
                         if ($scope.selectedPointOfInterest && $scope.selectedPointOfInterest._id) {
                             $scope.selectedPointOfInterest = interests.reduce(function (output, interest) {
@@ -155,68 +143,41 @@ angular.module('bikeTouringMapApp')
             return deffered.promise;
         }
 
-         $scope.saveDescription = function () {
+        $scope.saveDescription = function () {
             if ($scope.step && $scope.step.originalModel) {
 
-                if ($scope.step.saveDescriptionTimeout) {
-                    // cancel previous timer
-                $timeout.cancel($scope.step.saveDescriptionTimeout);
-                }
-
-                $scope.step.saveDescriptionTimeout = $timeout(function () {
-
-                    // save after a short delay
+                // save after a short delay
                 $scope.step.originalModel.$update(function (data, putResponseHeaders) {
-                        console.info('Step updated.');
-                    });
-                }, 500); // delay 500 ms
 
+                    $scope.loadStep();
 
+                    console.info('Step updated.');
+                });
             }
         };
-        
-        $scope.loadSteppoints = function () {
-            var deffered = $q.defer();
 
-            $scope.steppointsLoading = true;
-
-            SteppointRepository.getByStep({
-                    stepId: $scope.stepId
-                }, function (steppoints) {
-                    $scope.steppoints = steppoints;
-
-                    $scope.steppointsLoading = false;
-
-                    deffered.resolve(steppoints);
-                },
-                function () {
-                    $scope.steppointsLoading = false;
-                    console.error('Unexpected error while retrieving steppoints of step %s', $scope.stepId);
-                    deffered.reject('Unexpected error while retrieving steppoints.');
-                });
-
-            return deffered.promise;
-        };
-
-        $scope.updatePoints = function (points) {
+        $scope.updatePoints = function (coordinates) {
             var deffered = $q.defer();
 
             var stepRepository;
-            if (points.length > 1) {
+            if (coordinates.length > 1) {
 
-                SteppointRepository.updateByStep({
-                        stepId: $scope.stepId,
-                        points: points
-                    }, function () {
+                $scope.step.originalModel.geometry = {
+                    coordinates: coordinates,
+                    type: 'LineString'
+                };
 
-                        $scope.loadStep();
-                        deffered.resolve($scope.loadSteppoints());
+                $scope.step.originalModel.$update(function (step, putResponseHeaders) {
+                        console.info('Step updated.');
+                        var stepViewModel = new MyTourStepViewModelStep(step, $scope.tour, $scope.interests);
+
+                        $scope.step = stepViewModel;
+                        deffered.resolve(step);
                     },
                     function () {
                         console.error('Unexpected error while updating steppoints of step %s', $scope.stepId);
                         deffered.reject('Unexpected error while updating steppoints.');
                     });
-
 
             } else {
                 effered.reject('Invalid size.');
@@ -226,18 +187,15 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.updatePointsFromMapEditor = function (points) {
-            var stepPoints = points.reduce(function (output, item) {
+            var coordinates = points.reduce(function (output, item) {
 
-                output.push({
-                    latitude: item.latitude,
-                    longitude: item.longitude
-                });
+                output.push([item.longitude, item.latitude]);
 
                 return output;
             }, []);
 
-            $scope.updatePoints(stepPoints);
-            return stepPoints;
+            $scope.updatePoints(coordinates);
+            return coordinates;
         };
 
         $scope.init = function () {
@@ -267,28 +225,35 @@ angular.module('bikeTouringMapApp')
 
                             $scope.eMap = eMap;
 
-                            $scope.$watch('steppoints', function (steppoints, old) {
-                                if (steppoints) {
-                                    MyTourStepMapService.updateTrace($scope.mapConfig, $scope.step, steppoints);
-                                    if ($scope.autozoom) {
-                                        // zoom to trace
-                                        eMap.config.control.fitBoundsFromPoints(steppoints);
 
+
+                            $scope.$watch('step', function (step, old) {
+
+                                if (step && step.originalModel && step.originalModel.geometry) {
+
+                                    var traceFeatures = [bikeTourMapService.buildStepTraceFeature(step)];
+
+                                    eMap.addItemsToGroup(traceFeatures, {
+                                        name: 'Tracé',
+                                        control: true
+                                    });
+
+                                    eMap.config.control.fitBoundsFromGeometry(step.originalModel.geometry);
+
+                                    if ($scope.autozoom) {
                                         $scope.autozoom = false;
                                     }
-                                }
 
+                                }
                             });
 
                             // load data
                             $scope.loadStep().then(function (step) {
-                                $scope.loadSteppoints().then(function (steppoints) {
-                                    if (steppoints.length === 0) {
-                                        // zoom to cityFrom/cityTo
-                                        eMap.config.control.fitBoundsFromPoints([step.cityFrom, step.cityTo]);
-                                        $scope.autozoom = false;
-                                    }
-                                });
+                                if (!step.geometry || step.geometry.coordinates.length === 0) {
+                                    // zoom to cityFrom/cityTo
+                                    eMap.config.control.fitBoundsFromPoints([step.cityFrom, step.cityTo]);
+                                    $scope.autozoom = false;
+                                }
                             });
                         },
                         'draw:created': function (eMap, points, e) {
