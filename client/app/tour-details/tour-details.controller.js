@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, Auth, TourRepository, StepRepository, TourDetailsMapService) {
+    .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService) {
 
         $scope.isAdmin = Auth.isAdmin;
 
@@ -22,7 +22,7 @@ angular.module('bikeTouringMapApp')
                 points.push(step.cityTo);
             }
 
-           if (points.length > 1) {
+            if (points.length > 1) {
                 if (eMap) {
                     eMap.config.control.fitBoundsFromPoints(points, 0.2);
                 }
@@ -36,6 +36,28 @@ angular.module('bikeTouringMapApp')
                 id: $scope.tourId
             }, function (tour) {
                 $scope.tour = tour;
+
+                $scope.tourMapConfig = {
+                    class: 'tour-map',
+                    initialCenter: {
+                        lat: 43.6,
+                        lng: 1.45,
+                        zoom: 10
+                    },
+                    callbacks: {
+                        'map:created': function (eMap) {
+                            var traceFeatures = bikeTourMapService.buildTourStepTracesFeatures(tour, {
+
+                            });
+
+                            eMap.addItemsToGroup(traceFeatures, {
+                                name: 'Tracés des itinéraires',
+                                control: true
+                            });
+                        }
+                    }
+                };
+
 
                 StepRepository.getByTour({
                     tourId: $scope.tourId

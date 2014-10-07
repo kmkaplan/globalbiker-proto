@@ -12,10 +12,18 @@
     </a>
     <h1>{{ tour.title }}</h1>
     <div class="alert tour-description" ng-if="tour.description" ng-bind-html="tour.description"></div>
-    
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tour-map-area smart-map-area">
+                <div extended-map config="tourMapConfig"></div>
+            </div>
+        </div>
+    </div>
+
     <div ng-repeat="step in steps">
         <h2>{{ 'tour-details.step' | translate }} {{ $index + 1 }}: {{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</h2>
-       <div class="row">
+        <div class="row">
             <div class="col-md-6">
                 <div class="row tour-step-rating">
                     <div class="col-md-6">

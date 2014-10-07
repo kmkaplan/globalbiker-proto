@@ -93,9 +93,9 @@ angular.module('bikeTouringMapApp')
                         });
                     }
                 });
-                
-                stepFeature.properties.animate= true;
-                    
+
+                stepFeature.properties.animate = true;
+
 
                 return stepFeature;
             },
@@ -109,31 +109,39 @@ angular.module('bikeTouringMapApp')
                     }
                 });
             },
+            buildTourStepTracesFeatures: function (tour, options) {
+                var self = this;
+
+                var tourOptions = angular.copy(options);
+
+                if (!tourOptions.color) {
+                    if (tour.color) {
+                        tourOptions.color = tour.color;
+                    } else {
+                        tourOptions.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    }
+                }
+
+                if (tour.steps) {
+
+                    return tour.steps.reduce(function (stepTraceFeatures, step) {
+
+                        var feature = self.buildStepTraceFeature(step, tourOptions);
+                        if (feature) {
+                            stepTraceFeatures.push(feature);
+                        }
+                        return stepTraceFeatures;
+                    }, []);
+                }
+
+                return [];
+
+            },
             buildToursStepTracesFeatures: function (tours, options) {
                 var self = this;
                 var stepTraceFeatures = tours.reduce(function (stepTraceFeatures, tour) {
 
-                    var tourOptions = angular.copy(options);
-
-                    if (!tourOptions.color) {
-                        if (tour.color) {
-                            tourOptions.color = tour.color;
-                        } else {
-                            tourOptions.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                        }
-                    }
-
-                    if (tour.steps) {
-
-                        tour.steps.reduce(function (stepTraceFeatures, step) {
-
-                            var feature = self.buildStepTraceFeature(step, tourOptions);
-                            if (feature) {
-                                stepTraceFeatures.push(feature);
-                            }
-                            return stepTraceFeatures;
-                        }, stepTraceFeatures);
-                    }
+                    stepTraceFeatures = stepTraceFeatures.concat(self.buildTourStepTracesFeatures(tour, options));
 
                     return stepTraceFeatures;
                 }, []);

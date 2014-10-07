@@ -31,7 +31,7 @@ angular.module('bikeTouringMapApp')
                             });
                         }
                     });
-                    
+
                     $scope.$watch('waterPoints', function (waterPoints, old) {
                         if (waterPoints) {
                             eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints), {
