@@ -80,9 +80,9 @@ exports.update = function (req, res) {
             }
         }
 
-        step.distance = geo.getTotalDistanceFromGeometry(step.geometry);
-
         if (step.geometry) {
+
+            step.distance = geo.getTotalDistanceFromGeometry(step.geometry);
 
             var elevationGain = geo.getElevationGain(step.geometry.type, step.elevationPoints);
 
@@ -96,11 +96,11 @@ exports.update = function (req, res) {
                 step.negativeElevationGain = null;
             }
         } else {
-                console.log('Trace has been uploaded (distance: %d).', step.distance);
-                step.positiveElevationGain = null;
-                step.negativeElevationGain = null;
-            }
-        
+            console.log('No trace on step %d.', step._id);
+            step.positiveElevationGain = null;
+            step.negativeElevationGain = null;
+        }
+
 
         step.save(function (err) {
             if (err) {

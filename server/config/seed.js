@@ -13,8 +13,8 @@ var Interest = require('../api/interest/interest.model');
 
 var Q = require('q');
 
-return;
 
+return;
 Interest.find({
     geometry: null
 }, function (err, interests) {
