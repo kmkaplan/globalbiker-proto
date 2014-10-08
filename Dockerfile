@@ -23,7 +23,7 @@ RUN npm install karma karma-phantomjs-launcher grunt-contrib-imagemin grunt-goog
 WORKDIR /app
 
 ADD package.json /app/
-RUN npm install --verbose
+RUN npm install --verbose && tail -100 /app/npm-debug.log
 
 ADD bower.json /app/
 RUN bower install --allow-root

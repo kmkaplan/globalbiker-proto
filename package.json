@@ -4,6 +4,7 @@
   "main": "server/app.js",
   "dependencies": {
     "body-parser": "~1.0.0",
+    "caniuse-db": "^1.0.20141006",
     "chalk": "^0.5.1",
     "composable-middleware": "^0.3.0",
     "compression": "~1.0.1",
