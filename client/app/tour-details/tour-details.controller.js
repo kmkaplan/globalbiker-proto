@@ -196,7 +196,7 @@ angular.module('bikeTouringMapApp')
                             }
                         });
 
-                        $scope.$watch('waterPoints', function (waterPoints, old) {
+                       /* $scope.$watch('waterPoints', function (waterPoints, old) {
                             if (waterPoints) {
                                 eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints, {
                                     mode: 'light',
@@ -207,7 +207,7 @@ angular.module('bikeTouringMapApp')
                                     control: true
                                 });
                             }
-                        });
+                        });*/
 
                         $scope.$watch('velotoulouse', function (velotoulouse, old) {
                             if (velotoulouse) {
@@ -222,7 +222,7 @@ angular.module('bikeTouringMapApp')
                             }
                         });
 
-                        $scope.$watch('dangers', function (dangers, old) {
+                       /* $scope.$watch('dangers', function (dangers, old) {
                             if (dangers) {
                                 eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(dangers, {
                                     mode: 'light',
@@ -233,9 +233,9 @@ angular.module('bikeTouringMapApp')
                                     control: true
                                 });
                             }
-                        });
+                        });*/
 
-                        $scope.$watch('wcs', function (wcs, old) {
+                      /*  $scope.$watch('wcs', function (wcs, old) {
                             if (wcs) {
                                 eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(wcs, {
                                     mode: 'light',
@@ -246,7 +246,7 @@ angular.module('bikeTouringMapApp')
                                     control: true
                                 });
                             }
-                        });
+                        });*/
 
                         $scope.$watch('merimees', function (merimees, old) {
                             if (merimees) {

@@ -11,7 +11,7 @@ var geo = require('../../components/geo/geo');
 var Q = require('q');
 
 var geojsonTools = require('geojson-tools');
-
+var simplify = require('simplify-js');
 
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -64,6 +64,29 @@ exports.searchNearPoint = function (point, distance, extraCriteria) {
 
     return deffered.promise;
 };
+
+exports.coordinatesToNearPromise = function (distance, promises, coordinates, extraCriteria) {
+
+    var simplifiedCoordinates = simplify(coordinates, 0.5, false)
+
+    var points = geojsonTools.complexify(simplifiedCoordinates, distance / 1000);
+
+  //  var points = geojsonTools.complexify(coordinates, distance / 1000);
+
+  /*  console.info('Simplify from %d to %d then complexify to %d instead of %d, ratio: %d.', coordinates.length, simplifiedCoordinates.length, simplifiedComplexifiedPoints.length, points.length, simplifiedComplexifiedPoints.length / points.length);*/
+
+    var promises = points.reduce(function (promises, point) {
+
+        if (promises.length < 2000) {
+
+            promises.push(exports.searchNearPoint(point, distance, extraCriteria));
+
+        }
+        return promises;
+    }, promises);
+    return promises;
+};
+
 exports.searchAroundTour = function (req, res) {
 
     if (!req.query.tourId) {
@@ -96,23 +119,28 @@ exports.searchAroundTour = function (req, res) {
 
         var promises = steps.reduce(function (promises, step) {
 
-
-            // TODO simplify polyline: https://github.com/theelee13/node-simplify-polyline
-            // https://github.com/seabre/simplify-geometry
-            //https://github.com/maxogden/simplify-geojson 
-            // https://github.com/theelee13/node-gtfs-shapes-simplify
-
             if (step.geometry && step.geometry.coordinates) {
 
+                var nbInput = 0;
 
-                var points = geojsonTools.complexify(step.geometry.coordinates, distance / 1000);
+                if (step.geometry.type === 'LineString') {
 
-                console.info('%d points', points.length);
+                    promises = exports.coordinatesToNearPromise(distance, promises, step.geometry.coordinates, extraCriteria);
+                    nbInput += step.geometry.coordinates.length;
+                } else if (step.geometry.type === 'MultiLineString') {
 
-                var promises = points.reduce(function (promises, point) {
-                    promises.push(exports.searchNearPoint(point, distance, extraCriteria));
+                    promises = step.geometry.coordinates.reduce(function (promises, coordinates) {
+                        nbInput += coordinates.length;
+                        return exports.coordinatesToNearPromise(distance, promises, coordinates, extraCriteria);
+                    }, promises);
+
+                } else {
+                    console.log('Unexpected feature geometry type "%s".', step.geometry.type);
                     return promises;
-                }, promises);
+                }
+
+                console.info('Query near from %d to %d points.', nbInput, promises.length);
+
 
             }
             return promises;
@@ -370,13 +398,13 @@ exports.upload = function (req, res) {
                 {
                     interest.name = currentFeature.properties['nom_des_branches_du_carrefour'];
                     interest.description = currentFeature.properties['nom_des_branches_du_carrefour'];
-                    
+
                     var total = currentFeature.properties['total__2008_2012_'];
-                    
-                    if (!total || parseInt(total) <= 2){
+
+                    if (!total || parseInt(total) <= 2) {
                         return interests;
                     }
-                    
+
                     break;
                 }
             }

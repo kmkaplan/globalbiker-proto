@@ -227,30 +227,25 @@ exports.readTracesFromFile = function (file, concatenateFeatures) {
 
 
             } else if (feature.geometry.type === 'MultiLineString') {
-                
-                console.log('MultiLineString');
-                
+
+
                 // multiple lines
                 feature.xyzCoordinates = feature.geometry.coordinates.reduce(function (xyzCoordinates, coordinates) {
 
-                   console.log('MultiLineString2');
-                if (!coordinates || coordinates.length < 2) {
+                    if (!coordinates || coordinates.length < 2) {
                         console.log('Invalid line will be ignored.');
                         return xyzCoordinates;
                     }
 
-                   console.log('MultiLineString3');
-                var subXYZCoordinates = coordinates.reduce(function (xyzCoordinates, point) {
+                    var subXYZCoordinates = coordinates.reduce(function (xyzCoordinates, point) {
 
                         var pointArray = [point[0], point[1]];
 
-                      console.log('MultiLineString4');
-                 if (convertProjection) {
+                        if (convertProjection) {
                             pointArray = exports.convertPointCoordinatesToWGS84(pointArray);
                         }
 
-                      console.log('MultiLineString5');
-                 xyzCoordinates.xy.push(pointArray);
+                        xyzCoordinates.xy.push(pointArray);
 
                         if (point.length > 2) {
                             // add elevation
