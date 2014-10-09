@@ -97,21 +97,23 @@ exports.searchAroundTour = function (req, res) {
             //https://github.com/maxogden/simplify-geojson 
             // https://github.com/theelee13/node-gtfs-shapes-simplify
 
+            if (step.geometry && step.geometry.coordinates) {
 
 
+                var points = geojsonTools.complexify(step.geometry.coordinates, distance / 1000);
 
-            var points = geojsonTools.complexify(step.geometry.coordinates, distance / 1000);
+                console.info('%d points', points.length);
 
-            console.info('%d points', points.length);
+                var promises = points.reduce(function (promises, point) {
+                    promises.push(exports.searchNearPoint(point, distance, extraCriteria));
+                    return promises;
+                }, promises);
 
-            var promises = points.reduce(function (promises, point) {
-                promises.push(exports.searchNearPoint(point, distance, extraCriteria));
-                return promises;
-            }, promises);
-
-
+            }
             return promises;
         }, []);
+
+
 
         console.info('%d promises', promises.length);
 
@@ -228,7 +230,7 @@ exports.getByStep = function (req, res) {
 };
 
 
-exports.buildInterest = function (type, coordinates, properties) {
+exports.buildInterest = function (type, coordinates, properties, source) {
 
     // convert coordinates
     var coordinates = geo.convertPointCoordinatesToWGS84(coordinates);
@@ -241,14 +243,11 @@ exports.buildInterest = function (type, coordinates, properties) {
     var p = properties;
 
     var interest = {
-        name: p['TYPE'],
-        description: p['LOCALISATION'],
         latitude: coordinates[1],
         longitude: coordinates[0],
         geometry: geometry,
-        type: 'water-point',
-        source: 'upload',
-        priority: 3
+        priority: 3,
+        source: source
     };
 
     return interest;
@@ -258,19 +257,41 @@ exports.buildInterest = function (type, coordinates, properties) {
 // Creates a new bikelane in the DB.
 exports.upload = function (req, res) {
 
-    console.log(req.body);
-    console.log(req.files);
+    var interestType = req.params.type;
+    if (!interestType) {
+        console.error('Type is missing');
+        return res.send(400, 'Type is missing');
+    }
 
     var file = req.files.file;
-
     if (!file) {
-        console.log('File "file" is missing.');
+        console.error('File "file" is missing.');
         return res.send(400, 'File "file" is missing.');
     }
 
-    if (file.originalname !== 'fontaines_a_boire.json') {
-        console.log('Unexpected file name: "%s" instead of "fontaines_a_boire.json".', file.originalname);
-        return res.send(400, 'Unexpected file name. "fontaines_a_boire.json" expected.');
+    var fileName;
+    switch (interestType) {
+    case 'water-point':
+        {
+            fileName = 'fontaines_a_boire.json';
+            break;
+        }
+    case 'velotoulouse':
+        {
+            fileName = 'Velo_Toulouse.json';
+            break;
+        }
+    default:
+        {
+            console.error('Invalid type "%s"', interestType);
+            return res.send(400, 'Invalid type');
+            break;
+        }
+    }
+
+    if (file.originalname !== fileName) {
+        console.error('Unexpected file name: "%s" instead of "%s".', file.originalname, fileName);
+        return res.send(400, 'Unexpected file name: "' + fileName + '" expected.');
     }
 
     fs.readFile(file.path, 'utf8', function (err, data) {
@@ -283,7 +304,27 @@ exports.upload = function (req, res) {
 
         var interests = geojsonContent.features.reduce(function (interests, currentFeature) {
 
-            var interest = exports.buildInterest('Point', currentFeature.geometry.coordinates, currentFeature.properties);
+            var interest = exports.buildInterest('Point', currentFeature.geometry.coordinates, currentFeature.properties, 'upload');
+            interest.type = interestType;
+
+            switch (interestType) {
+            case 'water-point':
+                {
+                    interest.name = currentFeature.properties['TYPE'],
+                    interest.description = currentFeature.properties['LOCALISATION'];
+                    break;
+
+                }
+            case 'velotoulouse':
+                {
+                    interest.name = currentFeature.properties['nom'];
+                    interest.description = currentFeature.properties['num_station'];
+                    break;
+                }
+            }
+
+
+
 
             interests.push(interest);
 
@@ -294,7 +335,7 @@ exports.upload = function (req, res) {
         // replace existing bikelanes
 
         Interest.find({
-            type: 'water-point',
+            type: interestType,
             source: 'upload'
         }).remove(function () {
 

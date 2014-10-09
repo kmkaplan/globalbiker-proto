@@ -213,6 +213,12 @@ angular.module('bikeTouringMapApp')
                                 circleOptions.fillColor = '#5282ed';
                                 break;
                             }
+                        case 'velotoulouse':
+                            {
+                                circleOptions.color = '#ff6c00';
+                                circleOptions.fillColor = '#ff6c00';
+                                break;
+                            }
                         case 'interest':
                             {
                                 circleOptions.color = '#047104';
@@ -235,7 +241,7 @@ angular.module('bikeTouringMapApp')
                             console.warn('Unknown type "%s" for interest %s.', interest.type, interest._id);
                             break;
                         }
-                        
+
                         angular.extend(circleOptions, options);
 
                         return {

@@ -47,6 +47,16 @@ angular.module('bikeTouringMapApp')
                         $scope.waterPoints = waterPoints;
                     }, function () {});
 
+                
+                InterestRepository.searchAroundTour({
+                        tourId: tour._id,
+                        type: 'velotoulouse',
+                        distance: 200
+                    },
+                    function (velotoulouse) {
+                        $scope.velotoulouse = velotoulouse;
+                    }, function () {});
+                
                 StepRepository.getByTour({
                     tourId: $scope.tourId
                 }, function (steps) {
@@ -163,6 +173,19 @@ angular.module('bikeTouringMapApp')
                                     weight: 2
                                 }), {
                                     name: 'Points d\'eau potable',
+                                    control: true
+                                });
+                            }
+                        });
+                        
+                         $scope.$watch('velotoulouse', function (velotoulouse, old) {
+                            if (velotoulouse) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(velotoulouse, {
+                                    mode: 'light',
+                                    radius: 3,
+                                    weight: 2
+                                }), {
+                                    name: 'Stations vélo Toulouse',
                                     control: true
                                 });
                             }

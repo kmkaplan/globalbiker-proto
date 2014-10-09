@@ -58,6 +58,27 @@ img.smart-photo {
     margin: 2px;
 }
 
+.responsive-map-area {
+    .default-extended-map {
+        height: 200px;
+        @media all and (min-height: 450px) {
+            height: 250px;
+        }
+        @media all and (min-height: 500px) {
+            height: 300px;
+        }
+        @media all and (min-height: 500px) {
+            height: 300px;
+        }
+        @media all and (min-height: 600px) {
+            height: 350px;
+        }
+        @media all and (min-height: 700px) {
+            height: 450px;
+        }
+    }
+}
+
 .smart-map-area {
     border: 10px solid #555;
     border-radius: 10px;
@@ -85,4 +106,3 @@ img.smart-photo {
         color: #2a8010;
     }
 }
-

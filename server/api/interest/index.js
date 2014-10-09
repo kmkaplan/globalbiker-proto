@@ -11,7 +11,7 @@ router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/step/:stepId', controller.getByStep);
 router.post('/:id/upload-photo', controller.uploadPhoto);
-router.post('/upload', controller.upload);
+router.post('/upload/:type', controller.upload);
 router.delete('/:id/photo', controller.deletePhoto);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

@@ -14,7 +14,7 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.waterpointsUpload = {
-            url: '/api/interests/upload',
+            url: '/api/interests/upload/water-point',
             filename: 'fontaines_a_boire.json',
             callbacks: {
                 success: function (data) {
@@ -22,6 +22,17 @@ angular.module('bikeTouringMapApp')
                 }
             }
         };
+
+        $scope.velotoulouseUpload = {
+            url: '/api/interests/upload/velotoulouse',
+            filename: 'Velo_Toulouse.json',
+            callbacks: {
+                success: function (data) {
+                    $scope.loadPointsOfInterests();
+                }
+            }
+        };
+
 
         $scope.init = function () {
 

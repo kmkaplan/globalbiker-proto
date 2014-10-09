@@ -2,20 +2,32 @@
 
 <div class="container admin-data-page">
 
-    <div extended-map config="mapConfig"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="admin-data-map-area responsive-map-area smart-map-area">
+                <div extended-map config="mapConfig"></div>
+            </div>
+        </div>
+    </div>
 
     <section class="form-section">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h3>Réseau cyclable et vert</h3>
                 <div ng-hide="loadingInProgress">
                     <div file-upload="bikemapFileupload"></div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h3>Fontaines à eau</h3>
                 <div ng-hide="loadingInProgress">
                     <div file-upload="waterpointsUpload"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h3>Vélos toulouse</h3>
+                <div ng-hide="loadingInProgress">
+                    <div file-upload="velotoulouseUpload"></div>
                 </div>
             </div>
         </div>
