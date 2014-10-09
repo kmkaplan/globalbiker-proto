@@ -130,7 +130,7 @@ exports.uploadTrace = function (req, res) {
             return res.send(400, 'File "file" is missing.');
         }
 
-        geo.readTracesFromFile(file).then(function (features) {
+        geo.readTracesFromFile(file, true).then(function (features) {
 
                 var feature;
 
@@ -138,10 +138,11 @@ exports.uploadTrace = function (req, res) {
                     console.log('Trace without any feature.');
                     return res.send(400, 'Trace without any point');
                 } else if (features.length > 1) {
-                    console.log('Trace with %d features(s): first one will be used.', features.length);
+                    console.error('Trace with %d features(s). Should never append due to readTracesFromFile second parameter.', features.length);
                 }
+                    
                 feature = features[0];
-
+            
                 // update step geometry
                 step.geometry = {
                     coordinates: feature.xyzCoordinates.xy, //[[[0.951528735, 44.182434697], [0.951036299, 44.182579117]]],

@@ -135,7 +135,7 @@ exports.buildLine = function (coordinates) {
 
 }
 
-exports.readTracesFromFile = function (file) {
+exports.readTracesFromFile = function (file, concatenateFeatures) {
 
     var deffered = Q.defer();
 
@@ -155,12 +155,46 @@ exports.readTracesFromFile = function (file) {
             geojsonContent = tcx(dom);
         } else if (fileName.endsWith('.gpx')) {
             geojsonContent = togeojson.gpx(dom);
+        } else if (fileName.endsWith('.json')) {
+            geojsonContent = JSON.parse(dom);
         } else {
             console.log('Unsuported extension for file "%s".', file.originalName);
             return deffered.reject('Unsuported file extension.');
         }
 
+        var convertProjection = false;
 
+        if (geojsonContent.crs && geojsonContent.crs.properties && geojsonContent.crs.properties.name === 'EPSG:3943') {
+            convertProjection = true;
+        }
+
+
+        if (concatenateFeatures && geojsonContent.features.length > 1) {
+
+            // concatenate all LineString & MultiLineString in a single MultiLineString
+
+            var coordinates = geojsonContent.features.reduce(function (coordonates, feature) {
+
+                if (feature.geometry.type === 'LineString') {
+                    coordonates.push(feature.geometry.coordinates);
+                } else if (feature.geometry.type === 'MultiLineString') {
+                    coordonates = coordonates.concat(feature.geometry.coordonates);
+                } else {
+                    console.log('Unexpected feature geometry type "%s".', feature.geometry.type);
+                }
+                return coordonates;
+            }, []);
+
+            var uniqueFeature = geojsonContent.features[0];
+
+            uniqueFeature.geometry.type = 'MultiLineString';
+            uniqueFeature.geometry.coordinates = coordinates;
+
+            geojsonContent.features = [
+                        uniqueFeature
+                    ];
+
+        }
 
         var features = geojsonContent.features.reduce(function (features, feature) {
 
@@ -172,7 +206,14 @@ exports.readTracesFromFile = function (file) {
                     return features;
                 }
                 feature.xyzCoordinates = feature.geometry.coordinates.reduce(function (xyzCoordinates, point) {
-                    xyzCoordinates.xy.push([point[0], point[1]]);
+
+                    var point = [point[0], point[1]];
+
+                    if (convertProjection) {
+                        point = exports.convertPointCoordinatesToWGS84(point);
+                    }
+
+                    xyzCoordinates.xy.push(point);
                     if (point.length > 2) {
                         // add elevation
                         xyzCoordinates.z.push(point[2]);
@@ -195,7 +236,14 @@ exports.readTracesFromFile = function (file) {
 
                     var subXYZCoordinates = coordinates.reduce(function (xyzCoordinates, point) {
 
-                        xyzCoordinates.xy.push([point[0], point[1]]);
+                        var point = [point[0], point[1]];
+
+                        if (convertProjection) {
+                            point = exports.convertPointCoordinatesToWGS84(point);
+                        }
+
+                        xyzCoordinates.xy.push(point);
+
                         if (point.length > 2) {
                             // add elevation
                             xyzCoordinates.z.push(point[2]);

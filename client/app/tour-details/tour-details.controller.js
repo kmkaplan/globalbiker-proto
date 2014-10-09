@@ -29,6 +29,54 @@ angular.module('bikeTouringMapApp')
             }
         };
 
+        $scope.loadInterests = function (tour) {
+            InterestRepository.searchAroundTour({
+                    tourId: tour._id,
+                    type: 'water-point',
+                    distance: 200
+                },
+                function (waterPoints) {
+                    $scope.waterPoints = waterPoints;
+                }, function () {});
+
+
+            InterestRepository.searchAroundTour({
+                    tourId: tour._id,
+                    type: 'velotoulouse',
+                    distance: 200
+                },
+                function (velotoulouse) {
+                    $scope.velotoulouse = velotoulouse;
+                }, function () {});
+
+            InterestRepository.searchAroundTour({
+                    tourId: tour._id,
+                    type: 'wc',
+                    distance: 200
+                },
+                function (wcs) {
+                    $scope.wcs = wcs;
+                }, function () {});
+
+            InterestRepository.searchAroundTour({
+                    tourId: tour._id,
+                    type: 'danger',
+                    distance: 50
+                },
+                function (dangers) {
+                    $scope.dangers = dangers;
+                }, function () {});
+
+            InterestRepository.searchAroundTour({
+                    tourId: tour._id,
+                    type: 'merimee',
+                    distance: 10
+                },
+                function (merimees) {
+                    $scope.merimees = merimees;
+                }, function () {});
+        };
+
         $scope.loadTour = function () {
 
             var deffered = $q.defer();
@@ -38,51 +86,6 @@ angular.module('bikeTouringMapApp')
             }, function (tour) {
                 $scope.tour = tour;
 
-                InterestRepository.searchAroundTour({
-                        tourId: tour._id,
-                        type: 'water-point',
-                        distance: 200
-                    },
-                    function (waterPoints) {
-                        $scope.waterPoints = waterPoints;
-                    }, function () {});
-
-
-                InterestRepository.searchAroundTour({
-                        tourId: tour._id,
-                        type: 'velotoulouse',
-                        distance: 200
-                    },
-                    function (velotoulouse) {
-                        $scope.velotoulouse = velotoulouse;
-                    }, function () {});
-
-                InterestRepository.searchAroundTour({
-                        tourId: tour._id,
-                        type: 'wc',
-                        distance: 200
-                    },
-                    function (wcs) {
-                        $scope.wcs = wcs;
-                    }, function () {});
-
-                InterestRepository.searchAroundTour({
-                        tourId: tour._id,
-                        type: 'danger',
-                        distance: 50
-                    },
-                    function (dangers) {
-                        $scope.dangers = dangers;
-                    }, function () {});
-
-                InterestRepository.searchAroundTour({
-                        tourId: tour._id,
-                        type: 'merimee',
-                        distance: 10
-                    },
-                    function (merimees) {
-                        $scope.merimees = merimees;
-                    }, function () {});
 
                 StepRepository.getByTour({
                     tourId: $scope.tourId
@@ -125,6 +128,7 @@ angular.module('bikeTouringMapApp')
                         };
                     }, []);
 
+                    $scope.loadInterests(tour);
 
                     deffered.resolve(tour);
                 }, function (err) {
