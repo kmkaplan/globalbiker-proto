@@ -18,7 +18,12 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 // Get list of interests
 exports.index = function (req, res) {
-    Interest.find(function (err, interests) {
+    var searchCriteria = {};
+    if (req.query.type) {
+        searchCriteria.type = req.query.type;
+    }
+
+    Interest.find(searchCriteria).limit(500).exec(function (err, interests) {
         if (err) {
             return handleError(res, err);
         }
@@ -232,6 +237,10 @@ exports.getByStep = function (req, res) {
 
 exports.buildInterest = function (type, coordinates, properties, source) {
 
+    if (!coordinates) {
+        return null;
+    }
+
     // convert coordinates
     var coordinates = geo.convertPointCoordinatesToWGS84(coordinates);
 
@@ -281,6 +290,21 @@ exports.upload = function (req, res) {
             fileName = 'Velo_Toulouse.json';
             break;
         }
+    case 'wc':
+        {
+            fileName = 'Sanisette.json';
+            break;
+        }
+    case 'merimee':
+        {
+            fileName = 'Base_Merimee.json';
+            break;
+        }
+    case 'danger':
+        {
+            fileName = 'acc_carrefours_2008_2012.json';
+            break;
+        }
     default:
         {
             console.error('Invalid type "%s"', interestType);
@@ -304,7 +328,16 @@ exports.upload = function (req, res) {
 
         var interests = geojsonContent.features.reduce(function (interests, currentFeature) {
 
+            if (currentFeature.geometry === null) {
+                return interests;
+            }
+
             var interest = exports.buildInterest('Point', currentFeature.geometry.coordinates, currentFeature.properties, 'upload');
+
+            if (interest === null) {
+                return interests;
+            }
+
             interest.type = interestType;
 
             switch (interestType) {
@@ -321,12 +354,38 @@ exports.upload = function (req, res) {
                     interest.description = currentFeature.properties['num_station'];
                     break;
                 }
+            case 'wc':
+                {
+                    interest.name = currentFeature.properties['type'];
+                    interest.description = currentFeature.properties['adresse'];
+                    break;
+                }
+            case 'merimee':
+                {
+                    interest.name = currentFeature.properties['chpnoms'];
+                    interest.description = currentFeature.properties['chpdesc'];
+                    break;
+                }
+            case 'danger':
+                {
+                    interest.name = currentFeature.properties['nom_des_branches_du_carrefour'];
+                    interest.description = currentFeature.properties['nom_des_branches_du_carrefour'];
+                    
+                    var total = currentFeature.properties['total__2008_2012_'];
+                    
+                    if (!total || parseInt(total) <= 2){
+                        return interests;
+                    }
+                    
+                    break;
+                }
             }
 
-
-
-
-            interests.push(interest);
+            if (interest.name && interest.description) {
+                interests.push(interest);
+            } else {
+                console.info('Name or description missing.');
+            }
 
             return interests;
 

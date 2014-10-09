@@ -33,6 +33,36 @@ angular.module('bikeTouringMapApp')
             }
         };
 
+        $scope.dangersCarrefoursUpload = {
+            url: '/api/interests/upload/danger',
+            filename: 'acc_carrefours_2008_2012.json',
+            callbacks: {
+                success: function (data) {
+                    $scope.loadPointsOfInterests();
+                }
+            }
+        };
+
+        $scope.merimeeUpload = {
+            url: '/api/interests/upload/merimee',
+            filename: 'Base_Merimee.json',
+            callbacks: {
+                success: function (data) {
+                    $scope.loadPointsOfInterests();
+                }
+            }
+        };
+
+        $scope.wcUpload = {
+            url: '/api/interests/upload/wc',
+            filename: 'Sanisette.json',
+            callbacks: {
+                success: function (data) {
+                    $scope.loadPointsOfInterests();
+                }
+            }
+        };
+
 
         $scope.init = function () {
 
@@ -59,15 +89,60 @@ angular.module('bikeTouringMapApp')
                                 });
                             }
                         });
-                        $scope.$watch('interests', function (interests, old) {
-                            if (interests) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(interests), {
-                                    name: 'Points d\'intérêt',
+                        $scope.$watch('waterPoints', function (waterPoints, old) {
+                            if (waterPoints) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints, {
+                                    mode: 'light'
+                                }), {
+                                    name: 'Points d\'eau potable',
                                     control: true
                                 });
                             }
                         });
 
+                        $scope.$watch('velotoulouse', function (velotoulouse, old) {
+                            if (velotoulouse) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(velotoulouse, {
+                                    mode: 'light'
+                                }), {
+                                    name: 'Stations vélo Toulouse',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('wcs', function (wcs, old) {
+                            if (wcs) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(wcs, {
+                                    mode: 'light'
+                                }), {
+                                    name: 'Sanisettes publiques',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('merimees', function (merimees, old) {
+                            if (merimees) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(merimees, {
+                                    mode: 'light'
+                                }), {
+                                    name: 'Base mérimée',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('dangers', function (dangers, old) {
+                            if (dangers) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(dangers, {
+                                    mode: 'light'
+                                }), {
+                                    name: 'Dangers',
+                                    control: true
+                                });
+                            }
+                        });
                     }
                 }
             };
@@ -90,13 +165,51 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.loadPointsOfInterests = function () {
-            $scope.loadingInProgress = true;
-            InterestRepository.query(function (interests) {
-                $scope.interests = interests;
+            // $scope.loadingInProgress = true;
+
+            InterestRepository.query({
+                    type: 'water-point'
+                },
+                function (waterPoints) {
+                    $scope.waterPoints = waterPoints;
+                }, function () {});
+
+
+            InterestRepository.query({
+                    type: 'velotoulouse'
+                },
+                function (velotoulouse) {
+                    $scope.velotoulouse = velotoulouse;
+                }, function () {});
+
+            InterestRepository.query({
+                    type: 'wc'
+                },
+                function (wcs) {
+                    $scope.wcs = wcs;
+                }, function () {});
+
+            InterestRepository.query({
+                    type: 'danger'
+                },
+                function (dangers) {
+                    $scope.dangers = dangers;
+                }, function () {});
+
+            InterestRepository.query({
+                    type: 'merimee'
+                },
+                function (merimees) {
+                    $scope.merimees = merimees;
+                }, function () {});
+
+
+            /*  InterestRepository.query(function (items) {
+                $scope.items = items;
                 $scope.loadingInProgress = false;
             }, function () {
                 $scope.loadingInProgress = false;
-            });
+            });*/
         };
 
 

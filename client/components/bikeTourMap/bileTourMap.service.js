@@ -207,10 +207,22 @@ angular.module('bikeTouringMapApp')
                                 circleOptions.fillColor = '#ff0014';
                                 break;
                             }
+                        case 'merimee':
+                            {
+                                circleOptions.color = '#7b188d';
+                                circleOptions.fillColor = '#7b188d';
+                                break;
+                            }
                         case 'water-point':
                             {
                                 circleOptions.color = '#5282ed';
                                 circleOptions.fillColor = '#5282ed';
+                                break;
+                            }
+                        case 'wc':
+                            {
+                                circleOptions.color = '#7c869b';
+                                circleOptions.fillColor = '#7c869b';
                                 break;
                             }
                         case 'velotoulouse':

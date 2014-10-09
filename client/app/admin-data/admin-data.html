@@ -31,6 +31,26 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Sanisettes publiques</h3>
+                <div ng-hide="loadingInProgress">
+                    <div file-upload="wcUpload"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h3>Base Mérimée</h3>
+                <div ng-hide="loadingInProgress">
+                    <div file-upload="merimeeUpload"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h3>Accidents aux carrefours</h3>
+                <div ng-hide="loadingInProgress">
+                    <div file-upload="dangersCarrefoursUpload"></div>
+                </div>
+            </div>
+        </div>
         <div ng-show="loadingInProgress">
             <div class="alert alert-warning"><i class="fa fa-spinner fa-spin"></i> Chargement en cours...</div>
         </div>

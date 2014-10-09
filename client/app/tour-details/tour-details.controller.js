@@ -47,7 +47,7 @@ angular.module('bikeTouringMapApp')
                         $scope.waterPoints = waterPoints;
                     }, function () {});
 
-                
+
                 InterestRepository.searchAroundTour({
                         tourId: tour._id,
                         type: 'velotoulouse',
@@ -56,7 +56,34 @@ angular.module('bikeTouringMapApp')
                     function (velotoulouse) {
                         $scope.velotoulouse = velotoulouse;
                     }, function () {});
-                
+
+                InterestRepository.searchAroundTour({
+                        tourId: tour._id,
+                        type: 'wc',
+                        distance: 200
+                    },
+                    function (wcs) {
+                        $scope.wcs = wcs;
+                    }, function () {});
+
+                InterestRepository.searchAroundTour({
+                        tourId: tour._id,
+                        type: 'danger',
+                        distance: 50
+                    },
+                    function (dangers) {
+                        $scope.dangers = dangers;
+                    }, function () {});
+
+                InterestRepository.searchAroundTour({
+                        tourId: tour._id,
+                        type: 'merimee',
+                        distance: 10
+                    },
+                    function (merimees) {
+                        $scope.merimees = merimees;
+                    }, function () {});
+
                 StepRepository.getByTour({
                     tourId: $scope.tourId
                 }, function (steps) {
@@ -177,8 +204,8 @@ angular.module('bikeTouringMapApp')
                                 });
                             }
                         });
-                        
-                         $scope.$watch('velotoulouse', function (velotoulouse, old) {
+
+                        $scope.$watch('velotoulouse', function (velotoulouse, old) {
                             if (velotoulouse) {
                                 eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(velotoulouse, {
                                     mode: 'light',
@@ -186,6 +213,45 @@ angular.module('bikeTouringMapApp')
                                     weight: 2
                                 }), {
                                     name: 'Stations vélo Toulouse',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('dangers', function (dangers, old) {
+                            if (dangers) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(dangers, {
+                                    mode: 'light',
+                                    radius: 3,
+                                    weight: 2
+                                }), {
+                                    name: 'Dangers',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('wcs', function (wcs, old) {
+                            if (wcs) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(wcs, {
+                                    mode: 'light',
+                                    radius: 3,
+                                    weight: 2
+                                }), {
+                                    name: 'Toilettes',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('merimees', function (merimees, old) {
+                            if (merimees) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(merimees, {
+                                    mode: 'light',
+                                    radius: 3,
+                                    weight: 2
+                                }), {
+                                    name: 'Base Mérimée',
                                     control: true
                                 });
                             }
