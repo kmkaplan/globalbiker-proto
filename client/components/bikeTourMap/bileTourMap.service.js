@@ -54,11 +54,19 @@ angular.module('bikeTouringMapApp')
             },
             buildStepTraceFeature: function (step, options) {
 
+                if (!options){
+                    options = {};
+                }
+                if (!options.style){
+                    options.style = {};
+                }
+                
+                
                 var style = _.merge({
                     color: '#236d15',
                     opacity: 0.6,
                     weight: 12
-                }, options);
+                }, options.style);
 
                 if (!step.geometry) {
                     step.geometry = {
@@ -68,9 +76,13 @@ angular.module('bikeTouringMapApp')
                     style.dashArray = '20 15';
                 }
 
-                var overStyle = angular.copy(style);
-                overStyle.opacity = 1;
-                overStyle.weight = 20;
+                var overStyle;
+                if (options.overStyle) {
+                    overStyle = angular.copy(style);
+                    angular.extend(overStyle, options.overStyle);
+                } else {
+                    overStyle = null
+                }
 
                 var stepFeature = this._buildFeature(step, {
                     style: function () {
@@ -79,10 +91,14 @@ angular.module('bikeTouringMapApp')
                     onEachFeature: function (feature, layer) {
                         layer.on({
                             mouseover: function () {
-                                layer.setStyle(overStyle);
+                                if (overStyle !== null) {
+                                    layer.setStyle(overStyle);
+                                }
                             },
                             mouseout: function () {
-                                layer.setStyle(style);
+                                if (overStyle !== null) {
+                                    layer.setStyle(style);
+                                }
                             },
                             click: function () {
 
@@ -109,29 +125,32 @@ angular.module('bikeTouringMapApp')
                     }
                 });
             },
-            buildTourStepTracesFeatures: function (tour, options) {
+            buildStepsTracesFeatures: function (steps, options) {
                 var self = this;
 
-                var tourOptions = angular.copy(options);
+                if (steps) {
 
-                if (!tourOptions.color) {
-                    if (tour.color) {
-                        tourOptions.color = tour.color;
-                    } else {
-                        tourOptions.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    var stepsOptions = angular.copy(options);
+
+                    if (!stepsOptions.style) {
+                        stepsOptions.style = {};
                     }
-                }
 
-                if (tour.steps) {
+                    if (!stepsOptions.style.color) {
+                        stepsOptions.style.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    }
 
-                    return tour.steps.reduce(function (stepTraceFeatures, step) {
+                    if (steps) {
 
-                        var feature = self.buildStepTraceFeature(step, tourOptions);
-                        if (feature) {
-                            stepTraceFeatures.push(feature);
-                        }
-                        return stepTraceFeatures;
-                    }, []);
+                        return steps.reduce(function (stepTraceFeatures, step) {
+
+                            var feature = self.buildStepTraceFeature(step, stepsOptions);
+                            if (feature) {
+                                stepTraceFeatures.push(feature);
+                            }
+                            return stepTraceFeatures;
+                        }, []);
+                    }
                 }
 
                 return [];
@@ -141,7 +160,19 @@ angular.module('bikeTouringMapApp')
                 var self = this;
                 var stepTraceFeatures = tours.reduce(function (stepTraceFeatures, tour) {
 
-                    stepTraceFeatures = stepTraceFeatures.concat(self.buildTourStepTracesFeatures(tour, options));
+                    if (!options) {
+                        options = {};
+                    }
+
+                    if (!options.style) {
+                        options.style = {};
+                    }
+
+                    if (!options.style.color && tour.color) {
+                        options.style.color = tour.color;
+                    }
+
+                    stepTraceFeatures = stepTraceFeatures.concat(self.buildStepsTracesFeatures(tour.steps, options));
 
                     return stepTraceFeatures;
                 }, []);

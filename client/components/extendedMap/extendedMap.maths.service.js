@@ -5,9 +5,35 @@
          // AngularJS will instantiate a singleton by calling "new" on this function
 
          return {
-             getBoundsFromGeometry: function (geometry, margin) {
+             getBoundsFromGeometries: function (geometries, margin) {
+
                  var self = this;
+
+                 var bounds = geometries.reduce(function (bounds, geometry) {
+
+                     bounds = self.getBoundsFromGeometry(geometry, false, bounds);
+                     return bounds;
+
+                 }, [[null, null], [null, null]]);
+
+                 if (margin) {
+                     bounds = this._extendBounds(bounds, margin);
+                 }
+
+                 return bounds;
+
+             },
+             getBoundsFromGeometry: function (geometry, margin, initialBounds) {
+
                  var bounds;
+                 if (initialBounds) {
+                     bounds = initialBounds;
+                 } else {
+                     bounds = [[null, null], [null, null]];
+                 }
+
+                 var self = this;
+
                  if (geometry.type === 'LineString') {
                      bounds = geometry.coordinates.reduce(function (bounds, g) {
 
@@ -17,7 +43,7 @@
                          });
                          return bounds;
 
-                     }, [[null, null], [null, null]]);
+                     }, bounds);
                  } else if (geometry.type === 'MultiLineString') {
                      bounds = geometry.coordinates.reduce(function (bounds, coordinates) {
 
@@ -32,7 +58,7 @@
 
                          return bounds;
 
-                     }, [[null, null], [null, null]]);
+                     }, bounds);
                  } else {
                      console.error('Geometry type "%s" not supported.', geometry.type);
                      return null;

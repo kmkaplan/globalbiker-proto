@@ -49,6 +49,14 @@ angular.module('bikeTouringMapApp')
                                 });
                             }
                         },
+                        fitBoundsFromGeometries: function (geometries, margin) {
+                            var bounds = extendedMapMathsService.getBoundsFromGeometries(geometries, margin);
+                            if (bounds) {
+                                console.info('Fit to bounds from geometries.');
+                                this.fitBounds(bounds);
+                            }
+                            return bounds;
+                        },
                         fitBoundsFromGeometry: function (geometry, margin) {
                             var bounds = extendedMapMathsService.getBoundsFromGeometry(geometry, margin);
                             if (bounds) {

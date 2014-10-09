@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService) {
+    .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService) {
 
         $scope.isAdmin = Auth.isAdmin;
 
@@ -36,28 +36,6 @@ angular.module('bikeTouringMapApp')
                 id: $scope.tourId
             }, function (tour) {
                 $scope.tour = tour;
-
-                $scope.tourMapConfig = {
-                    class: 'tour-map',
-                    initialCenter: {
-                        lat: 43.6,
-                        lng: 1.45,
-                        zoom: 10
-                    },
-                    callbacks: {
-                        'map:created': function (eMap) {
-                            var traceFeatures = bikeTourMapService.buildTourStepTracesFeatures(tour, {
-
-                            });
-
-                            eMap.addItemsToGroup(traceFeatures, {
-                                name: 'Tracés des itinéraires',
-                                control: true
-                            });
-                        }
-                    }
-                };
-
 
                 StepRepository.getByTour({
                     tourId: $scope.tourId
@@ -113,6 +91,44 @@ angular.module('bikeTouringMapApp')
             }
 
             $scope.tourId = $stateParams.id
+
+            $scope.tourMapConfig = {
+                class: 'tour-map',
+                initialCenter: {
+                    lat: 43.6,
+                    lng: 1.45,
+                    zoom: 10
+                },
+                callbacks: {
+                    'map:created': function (eMap) {
+
+                        $scope.$watch('steps', function (steps, old) {
+
+                            if (steps) {
+                                var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
+                                    style: {
+                                        color: '#004eff',
+                                        width: 3,
+                                        weight: 8
+                                    }
+                                });
+
+                                eMap.addItemsToGroup(traceFeatures, {
+                                    name: 'Tracés des itinéraires',
+                                    control: true
+                                });
+                                var geometries = steps.reduce(function (geometries, step) {
+                                    geometries.push(step.geometry);
+                                    return geometries;
+                                }, []);
+                                $timeout(function () {
+                                    eMap.config.control.fitBoundsFromGeometries(geometries);
+                                }, 200);
+                            }
+                        });
+                    }
+                }
+            };
 
             $scope.loadTour().catch(function (err) {
                 $scope.redirectOnError();
