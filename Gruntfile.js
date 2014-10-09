@@ -344,6 +344,15 @@ module.exports = function (grunt) {
           src: [
             '*'
           ]
+        },
+            {
+          expand: true,
+          dot: true,
+          cwd: '<%= yeoman.client %>/bower_components/leaflet-dist/images',
+          dest: '<%= yeoman.dist %>/public/app/images',
+          src: [
+            '*'
+          ]
         },{
           expand: true,
           dot: true,
