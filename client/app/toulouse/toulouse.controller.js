@@ -112,7 +112,7 @@ angular.module('bikeTouringMapApp')
 
         $scope.loadPointsOfInterests = function () {
             $scope.loadingInProgress = true;
-            InterestRepository.search({
+            InterestRepository.searchAroundPoint({
                     latitude: 43.61,
                     longitude: 1.44,
                     maxDistance: 10000,
@@ -121,7 +121,7 @@ angular.module('bikeTouringMapApp')
 
                 function (interests) {
                     $scope.interests = interests;
-                    InterestRepository.search({
+                    InterestRepository.searchAroundPoint({
                             latitude: 43.61,
                             longitude: 1.44,
                             maxDistance: 10000,

@@ -5,14 +5,24 @@ angular.module('bikeTouringMapApp')
         return $resource('/api/interests/:id/:controller', {
             id: '@_id'
         }, {
-            search: {
+            searchAroundPoint: {
                 method: 'GET',
-                url: '/api/interests/search',
+                url: '/api/interests/search/point',
                 params: {
                     latitude: '@latitude',
                     longitude: '@longitude',
                     maxDistance: '@maxDistance',
                     priority: '@priority'
+                },
+                isArray: true
+            },
+            searchAroundTour: {
+                method: 'GET',
+                url: '/api/interests/search/tour',
+                params: {
+                    tourId: '@tourId',
+                    type: '@type',
+                    distance: '@distance'
                 },
                 isArray: true
             },

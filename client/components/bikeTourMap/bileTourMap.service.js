@@ -54,14 +54,14 @@ angular.module('bikeTouringMapApp')
             },
             buildStepTraceFeature: function (step, options) {
 
-                if (!options){
+                if (!options) {
                     options = {};
                 }
-                if (!options.style){
+                if (!options.style) {
                     options.style = {};
                 }
-                
-                
+
+
                 var style = _.merge({
                     color: '#236d15',
                     opacity: 0.6,
@@ -187,7 +187,7 @@ angular.module('bikeTouringMapApp')
                 if (!options.mode) {
                     options.mode = 'light';
                 }
-                if (options.mode == 'light') {
+                if (options.mode === 'light') {
                     var geojsonMarkerOptions = {
                         radius: 3,
                         fillColor: 'grey',
@@ -198,47 +198,49 @@ angular.module('bikeTouringMapApp')
                     };
                     return this._buildFeatures(interests, function (interest) {
 
-                        var options = angular.copy(geojsonMarkerOptions);
+                        var circleOptions = angular.copy(geojsonMarkerOptions);
 
                         switch (interest.type) {
                         case 'danger':
                             {
-                                options.color = '#ff0014';
-                                options.fillColor = '#ff0014';
+                                circleOptions.color = '#ff0014';
+                                circleOptions.fillColor = '#ff0014';
                                 break;
                             }
                         case 'water-point':
                             {
-                                options.color = '#5282ed';
-                                options.fillColor = '#5282ed';
+                                circleOptions.color = '#5282ed';
+                                circleOptions.fillColor = '#5282ed';
                                 break;
                             }
                         case 'interest':
                             {
-                                options.color = '#047104';
-                                options.fillColor = '##047104';
+                                circleOptions.color = '#047104';
+                                circleOptions.fillColor = '##047104';
                                 break;
                             }
                         case 'bike-shops':
                             {
-                                options.color = '#f51e43';
-                                options.fillColor = '#f51e43';
+                                circleOptions.color = '#f51e43';
+                                circleOptions.fillColor = '#f51e43';
                                 break;
                             }
                         case 'food':
                             {
-                                options.color = 'black';
-                                options.fillColor = 'black';
+                                circleOptions.color = 'black';
+                                circleOptions.fillColor = 'black';
                                 break;
                             }
                         default:
-                            console.warn('Unknown type %s for interest %s.', interest.type, interest._id);
+                            console.warn('Unknown type "%s" for interest %s.', interest.type, interest._id);
                             break;
                         }
+                        
+                        angular.extend(circleOptions, options);
 
                         return {
                             pointToLayer: function (feature, latlng) {
-                                return L.circleMarker(latlng, options);
+                                return L.circleMarker(latlng, circleOptions);
                             }
                         }
 
@@ -259,6 +261,13 @@ angular.module('bikeTouringMapApp')
                                         prefix: 'glyphicon',
                                         icon: 'eye-open',
                                         markerColor: 'green'
+                                    };
+                                    break;
+                                case 'water-point':
+                                    iconOptions = {
+                                        prefix: 'glyphicon',
+                                        icon: 'ok',
+                                        markerColor: 'blue'
                                     };
                                     break;
                                 case 'bike-shops':
@@ -288,7 +297,7 @@ angular.module('bikeTouringMapApp')
                                         icon: 'question-sign',
                                         markerColor: 'black'
                                     };
-                                    console.warn('Unknown type %s for interest %s.', interest.type, interest._id);
+                                    console.warn('Unknown type "%s" for interest %s.', interest.type, interest._id);
                                     break;
                                 }
 

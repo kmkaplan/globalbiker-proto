@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService) {
+    .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService, InterestRepository) {
 
         $scope.isAdmin = Auth.isAdmin;
 
@@ -30,12 +30,22 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.loadTour = function () {
+
             var deffered = $q.defer();
 
             TourRepository.get({
                 id: $scope.tourId
             }, function (tour) {
                 $scope.tour = tour;
+
+                InterestRepository.searchAroundTour({
+                        tourId: tour._id,
+                        type: 'water-point',
+                        distance: 200
+                    },
+                    function (waterPoints) {
+                        $scope.waterPoints = waterPoints;
+                    }, function () {});
 
                 StepRepository.getByTour({
                     tourId: $scope.tourId
@@ -53,9 +63,26 @@ angular.module('bikeTouringMapApp')
                             },
                             callbacks: {
                                 'map:created': function (eMap) {
-                                    TourDetailsMapService.updateStep(step.mapConfig, steps, step._id);
+                                    var traceFeature = bikeTourMapService.buildStepTraceFeature(step, {
+                                        style: {
+                                            color: '#0c6f32',
+                                            width: 3,
+                                            weight: 8,
+                                            opacity: 0.5
+                                        }
+                                    });
 
-                                    $scope.autozoom(step, eMap);
+                                    eMap.addItemsToGroup([traceFeature], {
+                                        name: 'Tracé de l\'itinéraire',
+                                        control: true
+                                    });
+
+
+                                    $timeout(function () {
+                                        eMap.config.control.fitBoundsFromGeometry(step.geometry);
+                                    }, 200);
+
+
                                 }
                             }
                         };
@@ -107,9 +134,10 @@ angular.module('bikeTouringMapApp')
                             if (steps) {
                                 var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
                                     style: {
-                                        color: '#004eff',
+                                        color: '#0c6f32',
                                         width: 3,
-                                        weight: 8
+                                        weight: 8,
+                                        opacity: 0.3
                                     }
                                 });
 
@@ -124,6 +152,19 @@ angular.module('bikeTouringMapApp')
                                 $timeout(function () {
                                     eMap.config.control.fitBoundsFromGeometries(geometries);
                                 }, 200);
+                            }
+                        });
+
+                        $scope.$watch('waterPoints', function (waterPoints, old) {
+                            if (waterPoints) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints, {
+                                    mode: 'light',
+                                    radius: 3,
+                                    weight: 2
+                                }), {
+                                    name: 'Points d\'eau potable',
+                                    control: true
+                                });
                             }
                         });
                     }

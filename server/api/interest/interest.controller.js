@@ -2,12 +2,18 @@
 
 var _ = require('lodash');
 var Interest = require('./interest.model');
+var Step = require('../step/step.model');
 
 var IO = require('../../components/io/io');
 var path = require('path');
 var fs = require('fs');
 var geo = require('../../components/geo/geo');
+var Q = require('q');
 
+var geojsonTools = require('geojson-tools');
+
+
+var ObjectId = require('mongoose').Types.ObjectId;
 
 
 // Get list of interests
@@ -20,9 +26,129 @@ exports.index = function (req, res) {
     });
 };
 
+exports.searchNearPoint = function (point, distance, extraCriteria) {
+    var deffered = Q.defer();
 
-// Get list of bikelanes
-exports.search = function (req, res) {
+
+
+    var criteria = {
+        geometry: {
+            $near: {
+                $geometry: {
+                    type: 'Point',
+                    coordinates: point
+                },
+                $maxDistance: distance
+            }
+        }
+    };
+
+    if (extraCriteria.type) {
+        criteria.type = extraCriteria.type;
+    }
+
+    Interest.find(criteria).exec(function (err, interests) {
+        if (err) {
+            console.error(err);
+            deffered.reject(err);
+        }
+
+
+        deffered.resolve(interests);
+    });
+
+    return deffered.promise;
+};
+exports.searchAroundTour = function (req, res) {
+
+    if (!req.query.tourId) {
+        return res.send(400, 'Parameter tourId is missing');
+    }
+
+    var tourId = req.query.tourId;
+    Step.find({
+        'tourId': new ObjectId(tourId)
+    }).sort({
+        'stepIndex': 1
+    }).exec(function (err, steps) {
+        if (err) {
+            return handleError(res, err);
+        }
+
+
+        var extraCriteria = {};
+
+        if (req.query.type) {
+            extraCriteria.type = req.query.type;
+        }
+
+        var distance;
+        if (req.query.distance) {
+            distance = parseInt(req.query.distance);
+        } else {
+            distance = 200;
+        }
+
+        var promises = steps.reduce(function (promises, step) {
+
+
+            // TODO simplify polyline: https://github.com/theelee13/node-simplify-polyline
+            // https://github.com/seabre/simplify-geometry
+            //https://github.com/maxogden/simplify-geojson 
+            // https://github.com/theelee13/node-gtfs-shapes-simplify
+
+
+
+
+            var points = geojsonTools.complexify(step.geometry.coordinates, distance / 1000);
+
+            console.info('%d points', points.length);
+
+            var promises = points.reduce(function (promises, point) {
+                promises.push(exports.searchNearPoint(point, distance, extraCriteria));
+                return promises;
+            }, promises);
+
+
+            return promises;
+        }, []);
+
+        console.info('%d promises', promises.length);
+
+
+        Q.all(promises).then(
+            function (results) {
+
+                var cache = {};
+
+                console.info('%d queries', results.length);
+
+                var results = results.reduce(function (results, result) {
+                    if (result.length && result.length > 0) {
+
+                        result.reduce(function (results, item) {
+                            if (!cache[item._id]) {
+                                results.push(item);
+                                cache[item._id] = true;
+                            }
+                            return results;
+                        }, results);
+
+                    }
+                    return results;
+                }, []);
+
+                console.info('%d results after removing duplicated', results.length);
+
+                return res.json(200, results);
+            });
+
+    });
+};
+
+
+
+exports.searchAroundPoint = function (req, res) {
 
     if (!req.query.longitude) {
         return res.send(400, 'Parameter longitude is missing');
