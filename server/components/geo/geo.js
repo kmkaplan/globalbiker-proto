@@ -199,6 +199,7 @@ exports.readTracesFromFile = function (file, concatenateFeatures) {
         var features = geojsonContent.features.reduce(function (features, feature) {
 
             if (feature.geometry.type === 'LineString') {
+                console.log('LineString');
                 // single line
                 // convert coordinates
                 if (feature.geometry.coordinates.length < 2) {
@@ -207,13 +208,13 @@ exports.readTracesFromFile = function (file, concatenateFeatures) {
                 }
                 feature.xyzCoordinates = feature.geometry.coordinates.reduce(function (xyzCoordinates, point) {
 
-                    var point = [point[0], point[1]];
+                    var pointArray = [point[0], point[1]];
 
                     if (convertProjection) {
-                        point = exports.convertPointCoordinatesToWGS84(point);
+                        pointArray = exports.convertPointCoordinatesToWGS84(pointArray);
                     }
 
-                    xyzCoordinates.xy.push(point);
+                    xyzCoordinates.xy.push(pointArray);
                     if (point.length > 2) {
                         // add elevation
                         xyzCoordinates.z.push(point[2]);
@@ -226,23 +227,30 @@ exports.readTracesFromFile = function (file, concatenateFeatures) {
 
 
             } else if (feature.geometry.type === 'MultiLineString') {
+                
+                console.log('MultiLineString');
+                
                 // multiple lines
                 feature.xyzCoordinates = feature.geometry.coordinates.reduce(function (xyzCoordinates, coordinates) {
 
-                    if (coordinates.length < 2) {
-                        console.log('Line with only %d points: will be ignored.', coordinates.length);
+                   console.log('MultiLineString2');
+                if (!coordinates || coordinates.length < 2) {
+                        console.log('Invalid line will be ignored.');
                         return xyzCoordinates;
                     }
 
-                    var subXYZCoordinates = coordinates.reduce(function (xyzCoordinates, point) {
+                   console.log('MultiLineString3');
+                var subXYZCoordinates = coordinates.reduce(function (xyzCoordinates, point) {
 
-                        var point = [point[0], point[1]];
+                        var pointArray = [point[0], point[1]];
 
-                        if (convertProjection) {
-                            point = exports.convertPointCoordinatesToWGS84(point);
+                      console.log('MultiLineString4');
+                 if (convertProjection) {
+                            pointArray = exports.convertPointCoordinatesToWGS84(pointArray);
                         }
 
-                        xyzCoordinates.xy.push(point);
+                      console.log('MultiLineString5');
+                 xyzCoordinates.xy.push(pointArray);
 
                         if (point.length > 2) {
                             // add elevation

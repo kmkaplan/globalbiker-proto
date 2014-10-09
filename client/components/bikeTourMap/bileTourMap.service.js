@@ -160,19 +160,22 @@ angular.module('bikeTouringMapApp')
                 var self = this;
                 var stepTraceFeatures = tours.reduce(function (stepTraceFeatures, tour) {
 
+                    var traceOptions;
                     if (!options) {
-                        options = {};
+                        traceOptions = {};
+                    }else{
+                        traceOptions = angular.copy(options);
                     }
 
-                    if (!options.style) {
-                        options.style = {};
+                    if (!traceOptions.style) {
+                        traceOptions.style = {};
                     }
 
-                    if (!options.style.color && tour.color) {
-                        options.style.color = tour.color;
+                    if (!traceOptions.style.color && tour.color) {
+                        traceOptions.style.color = tour.color;
                     }
 
-                    stepTraceFeatures = stepTraceFeatures.concat(self.buildStepsTracesFeatures(tour.steps, options));
+                    stepTraceFeatures = stepTraceFeatures.concat(self.buildStepsTracesFeatures(tour.steps, traceOptions));
 
                     return stepTraceFeatures;
                 }, []);
