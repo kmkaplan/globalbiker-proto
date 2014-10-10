@@ -33,8 +33,6 @@ exports.index = function (req, res) {
 exports.searchNearPoint = function (point, distance, extraCriteria) {
     var deffered = Q.defer();
 
-
-
     var criteria = {
         geometry: {
             $near: {
@@ -48,7 +46,19 @@ exports.searchNearPoint = function (point, distance, extraCriteria) {
     };
 
     if (extraCriteria.type) {
-        criteria.type = extraCriteria.type;
+
+        if (Object.prototype.toString.call(extraCriteria.type) === '[object Array]') {
+            criteria['$or'] = extraCriteria.type.reduce(function (types, type) {
+                types.push({
+                    type: type
+                });
+                return types;
+            }, []);
+
+        } else {
+            criteria.type = extraCriteria.type;
+        }
+
     }
 
     Interest.find(criteria).exec(function (err, interests) {

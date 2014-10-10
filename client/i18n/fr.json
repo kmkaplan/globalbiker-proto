@@ -87,10 +87,12 @@
         "update_your_trace": "Mettre à jour la trace GPS",
         "draw_it_manually": "Ou dessinez la via les outils de la carte!",
         "delete_your_trace": "Supprimer la trace",
-        "delete_current_trace": "Supprimer"
+        "delete_current_trace": "Supprimer",
+        "see-the-step": "voir le step"
     },
     "tour-details": {
         "step": "Etape",
-        "edit-the-tour": "modifier le tour"
+        "edit-the-tour": "modifier le tour",
+        "edit-the-step": "modifier l'étape"
     }
 }

@@ -87,10 +87,12 @@
         "update_your_trace": "Update your trace",
         "draw_it_manually": "Or draw it manually using the tools in the map!",
         "delete_your_trace": "Delete your trace",
-        "delete_current_trace": "Delete current trace"
+        "delete_current_trace": "Delete current trace",
+        "see-the-step": "see the step"
     },
     "tour-details": {
         "step": "Step",
-        "edit-the-tour": "edit the tour"
+        "edit-the-tour": "edit the tour",
+        "edit-the-step": "edit the step"
     }
 }

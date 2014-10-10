@@ -1,7 +1,16 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('StepDetailsCtrl', function ($scope, $stateParams, $q, $timeout, TourRepository, StepRepository, InterestRepository, bikeTourMapService) {
+    .controller('StepDetailsCtrl', function ($scope, $stateParams, $q, $timeout, Auth, TourRepository, StepRepository, InterestRepository, bikeTourMapService) {
+
+        $scope.isAdmin = Auth.isAdmin;
+
+        $scope.isAllowedToEdit = function (tour) {
+            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
+                return true;
+            }
+            return false;
+        }
 
         $scope.redirectOnError = function () {
             // redirect to 'toulouse' page
@@ -42,19 +51,53 @@ angular.module('bikeTouringMapApp')
 
             return deffered.promise;
         }
+        $scope.loadInterests = function (stepId) {
+
+            // retrieve interests
+            var deffered = $q.defer();
+
+            InterestRepository.getByStep({
+                    stepId: stepId
+                }, function (interests) {
+
+                    $scope.interests = interests;
+                    deffered.resolve(interests);
+
+                },
+                function (err) {
+                    deffered.reject(err);
+                });
+
+            return deffered.promise;
+        };
 
         $scope.loadMarkers = function (stepId) {
             var deffered = $q.defer();
 
             InterestRepository.searchAroundStep({
-                stepId: stepId,
-                distance: 200
-            }, function (markers) {
-                $scope.waterPoints = markers;
-                deffered.resolve(markers);
-            }, function (err) {
-                deffered.reject(err);
-            });
+                    stepId: stepId,
+                    distance: 200,
+                    type: ['water-point', 'velotoulouse', 'interest', 'food', 'bike-shops', 'wc']
+                }, function (markers) {
+                    $scope.waterPoints = [];
+                    $scope.velotoulouses = [];
+                    $scope.wcs = [];
+
+                    markers.reduce(function (o, marker) {
+                        if (marker.type === 'water-point') {
+                            $scope.waterPoints.push(marker);
+                        } else if (marker.type === 'velotoulouse') {
+                            $scope.velotoulouses.push(marker);
+                        } else if (marker.type === 'wc') {
+                            $scope.wcs.push(marker);
+                        }
+
+                    }, null);
+                    deffered.resolve(markers);
+                },
+                function (err) {
+                    deffered.reject(err);
+                });
 
             return deffered.promise;
         }
@@ -79,7 +122,9 @@ angular.module('bikeTouringMapApp')
 
             $scope.loadStep($scope.stepId).then(function (step) {
                 $scope.loadTour(step.tourId).then(function (step) {
-                    $scope.loadMarkers($scope.stepId).then(function (step) {});
+                    $scope.loadInterests($scope.stepId).then(function (step) {
+                        $scope.loadMarkers($scope.stepId).then(function (step) {});
+                    });
                 });
             });
 
@@ -118,14 +163,45 @@ angular.module('bikeTouringMapApp')
                             }
                         });
 
-                        $scope.$watch('waterPoints', function (waterPoints, old) {
-                            if (waterPoints) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints, {
-                                    mode: 'light',
-                                    radius: 3,
-                                    weight: 2
+                        $scope.$watch('waterPoints', function (markers, old) {
+                            if (markers) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(markers, {
+                                    mode: 'light'
                                 }), {
                                     name: 'Points d\'eau potable',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('velotoulouses', function (markers, old) {
+                            if (markers) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(markers, {
+                                    mode: 'light'
+                                }), {
+                                    name: 'Réseau VéloToulouse',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('wcs', function (markers, old) {
+                            if (markers) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(markers, {
+                                    mode: 'light'
+                                }), {
+                                    name: 'Toilettes',
+                                    control: true
+                                });
+                            }
+                        });
+
+                        $scope.$watch('interests', function (markers, old) {
+                            if (markers) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(markers, {
+                                    mode: 'normal'
+                                }), {
+                                    name: 'Points d\'intérêt',
                                     control: true
                                 });
                             }
