@@ -14,7 +14,8 @@
             "beta_test": "Test the prototype!",
             "invit_mailing": "Join us and follow the progress of the project!",
             "email_placeh": "Your e-mail",
-            "email_btn": "Go"
+            "email_btn": "Go",
+            "email_success": "Thanks, your email address has been successfuly saved.!"
         },
         "prepare": {
             "title": "Prepare your bike tour",

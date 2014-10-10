@@ -11,20 +11,23 @@
             </div>
             <div class="col-sm-4 contacts">
 
-                <img src="/assets/images/contact.png" title="e-mail" />
-                <img src="/assets/images/facebook.png" title="facebook" />
+                <!-- <img src="/assets/images/contact.png" title="e-mail" />-->
+
+                <a href="https://www.facebook.com/pages/GlobalBiker/1559713927590196" target="_blank">
+                    <img src="/assets/images/facebook.png" title="facebook" />
+                </a>
                 <a href="https://twitter.com/a_GlobalBiker" target="_blank">
                     <img src="/assets/images/twitter.png" title="twitter" />
                 </a>
             </div>
             <div class="col-sm-1 contacts dropdown">
                 <a href type="button" data-toggle="dropdown">
-                   <img ng-src="{{languageSelection.current.img}}" />
+                    <img ng-src="{{languageSelection.current.img}}" />
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                    <li role="presentation" ng-repeat="lang in languageSelection.others" >
+                    <li role="presentation" ng-repeat="lang in languageSelection.others">
                         <a href="" ng-click="switchLanguage(lang.code)">
-                            <img ng-src="{{lang.img}}"></img> {{lang.name}}
+                            <img ng-src="{{lang.img}}"></img>{{lang.name}}
                         </a>
                     </li>
                 </ul>
@@ -40,39 +43,42 @@
                         <div class="col-sm-6">
                             <img src="assets/images/cartewelcome.png" alt="Votre blog" class="carte">
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-5 main-description-area">
                             <h2 class="slogan-welcome txt-shadow" translate="home.intro.invit">GlobalBiker</h2>
                             <h3 class="txt-shadow" translate="home.intro.description">First bike tourers' community</h3>
-                            <div>
+                            <!-- <div>
                                 <button class="btn btn-lg btn-default btn-welcome" type="button" onclick="smoothScroll('prepare'); smoothScroll('partager', 20000);"
                                     translate="home.intro.discover_btn">Discover GlobalBiker</button>
-                            </div>
+                            </div>-->
                             <div>
-                                <a href="/toulouse"><button class="btn btn-lg btn-default btn-welcome" type="button"
-                                    translate="home.intro.beta_test">Test the prototype!</button></a>
+                                <a href="/toulouse">
+                                    <button class="btn btn-lg btn-default btn-test-prototype" type="button" translate="home.intro.beta_test">Test the prototype!</button>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row ">
                         <div class="col-sm-12 mailing">
-                            <h3 class="txt-shadow" translate="home.intro.invit_mailing">Join us and follow the progress of the project!</h3>
-                            <form name="mailingForm" ng-submit="addMail(emailMailing)" class="mailing-form">
-                                <div class="input-group input-group-lg">
-                                    <input class="form-control transparent-form email-input" type="email" placeholder="{{ 'home.intro.email_placeh' | translate }}"  name="email"
-                                        ng-model="emailMailing">
-                                    <span class="input-group-btn">
-                                    <button class="btn signup-btn" type="submit">
+                            <div ng-if="!mailSuccess">
+                                <h3 class="txt-shadow" translate="home.intro.invit_mailing">Join us and follow the progress of the project!</h3>
+                                <form name="mailingForm" ng-submit="addMail(emailMailing)" class="mailing-form">
+                                    <div class="input-group input-group-lg">
+                                        <input class="form-control transparent-form email-input" type="email" placeholder="{{ 'home.intro.email_placeh' | translate }}" name="email" ng-model="emailMailing">
+                                        <span class="input-group-btn">
+                                    <button class="btn signup-btn btn-primary" type="submit">
                                         <span translate="home.intro.email_btn">Go</span>
-                                    </button>
-                                    </span>
-                                </div>
-                            </form>
+                                        </button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                            <h3 ng-if="mailSuccess" translate="home.intro.email_success">Thanks, your email address has been successfuly saved!</h3>
                         </div>
                     </div>
                 </div>
             </div>
     </section>
-    <section class="section prepare-page decouvrir-page" id="prepare">
+    <!-- <section class="section prepare-page decouvrir-page" id="prepare">
         <div class="decouvrir">
             <div class="cadre">
                 <div class="title">
@@ -131,5 +137,5 @@
                   <a href="my-tours"><button class="btn btn-lg btn-default btn-welcome" type="button" translate="home.share.test_beta">Test the prototype!</button></a>
             </div>
         </div>
-    </section>
-</div>
+    </section>-->
+    </div>

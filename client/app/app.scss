@@ -26,10 +26,14 @@ footer {
 }
 
 // orange/brown
-$baseColor1: #ff731c;
+$color1: hsl(16, 83%, 54%);
+$textcolor1: lighten($color1, 40%);
 
 // green
-$baseColor2: #5e8c15;
+$color2: #5e8c15;
+$textcolor2: lighten($color2, 40%);
+
+
 
 /**
  * App-wide Styles
@@ -105,4 +109,8 @@ img.smart-photo {
     .glyphicon-star-empty {
         color: #2a8010;
     }
+}
+
+.btn-primary {
+    @include button-variant($textcolor1, darken($color1, 5%), darken($color1, 10%));
 }

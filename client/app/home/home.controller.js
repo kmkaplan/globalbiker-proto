@@ -1,34 +1,36 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-  .controller('HomeCtrl', function ($scope, MailingRepository, $translate) {
-        $scope.addMail = function($email, $) {
+    .controller('HomeCtrl', function ($scope, MailingRepository, $translate) {
+        $scope.addMail = function ($email, $) {
             var mailingRepository;
-            mailingRepository = new MailingRepository( {
-                email : $email
+            mailingRepository = new MailingRepository({
+                email: $email
             });
-            mailingRepository.$save(function() {alert("Merci, votre adresse est bien enregistrée!")});
+            mailingRepository.$save(function () {
+                $scope.mailSuccess = true;
+            });
         }
 
-                $scope.languageApp = [
-             {
-                code    : "en",
-                img     : "/assets/images/languages/gb.png",
-                name    : "English"
+        $scope.languageApp = [
+            {
+                code: "en",
+                img: "/assets/images/languages/gb.png",
+                name: "English"
             },
             {
-                code    : "fr",
-                img     : "/assets/images/languages/fr.png",
-                name    : "Français"
+                code: "fr",
+                img: "/assets/images/languages/fr.png",
+                name: "Français"
             }
         ];
 
-        $scope.languageSelectionApp = function($used) {
+        $scope.languageSelectionApp = function ($used) {
             var result = {
-                current : null,
-                others : []
+                current: null,
+                others: []
             }
-            for(var i in $scope.languageApp) {
+            for (var i in $scope.languageApp) {
                 if ($scope.languageApp[i].code === $used) {
                     result.current = $scope.languageApp[i];
                 } else {
@@ -40,9 +42,9 @@ angular.module('bikeTouringMapApp')
 
         $scope.languageSelection = $scope.languageSelectionApp($translate.use());
 
-        $scope.switchLanguage = function($code) {
+        $scope.switchLanguage = function ($code) {
             $translate.use($code);
             $scope.languageSelection = $scope.languageSelectionApp($code);
         };
 
-  });
+    });
