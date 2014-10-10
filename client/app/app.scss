@@ -27,13 +27,11 @@ footer {
 
 // orange/brown
 $color1: hsl(16, 83%, 54%);
-$textcolor1: lighten($color1, 40%);
+$textcolor1: lighten(desaturate($color1, 65%), 45%);
 
 // green
 $color2: #5e8c15;
 $textcolor2: lighten($color2, 40%);
-
-
 
 /**
  * App-wide Styles
@@ -48,11 +46,45 @@ $textcolor2: lighten($color2, 40%);
 @import 'my-tour-step/my-tour-step.scss';
 @import 'my-tour/my-tour.scss';
 @import 'my-tours/my-tours.scss';
+@import 'table.scss';
 @import 'toulouse/toulouse.scss';
 @import 'tour-details/tour-details.scss';
 @import 'extendedMap/extendedMap.scss';
 @import 'file-upload/file-upload.scss';
+@import 'navbar/navbar.scss';
 // endinjector
+
+html {
+    min-height: 100%;
+    body {
+        min-height: 100%;
+        background: linear-gradient(to bottom, lighten(desaturate($color2, 65%), 45%) 0%, lighten($textcolor2, 15%) 100%);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    .page {
+        border: 1px rgba(lighten(desaturate($color2, 30%), 90%), 0.7);
+        background: rgba(lighten(desaturate($color2, 50%), 90%), 0.7);
+        padding: 10px;
+        border-radius: 10px 10px 10px 10px;
+        box-shadow: 1px 1px 3px 1px desaturate($color2, 30%);
+        padding: 10px 30px;
+        .breadcrumb {
+            border: rgba(lighten(desaturate($color2, 40%), 40%), 0.8);
+            background: rgba(lighten(desaturate($color2, 50%), 50%), 0.7);
+            li {
+                a {
+                    color: $color1;
+                    font-weight: bold;
+                }
+                &.active {
+                    color: desaturate($color1, 30%);
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
 
 img.smart-photo {
     height: 110px;

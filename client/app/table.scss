@@ -1,0 +1,42 @@
+@mixin smart-table($main-color) {
+    background-color: rgba(lighten($main-color, 20%), 0.8);
+    color: darken($main-color, 20%);
+    border: 1px dotted $main-color;
+    a {
+        color: darken($main-color, 40%);
+    }
+    thead {
+        background-color: rgba(lighten($main-color, 10%), 0.8);
+        color: darken($main-color, 20%);
+        .inverse {
+            background-color: rgba(darken($main-color, 20%), 0.8);
+            color: white;
+        }
+        tr th {
+            border: none;
+        }
+    }
+    tbody {
+        border: 1px dotted $main-color;
+        tr {
+            td {
+                border: none;
+            }
+        }
+    }
+    &.table-hover {
+        tr {
+            cursor: pointer;
+            &:hover {
+                td {
+                    background-color: rgba(darken($main-color, 22%), 0.8);
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+table.smart-table {
+    @include smart-table(lighten($color2, 30%));
+}

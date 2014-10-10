@@ -6,10 +6,7 @@ angular.module('bikeTouringMapApp')
 
         $scope.initMenu = function() {
             $translate(['mytours.nav-bar_name']).then(function(trans) {
-                $scope.menu = [{
-                    'title': "GlobalBikers",
-                    'link': '/'
-                },
+                $scope.menu = [
                 {
                     'title': "Toulouse",
                     'link': '/toulouse'

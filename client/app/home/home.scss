@@ -48,9 +48,7 @@ form p {
 
 .section {
     &.welcome-page {
-        background-image: url(/assets/images/mer.jpg);
-        background-repeat: no-repeat;
-        background-size: cover;
+        background: url("/assets/images/mer.jpg") no-repeat fixed center center;
         display: table;
         height: 100%;
         position: top;
@@ -181,6 +179,10 @@ form p {
     }
     &.intro {
         background: linear-gradient(to bottom, darken($color1, 5%) 0%, lighten($color1, 5%) 100%);
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
         top: 0;
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.62);
         display: table;
@@ -190,10 +192,6 @@ form p {
         width: 100%;
         height: 50px;
         margin-bottom: 0px;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
         .logo {
             margin-right: 5px;
             margin-top: 5px;

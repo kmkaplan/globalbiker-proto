@@ -41,6 +41,14 @@ angular.module('bikeTouringMapApp')
                         }
                     });
 
+                    $scope.openTour = function (tour) {
+                        $state.go('tour-details', {
+                            id: tour._id
+                        }, {
+                            inherit: false
+                        });
+                    }
+
                     $scope.$watch('tours', function (tours, old) {
                         if (tours) {
                             // ToulouseMapService.updateTours($scope.mapConfig, tours);
@@ -111,7 +119,7 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.loadPointsOfInterests = function () {
-            $scope.loadingInProgress = true;
+          /*  $scope.loadingInProgress = true;
             InterestRepository.searchAroundPoint({
                     latitude: 43.61,
                     longitude: 1.44,
@@ -136,7 +144,7 @@ angular.module('bikeTouringMapApp')
                         });
                 }, function () {
                     $scope.loadingInProgress = false;
-                });
+                });*/
 
         };
 
