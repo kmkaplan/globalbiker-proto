@@ -1,20 +1,21 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container tour-details-page page" ng-if="tour && step">
+<div class="container step-details-page page" ng-if="tour && step">
 
     <ol class="breadcrumb">
         <li><a href="/toulouse">Tours</a>
         </li>
-         <li><a href="/tour-details/{{ tour._id }}">{{ tour.title }}</a>
+        <li><a href="/tour-details/{{ tour._id }}">{{ tour.title }}</a>
         </li>
-        <li class="active"><span>{{ 'mytours.steps.from' | translate }} "{{ step.cityFrom.name }}" {{ 'mytours.steps.to' | translate }} "{{ step.cityTo.name }}"</span></li>
-        
+        <li class="active"><span>{{ 'mytours.steps.from' | translate }} "{{ step.cityFrom.name }}" {{ 'mytours.steps.to' | translate }} "{{ step.cityTo.name }}"</span>
+        </li>
+
     </ol>
     <a ng-if="isAllowedToEdit(tour)" class="pull-right" href="/my-tour-step/{{ step._id }}">
         <i class="fa fa-edit"></i> {{ 'tour-details.edit-the-step' | translate }}
     </a>
     <h1>{{ tour.title }}</h1>
-    <div class="alert tour-description" ng-if="tour.description" ng-bind-html="tour.description"></div>
+    <div class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
 
     <div class="row">
         <div class="col-md-12">
@@ -24,4 +25,23 @@
         </div>
     </div>
 
+    <div class="interests-area">
+        <h2>Points d'intérêt le long du parcours</h2>
+        <div ng-repeat="interest in interests">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="description">
+                        <h3>{{ interest.name }}</h3>
+                        <p>{{ interest.description }}</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div ng-repeat="photo in interest.photos">
+                        <img class="photo smart-photo" ng-src="{{ photo.url }}" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
