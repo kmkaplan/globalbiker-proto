@@ -26,6 +26,16 @@ angular.module('bikeTouringMapApp')
                 },
                 isArray: true
             },
+            searchAroundStep: {
+                method: 'GET',
+                url: '/api/interests/search/step',
+                params: {
+                    tourId: '@stepId',
+                    type: '@type',
+                    distance: '@distance'
+                },
+                isArray: true
+            },
             get: {
                 method: 'GET',
                 params: {

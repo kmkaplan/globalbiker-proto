@@ -8,9 +8,33 @@ var tcx = require('tcx');
 var S = require('string');
 var proj4 = require('proj4');
 var geolib = require('geolib');
+var simplify = require('simplify-js');
 
 exports.projections = {
     'EPSG:3943': '+proj=lcc +lat_1=42.25 +lat_2=43.75 +lat_0=43 +lon_0=3 +x_0=1700000 +y_0=2200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+};
+
+exports.inverseLatLng = function (array) {
+    return array.reduce(function (output, item) {
+        output.push([item[1], item[0]]);
+        return output;
+    }, []);
+};
+
+exports.simplify = function (geometry, tolerance, highQuality) {
+    if (geometry !== null) {
+        if (geometry.type == 'LineString') {
+            return simplify(geometry.coordinates, tolerance, highQuality);
+        } else if (geometry.type == 'MultiLineString') {
+            return geometry.coordinates.reduce(function (coordinatesArray, coordinates) {
+                coordinatesArray.push(simplify(coordinates, tolerance, highQuality));
+                return coordinatesArray;
+            }, []);
+        } else {
+            console.error('Geometry type "%s" not supported.', geometry.type);
+            return null;
+        }
+    }
 };
 
 exports.getTotalDistanceFromGeometry = function (geometry) {

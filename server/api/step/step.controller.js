@@ -41,6 +41,12 @@ exports.getByTour = function (req, res) {
 // Get a single step
 exports.show = function (req, res) {
     Step.findById(req.params.id, function (err, step) {
+      /*  if (step.geometry && step.geometry.coordinates) {
+            var before = step.geometry.coordinates.length;
+            step.geometry.coordinates = geo.simplify(step.geometry, 1, true);
+            console.log('Simplify from %d to %d.', before, step.geometry.coordinates.length);
+        }
+        */
         if (err) {
             return handleError(res, err);
         }

@@ -11,7 +11,6 @@ var geo = require('../../components/geo/geo');
 var Q = require('q');
 
 var geojsonTools = require('geojson-tools');
-var simplify = require('simplify-js');
 
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -67,17 +66,17 @@ exports.searchNearPoint = function (point, distance, extraCriteria) {
 
 exports.coordinatesToNearPromise = function (distance, promises, coordinates, extraCriteria) {
 
-    var simplifiedCoordinates = simplify(coordinates, 0.5, false)
+    var simplifiedCoordinates = coordinates; //geo.simplify(coordinates, 0.1, false)
 
     var points = geojsonTools.complexify(simplifiedCoordinates, distance / 1000);
 
-  //  var points = geojsonTools.complexify(coordinates, distance / 1000);
+    //  var points = geojsonTools.complexify(coordinates, distance / 1000);
 
-  /*  console.info('Simplify from %d to %d then complexify to %d instead of %d, ratio: %d.', coordinates.length, simplifiedCoordinates.length, simplifiedComplexifiedPoints.length, points.length, simplifiedComplexifiedPoints.length / points.length);*/
+    /*  console.info('Simplify from %d to %d then complexify to %d instead of %d, ratio: %d.', coordinates.length, simplifiedCoordinates.length, simplifiedComplexifiedPoints.length, points.length, simplifiedComplexifiedPoints.length / points.length);*/
 
     var promises = points.reduce(function (promises, point) {
 
-        if (promises.length < 2000) {
+        if (promises.length < 10000) {
 
             promises.push(exports.searchNearPoint(point, distance, extraCriteria));
 
@@ -85,6 +84,97 @@ exports.coordinatesToNearPromise = function (distance, promises, coordinates, ex
         return promises;
     }, promises);
     return promises;
+};
+
+exports.filterDuplicated = function (results) {
+    var cache = {};
+
+    var countDuplicated = 0;
+
+    var results = results.reduce(function (results, result) {
+        if (result.length && result.length > 0) {
+
+            result.reduce(function (results, item) {
+                if (!cache[item._id]) {
+                    results.push(item);
+                    cache[item._id] = true;
+                } else {
+                    countDuplicated++;
+                }
+                return results;
+            }, results);
+
+        }
+        return results;
+    }, []);
+
+    console.info('%d results after removing %d duplicated.', results.length, countDuplicated);
+
+    return results;
+};
+
+
+exports.searchAroundStep = function (req, res) {
+
+    var stepId = req.query.stepId;
+    if (!stepId) {
+        return res.send(400, 'Parameter stepId is missing');
+    }
+
+    var extraCriteria = {};
+
+    if (req.query.type) {
+        extraCriteria.type = req.query.type;
+    }
+
+    var distance;
+    if (req.query.distance) {
+        distance = parseInt(req.query.distance);
+    } else {
+        distance = 200;
+    }
+
+    Step.findById(stepId).exec(function (err, step) {
+        if (err) {
+            return handleError(step, err);
+        }
+
+        var promises = [];
+
+        if (step.geometry && step.geometry.coordinates) {
+
+            var nbInput = 0;
+
+            if (step.geometry.type === 'LineString') {
+
+                promises = exports.coordinatesToNearPromise(distance, promises, step.geometry.coordinates, extraCriteria);
+                nbInput += step.geometry.coordinates.length;
+            } else if (step.geometry.type === 'MultiLineString') {
+
+                promises = step.geometry.coordinates.reduce(function (promises, coordinates) {
+                    nbInput += coordinates.length;
+                    return exports.coordinatesToNearPromise(distance, promises, coordinates, extraCriteria);
+                }, promises);
+
+            } else {
+                console.log('Unexpected feature geometry type "%s".', step.geometry.type);
+                return promises;
+            }
+
+            console.info('Query near from %d to %d points.', nbInput, promises.length);
+
+        }
+
+
+        Q.all(promises).then(
+            function (results) {
+
+                var results = exports.filterDuplicated(results);
+
+                return res.json(200, results);
+            });
+
+    });
 };
 
 exports.searchAroundTour = function (req, res) {
@@ -97,7 +187,7 @@ exports.searchAroundTour = function (req, res) {
     Step.find({
         'tourId': new ObjectId(tourId)
     }).sort({
-        'stepIndex': 1
+        '_id': 1
     }).exec(function (err, steps) {
         if (err) {
             return handleError(res, err);
@@ -141,39 +231,15 @@ exports.searchAroundTour = function (req, res) {
 
                 console.info('Query near from %d to %d points.', nbInput, promises.length);
 
-
             }
             return promises;
         }, []);
 
 
-
-        console.info('%d promises', promises.length);
-
-
         Q.all(promises).then(
             function (results) {
 
-                var cache = {};
-
-                console.info('%d queries', results.length);
-
-                var results = results.reduce(function (results, result) {
-                    if (result.length && result.length > 0) {
-
-                        result.reduce(function (results, item) {
-                            if (!cache[item._id]) {
-                                results.push(item);
-                                cache[item._id] = true;
-                            }
-                            return results;
-                        }, results);
-
-                    }
-                    return results;
-                }, []);
-
-                console.info('%d results after removing duplicated', results.length);
+                var results = exports.filterDuplicated(results);
 
                 return res.json(200, results);
             });
@@ -235,6 +301,7 @@ exports.searchAroundPoint = function (req, res) {
 // Get a single interest
 exports.show = function (req, res) {
     Interest.findById(req.params.id, function (err, interest) {
+
         if (err) {
             return handleError(res, err);
         }

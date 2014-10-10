@@ -38,6 +38,9 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.loadInterests = function (tour) {
+           
+            return;
+            
             InterestRepository.searchAroundTour({
                     tourId: tour._id,
                     type: 'water-point',

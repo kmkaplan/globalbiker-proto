@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('StepDetailsCtrl', function ($scope, $stateParams, $q, $timeout, TourRepository, StepRepository, bikeTourMapService) {
+    .controller('StepDetailsCtrl', function ($scope, $stateParams, $q, $timeout, TourRepository, StepRepository, InterestRepository, bikeTourMapService) {
 
         $scope.redirectOnError = function () {
             // redirect to 'toulouse' page
@@ -42,6 +42,23 @@ angular.module('bikeTouringMapApp')
 
             return deffered.promise;
         }
+
+        $scope.loadMarkers = function (stepId) {
+            var deffered = $q.defer();
+
+            InterestRepository.searchAroundStep({
+                stepId: stepId,
+                distance: 200
+            }, function (markers) {
+                $scope.waterPoints = markers;
+                deffered.resolve(markers);
+            }, function (err) {
+                deffered.reject(err);
+            });
+
+            return deffered.promise;
+        }
+
         $scope.getStepLabel = function (step) {
             if (step.cityFrom.name === step.cityTo.name) {
                 // same source & destination
@@ -62,7 +79,7 @@ angular.module('bikeTouringMapApp')
 
             $scope.loadStep($scope.stepId).then(function (step) {
                 $scope.loadTour(step.tourId).then(function (step) {
-
+                    $scope.loadMarkers($scope.stepId).then(function (step) {});
                 });
             });
 
@@ -98,6 +115,19 @@ angular.module('bikeTouringMapApp')
                                 $timeout(function () {
                                     eMap.config.control.fitBoundsFromGeometry(step.geometry);
                                 }, 200);
+                            }
+                        });
+
+                        $scope.$watch('waterPoints', function (waterPoints, old) {
+                            if (waterPoints) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints, {
+                                    mode: 'light',
+                                    radius: 3,
+                                    weight: 2
+                                }), {
+                                    name: 'Points d\'eau potable',
+                                    control: true
+                                });
                             }
                         });
                     }

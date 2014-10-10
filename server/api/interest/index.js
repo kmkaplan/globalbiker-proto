@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.get('/search/point', controller.searchAroundPoint);
 router.get('/search/tour', controller.searchAroundTour);
+router.get('/search/step', controller.searchAroundStep);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/step/:stepId', controller.getByStep);
