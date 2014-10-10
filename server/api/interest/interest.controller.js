@@ -339,6 +339,42 @@ exports.getByStep = function (req, res) {
     });
 };
 
+/**
+ * Get interests by tour.
+ */
+exports.getByTour = function (req, res) {
+
+    var tourId = req.params.tourId;
+    if (!tourId) {
+        return res.send(400, 'Parameter tourId is missing');
+    }
+
+    Step.find({
+        'tourId': new ObjectId(tourId)
+    }).sort({
+        '_id': 1
+    }).exec(function (err, steps) {
+        if (err) {
+            return handleError(res, err);
+        }
+
+        var criteria = {};
+
+        criteria['$or'] = steps.reduce(function (orCriterias, step) {
+            orCriterias.push({
+                stepId: step._id
+            });
+            return orCriterias;
+        }, []);
+
+        Interest.find(criteria, function (err, interests) {
+            if (err) {
+                return handleError(res, err);
+            }
+            return res.json(200, interests);
+        });
+    });
+};
 
 exports.buildInterest = function (type, coordinates, properties, source) {
 

@@ -83,6 +83,9 @@ html {
                     font-weight: bold;
                 }
             }
+            li + li:before {
+                color: $color1;
+            } 
         }
         .form-section {
             border: 2px solid rgba($color1, 0.3);

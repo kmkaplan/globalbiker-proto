@@ -37,55 +37,24 @@ angular.module('bikeTouringMapApp')
             }
         };
 
-        $scope.loadInterests = function (tour) {
-           
-            return;
-            
-            InterestRepository.searchAroundTour({
-                    tourId: tour._id,
-                    type: 'water-point',
-                    distance: 200
-                },
-                function (waterPoints) {
-                    $scope.waterPoints = waterPoints;
-                }, function () {});
+        $scope.loadInterests = function (tourId) {
 
+            // retrieve interests
+            var deffered = $q.defer();
 
-            InterestRepository.searchAroundTour({
-                    tourId: tour._id,
-                    type: 'velotoulouse',
-                    distance: 200
-                },
-                function (velotoulouse) {
-                    $scope.velotoulouse = velotoulouse;
-                }, function () {});
+            InterestRepository.getByTour({
+                    tourId: tourId
+                }, function (interests) {
 
-            InterestRepository.searchAroundTour({
-                    tourId: tour._id,
-                    type: 'wc',
-                    distance: 200
-                },
-                function (wcs) {
-                    $scope.wcs = wcs;
-                }, function () {});
+                    $scope.interests = interests;
+                    deffered.resolve(interests);
 
-            InterestRepository.searchAroundTour({
-                    tourId: tour._id,
-                    type: 'danger',
-                    distance: 50
                 },
-                function (dangers) {
-                    $scope.dangers = dangers;
-                }, function () {});
+                function (err) {
+                    deffered.reject(err);
+                });
 
-            InterestRepository.searchAroundTour({
-                    tourId: tour._id,
-                    type: 'merimee',
-                    distance: 10
-                },
-                function (merimees) {
-                    $scope.merimees = merimees;
-                }, function () {});
+            return deffered.promise;
         };
 
         $scope.loadTour = function () {
@@ -103,43 +72,8 @@ angular.module('bikeTouringMapApp')
                 }, function (steps) {
                     $scope.steps = steps;
 
-                    steps.reduce(function (output, step) {
 
-                        step.mapConfig = {
-                            class: 'step-map',
-                            initialCenter: {
-                                lat: 43.6,
-                                lng: 1.45,
-                                zoom: 10
-                            },
-                            callbacks: {
-                                'map:created': function (eMap) {
-                                    var traceFeature = bikeTourMapService.buildStepTraceFeature(step, {
-                                        style: {
-                                            color: '#0c6f32',
-                                            width: 3,
-                                            weight: 8,
-                                            opacity: 0.5
-                                        }
-                                    });
-
-                                    eMap.addItemsToGroup([traceFeature], {
-                                        name: 'Tracé de l\'itinéraire',
-                                        control: true
-                                    });
-
-
-                                    $timeout(function () {
-                                        eMap.config.control.fitBoundsFromGeometry(step.geometry);
-                                    }, 200);
-
-
-                                }
-                            }
-                        };
-                    }, []);
-
-                    $scope.loadInterests(tour);
+                    $scope.loadInterests(tour._id);
 
                     deffered.resolve(tour);
                 }, function (err) {
@@ -215,7 +149,7 @@ angular.module('bikeTouringMapApp')
                                 });
 
                                 eMap.addItemsToGroup(traceFeatures, {
-                                    name: 'Tracés des itinéraires',
+                                    name: 'Tracé des  l\'itinéraires',
                                     control: true
                                 });
                                 var geometries = steps.reduce(function (geometries, step) {
@@ -228,66 +162,12 @@ angular.module('bikeTouringMapApp')
                             }
                         });
 
-                        /* $scope.$watch('waterPoints', function (waterPoints, old) {
-                            if (waterPoints) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints, {
-                                    mode: 'light',
-                                    radius: 3,
-                                    weight: 2
+                        $scope.$watch('interests', function (markers, old) {
+                            if (markers) {
+                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(markers, {
+                                    mode: 'normal'
                                 }), {
-                                    name: 'Points d\'eau potable',
-                                    control: true
-                                });
-                            }
-                        });*/
-
-                        $scope.$watch('velotoulouse', function (velotoulouse, old) {
-                            if (velotoulouse) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(velotoulouse, {
-                                    mode: 'light',
-                                    radius: 3,
-                                    weight: 2
-                                }), {
-                                    name: 'Stations vélo Toulouse',
-                                    control: true
-                                });
-                            }
-                        });
-
-                        /* $scope.$watch('dangers', function (dangers, old) {
-                            if (dangers) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(dangers, {
-                                    mode: 'light',
-                                    radius: 3,
-                                    weight: 2
-                                }), {
-                                    name: 'Dangers',
-                                    control: true
-                                });
-                            }
-                        });*/
-
-                        /*  $scope.$watch('wcs', function (wcs, old) {
-                            if (wcs) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(wcs, {
-                                    mode: 'light',
-                                    radius: 3,
-                                    weight: 2
-                                }), {
-                                    name: 'Toilettes',
-                                    control: true
-                                });
-                            }
-                        });*/
-
-                        $scope.$watch('merimees', function (merimees, old) {
-                            if (merimees) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(merimees, {
-                                    mode: 'light',
-                                    radius: 3,
-                                    weight: 2
-                                }), {
-                                    name: 'Base Mérimée',
+                                    name: 'Points d\'intérêt',
                                     control: true
                                 });
                             }

@@ -51,6 +51,11 @@ angular.module('bikeTouringMapApp')
                 isArray: true,
                 url: '/api/interests/step/:stepId'
             },
+            getByTour: {
+                method: 'GET',
+                isArray: true,
+                url: '/api/interests/tour/:tourId'
+            },
             deletePhoto: {
                 method: 'DELETE',
                 url: '/api/interests/:id/photo',

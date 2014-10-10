@@ -11,6 +11,7 @@ router.get('/search/step', controller.searchAroundStep);
 router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/step/:stepId', controller.getByStep);
+router.get('/tour/:tourId', controller.getByTour);
 router.post('/:id/upload-photo', controller.uploadPhoto);
 router.post('/upload/:type', controller.upload);
 router.delete('/:id/photo', controller.deletePhoto);
