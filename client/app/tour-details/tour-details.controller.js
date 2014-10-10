@@ -19,7 +19,7 @@ angular.module('bikeTouringMapApp')
                 inherit: false
             });
         }
-        
+
         $scope.autozoom = function (step, eMap) {
             var points = [];
 
@@ -199,6 +199,15 @@ angular.module('bikeTouringMapApp')
                                     },
                                     label: function (step) {
                                         return $scope.getStepLabel(step);
+                                    },
+                                    callbacks: {
+                                        'click': function (step) {
+                                            $state.go('step-details', {
+                                                id: step._id
+                                            }, {
+                                                inherit: false
+                                            });
+                                        }
                                     }
                                 });
 

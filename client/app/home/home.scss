@@ -72,11 +72,13 @@ form p {
                 margin-top: 5px;
             }
             .main-description-area {
-                border: 1px solid rgba(desaturate($color2, 30%), 0.7);
-                background: rgba(desaturate($color2, 50%), 0.7);
-                border-radius: 10px 10px 10px 10px;
-                box-shadow: 1px 1px 3px 1px desaturate($color2, 30%);
-                padding: 20px;
+                .titles {
+                    border: 1px rgba(lighten(desaturate($color1, 30%), 30%), 0.5);
+                    background: rgba(lighten(desaturate($color1, 30%), 20%), 0.5);
+                    border-radius: 5px;
+                    box-shadow: 1px 1px 3px 1px desaturate($color1, 30%);
+                    padding: 20px;
+                }
                 .btn-test-prototype {
                     margin-top: 30px;
                     margin-bottom: 60px;

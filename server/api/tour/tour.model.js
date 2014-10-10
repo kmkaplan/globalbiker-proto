@@ -41,6 +41,10 @@ var TourSchema = new Schema({
             type: String,
             required: 'Please fill country code'
         }
+    },
+    priority: {
+        type: Number,
+        default: 1
     }
 });
 

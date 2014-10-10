@@ -28,7 +28,7 @@ exports.getByTour = function (req, res) {
     Step.find({
         'tourId': tourId
     }).sort({
-        'stepIndex': 1
+        '_id': 1
     }).exec(function (err, steps) {
         if (err) {
             return handleError(res, err);

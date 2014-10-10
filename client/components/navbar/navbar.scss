@@ -5,10 +5,10 @@
     }
     .navbar-nav > li > a {
         color: $textcolor1;
-        font-size: 25px;
-        line-height: 25px;
+        font-size: 20px;
+        line-height: 20px;
         &.main {
-            font-size: 28px;
+            font-size: 25px;
             font-weight: bold;
             &:hover, &:focus {
                 color: #333333;
@@ -24,8 +24,8 @@
 }
 
 .navbar .navbar-nav > li.active > a {
-    line-height: 28px;
-    background: lighten(desaturate($color2, 65%), 45%);
+    line-height: 25px;
+    background: lighten(desaturate($color1, 65%), 35%);
     color: #555;
     font-weight: bold;
 }

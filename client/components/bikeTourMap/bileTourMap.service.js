@@ -339,7 +339,7 @@ angular.module('bikeTouringMapApp')
                                     icon: icon
                                 };
 
-                                var markerLayer = L.marker(latlng, markerOptions);
+                                var markerLayer = L.marker(latlng, markerOptions).bindLabel(interest.name);;
 
                                 if (typeof (options.callbacks) !== 'undefined' && typeof (options.callbacks['click']) === 'function') {
                                     markerLayer.on('click', function (e) {

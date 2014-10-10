@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, $timeout, leafletData, TourRepository, StepRepository, MyTourViewModelTour, MyTourViewModelStep, MyTourViewModelCity, geonames, MyTourMapService, Auth) {
+    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, $timeout, leafletData, TourRepository, StepRepository, MyTourViewModelTour, MyTourViewModelStep, MyTourViewModelCity, geonames, MyTourMapService, Auth, bikeTourMapService) {
 
         $scope.loadTours = function () {
             var deffered = $q.defer();
@@ -17,6 +17,8 @@ angular.module('bikeTouringMapApp')
                 }, function (steps) {
 
                     var lastCityTo = null;
+
+                    $scope.steps = steps;
 
                     // convert steps to viewmodel
                     var steps = steps.reduce(function (output, step) {
@@ -50,6 +52,15 @@ angular.module('bikeTouringMapApp')
             return deffered.promise;
         };
 
+        $scope.getStepLabel = function (step) {
+            if (step.cityFrom.name === step.cityTo.name) {
+                // same source & destination
+                return step.cityFrom.name;
+            } else {
+                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
+            }
+        };
+
         $scope.init = function () {
 
             if ($stateParams.id) {
@@ -60,6 +71,8 @@ angular.module('bikeTouringMapApp')
 
                 $scope.tourId = $stateParams.id;
 
+                $scope.loadTours().then(function () {});
+
                 $scope.mapConfig = {
                     class: 'my-tour-map',
                     callbacks: {
@@ -67,30 +80,70 @@ angular.module('bikeTouringMapApp')
 
                             $scope.eMap = eMap;
 
-                            $scope.loadTours().then(function () {
-                                $scope.$watch('tour.country', function (newCountry, oldCountry) {
 
-                                    if (typeof (newCountry) !== 'undefined' && newCountry !== null && newCountry.countryCode) {
+                            $scope.$watch('tour.country', function (newCountry, oldCountry) {
 
-                                        return $http.get('http://api.geonames.org/countryInfoJSON?country=' + newCountry.countryCode + '&username=toub', {
-                                            params: {
-                                                sensor: false
-                                            }
-                                        }).then(function (res) {
-                                            if (res && res.data && res.data.geonames && res.data.geonames[0]) {
+                                if (typeof (newCountry) !== 'undefined' && newCountry !== null && newCountry.countryCode) {
 
-                                                var info = res.data.geonames[0];
-                                                $scope.countryBounds = [
+                                    return $http.get('http://api.geonames.org/countryInfoJSON?country=' + newCountry.countryCode + '&username=toub', {
+                                        params: {
+                                            sensor: false
+                                        }
+                                    }).then(function (res) {
+                                        if (res && res.data && res.data.geonames && res.data.geonames[0]) {
+
+                                            var info = res.data.geonames[0];
+                                            $scope.countryBounds = [
                                                     [info.north, info.west],
                                                     [info.south, info.east]
                                                 ];
-                                            }
+                                        }
+                                        if (!$scope.steps || $scope.steps.length === 0) {
                                             $scope.autozoom();
+                                        }
 
+                                        $scope.$watch('steps', function (steps, old) {
+
+                                            if (steps) {
+                                                var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
+                                                    style: {
+                                                        color: '#34a0b4',
+                                                        width: 3,
+                                                        weight: 8,
+                                                        opacity: 0.8
+                                                    },
+                                                    label: function (step) {
+                                                        return $scope.getStepLabel(step);
+                                                    },
+                                                    callbacks: {
+                                                        'click': function (step) {
+                                                            $state.go('my-tour-step', {
+                                                                id: step._id
+                                                            }, {
+                                                                inherit: false
+                                                            });
+                                                        }
+                                                    }
+                                                });
+
+                                                eMap.addItemsToGroup(traceFeatures, {
+                                                    name: 'Tracés des itinéraires',
+                                                    control: true
+                                                });
+                                                var geometries = steps.reduce(function (geometries, step) {
+                                                    geometries.push(step.geometry);
+                                                    return geometries;
+                                                }, []);
+                                                $timeout(function () {
+                                                    eMap.config.control.fitBoundsFromGeometries(geometries);
+                                                }, 200);
+                                            }
                                         });
 
-                                    }
-                                });
+                                    });
+
+                                }
+
                             });
 
                         }
@@ -162,7 +215,7 @@ angular.module('bikeTouringMapApp')
         };
 
         $scope.updateMap = function () {
-            MyTourMapService.updateMap($scope.mapConfig, $scope.tour);
+            // MyTourMapService.updateMap($scope.mapConfig, $scope.tour);
         };
 
         $scope.citySelected = function ($item, $model, $label) {
@@ -232,22 +285,21 @@ angular.module('bikeTouringMapApp')
             }
         };
 
-        $scope.saveDescription = function () {
+        $scope.editProperties = function () {
+            $scope.isEditProperties = true;
+        };
+
+        $scope.saveProperties = function () {
             if ($scope.tour && $scope.tour.originalModel) {
-
-                if ($scope.tour.saveDescriptionTimeout) {
-                    // cancel previous timer
-                $timeout.cancel($scope.tour.saveDescriptionTimeout);
-                }
-
-                $scope.tour.saveDescriptionTimeout = $timeout(function () {
-
-                    // save after a short delay
+                $scope.isEditProperties = false;
+                // save after a short delay
                 $scope.tour.originalModel.$update(function (data, putResponseHeaders) {
-                        console.info('Tour updated.');
-                    });
-                }, 500); // delay 500 ms
+                    console.info('Tour updated.');
 
+                }, function (err) {
+                    // TODO manage errors
+                    $scope.isEditProperties = true;
+                });
 
             }
         };

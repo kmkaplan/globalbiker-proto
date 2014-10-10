@@ -53,7 +53,14 @@ angular.module('bikeTouringMapApp')
                         if (tours) {
                             // ToulouseMapService.updateTours($scope.mapConfig, tours);
 
-                            var traceFeatures = bikeTourMapService.buildToursStepTracesFeatures(tours, {
+                            var toursToDisplayInMap = tours.reduce(function(toursToDisplayInMap, tour){
+                                if (tour.priority === 1){
+                                    toursToDisplayInMap.push(tour);
+                                }
+                                return toursToDisplayInMap;
+                            }, []);
+                            
+                            var traceFeatures = bikeTourMapService.buildToursStepTracesFeatures(toursToDisplayInMap, {
                                 style: {
                                     // color: 'red'
                                 },

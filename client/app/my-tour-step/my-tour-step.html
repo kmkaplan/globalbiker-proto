@@ -1,5 +1,6 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-<div class="container my-tour-step-page page">
+
+<div class="container my-tour-step-page page" ng-if="step">
     <ol class="breadcrumb">
         <li><a href="/my-tours" translate="mytours.nav-bar_name">My tours</a>
         </li>
@@ -10,25 +11,35 @@
     <h2>{{ "mytours.steps.from" | translate }} {{ step.cityFrom.name }} {{ "mytours.steps.to" | translate }} {{ step.cityTo.name }}</h2>
     <div class="row">
         <div class="col-md-7">
-            <div extended-map config="mapConfig"></div>
+            <div class="smart-map-area">
+                <div extended-map config="mapConfig"></div>
+            </div>
         </div>
 
         <div class="col-md-5">
 
 
-            <form role="form">
-                <section class="form-section">
-                    <div>
-                        <a ng-click="saveDescription()" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
-                    </div>
 
-                    <h3>Description</h3>
-
+            <section class="form-section">
+                <div ng-show="isEditProperties">
+                    <a ng-click="saveProperties()" class="btn btn-primary pull-right"><i class="fa fa-check"></i>Validate</a>
+                </div>
+                <div ng-hide="isEditProperties">
+                    <a ng-click="editProperties()" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i>Edit</a>
+                </div>
+                <h3>Propriétés</h3>
+                <form role="form" ng-show="isEditProperties">
                     <div class="form-group">
+                        <label>Description</label>
                         <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="step.originalModel.description" type="text" class="form-control"></textarea>
                     </div>
-                </section>
-            </form>
+                </form>
+                <div ng-hide="isEditProperties">
+                    <label>Description</label>
+                    <div class="alert alert-success" ng-bind-html="step.originalModel.description"></div>
+                </div>
+            </section>
+
 
             <div class="modal fade" role="dialog" arial-hidden="true" id="new-point-of-interest-form">
                 <div class="modal-dialog modal-md">

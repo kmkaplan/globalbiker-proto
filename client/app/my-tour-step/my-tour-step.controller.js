@@ -62,15 +62,8 @@ angular.module('bikeTouringMapApp')
 
         $scope.deleteTrace = function () {
 
-            SteppointRepository.deleteByStep({
-                stepId: $scope.stepId
-            }, function () {
-                $scope.steppoints = [];
-                if ($scope.eMap) {
-                    // zoom to cityFrom/cityTo
-                    $scope.eMap.config.control.fitBoundsFromPoints([$scope.step.cityFrom, $scope.step.cityTo]);
-                }
-            }, function () {});
+            $scope.step.originalModel.geometry = null;
+            $scope.updateStep();
 
         };
 
@@ -143,7 +136,19 @@ angular.module('bikeTouringMapApp')
             return deffered.promise;
         }
 
-        $scope.saveDescription = function () {
+
+
+        $scope.editProperties = function () {
+            $scope.isEditProperties = true;
+        };
+
+        $scope.saveProperties = function () {
+            $scope.isEditProperties = false;
+
+            $scope.updateStep();
+
+        };
+        $scope.updateStep = function () {
             if ($scope.step && $scope.step.originalModel) {
 
                 // save after a short delay
@@ -214,6 +219,11 @@ angular.module('bikeTouringMapApp')
 
                 $scope.stepId = $stateParams.id;
 
+                // load data
+                $scope.loadStep().then(function (step) {
+
+                });
+
                 $scope.mapConfig = {
                     class: 'my-tour-step-map',
                     drawingOptions: {
@@ -263,12 +273,7 @@ angular.module('bikeTouringMapApp')
                                         $scope.autozoom = false;
                                     }
 
-                                }
-                            });
-
-                            // load data
-                            $scope.loadStep().then(function (step) {
-                                if (!step.geometry || step.geometry.coordinates.length === 0) {
+                                } else if (!step.geometry || step.geometry.coordinates.length === 0) {
                                     // zoom to cityFrom/cityTo
                                     eMap.config.control.fitBoundsFromPoints([step.cityFrom, step.cityTo]);
                                     $scope.autozoom = false;
@@ -344,9 +349,9 @@ angular.module('bikeTouringMapApp')
                 });
                 interest.$save(function (u, putResponseHeader) {
 
-                    $('#new-point-of-interest-form').modal('hide')
+                    $('#new-point-of-interest-form').modal('hide');
 
-                    $scope.step.interests.push(interest);
+                    $scope.interests = $scope.interests.concat([interest]);
 
                     // FIXME à supprimer MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
 
