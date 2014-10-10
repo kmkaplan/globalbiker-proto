@@ -15,7 +15,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="tour-map-area responsive-map-area smart-map-area">
+            <div class="tour-map-area responsive-map-area  smart-map-area">
                 <div extended-map config="tourMapConfig"></div>
             </div>
         </div>

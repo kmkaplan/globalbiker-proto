@@ -58,7 +58,14 @@ exports.searchNearPoint = function (point, distance, extraCriteria) {
         } else {
             criteria.type = extraCriteria.type;
         }
+    }
 
+    if (extraCriteria.withPhoto) {
+        criteria.photos = {
+            $not: {
+                $size: 0
+            }
+        };
     }
 
     Interest.find(criteria).exec(function (err, interests) {

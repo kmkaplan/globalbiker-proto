@@ -1,56 +1,61 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container toulouse-page page">
-
-    <h2>Découvrez la région de <span class="city-name"> Toulouse</span> à vélo!</h2>
+<div class="container toulouse-page page" ng-if="tours && photos">
 
     <div class="row">
-        <div class="col-md-6">
-            <h3><span class="city-name"> Toulouse</span> s'engage à vélo</h3>
-            <ul>
+        <div class="col-md-8">
+            <h2>Découvrez la région de <span class="city-name"> Toulouse</span> à vélo!</h2>
+
+            <ul class="toulouse-presentation">
                 <li>Profitez d'un réseau dense de pistes cyclables et voies vertes.</li>
                 <li>Découvrez le patrimoine de la région de <span class="city-name"> Toulouse</span> de manière originale.</li>
                 <li>Dégustez tout au long de votre parcours les spécialités gastronomiques du Sud-Ouest.</li>
                 <li>Rejoignez d'autres cyclistes le long du Canal Midi, inscrit au patrimoine de l'Unesco.</li>
                 <li>Reposez vous dans l'un des nombreux établissements de la région.</li>
             </ul>
+
         </div>
-        <div class="col-md-6">
-            <div class="images-bar">
-                <img class="smart-photo" src="/assets/images/p01.jpg" />
-                <img class="smart-photo" src="/assets/images/p02.jpg" />
-                <img class="smart-photo" src="/assets/images/p05.jpg" />
-                <img class="smart-photo" src="/assets/images/p03.jpg" />
-                <img class="smart-photo" src="/assets/images/p04.jpg" />
+        <div class="col-md-4" ng-if="photos">
+            <div class="carousel-area">
+                <div class="smart-area">
+                    <carousel interval="5000">
+                        <slide ng-repeat="photo in photos" active="photo.active">
+                            <img ng-src="{{ photo.url }}" style="margin:auto;">
+                            <!-- <div class="carousel-caption">
+                            <h4>Slide {{$index}}</h4>
+                            <p>{{slide.text}}</p>
+                        </div>-->
+                        </slide>
+                    </carousel>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="toulouse-map-area responsive-map-area smart-map-area">
-                <div extended-map config="mapConfig"></div>
-                <div class="alert alert-info" role="alert">Cliquez sur la carte pour découvrir les parcours à vélo de la région.</div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="toulouse-map-area responsive-map-area smart-area smart-map-area">
+                    <div extended-map config="mapConfig"></div>
+                    <div class="alert alert-info" role="alert">Cliquez sur la carte pour découvrir les parcours à vélo de la région.</div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Choisissez un trajet</h3>
-            <table class="smart-table table table-striped table-hover">
-                <tbody>
-                    <tr ng-click="openTour(tour)" ng-repeat="tour in tours">
-                        <td class="main">{{ tour.title }}
-                        </td>
-                        <td>{{ tour.steps.length }} étape(s)</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Choisissez un trajet</h3>
+                <table class="smart-table table table-striped table-hover">
+                    <tbody>
+                        <tr ng-click="openTour(tour)" ng-repeat="tour in tours">
+                            <td class="main">{{ tour.title }}
+                            </td>
+                            <td>{{ tour.steps.length }} étape(s)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+
+
     </div>
 
-
-
-</div>
-
-<div ng-include="'components/footer/footer.html'"></div>
+    <div ng-include="'components/footer/footer.html'"></div>

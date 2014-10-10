@@ -12,7 +12,8 @@ angular.module('bikeTouringMapApp')
                     latitude: '@latitude',
                     longitude: '@longitude',
                     maxDistance: '@maxDistance',
-                    priority: '@priority'
+                    priority: '@priority',
+                    withPhotos: '@withPhotos'
                 },
                 isArray: true
             },

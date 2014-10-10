@@ -52,7 +52,7 @@ angular.module('bikeTouringMapApp')
 
                 return features;
             },
-            buildStepTraceFeature: function (step, options) {
+            buildStepTraceFeature: function (step, options, tour) {
 
                 if (!options) {
                     options = {};
@@ -87,7 +87,7 @@ angular.module('bikeTouringMapApp')
                 var label;
                 if (options.label){
                     if (typeof(options.label) === 'function'){
-                        label = options.label(step);
+                        label = options.label(step, tour);
                     }else{
                         label = options.label;
                     }
@@ -135,7 +135,7 @@ angular.module('bikeTouringMapApp')
                     }
                 });
             },
-            buildStepsTracesFeatures: function (steps, options) {
+            buildStepsTracesFeatures: function (steps, options, tour) {
                 var self = this;
 
                 if (steps) {
@@ -154,7 +154,7 @@ angular.module('bikeTouringMapApp')
 
                         return steps.reduce(function (stepTraceFeatures, step) {
 
-                            var feature = self.buildStepTraceFeature(step, stepsOptions);
+                            var feature = self.buildStepTraceFeature(step, stepsOptions, tour);
                             if (feature) {
                                 stepTraceFeatures.push(feature);
                             }
@@ -185,7 +185,7 @@ angular.module('bikeTouringMapApp')
                         traceOptions.style.color = tour.color;
                     }
 
-                    stepTraceFeatures = stepTraceFeatures.concat(self.buildStepsTracesFeatures(tour.steps, traceOptions));
+                    stepTraceFeatures = stepTraceFeatures.concat(self.buildStepsTracesFeatures(tour.steps, traceOptions, tour));
 
                     return stepTraceFeatures;
                 }, []);

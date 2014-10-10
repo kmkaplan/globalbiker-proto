@@ -19,28 +19,40 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="tour-map-area responsive-map-area smart-map-area">
+            <div class="tour-map-area responsive-map-area smart-area smart-map-area">
                 <div extended-map config="tourMapConfig"></div>
             </div>
         </div>
     </div>
 
-    <div class="interests-area">
+    <div class="interests-area" ng-if="interests">
         <h2>Points d'intérêt le long du parcours</h2>
         <div ng-repeat="interest in interests">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="description">
-                        <h3>{{ interest.name }}</h3>
-                        <p>{{ interest.description }}</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div ng-repeat="photo in interest.photos">
-                        <img class="photo smart-photo" ng-src="{{ photo.url }}" />
-                    </div>
-                </div>
+            <div class="form-section">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="description">
+                            <h3>{{ interest.name }}</h3>
+                            <p>{{ interest.description }}</p>
 
+                        </div>
+                    </div>
+                    <div class="col-md-6" ng-if="interest.photos">
+                        <div class="carousel-area">
+                            <div class="smart-area">
+                                <carousel interval="5000">
+                                    <slide ng-repeat="photo in interest.photos" active="photo.active">
+                                        <img ng-src="{{ photo.url }}" style="margin:auto;">
+                                        <!-- <div class="carousel-caption">
+                            <h4>Slide {{$index}}</h4>
+                            <p>{{slide.text}}</p>
+                        </div>-->
+                                    </slide>
+                                </carousel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -5,13 +5,32 @@
         text-align: center;
     }
     .toulouse-map-area {
-        margin-top: 50px;
+        margin-top: 20px;
         .alert {
             margin: 0;
             border-radius: 0px;
         }
     }
-    .city-name{
+    .carousel-area {
+        //height: 258px;
+        overflow: hidden;
+        background: transparent;
+        vertical-align: middle;
+        .smart-area {
+            border: transparent;
+            overflow: hidden;
+            .carousel-control {
+                background: transparent;
+            }
+            img {
+                max-height: 240px;
+            }
+        }
+    }
+    .city-name {
         color: $color1;
+    }
+    .toulouse-presentation {
+        font-size: 16px;
     }
 }
