@@ -151,6 +151,15 @@ angular.module('bikeTouringMapApp')
             });
         };
 
+        $scope.getStepLabel = function(step){
+            if (step.cityFrom.name === step.cityTo.name){
+                // same source & destination
+                return step.cityFrom.name;
+            }else{
+                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
+            }
+        };
+    
         $scope.init = function () {
 
             if (!$stateParams.id) {
@@ -179,6 +188,9 @@ angular.module('bikeTouringMapApp')
                                         width: 3,
                                         weight: 8,
                                         opacity: 0.3
+                                    }, 
+                                    label: function(step){
+                                        return $scope.getStepLabel(step);
                                     }
                                 });
 

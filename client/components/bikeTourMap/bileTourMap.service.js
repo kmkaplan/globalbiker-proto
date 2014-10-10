@@ -83,8 +83,18 @@ angular.module('bikeTouringMapApp')
                 } else {
                     overStyle = null
                 }
-
+                
+                var label;
+                if (options.label){
+                    if (typeof(options.label) === 'function'){
+                        label = options.label(step);
+                    }else{
+                        label = options.label;
+                    }
+                }
+                
                 var stepFeature = this._buildFeature(step, {
+                    label: label,
                     style: function () {
                         return style;
                     },
@@ -163,7 +173,7 @@ angular.module('bikeTouringMapApp')
                     var traceOptions;
                     if (!options) {
                         traceOptions = {};
-                    }else{
+                    } else {
                         traceOptions = angular.copy(options);
                     }
 
@@ -192,7 +202,7 @@ angular.module('bikeTouringMapApp')
                 }
                 if (options.mode === 'light') {
                     var geojsonMarkerOptions = {
-                        radius: 3,
+                        radius: 5,
                         fillColor: 'grey',
                         color: 'black',
                         weight: 1,
@@ -261,7 +271,7 @@ angular.module('bikeTouringMapApp')
 
                         return {
                             pointToLayer: function (feature, latlng) {
-                                return L.circleMarker(latlng, circleOptions);
+                                return L.circleMarker(latlng, circleOptions).bindLabel(interest.name);
                             }
                         }
 

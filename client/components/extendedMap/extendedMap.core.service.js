@@ -81,11 +81,11 @@ angular.module('bikeTouringMapApp')
                 this.addToLayer(eMap, layerOptions, featureLayer, feature);
 
                 var polylineLayer = featureLayer.getLayers()[0];
-                
-                if (feature.properties.animate){
+
+                if (feature.properties.animate) {
                     // this._animate(polylineLayer);
                 }
-                
+
                 return featureLayer;
             },
             drawMarker: function (eMap, layerOptions, marker) {
@@ -226,7 +226,7 @@ angular.module('bikeTouringMapApp')
 
                 return polylineLayer;
             },
-            _animate: function(polylineLayer){
+            _animate: function (polylineLayer) {
                 polylineLayer._path.classList.add('path-start');
 
                 var totalLength = polylineLayer._path.getTotalLength();
@@ -236,7 +236,7 @@ angular.module('bikeTouringMapApp')
                 // for details on this trick.
                 polylineLayer._path.style.strokeDashoffset = totalLength;
                 polylineLayer._path.style.strokeDasharray = totalLength;
-                
+
                 setTimeout((function (path) {
                     return function () {
                         // setting the strokeDashoffset to 0 triggers
