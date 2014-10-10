@@ -60,11 +60,8 @@ angular.module('bikeTouringMapApp')
                             }, []);
 
                             var traceFeatures = bikeTourMapService.buildToursStepTracesFeatures(toursToDisplayInMap, {
-                                style: {
-                                    // color: 'red'
-                                },
                                 overStyle: {
-                                    color: 'green',
+                                    color: '#555',
                                     opacity: 0.8
                                 },
                                 callbacks: {
