@@ -12,6 +12,14 @@ angular.module('bikeTouringMapApp')
             return false;
         }
 
+        $scope.openStep = function (step) {
+            $state.go('step-details', {
+                id: step._id
+            }, {
+                inherit: false
+            });
+        }
+        
         $scope.autozoom = function (step, eMap) {
             var points = [];
 
@@ -151,15 +159,15 @@ angular.module('bikeTouringMapApp')
             });
         };
 
-        $scope.getStepLabel = function(step){
-            if (step.cityFrom.name === step.cityTo.name){
+        $scope.getStepLabel = function (step) {
+            if (step.cityFrom.name === step.cityTo.name) {
                 // same source & destination
                 return step.cityFrom.name;
-            }else{
+            } else {
                 return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
             }
         };
-    
+
         $scope.init = function () {
 
             if (!$stateParams.id) {
@@ -188,8 +196,8 @@ angular.module('bikeTouringMapApp')
                                         width: 3,
                                         weight: 8,
                                         opacity: 0.3
-                                    }, 
-                                    label: function(step){
+                                    },
+                                    label: function (step) {
                                         return $scope.getStepLabel(step);
                                     }
                                 });
@@ -208,7 +216,7 @@ angular.module('bikeTouringMapApp')
                             }
                         });
 
-                       /* $scope.$watch('waterPoints', function (waterPoints, old) {
+                        /* $scope.$watch('waterPoints', function (waterPoints, old) {
                             if (waterPoints) {
                                 eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints, {
                                     mode: 'light',
@@ -234,7 +242,7 @@ angular.module('bikeTouringMapApp')
                             }
                         });
 
-                       /* $scope.$watch('dangers', function (dangers, old) {
+                        /* $scope.$watch('dangers', function (dangers, old) {
                             if (dangers) {
                                 eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(dangers, {
                                     mode: 'light',
@@ -247,7 +255,7 @@ angular.module('bikeTouringMapApp')
                             }
                         });*/
 
-                      /*  $scope.$watch('wcs', function (wcs, old) {
+                        /*  $scope.$watch('wcs', function (wcs, old) {
                             if (wcs) {
                                 eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(wcs, {
                                     mode: 'light',

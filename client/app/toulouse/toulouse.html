@@ -37,10 +37,10 @@
     <div class="row">
         <div class="col-md-12">
             <h3>Choisissez un trajet</h3>
-               <table class="smart-table table table-striped table-hover">
+            <table class="smart-table table table-striped table-hover">
                 <tbody>
                     <tr ng-click="openTour(tour)" ng-repeat="tour in tours">
-                        <td>{{ tour.title }}
+                        <td class="main">{{ tour.title }}
                         </td>
                         <td>{{ tour.steps.length }} étape(s)</td>
                     </tr>
