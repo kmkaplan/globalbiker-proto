@@ -8,11 +8,11 @@
         </li>
         <li class="active">{{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</li>
     </ol>
-    
+
     <a class="pull-right" href="/step-details/{{ step._id }}">
         <i class="fa fa-eye"></i> {{ 'mytourstep.see-the-step' | translate }}
     </a>
-    
+
     <h2>{{ "mytours.steps.from" | translate }} {{ step.cityFrom.name }} {{ "mytours.steps.to" | translate }} {{ step.cityTo.name }}</h2>
     <div class="row">
         <div class="col-md-7">
@@ -199,7 +199,13 @@
                         <div class="row" ng-if="selectedPointOfInterest.photos.length">
                             <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
                                 <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
-                                <img class="smart-photo" alt="-" ng-src="{{ photo.url }}" />
+                                <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600 }}" />
+                               <!-- <div>
+                                    <input type="text" ng-model="photo.author" />
+                                    <input type="text" ng-model="photo.licence" />
+                                    <input type="text" ng-model="photo.url" />
+                                </div>-->
+
                             </div>
                         </div>
 

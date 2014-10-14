@@ -46,8 +46,22 @@ var InterestSchema = new Schema({
             url: {
                 type: String,
                 required: 'Please fill url'
+            },
+            thumbnails: {
+                w600: {
+                    type: String,
+                    required: 'Please fill thumbnails.600'
+                }
+            },
+            author: {
+                name: String,
+                url: String
+            },
+            licence: {
+                name: String,
+                url: String
             }
-    }
+        }
     ]
 });
 

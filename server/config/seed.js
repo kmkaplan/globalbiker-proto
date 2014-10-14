@@ -10,34 +10,99 @@ var Tour = require('../api/tour/tour.model');
 var Step = require('../api/step/step.model');
 var User = require('../api/user/user.model');
 var Interest = require('../api/interest/interest.model');
+var io = require('../components/io/io');
+var path = require('path');
+
 
 var Q = require('q');
 
 
-return;
 Interest.find({
-    geometry: null
-}, function (err, interests) {
-    if (err) {
-        console.error(err);
-    } else {
-        console.info('Convert %d interests without geometry.', interests.length);
+        photos: {
+            $not: {
+                $size: 0
+            }
+        }
+    },
+    function (err, interests) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.info('Found %d interests with photos.', interests.length);
 
-        interests.reduce(function (o, interest) {
-            interest.geometry = {
-                type: 'Point',
-                coordinates: [interest.longitude, interest.latitude]
-            };
- 
-            interest.save(function (err) {
-                if (err) {
-                    console.error(err);
-                }
-            });
-        }, null);
+            interests.reduce(function (o, interest) {
 
-    }
-});
+                interest.photos = interest.photos.reduce(function (photos, photo) {
+
+                    if (!photo.thumbnails) {
+                        photo.thumbnails = {};
+                    }
+                    if (!photo.thumbnails.w600) {
+
+                        var photoPath = path.resolve(__dirname, '..' + photo.url);
+
+                        var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, '-600');
+
+                        io.createThumbnail(photoPath, thumbnailHttpPath, 600)
+
+                        photo.thumbnails.w600 = io.addPathSuffixBeforeFileExtension(photo.url, '-600');;
+
+                        console.info('Photo thumbnail url: %s.', thumbnailHttpPath); 
+
+                    }
+                    photos.push(photo);
+
+                    return photos;
+
+                }, []);
+
+                interest.save(function (err) {
+                    if (err) {
+                        console.error(err);
+                    }
+                })
+            }, null);
+
+        }
+    });
+
+return;
+
+var file = req.files.file;
+
+if (!file) {
+    console.log('File "file" is missing.');
+    return res.send(400, 'File "file" is missing.');
+}
+
+var imageHttpPath = io.getHttpPath(file.path);
+
+// copy file
+var outputFilePath = 'server' + imageHttpPath;
+
+var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(imageHttpPath, '-200');
+var thumbnailOutputFilePath = 'server' + thumbnailHttpPath
+
+var imageAttributes = req.body;
+imageAttributes.path = imageHttpPath;
+imageAttributes.thumbnail200path = thumbnailHttpPath;
+
+
+Q.all(
+        [
+            io.copyFile(file.path, outputFilePath),
+            io.createThumbnail(file.path, thumbnailOutputFilePath, 200)
+        ]
+).then(function () {
+    Image.create(imageAttributes, function (err, image) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(201, image);
+    });
+}, function (err) {
+    return res.json(500, err);
+}).done();
 
 var resetUsers = function () {
 
