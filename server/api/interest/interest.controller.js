@@ -4,7 +4,7 @@ var _ = require('lodash');
 var Interest = require('./interest.model');
 var Step = require('../step/step.model');
 
-var IO = require('../../components/io/io');
+var io = require('../../components/io/io');
 var path = require('path');
 var fs = require('fs');
 var geo = require('../../components/geo/geo');
@@ -560,6 +560,39 @@ exports.upload = function (req, res) {
     });
 };
 
+exports.createThumbnail = function (photo, widthSize) {
+    var deferred = Q.defer();
+
+    if (!photo.thumbnails) {
+        photo.thumbnails = {};
+    }
+    if (!photo.thumbnails['w' + widthSize]) {
+
+        var photoPath = path.resolve(__dirname, '..' + photo.url);
+
+        var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, '-' + widthSize);
+
+        photo.thumbnails.w600 = io.addPathSuffixBeforeFileExtension(photo.url, '-' + widthSize);;
+
+        console.info('Photo thumbnail url: %s.', thumbnailHttpPath);
+
+        io.createThumbnail(photoPath, thumbnailHttpPath, widthSize).then(function () {
+
+            deferred.resolve(photo);
+
+        }, function (err) {
+            deferred.reject(err);
+
+        });
+
+    } else {
+        // already exists
+        deferred.resolve(photo);
+    }
+
+    return deferred.promise;
+}
+
 exports.uploadPhoto = function (req, res) {
 
     var interestId = req.params.id;
@@ -582,18 +615,32 @@ exports.uploadPhoto = function (req, res) {
         var newPath = '/photos/interests/' + interestId + '/' + path.basename(file.path);
 
         // copy file
-        IO.copyFile(file.path, 'server/' + newPath);
+        io.copyFile(file.path, 'server/' + newPath).then(function () {
 
-        interest.photos.push({
-            url: newPath
-        });
+            var photo = {
+                url: newPath
+            };
 
-        interest.save(function (err) {
-            if (err) {
+            exports.createThumbnail(photo, 600).then(function () {
+
+                interest.photos.push(photo);
+
+                interest.save(function (err) {
+                    if (err) {
+                        return handleError(res, err);
+                    }
+                    return res.json(200, interest);
+                });
+
+            }, function (err) {
                 return handleError(res, err);
-            }
-            return res.json(200, interest);
+            });
+
+        }, function (err) {
+            return handleError(res, err);
         });
+
+
     })
 };
 
@@ -636,7 +683,7 @@ exports.deletePhoto = function (req, res) {
                 if (err) {
                     return handleError(res, err);
                 }
-                IO.removeFile(photoToDelete.url, function (err) {
+                io.removeFile(photoToDelete.url, function (err) {
                     return res.json(204, interest);
                 });
 

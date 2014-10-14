@@ -38,6 +38,7 @@
     "angular-scenario": ">=1.2.*"
   },
   "resolutions": {
-    "tinymce": "~4.1.5"
+    "tinymce": "~4.1.5",
+    "angular": "~1.2.6"
   }
 }
