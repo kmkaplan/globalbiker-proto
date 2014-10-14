@@ -568,7 +568,7 @@ exports.createThumbnail = function (photo, widthSize) {
     }
     if (!photo.thumbnails['w' + widthSize]) {
 
-        var photoPath = path.resolve(__dirname, '..' + photo.url);
+        var photoPath = path.resolve(__dirname, '../..' + photo.url);
 
         var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, '-' + widthSize);
 
@@ -612,13 +612,13 @@ exports.uploadPhoto = function (req, res) {
             return res.send(400, 'File "file" is missing.');
         }
 
-        var newPath = '/photos/interests/' + interestId + '/' + path.basename(file.path);
-
+        var newUrl = '/photos/interests/' + interestId + '/' + path.basename(file.path);
+        var newPath ='server/' + newUrl;
         // copy file
-        io.copyFile(file.path, 'server/' + newPath).then(function () {
+        io.copyFile(file.path, newPath).then(function () {
 
             var photo = {
-                url: newPath
+                url: newUrl
             };
 
             exports.createThumbnail(photo, 600).then(function () {

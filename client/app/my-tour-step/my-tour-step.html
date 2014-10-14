@@ -200,12 +200,6 @@
                             <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
                                 <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
                                 <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600 }}" />
-                               <!-- <div>
-                                    <input type="text" ng-model="photo.author" />
-                                    <input type="text" ng-model="photo.licence" />
-                                    <input type="text" ng-model="photo.url" />
-                                </div>-->
-
                             </div>
                         </div>
 
@@ -237,7 +231,19 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row" ng-if="selectedPointOfInterest.photos.length">
+                            <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
+                                <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
+                                <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600 }}" />
+                                <div>
+                                    <input type="text" ng-model="photo.author.name" />
+                                    <!--
+                                    <input type="text" ng-model="photo.licence" />
+                                    <input type="text" ng-model="photo.url" />-->
+                                </div>
 
+                            </div>
                         </div>
 
                         <div class="form-group required" ng-class="{ 'has-error':  editPointForm.description.$dirty && editPointForm.description.$invalid, 'has-success': editPointForm.description.$dirty && editPointForm.description.$valid }">
