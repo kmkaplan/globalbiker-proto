@@ -40,7 +40,7 @@
                     <div class="col-md-6" ng-if="interest.photos">
                         <div class="carousel-area">
                             <div class="">
-                                <carousel interval="5000">
+                                <carousel>
                                     <slide ng-repeat="photo in interest.photos" active="photo.active">
                                         <img class="photo smart-area" ng-src="{{ photo.thumbnails.w600h400 }}" style="margin:auto;">
                                         <!-- <div class="carousel-caption">
