@@ -3,6 +3,13 @@
     "login": "Se connecter",
     "hello": "Bonjour",
     "logout": "Se déconnecter",
+    "signup": {
+        "intro":{
+            "description": "Le site sera bientôt prêt pour accueillir vos contributions.",
+            "invit_mailing": "Pour recevoir une invitation en avant première, indiquez nous votre adresse e-mail.",
+            "email_success": "Merci, votre adresse est bien enregistrée!"
+        }
+    },
     "home": {
         "main": {
             "slogan": "Ride Global, Ride GlobalBiker"
