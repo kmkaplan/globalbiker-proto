@@ -199,7 +199,7 @@
                         <div class="row" ng-if="selectedPointOfInterest.photos.length">
                             <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
                                 <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
-                                <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600 }}" />
+                                <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
                             </div>
                         </div>
 
@@ -235,7 +235,7 @@
                         <div class="row" ng-if="selectedPointOfInterest.photos.length">
                             <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
                                 <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
-                                <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600 }}" />
+                                <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
                                 <div>
                                     <input type="text" ng-model="photo.author.name" />
                                     <!--

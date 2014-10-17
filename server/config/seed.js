@@ -10,6 +10,7 @@ var Tour = require('../api/tour/tour.model');
 var Step = require('../api/step/step.model');
 var User = require('../api/user/user.model');
 var Interest = require('../api/interest/interest.model');
+var InterestCtrl = require('../api/interest/interest.controller');
 var io = require('../components/io/io');
 var path = require('path');
 
@@ -32,35 +33,36 @@ Interest.find({
 
             interests.reduce(function (o, interest) {
 
-                interest.photos = interest.photos.reduce(function (photos, photo) {
+                var defferedArray = interest.photos.reduce(function (defferedArray, photo) {
 
-                    if (!photo.thumbnails) {
-                        photo.thumbnails = {};
-                    }
-                    if (!photo.thumbnails.w600) {
+                    delete photo.thumbnails.w600;
+                    delete photo.thumbnail200;
+                    delete photo.thumbnail400;
+                    delete photo.thumbnail600;
 
-                        var photoPath = path.resolve(__dirname, '..' + photo.url);
-
-                        var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, '-600');
-
-                        io.createThumbnail(photoPath, thumbnailHttpPath, 600)
-
-                        photo.thumbnails.w600 = io.addPathSuffixBeforeFileExtension(photo.url, '-600');;
-
-                        console.info('Photo thumbnail url: %s.', thumbnailHttpPath); 
-
-                    }
-                    photos.push(photo);
-
-                    return photos;
+                    defferedArray.push(InterestCtrl.createThumbnail(photo, 600, 400));
+                    
+                    return defferedArray;
 
                 }, []);
 
-                interest.save(function (err) {
-                    if (err) {
-                        console.error(err);
-                    }
-                })
+
+                Q.all(defferedArray).then(function (photos) {
+
+                    console.info('Number of photos for this interest.', photos.length);
+
+                    interest.photos = photos;
+
+                    console.info(photos);
+
+                    interest.save(function (err) {
+                        if (err) {
+                            console.error(err);
+                        }
+                    })
+                });
+
+
             }, null);
 
         }
@@ -68,41 +70,6 @@ Interest.find({
 
 return;
 
-var file = req.files.file;
-
-if (!file) {
-    console.log('File "file" is missing.');
-    return res.send(400, 'File "file" is missing.');
-}
-
-var imageHttpPath = io.getHttpPath(file.path);
-
-// copy file
-var outputFilePath = 'server' + imageHttpPath;
-
-var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(imageHttpPath, '-200');
-var thumbnailOutputFilePath = 'server' + thumbnailHttpPath
-
-var imageAttributes = req.body;
-imageAttributes.path = imageHttpPath;
-imageAttributes.thumbnail200path = thumbnailHttpPath;
-
-
-Q.all(
-        [
-            io.copyFile(file.path, outputFilePath),
-            io.createThumbnail(file.path, thumbnailOutputFilePath, 200)
-        ]
-).then(function () {
-    Image.create(imageAttributes, function (err, image) {
-        if (err) {
-            return handleError(res, err);
-        }
-        return res.json(201, image);
-    });
-}, function (err) {
-    return res.json(500, err);
-}).done();
 
 var resetUsers = function () {
 

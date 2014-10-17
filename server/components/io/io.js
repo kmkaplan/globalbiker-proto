@@ -50,7 +50,7 @@ exports.getHttpPath = function (filePath) {
     return '/images/' + path.basename(filePath).toLowerCase();
 };
 
-exports.createThumbnail = function (inputPath, outputPath, width) {
+exports.createThumbnail = function (inputPath, outputPath, maxWidth, maxHeight) {
 
     var deferred = Q.defer();
 
@@ -71,15 +71,44 @@ exports.createThumbnail = function (inputPath, outputPath, width) {
 
                     } else {
 
-                        var height = width / image.width() * image.height();
+                        var width = image.width();
+                        var height = image.height();
 
-                        image.resize(width, height, function () {
 
-                            image.writeFile(outputPath, function () {
+                        if (maxWidth && maxHeight) {
+                            if (width > maxWidth || height > maxHeight) {
+                                if (width / maxWidth > height / maxHeight) {
+                                    width = maxWidth;
+                                    height = parseInt( width / image.width() * image.height());
+                                } else {
+                                    console.info('Height ratio bigger than height one');
+                                    height = maxHeight;
+                                    width = parseInt(height / image.height() * image.width());
+                                }
+                            }
+                        } else if (maxWidth && width > maxWidth) {
+                            width = maxWidth;
+                            height =parseInt( width / image.width() * image.height());
+
+                        } else if (maxHeight && height > maxHeight) {
+                            height = maxHeight
+                            width = parseInt(height / image.height() * image.width());
+                        }
+
+                        if (width !== image.width() || height !== image.height()) {
+                            image.resize(width, height, function () {
+
+                                image.writeFile(outputPath, function () {
+                                    deferred.resolve('success');
+                                });
+
+                            })
+                        } else {
+                            console.info('Do not resize.');
+                            exports.copyFile(inputPath, outputPath, function () {
                                 deferred.resolve('success');
                             });
-
-                        })
+                        }
                     }
 
                 });

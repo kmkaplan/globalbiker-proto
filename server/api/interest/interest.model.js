@@ -47,8 +47,12 @@ var InterestSchema = new Schema({
                 type: String,
                 required: 'Please fill url'
             },
+            thumbnail200: String,
+            thumbnail400: String,
+            thumbnail600: String,
             thumbnails: {
-                w600: {
+                w600: String,
+                w600h400: {
                     type: String,
                     required: 'Please fill thumbnails.600'
                 }

@@ -560,23 +560,28 @@ exports.upload = function (req, res) {
     });
 };
 
-exports.createThumbnail = function (photo, widthSize) {
+exports.createThumbnail = function (photo, maxWidth, maxHeight) {
     var deferred = Q.defer();
 
     if (!photo.thumbnails) {
         photo.thumbnails = {};
     }
-    if (!photo.thumbnails['w' + widthSize]) {
+    
+    var thumbnailReference = 'w' + maxWidth + 'h' + maxHeight;
+    
+    if (!photo.thumbnails[thumbnailReference]) {
 
         var photoPath = path.resolve(__dirname, '../..' + photo.url);
 
-        var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, '-' + widthSize);
+        var suffix = '-' + maxWidth + '-' + maxHeight;
 
-        photo.thumbnails.w600 = io.addPathSuffixBeforeFileExtension(photo.url, '-' + widthSize);;
+        var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, suffix);
 
-        console.info('Photo thumbnail url: %s.', thumbnailHttpPath);
+        photo.thumbnails[thumbnailReference] = io.addPathSuffixBeforeFileExtension(photo.url, suffix);;
 
-        io.createThumbnail(photoPath, thumbnailHttpPath, widthSize).then(function () {
+        console.info('Photo thumbnail %s url: %s.', thumbnailReference, thumbnailHttpPath);
+
+        io.createThumbnail(photoPath, thumbnailHttpPath, maxWidth, maxHeight).then(function () {
 
             deferred.resolve(photo);
 
@@ -613,7 +618,7 @@ exports.uploadPhoto = function (req, res) {
         }
 
         var newUrl = '/photos/interests/' + interestId + '/' + path.basename(file.path);
-        var newPath ='server/' + newUrl;
+        var newPath = 'server/' + newUrl;
         // copy file
         io.copyFile(file.path, newPath).then(function () {
 
@@ -621,7 +626,7 @@ exports.uploadPhoto = function (req, res) {
                 url: newUrl
             };
 
-            exports.createThumbnail(photo, 600).then(function () {
+            exports.createThumbnail(photo, 600, 400).then(function () {
 
                 interest.photos.push(photo);
 

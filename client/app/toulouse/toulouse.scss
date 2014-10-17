@@ -13,18 +13,20 @@
     }
     .carousel-area {
         //height: 258px;
+        text-align: center;
         overflow: hidden;
         background: transparent;
         vertical-align: middle;
-        .smart-area {
-            border: transparent;
-            overflow: hidden;
-            .carousel-control {
-                background: transparent;
-            }
-            img {
-                max-height: 240px;
-            }
+        .carousel-control {
+            background: transparent;
+            cursor: pointer;
+        }
+        .carousel-indicators {
+            margin-bottom: 0px;
+        }
+        img {
+            display: inline;
+            height: 200px;
         }
     }
     .city-name {
