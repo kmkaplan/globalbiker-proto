@@ -15,5 +15,15 @@
         .carousel-indicators {
             margin-bottom: -0px;
         }
+        
+        .author, .license{
+            text-shadow: 1px 1px 0px #6d6d6d;
+        }
+        .author{
+            color: #a8a8a8;
+        }
+        .license{
+            color: #cbcbcb;
+        }
     }
 }

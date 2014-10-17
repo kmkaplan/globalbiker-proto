@@ -5,7 +5,39 @@ var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
 var lwip = require('lwip');
+var http = require('http');
 
+exports.downloadFile = function (url, dest) {
+
+    var deferred = Q.defer();
+
+    var outputDir = path.dirname(dest)
+
+    // ensure that directory exists
+    mkdirp(outputDir, function (err) {
+
+        if (fs.existsSync(dest)) {
+            // file already exists
+            deferred.resolve('File already exists on local disk.');
+        } else {
+            console.info('Downloading photo from "%s". to local disk "%s"...', url, dest);
+
+            // download file
+            var file = fs.createWriteStream(dest);
+            var request = http.get(url, function (response) {
+                response.pipe(file);
+                file.on('finish', function () {
+                    file.close(function (res) {
+                        deferred.resolve(res);
+                    });
+                });
+            });
+        }
+
+    });
+
+    return deferred.promise;
+};
 
 exports.copyFile = function (inputPath, outputPath) {
 
@@ -62,59 +94,69 @@ exports.createThumbnail = function (inputPath, outputPath, maxWidth, maxHeight) 
             console.error(err);
             deferred.reject(new Error(err));
         } else {
-            try {
-                lwip.open(buffer, extension, function (err, image) {
-                    if (err) {
-                        console.error(err);
-                        console.warn('Can not resize image "%s"', inputPath);
-                        deferred.resolve(exports.copyFile(inputPath, outputPath));
-
-                    } else {
-
-                        var width = image.width();
-                        var height = image.height();
 
 
-                        if (maxWidth && maxHeight) {
-                            if (width > maxWidth || height > maxHeight) {
-                                if (width / maxWidth > height / maxHeight) {
-                                    width = maxWidth;
-                                    height = parseInt( width / image.width() * image.height());
-                                } else {
-                                    console.info('Height ratio bigger than height one');
-                                    height = maxHeight;
-                                    width = parseInt(height / image.height() * image.width());
+            if (fs.existsSync(outputPath)) {
+                // file already exists
+                deferred.resolve('File already exists on local disk.');
+            } else {
+
+                console.info('Creating photo thumbnail from "%s" with max (%d, %d).', inputPath, maxWidth, maxHeight);
+
+                try {
+                    lwip.open(buffer, extension, function (err, image) {
+                        if (err) {
+                            console.error(err);
+                            console.warn('Can not resize image "%s"', inputPath);
+                            deferred.resolve(exports.copyFile(inputPath, outputPath));
+
+                        } else {
+
+                            var width = image.width();
+                            var height = image.height();
+
+
+                            if (maxWidth && maxHeight) {
+                                if (width > maxWidth || height > maxHeight) {
+                                    if (width / maxWidth > height / maxHeight) {
+                                        width = maxWidth;
+                                        height = parseInt(width / image.width() * image.height());
+                                    } else {
+                                        console.info('Height ratio bigger than height one');
+                                        height = maxHeight;
+                                        width = parseInt(height / image.height() * image.width());
+                                    }
                                 }
+                            } else if (maxWidth && width > maxWidth) {
+                                width = maxWidth;
+                                height = parseInt(width / image.width() * image.height());
+
+                            } else if (maxHeight && height > maxHeight) {
+                                height = maxHeight
+                                width = parseInt(height / image.height() * image.width());
                             }
-                        } else if (maxWidth && width > maxWidth) {
-                            width = maxWidth;
-                            height =parseInt( width / image.width() * image.height());
 
-                        } else if (maxHeight && height > maxHeight) {
-                            height = maxHeight
-                            width = parseInt(height / image.height() * image.width());
-                        }
+                            if (width !== image.width() || height !== image.height()) {
+                                image.resize(width, height, function () {
 
-                        if (width !== image.width() || height !== image.height()) {
-                            image.resize(width, height, function () {
+                                    image.writeFile(outputPath, function () {
+                                        deferred.resolve('success');
+                                    });
 
-                                image.writeFile(outputPath, function () {
+                                })
+                            } else {
+                                console.info('Do not resize.');
+                                exports.copyFile(inputPath, outputPath, function () {
                                     deferred.resolve('success');
                                 });
-
-                            })
-                        } else {
-                            console.info('Do not resize.');
-                            exports.copyFile(inputPath, outputPath, function () {
-                                deferred.resolve('success');
-                            });
+                            }
                         }
-                    }
 
-                });
-            } catch (err) {
-                deferred.reject(new Error(err));
-                console.log("Error:", err)
+                    });
+                } catch (err) {
+                    deferred.reject(new Error(err));
+                    console.log("Error:", err)
+                }
             }
         }
     });

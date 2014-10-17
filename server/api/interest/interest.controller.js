@@ -566,34 +566,32 @@ exports.createThumbnail = function (photo, maxWidth, maxHeight) {
     if (!photo.thumbnails) {
         photo.thumbnails = {};
     }
-    
+
     var thumbnailReference = 'w' + maxWidth + 'h' + maxHeight;
-    
-    if (!photo.thumbnails[thumbnailReference]) {
 
-        var photoPath = path.resolve(__dirname, '../..' + photo.url);
+    //  if (!photo.thumbnails[thumbnailReference]) {
 
-        var suffix = '-' + maxWidth + '-' + maxHeight;
+    var photoPath = path.resolve(__dirname, '../..' + photo.url);
 
-        var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, suffix);
+    var suffix = '-' + maxWidth + '-' + maxHeight;
 
-        photo.thumbnails[thumbnailReference] = io.addPathSuffixBeforeFileExtension(photo.url, suffix);;
+    var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, suffix);
 
-        console.info('Photo thumbnail %s url: %s.', thumbnailReference, thumbnailHttpPath);
+    photo.thumbnails[thumbnailReference] = io.addPathSuffixBeforeFileExtension(photo.url, suffix);;
 
-        io.createThumbnail(photoPath, thumbnailHttpPath, maxWidth, maxHeight).then(function () {
+    io.createThumbnail(photoPath, thumbnailHttpPath, maxWidth, maxHeight).then(function () {
 
-            deferred.resolve(photo);
+        deferred.resolve(photo);
 
-        }, function (err) {
-            deferred.reject(err);
+    }, function (err) {
+        deferred.reject(err);
 
-        });
+    });
 
-    } else {
+    /* } else {
         // already exists
         deferred.resolve(photo);
-    }
+    }*/
 
     return deferred.promise;
 }
@@ -717,6 +715,27 @@ exports.create = function (req, res) {
     });
 };
 
+var mergeObjects = function (input, output) {
+    for (var key in input) {
+        if (input.hasOwnProperty(key)) {
+
+            var value = input[key];
+
+            if (Object.prototype.toString.call(value) === '[object Array]') {
+                // value is an array
+                console.log(value.slice(0));
+                output[key] = value.slice(0);
+                console.log(output[key]);
+
+            } else {
+                // single property
+                output[key] = value;
+            }
+
+        }
+    }
+}
+
 // Updates an existing interest in the DB.
 exports.update = function (req, res) {
     if (req.body._id) {
@@ -729,8 +748,15 @@ exports.update = function (req, res) {
         if (!interest) {
             return res.send(404);
         }
-        var updated = _.merge(interest, req.body);
-        updated.save(function (err) {
+
+         console.log(req.body);
+        
+       // console.log(deepCopy(req.body));
+        
+        
+        mergeObjects(req.body, interest);
+
+        interest.save(function (err) {
             if (err) {
                 return handleError(res, err);
             }

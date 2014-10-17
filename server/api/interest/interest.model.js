@@ -61,10 +61,7 @@ var InterestSchema = new Schema({
                 name: String,
                 url: String
             },
-            licence: {
-                name: String,
-                url: String
-            }
+            licenseId: Schema.ObjectId
         }
     ]
 });

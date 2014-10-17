@@ -7,16 +7,117 @@
 'use strict';
 
 var Tour = require('../api/tour/tour.model');
+var License = require('../api/license/license.model');
 var Step = require('../api/step/step.model');
 var User = require('../api/user/user.model');
 var Interest = require('../api/interest/interest.model');
 var InterestCtrl = require('../api/interest/interest.controller');
 var io = require('../components/io/io');
 var path = require('path');
+var config = require('./environment');
 
 
 var Q = require('q');
 
+License.find({}, function (err, licenses) {
+    if (err) {
+        console.error(err);
+    } else {
+        if (licenses.length === 0) {
+            License.create({
+                name: 'CC BY 4.0',
+                url: 'http://creativecommons.org/licenses/by/4.0'
+            }, {
+                name: 'CC BY-SA 4.0',
+                url: 'http://creativecommons.org/licenses/by-sa/4.0'
+            }, {
+                name: 'CC BY-ND 4.0',
+                url: 'http://creativecommons.org/licenses/by-nd/4.0'
+            }, {
+                name: 'CC BY-NC 4.0',
+                url: 'http://creativecommons.org/licenses/by-nc/4.0'
+            }, {
+                name: 'CC BY-NC-SA 4.0',
+                url: 'http://creativecommons.org/licenses/by-nc-sa/4.0'
+            }, {
+                name: 'CC BY-NC-ND 4.0',
+                url: 'http://creativecommons.org/licenses/by-nc-nd/4.0'
+            }, function () {
+                console.log('finished populating licenses');
+            });
+        }
+    }
+});
+
+
+var downloadPhotosFromProd = function (interest) {
+
+    //  console.info('Download photos for interest %s.', interest.name);
+
+    var deffered = Q.defer();
+    if (config.downloadPhotosFromProd) {
+
+        // create thumbnail
+        var defferedArray = interest.photos.reduce(function (defferedArray, photo) {
+
+            // download photos
+            interest.photos.reduce(function (o, photo) {
+
+                var localDiskPath = path.resolve(__dirname, '..' + photo.url);
+                defferedArray.push(io.downloadFile(config.prodUrl + photo.url, localDiskPath));
+            }, []);
+
+
+            return defferedArray;
+
+        }, []);
+
+        Q.all(defferedArray).then(function (photos) {
+            deffered.resolve('success');
+        }).done();
+    } else {
+        deffered.resolve('success');
+    }
+
+    return deffered.promise;
+}
+
+var createThumbnails = function (interest) {
+
+    //   console.info('Create thumbnails for interest %s.', interest.name);
+
+    var deffered = Q.defer();
+
+    // create thumbnail
+    var defferedArray = interest.photos.reduce(function (defferedArray, photo) {
+
+        delete photo.thumbnails.w600;
+        delete photo.thumbnail200;
+        delete photo.thumbnail400;
+        delete photo.thumbnail600;
+
+        defferedArray.push(InterestCtrl.createThumbnail(photo, 600, 400));
+
+        return defferedArray;
+
+    }, []);
+
+    Q.all(defferedArray).then(function (photos) {
+
+        interest.photos = photos;
+
+        interest.save(function (err) {
+            if (err) {
+                console.error(err);
+                deffered.reject(err);
+            } else {
+                deffered.resolve('success');
+            }
+        }.done())
+    });
+
+    return deffered.promise;
+};
 
 Interest.find({
         photos: {
@@ -33,34 +134,14 @@ Interest.find({
 
             interests.reduce(function (o, interest) {
 
-                var defferedArray = interest.photos.reduce(function (defferedArray, photo) {
+                // console.info('Interest %s with %d photos.', interest.name, interest.photos.length);
 
-                    delete photo.thumbnails.w600;
-                    delete photo.thumbnail200;
-                    delete photo.thumbnail400;
-                    delete photo.thumbnail600;
+                downloadPhotosFromProd(interest).then(function () {
 
-                    defferedArray.push(InterestCtrl.createThumbnail(photo, 600, 400));
-                    
-                    return defferedArray;
+                    // create thumbnail
+                    createThumbnails(interest).done();
 
-                }, []);
-
-
-                Q.all(defferedArray).then(function (photos) {
-
-                    console.info('Number of photos for this interest.', photos.length);
-
-                    interest.photos = photos;
-
-                    console.info(photos);
-
-                    interest.save(function (err) {
-                        if (err) {
-                            console.error(err);
-                        }
-                    })
-                });
+                }).done();
 
 
             }, null);

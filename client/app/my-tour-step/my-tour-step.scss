@@ -1,9 +1,24 @@
 .my-tour-step-page {
     .photos-area {
-        img {
+        img.smart-photo {
             width: 100%;
         }
-        .remove-button{
+        .edit-photo-area {
+            margin-top: 20px;
+            img.smart-photo {
+                max-height: inherit;
+            }
+        }
+        .author, .license{
+            text-shadow: 1px 1px 0px #6d6d6d;
+        }
+        .author{
+            color: #a8a8a8;
+        }
+        .license{
+            color: #cbcbcb;
+        }
+        .remove-button {
             position: absolute;
             right: 17px;
             top: 6px;
@@ -12,10 +27,9 @@
             background-color: #ddd;
             color: rgba(180, 32, 32, 0.81);
             border-radius: 0;
-            &:hover{
+            &:hover {
                 background-color: #f2f2f2;
-            color: rgba(180, 32, 32, 0.9);
-            
+                color: rgba(180, 32, 32, 0.9);
             }
         }
     }

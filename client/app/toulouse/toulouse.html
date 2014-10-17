@@ -21,10 +21,11 @@
                     <carousel interval="5000">
                         <slide ng-repeat="photo in photos" active="photo.active">
                             <img class="smart-area" ng-src="{{ photo.thumbnails.w600h400 }}">
-                            <!-- <div class="carousel-caption">
-                            <h4>Slide {{$index}}</h4>
-                            <p>{{slide.text}}</p>
-                        </div>-->
+                            <p>
+                                <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
+                                -
+                                <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
+                            </p>
                         </slide>
                     </carousel>
                 </div>

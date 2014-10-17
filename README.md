@@ -31,13 +31,13 @@ Install [Libvips](https://github.com/jcupitt/libvips).
         
 ## Import / Export database
 
-Export from prod database:
+Export from prod database (throw SSH tunel):
 
-    mongodump -d biketouringmap -o ./dumps
+    mongodump --host localhost:27018 -d biketouringmap -o ./dumps
     
 Import to dev database:
 
-    mongorestore --db biketouringmap-dev ./dumps
+    mongorestore --db biketouringmap-dev ./dumps/biketouringmap/
 
 ## Continuous integration deployment
 

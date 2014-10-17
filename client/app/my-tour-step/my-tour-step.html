@@ -16,7 +16,7 @@
     <h2>{{ "mytours.steps.from" | translate }} {{ step.cityFrom.name }} {{ "mytours.steps.to" | translate }} {{ step.cityTo.name }}</h2>
     <div class="row">
         <div class="col-md-7">
-            <div class="smart-map-area">
+            <div class="smart-area">
                 <div extended-map config="mapConfig"></div>
             </div>
         </div>
@@ -161,7 +161,7 @@
                         <a ng-click="editSelectedPointOfInterest = true" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i></a>
                     </div>
                     <div ng-show="editSelectedPointOfInterest">
-                        <a ng-click="submitEditPointForm(editPointForm)" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
+                        <a ng-click="editSelectedPointOfInterest = false; submitEditPointForm(editPointForm)" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
                     </div>
                     <h4 ng-switch="selectedPointOfInterest.type">
                             <span class="interest-type interest" ng-switch-when="interest">
@@ -183,7 +183,7 @@
                             <span ng-if="selectedPointOfInterest.priority == 1">(page d'accueil)</span>
                         </h4>
                     <div ng-hide="editSelectedPointOfInterest" class="photos-area">
-                        <p ng-if="selectedPointOfInterest.description">{{ selectedPointOfInterest.description }}</p>
+                        <p ng-if="selectedPointOfInterest.description" ng-bind-html="selectedPointOfInterest.description"></p>
                         <h4>Add a photo</h4>
                         <div class="form-group">
                             <div class="file-upload btn btn-primary">
@@ -196,15 +196,20 @@
                             </div>
                         </div>
 
-                        <div class="row" ng-if="selectedPointOfInterest.photos.length">
+                        <div class="row photos-area" ng-if="selectedPointOfInterest.photos.length">
                             <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
                                 <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
                                 <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
+                                <p>
+                                    <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
+                                    -
+                                    <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
+                                </p>
                             </div>
                         </div>
 
                     </div>
-                    <div ng-show="editSelectedPointOfInterest">
+                    <div ng-if="editSelectedPointOfInterest">
                         <div class="form-group required" ng-class="{ 'has-error':  editPointForm.type.$invalid, 'has-success':editPointForm.type.$valid }">
                             <label class="control-label">Type</label>
                             <select required name="type" ng-model="selectedPointOfInterest.type" class="form-control">
@@ -232,25 +237,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" ng-if="selectedPointOfInterest.photos.length">
-                            <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
-                                <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
+                        <div class="form-group required" ng-class="{ 'has-error':  editPointForm.description.$dirty && editPointForm.description.$invalid, 'has-success': editPointForm.description.$dirty && editPointForm.description.$valid }">
+                            <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
+                            <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="selectedPointOfInterest.description" type="text" class="form-control"></textarea>
+                            <label class="error-label" ng-show="editPointForm.description.$invalid && editPointForm.description.$dirty" translate="mytourstep.description_warn">The description is required.</label>
+                        </div>
+                        <div class="row photos-area" ng-if="selectedPointOfInterest.photos.length">
+                            <div class="col-md-12 edit-photo-area" ng-repeat="photo in selectedPointOfInterest.photos">
                                 <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
-                                <div>
-                                    <input type="text" ng-model="photo.author.name" />
-                                    <!--
-                                    <input type="text" ng-model="photo.licence" />
-                                    <input type="text" ng-model="photo.url" />-->
+                                <div class="form-group required">
+                                    <label class="control-label">Author name</label>
+                                    <input ng-model="photo.author.name" type="text" class="form-control" placeholder="Author name">
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label">Author Web site</label>
+                                    <input ng-model="photo.author.url" type="text" class="form-control" placeholder="Author url">
+                                </div>
+                                <div class="form-group required">
+                                    <label class="control-label">License</label>
+                                    <select ng-model="photo.licenseId" ng-options="license._id as license.name for license in licenses"></select>
                                 </div>
 
                             </div>
                         </div>
 
-                        <div class="form-group required" ng-class="{ 'has-error':  editPointForm.description.$dirty && editPointForm.description.$invalid, 'has-success': editPointForm.description.$dirty && editPointForm.description.$valid }">
-                            <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
-                            <input required name="description" ng-model="selectedPointOfInterest.description" type="text" class="form-control" placeholder="Enter the description of this point ...">
-                            <label class="error-label" ng-show="editPointForm.description.$invalid && editPointForm.description.$dirty" translate="mytourstep.description_warn">The description is required.</label>
-                        </div>
                     </div>
                 </form>
             </section>

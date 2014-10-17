@@ -1,8 +1,24 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, BikelaneRepository, bikeTourMapService) {
+    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, BikelaneRepository, bikeTourMapService, LicenseRepository) {
 
+    $scope.licenses = LicenseRepository.query();
+
+        $scope.getLicense = function (photo) {
+            if (!photo || !photo.licenseId) {
+                return null;
+            }
+            var license = $scope.licenses.reduce(function (photoLicense, license) {
+                    if (license._id === photo.licenseId) {
+                        return license;
+                    }
+                    return photoLicense;
+                },
+                null);
+            return license;
+        }
+    
         $scope.mapConfig = {
             class: 'toulouse-map',
             initialCenter: {
@@ -50,12 +66,12 @@ angular.module('bikeTouringMapApp')
                     $scope.openTour = function (tour) {
                         if (tour.steps && tour.steps.length === 1) {
                             $scope.openStep(tour.steps[0]);
-                        }else{
-                        $state.go('tour-details', {
-                            id: tour._id
-                        }, {
-                            inherit: false
-                        });
+                        } else {
+                            $state.go('tour-details', {
+                                id: tour._id
+                            }, {
+                                inherit: false
+                            });
                         }
                     }
 

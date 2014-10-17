@@ -33,20 +33,21 @@
                     <div class="col-md-6">
                         <div class="description">
                             <h3>{{ interest.name }}</h3>
-                            <p>{{ interest.description }}</p>
+                            <p ng-bind-html="interest.description"></p>
 
                         </div>
                     </div>
                     <div class="col-md-6" ng-if="interest.photos">
-                        <div class="carousel-area">
+                        <div class="carousel-area ">
                             <div class="">
                                 <carousel>
                                     <slide ng-repeat="photo in interest.photos" active="photo.active">
                                         <img class="photo smart-area" ng-src="{{ photo.thumbnails.w600h400 }}" style="margin:auto;">
-                                        <!-- <div class="carousel-caption">
-                            <h4>Slide {{$index}}</h4>
-                            <p>{{slide.text}}</p>
-                        </div>-->
+                                        <p>
+                                            <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
+                                            -
+                                            <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
+                                        </p>
                                     </slide>
                                 </carousel>
                             </div>

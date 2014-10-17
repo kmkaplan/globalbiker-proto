@@ -1,8 +1,23 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService, bikeTourMapService) {
+    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService, bikeTourMapService, LicenseRepository) {
 
+        $scope.licenses = LicenseRepository.query();
+
+        $scope.getLicense = function (photo) {
+            if (!photo || !photo.licenseId) {
+                return null;
+            }
+            var license = $scope.licenses.reduce(function (photoLicense, license) {
+                    if (license._id === photo.licenseId) {
+                        return license;
+                    }
+                    return photoLicense;
+                },
+                null);
+            return license;
+        }
 
         $scope.onPhotoSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
@@ -110,7 +125,6 @@ angular.module('bikeTouringMapApp')
                             }, null);
                         }
 
-
                         var stepViewModel = new MyTourStepViewModelStep(step, tour, interests);
 
                         $scope.step = stepViewModel;
@@ -190,6 +204,8 @@ angular.module('bikeTouringMapApp')
 
             return deffered.promise;
         };
+
+
 
         $scope.updatePointsFromMapEditor = function (points) {
             var coordinates = points.reduce(function (output, item) {
@@ -373,18 +389,13 @@ angular.module('bikeTouringMapApp')
                     type: $scope.selectedPointOfInterest.type,
                     name: $scope.selectedPointOfInterest.name,
                     description: $scope.selectedPointOfInterest.description,
-                    priority: $scope.selectedPointOfInterest.priority
+                    priority: $scope.selectedPointOfInterest.priority,
+                    photos: $scope.selectedPointOfInterest.photos
                 });
                 interest.$update({
                     id: $scope.selectedPointOfInterest._id
                 }, function (u, putResponseHeader) {
-
-                    $('#new-point-of-interest-form').modal('hide')
-
-                    $scope.step.interests.push(interest);
-
-                    // FIXME à supprimer  MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
-
+                    //       $scope.selectedPointOfInterest = null;
                     $scope.editSelectedPointOfInterest = false;
                 });
 

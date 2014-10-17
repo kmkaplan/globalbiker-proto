@@ -3,10 +3,12 @@
 // Development specific configuration
 // ==================================
 module.exports = {
-  // MongoDB connection options
-  mongo: {
-    uri: 'mongodb://localhost/biketouringmap-dev'
-  },
+    // MongoDB connection options
+    mongo: {
+        uri: 'mongodb://localhost/biketouringmap-dev'
+    },
 
-  seedDB: true
+    seedDB: true,
+    downloadPhotosFromProd: true,
+    prodUrl: 'http://globalbiker.org'
 };

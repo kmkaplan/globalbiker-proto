@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('StepDetailsCtrl', function ($scope, $stateParams, $q, $timeout, Auth, TourRepository, StepRepository, InterestRepository, bikeTourMapService) {
+    .controller('StepDetailsCtrl', function ($scope, $stateParams, $q, $timeout, Auth, TourRepository, StepRepository, InterestRepository, bikeTourMapService, LicenseRepository) {
 
         $scope.isAdmin = Auth.isAdmin;
 
@@ -11,6 +11,22 @@ angular.module('bikeTouringMapApp')
             }
             return false;
         }
+        $scope.licenses = LicenseRepository.query();
+
+        $scope.getLicense = function (photo) {
+            if (!photo || !photo.licenseId) {
+                return null;
+            }
+            var license = $scope.licenses.reduce(function (photoLicense, license) {
+                    if (license._id === photo.licenseId) {
+                        return license;
+                    }
+                    return photoLicense;
+                },
+                null);
+            return license;
+        }
+
 
         $scope.redirectOnError = function () {
             // redirect to 'toulouse' page
