@@ -200,7 +200,7 @@ angular.module('bikeTouringMapApp')
                     $scope.loadToursSteps(tours).then(function () {
                         $scope.tours = tours;
 
-                        $scope.loadInterestsWithPhotos().then(function (interestsWithPhotos) {
+                       $scope.loadInterestsWithPhotos().then(function (interestsWithPhotos) {
                                 var photos = interestsWithPhotos.reduce(function (photos, interest) {
                                     photos = photos.concat(interest.photos);
                                     return photos;
@@ -208,7 +208,7 @@ angular.module('bikeTouringMapApp')
 
                                 if (photos.length > 0) {
                                     photos[0].active = true;
-                                    $scope.photos = photos;
+                                    $scope.photos = photos.splice(0,10);
                                 }
 
                                 deffered.resolve(tours);
@@ -241,7 +241,7 @@ angular.module('bikeTouringMapApp')
         $scope.init = function () {
             $scope.isAdmin = Auth.isAdmin;
             $scope.loadTours().then(function () {
-                $scope.loadBikelanes();
+              //  $scope.loadBikelanes();
             });
         }
 
