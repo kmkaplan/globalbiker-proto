@@ -45,6 +45,48 @@ License.find({}, function (err, licenses) {
             }, function () {
                 console.log('finished populating licenses');
             });
+        } else if (licenses.length === 6) {
+            License.create({
+                name: 'CC BY 3.0',
+                url: 'http://creativecommons.org/licenses/by/3.0'
+            }, {
+                name: 'CC BY-SA 3.0',
+                url: 'http://creativecommons.org/licenses/by-sa/3.0'
+            }, {
+                name: 'CC BY-ND 3.0',
+                url: 'http://creativecommons.org/licenses/by-nd/3.0'
+            }, {
+                name: 'CC BY-NC 3.0',
+                url: 'http://creativecommons.org/licenses/by-nc/3.0'
+            }, {
+                name: 'CC BY-NC-SA 3.0',
+                url: 'https://creativecommons.org/licenses/by-nc-sa/3.0/'
+            }, {
+                name: 'CC BY-NC-ND 3.0',
+                url: 'http://creativecommons.org/licenses/by-nc-nd/3.0'
+            }, {
+                name: 'CC BY 2.0',
+                url: 'http://creativecommons.org/licenses/by/2.0'
+            }, {
+                name: 'CC BY-SA 2.0',
+                url: 'http://creativecommons.org/licenses/by-sa/2.0'
+            }, {
+                name: 'CC BY-ND 2.0',
+                url: 'http://creativecommons.org/licenses/by-nd/2.0'
+            }, {
+                name: 'CC BY-NC 2.0',
+                url: 'http://creativecommons.org/licenses/by-nc/2.0'
+            }, {
+                name: 'CC BY-NC-SA 2.0',
+                url: 'https://creativecommons.org/licenses/by-nc-sa/2.0/'
+            }, {
+                name: 'CC BY-NC-ND 2.0',
+                url: 'http://creativecommons.org/licenses/by-nc-nd/2.0'
+            }, function () {
+                console.log('finished populating licenses');
+            });
+
+
         }
     }
 });
