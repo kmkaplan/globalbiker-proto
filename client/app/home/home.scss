@@ -49,7 +49,7 @@ form p {
 .section {
     &.welcome-page {
         background: url("/assets/images/mer.jpg") no-repeat fixed center center;
-        display: table;
+        //display: table;
         height: 100%;
         position: top;
         width: 100%;
@@ -76,10 +76,10 @@ form p {
             }
             .main-description-area {
                 .titles {
-                    border: 1px rgba(lighten(desaturate($color1, 30%), 30%), 0.5);
-                    background: rgba(lighten(desaturate($color1, 30%), 20%), 0.5);
-                    border-radius: 5px;
-                    box-shadow: 1px 1px 3px 1px desaturate($color1, 30%);
+               //     border: 1px rgba(lighten(desaturate($color1, 30%), 30%), 0.5);
+               //     background: rgba(lighten(desaturate($color1, 30%), 20%), 0.5);
+               //     border-radius: 5px;
+               //     box-shadow: 1px 1px 3px 1px desaturate($color1, 30%);
                     padding: 20px;
                 }
                 .btn-test-prototype {
@@ -93,9 +93,10 @@ form p {
                 color: white;
             }
             .mailing {
-                padding: 20px 300px;
+                padding: 5px 5%;
                 margin: 50px auto;
                 text-align: center;
+                max-width: 600px;
                 h3 {
                     border: 1px solid rgba(desaturate($color2, 30%), 0.7);
                     background: rgba(desaturate($color2, 50%), 0.7);
@@ -127,7 +128,7 @@ form p {
             min-height: 550px;
             padding: 0px;
             font-weight: bold;
-            width: 650px;
+           // width: 650px;
             margin-top: 150px;
             text-align: center;
             margin-left: 550px;

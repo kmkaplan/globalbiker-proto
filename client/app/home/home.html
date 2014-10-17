@@ -2,14 +2,14 @@
     <!-- landing page -->
     <nav class="intro section navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="col-sm-7 logo-container">
+            <div class="col-xs-12 col-sm-7 logo-container">
                 <h1 class="logo">
-                    <img src="/assets/images/bike.png" title="bike logo provided by http://buzz.icons8.com" />
-                    <span class="global">Global</span><span class="biker">Biker</span>
-                    <p class="slogan" translate="home.main.slogan">Ride Global, Ride GlobalBiker</p>
-                </h1>
+                <img src="/assets/images/bike.png" title="bike logo provided by http://buzz.icons8.com" />
+                <span class="global">Global</span><span class="biker">Biker</span>
+                <p class="hidden-xs slogan" translate="home.main.slogan">Ride Global, Ride GlobalBiker</p>
+            </h1>
             </div>
-            <div class="col-sm-4 contacts">
+            <div class="hidden-xs col-sm-4 contacts">
 
                 <!-- <img src="/assets/images/contact.png" title="e-mail" />-->
 
@@ -40,15 +40,17 @@
             <div class="panel">
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-sm-6">
-                            <a href="/toulouse"><img class="screenshot" src="assets/images/cartewelcome.png" alt="Votre blog" class="carte"></a>
+                        <div class="col-md-6 col-xs-12">
+                            <a href="/toulouse">
+                                <img class="screenshot" src="assets/images/cartewelcome.png" alt="Votre blog" class="carte">
+                            </a>
                         </div>
-                        <div class="col-sm-5 main-description-area">
+                        <div class="col-md-6 col-xs-12 main-description-area">
                             <div class="titles">
-                            <h2 class="slogan-welcome txt-shadow" translate="home.intro.invit">GlobalBiker</h2>
-                            <h3 class="txt-shadow" translate="home.intro.description">First bike tourers' community</h3>
+                                <h2 class="slogan-welcome txt-shadow" translate="home.intro.invit">GlobalBiker</h2>
+                                <h3 class="txt-shadow" translate="home.intro.description">First bike tourers' community</h3>
                             </div>
-                               <!-- <div>
+                            <!-- <div>
                                 <button class="btn btn-lg btn-default btn-welcome" type="button" onclick="smoothScroll('prepare'); smoothScroll('partager', 20000);"
                                     translate="home.intro.discover_btn">Discover GlobalBiker</button>
                             </div>-->
@@ -60,7 +62,7 @@
                         </div>
                     </div>
                     <div class="row ">
-                        <div class="col-sm-12 mailing">
+                        <div class="mailing">
                             <div ng-if="!mailSuccess">
                                 <h3 class="txt-shadow" translate="home.intro.invit_mailing">Join us and follow the progress of the project!</h3>
                                 <form name="mailingForm" ng-submit="addMail(emailMailing)" class="mailing-form">
@@ -77,9 +79,24 @@
                             <h3 ng-if="mailSuccess" translate="home.intro.email_success">Thanks, your email address has been successfuly saved!</h3>
                         </div>
                     </div>
+                    
+                    <div class="row visible-xs">
+                        <div class="col-xs-12">
+                            <a href="https://www.facebook.com/globalbikercommunity" target="_blank">
+                                <img src="/assets/images/facebook.png" title="facebook" />
+                            </a>
+                            <a href="https://twitter.com/GlobalBiker_org" target="_blank">
+                                <img src="/assets/images/twitter.png" title="twitter" />
+                            </a>
+                        </div>
+                    </div>
+                    
+                    
                 </div>
+                
             </div>
     </section>
+
     <!-- <section class="section prepare-page decouvrir-page" id="prepare">
         <div class="decouvrir">
             <div class="cadre">
@@ -141,3 +158,4 @@
         </div>
     </section>-->
     </div>
+</div>
