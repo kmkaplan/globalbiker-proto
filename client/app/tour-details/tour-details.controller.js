@@ -57,29 +57,39 @@ angular.module('bikeTouringMapApp')
             return deffered.promise;
         };
 
-        $scope.loadTour = function () {
+        $scope.loadTour = function (tourId) {
 
             var deffered = $q.defer();
 
-            TourRepository.get({
-                id: $scope.tourId
-            }, function (tour) {
-                $scope.tour = tour;
+            StepRepository.getByTour({
+                tourId: tourId
+            }, function (steps) {
+                
+                console.error(steps.length);
 
+                if (steps.length === 1) {
+                    console.warn('Only one step: redirect to step details.');
+                    $scope.openStep(steps[0]);
+                    deffered.success('Only one step.');
+                } else {
 
-                StepRepository.getByTour({
-                    tourId: $scope.tourId
-                }, function (steps) {
                     $scope.steps = steps;
 
+                    TourRepository.get({
+                        id: tourId
+                    }, function (tour) {
 
-                    $scope.loadInterests(tour._id);
+                        $scope.tour = tour;
 
-                    deffered.resolve(tour);
-                }, function (err) {
-                    // error loading tour steps
-                    deffered.reject(err);
-                });
+                        $scope.loadInterests(tourId);
+
+                        deffered.resolve(tour);
+                    }, function (err) {
+                        // error loading tour steps
+                        deffered.reject(err);
+                    });
+
+                }
 
             }, function (err) {
                 // error loading tour
@@ -176,7 +186,7 @@ angular.module('bikeTouringMapApp')
                 }
             };
 
-            $scope.loadTour().catch(function (err) {
+            $scope.loadTour($scope.tourId).catch(function (err) {
                 $scope.redirectOnError();
             });
         };

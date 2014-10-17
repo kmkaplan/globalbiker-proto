@@ -40,13 +40,23 @@ angular.module('bikeTouringMapApp')
                             });
                         }
                     });
-
+                    $scope.openStep = function (step) {
+                        $state.go('step-details', {
+                            id: step._id
+                        }, {
+                            inherit: false
+                        });
+                    }
                     $scope.openTour = function (tour) {
+                        if (tour.steps && tour.steps.length === 1) {
+                            $scope.openStep(tour.steps[0]);
+                        }else{
                         $state.go('tour-details', {
                             id: tour._id
                         }, {
                             inherit: false
                         });
+                        }
                     }
 
                     $scope.$watch('tours', function (tours, old) {
@@ -72,7 +82,8 @@ angular.module('bikeTouringMapApp')
                                             inherit: false
                                         });
                                     }
-                                },label: function (step, tour) {
+                                },
+                                label: function (step, tour) {
                                     return tour.title;
                                 }
                             });
@@ -178,11 +189,11 @@ angular.module('bikeTouringMapApp')
                                     photos = photos.concat(interest.photos);
                                     return photos;
                                 }, []);
-                            
-                            if (photos.length > 0){
-                                photos[0].active = true;
-                                $scope.photos = photos;
-                            }
+
+                                if (photos.length > 0) {
+                                    photos[0].active = true;
+                                    $scope.photos = photos;
+                                }
 
                                 deffered.resolve(tours);
                             },
