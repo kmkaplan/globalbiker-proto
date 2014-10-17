@@ -33,6 +33,32 @@ $textcolor1: lighten(desaturate($color1, 65%), 45%);
 $color2: #5e8c15;
 $textcolor2: lighten($color2, 40%);
 
+@media all and (max-width: 1200px) {
+    /* screen size until 1200px */
+    h2 {
+        font-size: 1.5em;
+        /* 1.5x default size */
+    }
+}
+
+@media all and (max-width: 1000px) {
+    /* screen size until 1000px */
+    h2 {
+        font-size: 1.6em;
+            font-weight: bold;
+    }
+}
+
+@media all and (max-width: 500px) {
+    /* screen size until 500px */
+    body {
+        h2 {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    }
+}
+
 /**
  * App-wide Styles
  */
