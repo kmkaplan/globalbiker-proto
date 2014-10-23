@@ -42,11 +42,11 @@ angular.module('bikeTouringMapApp')
                             itemsGroup.layerOptions.name = groupName;
                         }
 
-                        if (typeof(itemsGroup.layerOptions.show) === 'undefined') {
+                        if (typeof (itemsGroup.layerOptions.show) === 'undefined') {
                             itemsGroup.layerOptions.show = true;
                         }
 
-                        if (typeof(itemsGroup.layerOptions.control) === 'undefined') {
+                        if (typeof (itemsGroup.layerOptions.control) === 'undefined') {
                             itemsGroup.layerOptions.control = false;
                         }
                     }
@@ -55,6 +55,17 @@ angular.module('bikeTouringMapApp')
             removeItemsGroups: function (eMap, itemsGroups) {
                 var map = eMap.map;
 
+                // remove all layers
+                for (var i in map._layers) {
+                    if (map._layers[i]._path != undefined) {
+                        try {
+                            map.removeLayer(map._layers[i]);
+                        } catch (e) {
+                            console.log("problem with " + e + map._layers[i]);
+                        }
+                    }
+                }
+                /*
                 var selfService = this;
 
                 this.configureGroups(itemsGroups);
@@ -76,7 +87,7 @@ angular.module('bikeTouringMapApp')
                             }, null);
                         }
                     }
-                }
+                }*/
             },
             drawItemsGroups: function (eMap, itemsGroups) {
                 var map = eMap.map;

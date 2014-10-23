@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, SteppointRepository, InterestRepository, BikelaneRepository, bikeTourMapService, LicenseRepository) {
+    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, InterestRepository, BikelaneRepository, bikeTourMapService, LicenseRepository) {
 
     $scope.licenses = LicenseRepository.query();
 

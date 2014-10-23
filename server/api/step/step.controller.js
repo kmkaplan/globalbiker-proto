@@ -2,7 +2,6 @@
 
 var _ = require('lodash');
 var Step = require('./step.model');
-var Steppoint = require('../steppoint/steppoint.model');
 var Interest = require('../interest/interest.model');
 var Q = require('q');
 
@@ -41,7 +40,7 @@ exports.getByTour = function (req, res) {
 // Get a single step
 exports.show = function (req, res) {
     Step.findById(req.params.id, function (err, step) {
-      /*  if (step.geometry && step.geometry.coordinates) {
+        /*  if (step.geometry && step.geometry.coordinates) {
             var before = step.geometry.coordinates.length;
             step.geometry.coordinates = geo.simplify(step.geometry, 1, true);
             console.log('Simplify from %d to %d.', before, step.geometry.coordinates.length);
@@ -146,9 +145,9 @@ exports.uploadTrace = function (req, res) {
                 } else if (features.length > 1) {
                     console.error('Trace with %d features(s). Should never append due to readTracesFromFile second parameter.', features.length);
                 }
-                    
+
                 feature = features[0];
-            
+
                 // update step geometry
                 step.geometry = {
                     coordinates: feature.xyzCoordinates.xy, //[[[0.951528735, 44.182434697], [0.951036299, 44.182579117]]],
@@ -194,36 +193,27 @@ exports.removeWithChildren = function (stepId) {
 
     var deffered = Q.defer();
 
-    // remove steppoints
-    Steppoint.find({
+    // remove interests
+    Interest.find({
         stepId: stepId
-    }).remove(function (err, step) {
+    }).remove(function (err) {
+
         if (err) {
             deffered.reject(err);
         }
 
-        // remove interests
-        Interest.find({
-            stepId: stepId
-        }).remove(function (err) {
-
+        // remove step
+        Step.findById(stepId).remove(function (err) {
             if (err) {
                 deffered.reject(err);
             }
-
-            // remove step
-            Step.findById(stepId).remove(function (err) {
-                if (err) {
-                    deffered.reject(err);
-                }
-                deffered.resolve(step);
-            });
+            deffered.resolve(step);
         });
+
+        return deffered.promise;
+
     });
-
-    return deffered.promise;
-
-}
+};
 
 // Deletes a step from the DB.
 exports.destroy = function (req, res) {

@@ -1,7 +1,9 @@
-bike-touring-map
+globalbiker-web
 ================
 
 Map application to share bike tours itinaries.
+
+Prototype: (http://globalbiker.org)
 
 ## Warning: work in progress
 

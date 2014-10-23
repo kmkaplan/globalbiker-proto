@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bikeTouringMapApp')
-    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, SteppointRepository, MyTourStepViewModelStep, MyTourStepMapService, bikeTourMapService, LicenseRepository) {
+    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, MyTourStepViewModelStep, MyTourStepMapService, bikeTourMapService, LicenseRepository) {
 
         $scope.licenses = LicenseRepository.query();
 
@@ -309,7 +309,7 @@ angular.module('bikeTouringMapApp')
 
                             } else if (e.layerType === 'polyline') {
 
-                                if ($scope.steppoints && $scope.steppoints.length != 0) {
+                                if ($scope.step.geometry) {
                                     if (!confirm('Are you sure do you want to replace the existing trace with the new one?')) {
                                         return;
                                     }
