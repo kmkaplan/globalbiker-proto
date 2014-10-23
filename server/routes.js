@@ -19,6 +19,7 @@ module.exports = function (app) {
 
 
     // Insert routes below
+    app.use('/api/interesttypes', require('./api/interesttype'));
     app.use('/api/licenses', require('./api/license'));
     app.use('/api/bikelanes', require('./api/bikelane'));
     app.use('/api/interests', require('./api/interest'));
