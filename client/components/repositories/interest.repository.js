@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .factory('InterestRepository', function ($resource) {
         return $resource('/api/interests/:id/:controller', {
             id: '@_id'
@@ -56,13 +56,6 @@ angular.module('bikeTouringMapApp')
                 method: 'GET',
                 isArray: true,
                 url: '/api/interests/tour/:tourId'
-            },
-            deletePhoto: {
-                method: 'DELETE',
-                url: '/api/interests/:id/photo',
-                params: {
-                    photoId: '@photoId'
-                }
             }
         });
     });

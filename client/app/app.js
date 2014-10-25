@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp', [
+angular.module('globalbikerWebApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
@@ -10,12 +10,14 @@ angular.module('bikeTouringMapApp', [
   'leaflet-directive',
   'angularFileUpload',
   'pascalprecht.translate',
-  'ui.tinymce'
+  'ui.tinymce', 'ui.select'
 ])
-    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider, uiSelectConfig) {
 
 
         tinyMCE.baseURL = '/bower_components/tinymce';
+
+        uiSelectConfig.theme = 'bootstrap';
 
         $urlRouterProvider
             .otherwise('/');

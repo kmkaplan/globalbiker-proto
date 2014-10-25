@@ -3,7 +3,7 @@
 describe('Service: geonames', function () {
 
   // load the service's module
-  beforeEach(module('bikeTouringMapApp'));
+  beforeEach(module('globalbikerWebApp'));
 
   // instantiate service
   var geonames;

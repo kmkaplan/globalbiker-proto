@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .service('extendedMapService', function (extendedMapCoreService, extendedMapDrawService) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 

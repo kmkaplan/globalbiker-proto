@@ -12,4 +12,14 @@
     .table > tfoot > tr > td {
         vertical-align: middle;
     }
+    .select-photo-area {
+        img {
+            max-height: 50px;
+            max-width: 100%;
+        }
+    }
+    img.selected-image {
+        max-height: 200px;
+        max-width: 100%;
+    }
 }

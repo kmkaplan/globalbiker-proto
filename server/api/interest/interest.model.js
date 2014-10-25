@@ -42,6 +42,10 @@ var InterestSchema = new Schema({
         type: String
     },
     priority: Number,
+    photosIds: [{
+        type: Schema.ObjectId,
+        ref: 'PhotoSchema'
+    }],
     photos: [{
             url: {
                 type: String,

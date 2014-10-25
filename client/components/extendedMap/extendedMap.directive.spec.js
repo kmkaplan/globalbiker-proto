@@ -3,7 +3,7 @@
 describe('Directive: extendedMap', function () {
 
   // load the directive's module and view
-  beforeEach(module('bikeTouringMapApp'));
+  beforeEach(module('globalbikerWebApp'));
   beforeEach(module('app/extendedMap/extendedMap.html'));
 
   var element, scope;

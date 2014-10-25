@@ -10,8 +10,6 @@ var fs = require('fs');
 var geo = require('../../components/geo/geo');
 var Q = require('q');
 
-var geojsonTools = require('geojson-tools');
-
 var ObjectId = require('mongoose').Types.ObjectId;
 
 
@@ -30,20 +28,10 @@ exports.index = function (req, res) {
     });
 };
 
-exports.searchNearPoint = function (point, distance, extraCriteria) {
+exports.searchNearPoint = function (searchCriteria, extraCriteria) {
     var deffered = Q.defer();
 
-    var criteria = {
-        geometry: {
-            $near: {
-                $geometry: {
-                    type: 'Point',
-                    coordinates: point
-                },
-                $maxDistance: distance
-            }
-        }
-    };
+    var criteria = searchCriteria;
 
     if (extraCriteria.type) {
 
@@ -81,56 +69,6 @@ exports.searchNearPoint = function (point, distance, extraCriteria) {
     return deffered.promise;
 };
 
-exports.coordinatesToNearPromise = function (distance, promises, coordinates, extraCriteria) {
-
-    var simplifiedCoordinates = coordinates; //geo.simplify(coordinates, 0.1, false)
-
-    var points = geojsonTools.complexify(simplifiedCoordinates, distance / 1000);
-
-    //  var points = geojsonTools.complexify(coordinates, distance / 1000);
-
-    /*  console.info('Simplify from %d to %d then complexify to %d instead of %d, ratio: %d.', coordinates.length, simplifiedCoordinates.length, simplifiedComplexifiedPoints.length, points.length, simplifiedComplexifiedPoints.length / points.length);*/
-
-    var promises = points.reduce(function (promises, point) {
-
-        if (promises.length < 10000) {
-
-            promises.push(exports.searchNearPoint(point, distance, extraCriteria));
-
-        }
-        return promises;
-    }, promises);
-    return promises;
-};
-
-exports.filterDuplicated = function (results) {
-    var cache = {};
-
-    var countDuplicated = 0;
-
-    var results = results.reduce(function (results, result) {
-        if (result.length && result.length > 0) {
-
-            result.reduce(function (results, item) {
-                if (!cache[item._id]) {
-                    results.push(item);
-                    cache[item._id] = true;
-                } else {
-                    countDuplicated++;
-                }
-                return results;
-            }, results);
-
-        }
-        return results;
-    }, []);
-
-    console.info('%d results after removing %d duplicated.', results.length, countDuplicated);
-
-    return results;
-};
-
-
 exports.searchAroundStep = function (req, res) {
 
     var stepId = req.query.stepId;
@@ -156,37 +94,20 @@ exports.searchAroundStep = function (req, res) {
             return handleError(step, err);
         }
 
-        var promises = [];
+        // convert geometry to search criteria array
+        var criteriaArray = geo.geometryToNearCriterias(step.geometry, distance);
 
-        if (step.geometry && step.geometry.coordinates) {
-
-            var nbInput = 0;
-
-            if (step.geometry.type === 'LineString') {
-
-                promises = exports.coordinatesToNearPromise(distance, promises, step.geometry.coordinates, extraCriteria);
-                nbInput += step.geometry.coordinates.length;
-            } else if (step.geometry.type === 'MultiLineString') {
-
-                promises = step.geometry.coordinates.reduce(function (promises, coordinates) {
-                    nbInput += coordinates.length;
-                    return exports.coordinatesToNearPromise(distance, promises, coordinates, extraCriteria);
-                }, promises);
-
-            } else {
-                console.log('Unexpected feature geometry type "%s".', step.geometry.type);
-                return promises;
-            }
-
-            console.info('Query near from %d to %d points.', nbInput, promises.length);
-
-        }
-
+        // query database
+        var promises = criteriaArray.reduce(function (promises, searchCriteria) {
+            var promise = exports.searchNearPoint(searchCriteria, extraCriteria);
+            promises.push(promise);
+            return promises;
+        }, []);
 
         Q.all(promises).then(
             function (results) {
 
-                var results = exports.filterDuplicated(results);
+                var results = geo.filterDuplicated(results);
 
                 return res.json(200, results);
             });
@@ -224,47 +145,31 @@ exports.searchAroundTour = function (req, res) {
             distance = 200;
         }
 
-        var promises = steps.reduce(function (promises, step) {
+        var criteriaArray = steps.reduce(function (criteriaArray, step) {
 
-            if (step.geometry && step.geometry.coordinates) {
+            // convert geometry to search criteria array
+            return criteriaArray.concat(geo.geometryToNearCriterias(step.geometry, distance));
 
-                var nbInput = 0;
-
-                if (step.geometry.type === 'LineString') {
-
-                    promises = exports.coordinatesToNearPromise(distance, promises, step.geometry.coordinates, extraCriteria);
-                    nbInput += step.geometry.coordinates.length;
-                } else if (step.geometry.type === 'MultiLineString') {
-
-                    promises = step.geometry.coordinates.reduce(function (promises, coordinates) {
-                        nbInput += coordinates.length;
-                        return exports.coordinatesToNearPromise(distance, promises, coordinates, extraCriteria);
-                    }, promises);
-
-                } else {
-                    console.log('Unexpected feature geometry type "%s".', step.geometry.type);
-                    return promises;
-                }
-
-                console.info('Query near from %d to %d points.', nbInput, promises.length);
-
-            }
-            return promises;
+            return criteriaArray;
         }, []);
 
+        // query database
+        var promises = criteriaArray.reduce(function (promises, searchCriteria) {
+            var promise = exports.searchNearPoint(searchCriteria, extraCriteria);
+            promises.push(promise);
+            return promises;
+        }, []);
 
         Q.all(promises).then(
             function (results) {
 
-                var results = exports.filterDuplicated(results);
+                var results = geo.filterDuplicated(results);
 
                 return res.json(200, results);
             });
 
     });
 };
-
-
 
 exports.searchAroundPoint = function (req, res) {
 
@@ -560,93 +465,6 @@ exports.upload = function (req, res) {
     });
 };
 
-exports.createThumbnail = function (photo, maxWidth, maxHeight) {
-    var deferred = Q.defer();
-
-    if (!photo.thumbnails) {
-        photo.thumbnails = {};
-    }
-
-    var thumbnailReference = 'w' + maxWidth + 'h' + maxHeight;
-
-    //  if (!photo.thumbnails[thumbnailReference]) {
-
-    var photoPath = path.resolve(__dirname, '../..' + photo.url);
-
-    var suffix = '-' + maxWidth + '-' + maxHeight;
-
-    var thumbnailHttpPath = io.addPathSuffixBeforeFileExtension(photoPath, suffix);
-
-    photo.thumbnails[thumbnailReference] = io.addPathSuffixBeforeFileExtension(photo.url, suffix);;
-
-    io.createThumbnail(photoPath, thumbnailHttpPath, maxWidth, maxHeight).then(function () {
-
-        deferred.resolve(photo);
-
-    }, function (err) {
-        deferred.reject(err);
-
-    });
-
-    /* } else {
-        // already exists
-        deferred.resolve(photo);
-    }*/
-
-    return deferred.promise;
-}
-
-exports.uploadPhoto = function (req, res) {
-
-    var interestId = req.params.id;
-
-    Interest.findById(interestId, function (err, interest) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!interest) {
-            console.log('Interest "%s" does not exists.', interestId);
-            return res.send(404);
-        }
-        var file = req.files.file;
-
-        if (!file) {
-            console.log('File "file" is missing.');
-            return res.send(400, 'File "file" is missing.');
-        }
-
-        var newUrl = '/photos/interests/' + interestId + '/' + path.basename(file.path);
-        var newPath = 'server/' + newUrl;
-        // copy file
-        io.copyFile(file.path, newPath).then(function () {
-
-            var photo = {
-                url: newUrl
-            };
-
-            exports.createThumbnail(photo, 600, 400).then(function () {
-
-                interest.photos.push(photo);
-
-                interest.save(function (err) {
-                    if (err) {
-                        return handleError(res, err);
-                    }
-                    return res.json(200, interest);
-                });
-
-            }, function (err) {
-                return handleError(res, err);
-            });
-
-        }, function (err) {
-            return handleError(res, err);
-        });
-
-
-    })
-};
-
 
 exports.deletePhoto = function (req, res) {
 
@@ -749,11 +567,11 @@ exports.update = function (req, res) {
             return res.send(404);
         }
 
-         console.log(req.body);
-        
-       // console.log(deepCopy(req.body));
-        
-        
+        console.log(req.body);
+
+        // console.log(deepCopy(req.body));
+
+
         mergeObjects(req.body, interest);
 
         interest.save(function (err) {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .controller('NavbarCtrl', function ($rootScope, $scope, $location, Auth, $translate) {
         var home;
 

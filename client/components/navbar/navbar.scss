@@ -1,10 +1,10 @@
 .navbar {
-    background: linear-gradient(to bottom, darken($color1, 5%) 0%, lighten($color1, 5%) 100%);
+    background: linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
     .navbar-text {
-        color: $textcolor1;
+        color: $white1;
     }
     .navbar-nav > li > a {
-        color: $textcolor1;
+        color: $white1;
         font-size: 20px;
         line-height: 20px;
         &.main {
@@ -17,15 +17,18 @@
                 }
             }
             .biker {
-                color: lighten($textcolor1, 10%);
+                color: white2;
             }
+        }
+        .logo {
+            height: 35px;
         }
     }
 }
 
 .navbar .navbar-nav > li.active > a {
     line-height: 25px;
-    background: lighten(desaturate($color1, 65%), 35%);
+    background: lighten($color1, 55%);
     color: #555;
     font-weight: bold;
 }

@@ -1,16 +1,49 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
-    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, $timeout, leafletData, TourRepository, StepRepository, MyTourViewModelTour, MyTourViewModelStep, MyTourViewModelCity, geonames, MyTourMapService, Auth, bikeTourMapService) {
+angular.module('globalbikerWebApp')
+    .controller('MyTourCtrl', function ($scope, $http, $stateParams, $state, $q, $timeout, leafletData, TourRepository, StepRepository, MyTourViewModelTour, MyTourViewModelStep, MyTourViewModelCity, geonames, MyTourMapService, Auth, bikeTourMapService, PhotoRepository, tourLoaderService) {
 
-        $scope.loadTours = function () {
+        $scope.photo = {};
+
+        $scope.loadPhotosAroundTour = function (tourId) {
+
+            // retrieve interests
             var deffered = $q.defer();
 
-            TourRepository.get({
-                id: $scope.tourId
-            }, function (tour) {
+            PhotoRepository.searchAroundTour({
+                    tourId: tourId,
+                    distance: 1000
+                }, function (photos) {
+                    $scope.photos = photos
+                    deffered.resolve(photos);
+                },
+                function (err) {
+                    deffered.reject(err);
+                });
 
-                var tour = new MyTourViewModelTour(tour);
+            return deffered.promise;
+        };
+
+        $scope.retrievePhotoById = function (photoId) {
+
+            var deffered = $q.defer();
+
+            PhotoRepository.get({
+                id: photoId
+            }, function (photo) {
+                deffered.resolve(photo);
+            }, function (err) {
+                console.error(err);
+                deffered.reject(err);
+            });
+
+            return deffered.promise;
+        };
+
+        $scope.loadTourWithSteps = function () {
+            var deffered = $q.defer();
+
+            $scope.loadTour().then(function (tour) {
 
                 StepRepository.getByTour({
                     tourId: $scope.tourId
@@ -44,10 +77,31 @@ angular.module('bikeTouringMapApp')
                     deffered.reject(err);
                 });
 
-            }, function (err) {
-                console.error(err);
-                deffered.reject(err);
             });
+
+            return deffered.promise;
+
+        }
+
+        $scope.loadTour = function () {
+            var deffered = $q.defer();
+
+            tourLoaderService.loadTour($scope.tourId, {
+                tour: {
+                    photo: true,
+                    photosAround: {
+                        distance: 500
+                    }
+                }
+
+            }).then(function (tour) {
+                    var tour = new MyTourViewModelTour(tour);
+                    deffered.resolve(tour);
+                },
+                function (err) {
+                    console.error(err);
+                    deffered.reject(err);
+                });
 
             return deffered.promise;
         };
@@ -71,7 +125,7 @@ angular.module('bikeTouringMapApp')
 
                 $scope.tourId = $stateParams.id;
 
-                $scope.loadTours().then(function () {});
+                $scope.loadTourWithSteps().then(function () {});
 
                 $scope.mapConfig = {
                     class: 'my-tour-map',
@@ -109,7 +163,7 @@ angular.module('bikeTouringMapApp')
                                                     style: {
                                                         color: '#34a0b4',
                                                         width: 3,
-                                                        weight: 8,
+                                                        weight: 6,
                                                         opacity: 0.8
                                                     },
                                                     label: function (step) {
@@ -293,6 +347,11 @@ angular.module('bikeTouringMapApp')
             if ($scope.tour && $scope.tour.originalModel) {
                 $scope.isEditProperties = false;
                 // save after a short delay
+                if ($scope.tour.photo) {
+                    $scope.tour.originalModel.photoId = $scope.tour.photo._id;
+                } else {
+                    delete $scope.tour.originalModel.photoId;
+                }
                 $scope.tour.originalModel.$update(function (data, putResponseHeaders) {
                     console.info('Tour updated.');
 
@@ -374,7 +433,7 @@ angular.module('bikeTouringMapApp')
                         id: step._id
                     },
                     function () {
-                        $scope.loadTours().then(function () {
+                        $scope.loadTourWithSteps().then(function () {
                             $scope.autozoom();
                         });
                     });

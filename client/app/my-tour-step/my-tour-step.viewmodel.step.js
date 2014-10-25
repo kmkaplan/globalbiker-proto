@@ -1,5 +1,5 @@
 
-angular.module('bikeTouringMapApp').factory('MyTourStepViewModelStep', function () {
+angular.module('globalbikerWebApp').factory('MyTourStepViewModelStep', function () {
     return function (step, tour, interests) {
         //set defaults properties and functions
         angular.extend(this, {

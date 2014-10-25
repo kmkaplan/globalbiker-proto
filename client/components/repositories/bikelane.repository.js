@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .factory('BikelaneRepository', function ($resource) {
         return $resource('/api/bikelanes/:id/:controller', {
             id: '@_id'

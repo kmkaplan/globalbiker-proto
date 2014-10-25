@@ -13,7 +13,6 @@ router.get('/', controller.index);
 router.get('/:id', controller.show);
 router.get('/step/:stepId', controller.getByStep);
 router.get('/tour/:tourId', controller.getByTour);
-router.post('/:id/upload-photo', auth.hasRole('admin'), controller.uploadPhoto);
 router.post('/upload/:type', auth.hasRole('admin'), controller.upload);
 router.delete('/:id/photo', auth.hasRole('admin'), controller.deletePhoto);
 router.post('/', auth.hasRole('admin'), controller.create);

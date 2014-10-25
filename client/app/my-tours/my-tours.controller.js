@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .controller('MyToursCtrl', function ($scope, $state, TourRepository, Auth) {
 
         Auth.isLoggedInAsync(function (loggedIn) {

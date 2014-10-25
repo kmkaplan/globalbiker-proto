@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .controller('HomeCtrl', function ($scope, MailingRepository, $translate) {
         $scope.addMail = function ($email, $) {
             var mailingRepository;

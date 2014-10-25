@@ -45,6 +45,10 @@ var TourSchema = new Schema({
     priority: {
         type: Number,
         default: 1
+    },
+    photoId: {
+        type: Schema.ObjectId,
+        ref: 'PhotoSchema'
     }
 });
 

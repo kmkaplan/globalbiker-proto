@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .factory('MailingRepository', function ($resource) {
         return $resource('/api/mailings/:id/:controller', {
                 id: '@_id'

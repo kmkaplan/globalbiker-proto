@@ -1,10 +1,11 @@
 'use strict';
 
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .directive('fileUpload', function ($upload) {
         return {
             templateUrl: 'components/file-upload/file-upload.html',
+            transclude: true,
             restrict: 'EA',
             scope: {
                 fileUpload: '='
@@ -15,17 +16,33 @@ angular.module('bikeTouringMapApp')
                     $scope.onFileSelect = function ($files) {
                         //$files: an array of files selected, each file has name, size, and type.
                         for (var i = 0; i < $files.length; i++) {
+
                             var file = $files[i];
 
                             $scope.fileUploadProgress = 0;
 
+                            var data = {};
+                            if ($scope.fileUpload.data && typeof ($scope.fileUpload.data) === 'function') {
+                                data = $scope.fileUpload.data();
+                            }
+
+                            var url = "";
+                            if ($scope.fileUpload.url) {
+                                if (typeof ($scope.fileUpload.data) === 'function') {
+                                    url = $scope.fileUpload.url();
+                                } else {
+                                    url = $scope.fileUpload.url;
+                                }
+                            }
+
                             $scope.upload = $upload.upload({
-                                url: $scope.fileUpload.url,
+                                url: url,
                                 file: file,
+                                data: data
                             }).progress(function (evt) {
                                 $scope.fileUploadProgress = (100 * evt.loaded / evt.total);
                             }).success(function (data, status, headers, config) {
-                                if ($scope.fileUpload && $scope.fileUpload.callbacks && $scope.fileUpload.callbacks.success && typeof($scope.fileUpload.callbacks.success) === 'function'){
+                                if ($scope.fileUpload && $scope.fileUpload.callbacks && $scope.fileUpload.callbacks.success && typeof ($scope.fileUpload.callbacks.success) === 'function') {
                                     $scope.fileUpload.callbacks.success(data);
                                 }
                                 $scope.fileUploadProgress = null;

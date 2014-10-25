@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
-    .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService, InterestRepository, LicenseRepository) {
+angular.module('globalbikerWebApp')
+    .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService, InterestRepository, LicenseRepository, tourLoaderService) {
 
         $scope.isAdmin = Auth.isAdmin;
 
@@ -57,47 +57,6 @@ angular.module('bikeTouringMapApp')
             return deffered.promise;
         };
 
-        $scope.loadTour = function (tourId) {
-
-            var deffered = $q.defer();
-
-            StepRepository.getByTour({
-                tourId: tourId
-            }, function (steps) {
-                
-                console.error(steps.length);
-
-                if (steps.length === 1) {
-                    console.warn('Only one step: redirect to step details.');
-                    $scope.openStep(steps[0]);
-                    deffered.success('Only one step.');
-                } else {
-
-                    $scope.steps = steps;
-
-                    TourRepository.get({
-                        id: tourId
-                    }, function (tour) {
-
-                        $scope.tour = tour;
-
-                        $scope.loadInterests(tourId);
-
-                        deffered.resolve(tour);
-                    }, function (err) {
-                        // error loading tour steps
-                        deffered.reject(err);
-                    });
-
-                }
-
-            }, function (err) {
-                // error loading tour
-                deffered.reject(err);
-            });
-
-            return deffered.promise;
-        }
 
         $scope.redirectOnError = function () {
             // redirect to 'toulouse' page
@@ -114,6 +73,21 @@ angular.module('bikeTouringMapApp')
                 return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
             }
         };
+
+        $scope.loadTour = function () {
+            return tourLoaderService.loadTour($scope.tourId, {
+                steps: {}
+            }).then(function (tour) {
+
+                if (tour.steps.length === 1) {
+                    console.warn('Only one step: redirect to step details.');
+                    $scope.openStep(tour.steps[0]);
+                    deffered.success('Only one step.');
+                } else {
+                    $scope.tour = tour;
+                }
+            });
+        }
 
         $scope.init = function () {
 
@@ -134,16 +108,16 @@ angular.module('bikeTouringMapApp')
                 callbacks: {
                     'map:created': function (eMap) {
 
-                        $scope.$watch('steps', function (steps, old) {
+                        $scope.$watch('tour.steps', function (steps, old) {
 
                             if (steps) {
                                 var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
                                     style: {
-                                        color: '#0c6f32',
-                                        width: 3,
-                                        weight: 8,
-                                        opacity: 0.3
-                                    },
+                                                        color: '#34a0b4',
+                                                        width: 3,
+                                                        weight: 6,
+                                                        opacity: 0.8
+                                                    },
                                     label: function (step) {
                                         return $scope.getStepLabel(step);
                                     },

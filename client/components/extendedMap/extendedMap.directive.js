@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .directive('extendedMap', function ($http, $timeout, extendedMapService, extendedMapMathsService, leafletData) {
         return {
             templateUrl: 'components/extendedMap/extendedMap.html',

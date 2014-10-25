@@ -9,6 +9,7 @@ var S = require('string');
 var proj4 = require('proj4');
 var geolib = require('geolib');
 var simplify = require('simplify-js');
+var geojsonTools = require('geojson-tools');
 
 exports.projections = {
     'EPSG:3943': '+proj=lcc +lat_1=42.25 +lat_2=43.75 +lat_0=43 +lon_0=3 +x_0=1700000 +y_0=2200000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
@@ -52,7 +53,7 @@ exports.getTotalDistanceFromGeometry = function (geometry) {
     }
     return distance;
 };
-
+2
 exports.getElevationGain = function (type, elevationPoints) {
 
     var elevationGain = {
@@ -158,6 +159,91 @@ exports.buildLine = function (coordinates) {
     return line;
 
 }
+
+exports.coordinatesToNearCriterias = function (coordinates, distance) {
+
+    var simplifiedCoordinates = coordinates; //geo.simplify(coordinates, 0.1, false)
+
+    var points = geojsonTools.complexify(simplifiedCoordinates, distance / 1000);
+
+    console.info('Simplify from %d to %d then complexify  instead of %d, ratio: %d.', coordinates.length, simplifiedCoordinates.length, points.length, simplifiedCoordinates.length / points.length);
+
+    var nearCriterias = points.reduce(function (nearCriterias, point) {
+        var criteria = {
+            geometry: {
+                $near: {
+                    $geometry: {
+                        type: 'Point',
+                        coordinates: point
+                    },
+                    $maxDistance: distance
+                }
+            }
+        };
+
+        nearCriterias.push(criteria);
+
+        return nearCriterias;
+    }, []);
+
+    return nearCriterias;
+};
+
+exports.geometryToNearCriterias = function (geometry, distance) {
+    if (geometry && geometry.coordinates) {
+        var nearCriterias;
+        if (geometry.type === 'LineString') {
+            console.log('LineString');
+            nearCriterias = exports.coordinatesToNearCriterias(geometry.coordinates, distance);
+        } else if (geometry.type === 'MultiLineString') {
+            console.log('MultiLineString');
+
+            nearCriterias = geometry.coordinates.reduce(function (nearCriterias, coordinates) {
+                var criteriaArray = exports.coordinatesToNearPromise(coordinates, distance);
+                return nearCriterias.concat(criteriaArray);
+            }, []);
+
+        } else {
+            console.log('Unexpected feature geometry type "%s".', geometry.type);
+            return null;
+        }
+        return nearCriterias;
+    } else {
+        console.log('Invalid geometry.');
+        return null;
+    }
+}
+
+
+exports.filterDuplicated = function (results) {
+    var cache = {};
+
+    var countDuplicated = 0;
+
+    var results = results.reduce(function (results, result) {
+        if (result.length && result.length > 0) {
+
+            result.reduce(function (results, item) {
+
+
+
+                if (!cache[item._id]) {
+                    results.push(item);
+                    cache[item._id] = true;
+                } else {
+                    countDuplicated++;
+                }
+                return results;
+            }, results);
+
+        }
+        return results;
+    }, []);
+
+    console.info('%d results after removing %d duplicated.', results.length, countDuplicated);
+
+    return results;
+};
 
 exports.readTracesFromFile = function (file, concatenateFeatures) {
 

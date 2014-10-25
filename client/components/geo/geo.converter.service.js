@@ -1,7 +1,7 @@
 /* global io */
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .factory('GeoConverter', function () {
 
         return {

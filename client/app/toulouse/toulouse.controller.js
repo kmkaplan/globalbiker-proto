@@ -1,9 +1,19 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
-    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, InterestRepository, BikelaneRepository, bikeTourMapService, LicenseRepository) {
+angular.module('globalbikerWebApp')
+    .controller('ToulouseCtrl', function ($scope, $q, $state, Auth, TourRepository, StepRepository, InterestRepository, BikelaneRepository, bikeTourMapService, LicenseRepository, tourLoaderService) {
 
-    $scope.licenses = LicenseRepository.query();
+        $scope.isAdmin = Auth.isAdmin;
+
+        $scope.isAllowedToEdit = function (tour) {
+            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
+                return true;
+            }
+            return false;
+        }
+
+
+        $scope.licenses = LicenseRepository.query();
 
         $scope.getLicense = function (photo) {
             if (!photo || !photo.licenseId) {
@@ -18,7 +28,7 @@ angular.module('bikeTouringMapApp')
                 null);
             return license;
         }
-    
+
         $scope.mapConfig = {
             class: 'toulouse-map',
             initialCenter: {
@@ -86,9 +96,14 @@ angular.module('bikeTouringMapApp')
                             }, []);
 
                             var traceFeatures = bikeTourMapService.buildToursStepTracesFeatures(toursToDisplayInMap, {
-                                overStyle: {
-                                    color: '#555',
+                                style: {
+                                    width: 3,
+                                    weight: 6,
                                     opacity: 0.8
+                                },
+                                overStyle: {
+                                    color: '#34a0b4',
+                                    opacity: 1
                                 },
                                 callbacks: {
                                     'click': function (step) {
@@ -191,6 +206,28 @@ angular.module('bikeTouringMapApp')
             return $q.all(defferedArray);
         };
 
+        $scope.loadTourDetails = function (tour) {
+            var deffered = $q.defer();
+
+            tourLoaderService.loadDetails(tour, {
+                tour: {
+                    photo: true,
+                    photosAround: {
+                        distance: 500
+                    }
+                }
+
+            }).then(function (tour) {
+                    deffered.resolve(tour);
+                },
+                function (err) {
+                    console.error(err);
+                    deffered.reject(err);
+                });
+
+            return deffered.promise;
+        };
+
         $scope.loadTours = function () {
 
             var deffered = $q.defer();
@@ -200,7 +237,13 @@ angular.module('bikeTouringMapApp')
                     $scope.loadToursSteps(tours).then(function () {
                         $scope.tours = tours;
 
-                       $scope.loadInterestsWithPhotos().then(function (interestsWithPhotos) {
+                        tours.reduce(function (o, tour) {
+
+                            $scope.loadTourDetails(tour);
+
+                        }, []);
+
+                        /*$scope.loadInterestsWithPhotos().then(function (interestsWithPhotos) {
                                 var photos = interestsWithPhotos.reduce(function (photos, interest) {
                                     photos = photos.concat(interest.photos);
                                     return photos;
@@ -208,14 +251,14 @@ angular.module('bikeTouringMapApp')
 
                                 if (photos.length > 0) {
                                     photos[0].active = true;
-                                    $scope.photos = photos.splice(0,10);
+                                    $scope.photos = photos.splice(0, 10);
                                 }
 
                                 deffered.resolve(tours);
                             },
                             function (err) {
                                 deffered.reject(err);
-                            });
+                            });*/
                     });
                 },
                 function (err) {
@@ -225,7 +268,7 @@ angular.module('bikeTouringMapApp')
             return deffered.promise;
         };
 
-        $scope.loadBikelanes = function () {
+        /* $scope.loadBikelanes = function () {
             $scope.loadingInProgress = true;
             BikelaneRepository.search({
                 latitude: 43.61,
@@ -237,11 +280,11 @@ angular.module('bikeTouringMapApp')
             }, function () {
                 $scope.loadingInProgress = false;
             });
-        };
+        };*/
         $scope.init = function () {
             $scope.isAdmin = Auth.isAdmin;
             $scope.loadTours().then(function () {
-              //  $scope.loadBikelanes();
+                //  $scope.loadBikelanes();
             });
         }
 

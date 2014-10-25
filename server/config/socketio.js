@@ -18,6 +18,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/photo/photo.socket').register(socket);
   require('../api/interesttype/interesttype.socket').register(socket);
   require('../api/license/license.socket').register(socket);
   require('../api/bikelane/bikelane.socket').register(socket);

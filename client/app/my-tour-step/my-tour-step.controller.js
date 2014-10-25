@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
-    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, MyTourStepViewModelStep, MyTourStepMapService, bikeTourMapService, LicenseRepository) {
+angular.module('globalbikerWebApp')
+    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, MyTourStepViewModelStep, MyTourStepMapService, bikeTourMapService, LicenseRepository, PhotoRepository, interestLoaderService) {
 
         $scope.licenses = LicenseRepository.query();
 
@@ -18,30 +18,6 @@ angular.module('bikeTouringMapApp')
                 null);
             return license;
         }
-
-        $scope.onPhotoSelect = function ($files) {
-            //$files: an array of files selected, each file has name, size, and type.
-            for (var i = 0; i < $files.length; i++) {
-                var file = $files[i];
-
-                $scope.photoUploadProgress = 0;
-
-                $scope.upload = $upload.upload({
-                    url: '/api/interests/' + $scope.selectedPointOfInterest._id + '/upload-photo',
-                    data: {},
-                    file: file,
-                }).progress(function (evt) {
-                    $scope.photoUploadProgress = (100 * evt.loaded / evt.total);
-                }).success(function (data, status, headers, config) {
-                    $scope.photoUploadProgress = null;
-                    $scope.loadStep();
-                }).error(function (msg) {
-                    alert(msg);
-                    $scope.photoUploadProgress = null;
-                });
-
-            }
-        };
 
         $scope.onFileSelect = function ($files) {
             //$files: an array of files selected, each file has name, size, and type.
@@ -74,6 +50,35 @@ angular.module('bikeTouringMapApp')
             }
         };
 
+        $scope.photosupload = {
+            // TODO manage multiple photos
+            multiple: false,
+            url: function () {
+                return '/api/photos/upload';
+            },
+            data: function () {
+                return {
+                    geometry: $scope.selectedPointOfInterest.geometry
+                }
+            },
+            callbacks: {
+                success: function (photo) {
+
+                    $scope.selectedPointOfInterest.photos.push(photo);
+                    $scope.selectedPointOfInterest.photosIds.push(photo._id);
+
+                    $scope.selectedPointOfInterest.$update(function (data, putResponseHeaders) {
+
+                        $scope.loadStep();
+
+                        console.info('Photo uploaded.');
+                    });
+
+
+
+                }
+            }
+        };
 
         $scope.deleteTrace = function () {
 
@@ -84,14 +89,39 @@ angular.module('bikeTouringMapApp')
 
         $scope.removePhoto = function (interest, photo) {
             if (interest && interest._id && photo && photo._id) {
-                InterestRepository.deletePhoto({
-                    id: interest._id,
-                    photoId: photo._id
-                }, function (interest) {
-                    $scope.loadStep();
+
+                var index = $scope.selectedPointOfInterest.photos.indexOf(photo);
+                if (index > -1) {
+                    $scope.selectedPointOfInterest.photos.splice(index, 1);
+                }
+
+                index = $scope.selectedPointOfInterest.photosIds.indexOf(photo._id);
+                if (index > -1) {
+                    $scope.selectedPointOfInterest.photosIds.splice(index, 1);
+                }
+
+                $scope.selectedPointOfInterest.$update(function (data, putResponseHeaders) {
+
+                    PhotoRepository.remove({
+                            id: photo._id
+                        },
+                        function () {
+                            $scope.loadStep();
+                            console.info('Photo removed.');
+                        });
                 });
             }
         };
+
+        $scope.updatePhoto = function (photo) {
+            if (photo && photo._id) {
+
+                photo.$update(function (data, putResponseHeaders) {
+                    console.info('Photo updated.');
+                });
+            }
+        };
+
 
         $scope.loadStep = function () {
             var deffered = $q.defer();
@@ -129,9 +159,9 @@ angular.module('bikeTouringMapApp')
 
                         $scope.step = stepViewModel;
 
-                        // FIXME à supprimer MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
-
                         deffered.resolve($scope.step);
+
+
                     }, function () {
                         console.error('Unexpected error while retrieving interests of step %s', $scope.stepId);
                         deffered.reject('Unexpected error while retrieving interests of step.');
@@ -257,9 +287,15 @@ angular.module('bikeTouringMapApp')
                                         mode: 'normal',
                                         callbacks: {
                                             'click': function (interest, markerLayer) {
-                                                $scope.selectedPointOfInterest = interest;
-                                                $scope.editSelectedPointOfInterest = false;
-                                                $scope.$apply();
+
+                                                interestLoaderService.loadDetails(interest, {
+                                                    interest: {
+                                                        photos: true
+                                                    }
+                                                }).then(function (interest) {
+                                                    $scope.selectedPointOfInterest = interest;
+                                                    $scope.editSelectedPointOfInterest = false;
+                                                });
                                             }
                                         }
                                     }), {
@@ -276,7 +312,14 @@ angular.module('bikeTouringMapApp')
 
                                 if (step && step.originalModel && step.originalModel.geometry) {
 
-                                    var traceFeatures = [bikeTourMapService.buildStepTraceFeature(step)];
+                                    var traceFeatures = [bikeTourMapService.buildStepTraceFeature(step, {
+                                        style: {
+                                            color: '#34a0b4',
+                                            width: 3,
+                                            weight: 6,
+                                            opacity: 0.8
+                                        }
+                                    })];
 
                                     eMap.addItemsToGroup(traceFeatures, {
                                         name: 'Tracé',
@@ -334,11 +377,7 @@ angular.module('bikeTouringMapApp')
 
                             $scope.updatePointsFromMapEditor([]);
                         },
-                        'interest:clicked': function (marker, eMap, item, itemLayer, e) {
-                            $scope.selectedPointOfInterest = marker;
-                            $scope.editSelectedPointOfInterest = false;
-                            $scope.$apply();
-                        }
+                        'interest:clicked': function (interest, eMap, item, itemLayer, e) {}
                     }
                 };
 
@@ -390,7 +429,7 @@ angular.module('bikeTouringMapApp')
                     name: $scope.selectedPointOfInterest.name,
                     description: $scope.selectedPointOfInterest.description,
                     priority: $scope.selectedPointOfInterest.priority,
-                    photos: $scope.selectedPointOfInterest.photos
+                    photosIds: $scope.selectedPointOfInterest.photosIds
                 });
                 interest.$update({
                     id: $scope.selectedPointOfInterest._id

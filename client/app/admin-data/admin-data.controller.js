@@ -1,11 +1,10 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .controller('AdminDataCtrl', function ($scope, $upload, InterestRepository, BikelaneRepository, bikeTourMapService) {
 
         $scope.bikemapFileupload = {
             url: '/api/bikelanes/upload',
-            filename: 'Pistes_Cyclables.json',
             callbacks: {
                 success: function (data) {
                     $scope.loadBikelanes();
@@ -15,7 +14,6 @@ angular.module('bikeTouringMapApp')
 
         $scope.waterpointsUpload = {
             url: '/api/interests/upload/water-point',
-            filename: 'fontaines_a_boire.json',
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();
@@ -25,7 +23,6 @@ angular.module('bikeTouringMapApp')
 
         $scope.velotoulouseUpload = {
             url: '/api/interests/upload/velotoulouse',
-            filename: 'Velo_Toulouse.json',
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();
@@ -35,7 +32,6 @@ angular.module('bikeTouringMapApp')
 
         $scope.dangersCarrefoursUpload = {
             url: '/api/interests/upload/danger',
-            filename: 'acc_carrefours_2008_2012.json',
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();
@@ -45,7 +41,6 @@ angular.module('bikeTouringMapApp')
 
         $scope.merimeeUpload = {
             url: '/api/interests/upload/merimee',
-            filename: 'Base_Merimee.json',
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();
@@ -55,7 +50,6 @@ angular.module('bikeTouringMapApp')
 
         $scope.wcUpload = {
             url: '/api/interests/upload/wc',
-            filename: 'Sanisette.json',
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();

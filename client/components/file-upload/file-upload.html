@@ -1,18 +1,12 @@
 <div class="file-upload-area">
-    <div class="alert alert-info">
-        <div class="row">
-            <div class="col-md-12">
-                <div ng-if="fileUploadProgress === null">
-                    <div class="file-upload btn btn-primary">
-                        <span>Sélectionner un fichier "{{ fileUpload.filename }}"</span>
-                        <input type="file" class="upload" ng-file-select="onFileSelect($files)" />
-                    </div>
-                </div>
-                <div ng-if="fileUploadProgress !== null">
-                    <i class="fa fa-spinner fa-spin"></i> Mise à jour en cours...
-                    <progressbar max="100" value="fileUploadProgress"></progressbar>
-                </div>
-            </div>
+    <div ng-if="fileUploadProgress === null">
+        <div class="file-upload btn btn-primary">
+            <span ng-transclude></span>
+            <input type="file" class="upload" ng-file-select="onFileSelect($files)" ng-attr-multiple="{{ fileUpload.multiple }}"  />
         </div>
+    </div>
+    <div ng-if="fileUploadProgress !== null">
+        <i class="fa fa-spinner fa-spin"></i> Mise à jour en cours...
+        <progressbar max="100" value="fileUploadProgress"></progressbar>
     </div>
 </div>

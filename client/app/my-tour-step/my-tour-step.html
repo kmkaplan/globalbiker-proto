@@ -23,25 +23,92 @@
 
         <div class="col-md-5">
 
-            <section class="form-section">
-                <div ng-show="isEditProperties">
-                    <a ng-click="saveProperties()" class="btn btn-primary pull-right"><i class="fa fa-check"></i>Validate</a>
-                </div>
-                <div ng-hide="isEditProperties">
-                    <a ng-click="editProperties()" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i>Edit</a>
-                </div>
-                <h3>Propriétés</h3>
-                <form role="form" ng-show="isEditProperties">
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="step.originalModel.description" type="text" class="form-control"></textarea>
-                    </div>
-                </form>
-                <div ng-hide="isEditProperties">
-                    <label>Description</label>
-                    <div class="alert alert-success" ng-bind-html="step.originalModel.description"></div>
-                </div>
-            </section>
+
+            <tabset>
+                <tab>
+                    <tab-heading>
+                        <h4>Propriétés</h4>
+                    </tab-heading>
+                    <section>
+                        <div ng-show="isEditProperties">
+                            <a ng-click="saveProperties()" class="btn btn-primary pull-right"><i class="fa fa-check"></i>Validate</a>
+                        </div>
+                        <div ng-hide="isEditProperties">
+                            <a ng-click="editProperties()" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i>Edit</a>
+                        </div>
+                        <form role="form" ng-show="isEditProperties">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="step.originalModel.description" type="text" class="form-control"></textarea>
+                            </div>
+                        </form>
+                        <div ng-hide="isEditProperties">
+                            <label>Description</label>
+                            <div class="alert" ng-bind-html="step.originalModel.description"></div>
+                        </div>
+                    </section>
+                </tab>
+                <tab>
+                    <tab-heading>
+                        <h4 translate="mytourstep.your_itinary_trace">Your itinary trace</h4>
+                    </tab-heading>
+                    <form role="form">
+                        <section>
+                            <div ng-show="step.geometry.coordinates.length && !step.isTraceInEdition">
+                                <a ng-click="step.isTraceInEdition = true" class="btn btn-default edit-step-trace-button pull-right"><i class="fa fa-pencil-square-o"></i></a>
+                            </div>
+                            <div ng-show="step.isTraceInEdition">
+                                <a ng-click="step.isTraceInEdition = false" class="btn btn-success leave-edit-step-trace-button pull-right"><i class="fa fa-check"></i></a>
+                            </div>
+                            <div class="trace-resume-area" ng-show="step.geometry.coordinates.length">
+                                <h4 translate="mytourstep.trace_resume">Trace resume</h4>
+
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <th translate="mytourstep.total_distance">Total distance</th>
+                                            <td>{{ step.readableDistance }}</td>
+                                        </tr>
+                                        <tr ng-show="step.readablePositiveElevationGain">
+                                            <th translate="mytourstep.positive_elevation_gain">Positive elevation gain</th>
+                                            <td>{{ step.readablePositiveElevationGain }}</td>
+                                        </tr>
+                                        <tr ng-show="step.readableNegativeElevationGain">
+                                            <th translate="mytourstep.negative_elevation_gain">Negative elevation gain</th>
+                                            <td>{{ step.readableNegativeElevationGain }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th translate="mytourstep.points_number">Number of points</th>
+                                            <td>{{ step.geometry.coordinates.length }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div ng-hide="step.geometry.coordinates.length && !step.isTraceInEdition">
+                                <h4 translate="mytourstep.update_your_trace">Update your trace</h4>
+                                <div class="form-group">
+                                    <div class="file-upload btn btn-primary">
+                                        <span translate="mytourstep.select_gps_file">Sélectionner un fichier de trace GPS (*.kml file):</span>
+                                        <input type="file" class="upload" ng-file-select="onFileSelect($files)" />
+                                    </div>
+                                </div>
+                                <div class="form-group" translate="mytourstep.draw_it_manually">
+                                    Or draw it manually using the tools in the map!
+                                </div>
+                                <div class="form-group" ng-show="step.isTraceInEdition">
+                                    <h4 translate="mytourstep.delete_your_trace">Delete your trace</h4>
+                                    <div>
+                                        <a title="Delete current trace" ng-click="deleteTrace()" class="btn btn-danger delete-step-button"><i class="fa fa-trash-o"></i> {{ "mytourstep.delete_current_trace" | translate }}</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </section>
+                    </form>
+                </tab>
+            </tabset>
+
+
 
 
             <div class="modal fade" role="dialog" arial-hidden="true" id="new-point-of-interest-form">
@@ -100,171 +167,138 @@
                     </div>
                 </div>
             </div>
-            <form role="form">
-                <section class="form-section">
-                    <div ng-show="step.geometry.coordinates.length && !step.isTraceInEdition">
-                        <a ng-click="step.isTraceInEdition = true" class="btn btn-default edit-step-trace-button pull-right"><i class="fa fa-pencil-square-o"></i></a>
-                    </div>
-                    <div ng-show="step.isTraceInEdition">
-                        <a ng-click="step.isTraceInEdition = false" class="btn btn-success leave-edit-step-trace-button pull-right"><i class="fa fa-check"></i></a>
-                    </div>
-                    <h3 translate="mytourstep.your_itinary_trace">Your itinary trace</h3>
-                    <div class="trace-resume-area" ng-show="step.geometry.coordinates.length">
-                        <h4 translate="mytourstep.trace_resume">Trace resume</h4>
 
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <th translate="mytourstep.total_distance">Total distance</th>
-                                    <td>{{ step.readableDistance }}</td>
-                                </tr>
-                                <tr ng-show="step.readablePositiveElevationGain">
-                                    <th translate="mytourstep.positive_elevation_gain">Positive elevation gain</th>
-                                    <td>{{ step.readablePositiveElevationGain }}</td>
-                                </tr>
-                                <tr ng-show="step.readableNegativeElevationGain">
-                                    <th translate="mytourstep.negative_elevation_gain">Negative elevation gain</th>
-                                    <td>{{ step.readableNegativeElevationGain }}</td>
-                                </tr>
-                                <tr>
-                                    <th translate="mytourstep.points_number">Number of points</th>
-                                    <td>{{ step.geometry.coordinates.length }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div ng-hide="step.geometry.coordinates.length && !step.isTraceInEdition">
-                        <h4 translate="mytourstep.update_your_trace">Update your trace</h4>
-                        <div class="form-group">
-                            <div class="file-upload btn btn-primary">
-                                <span translate="mytourstep.select_gps_file">Sélectionner un fichier de trace GPS (*.kml file):</span>
-                                <input type="file" class="upload" ng-file-select="onFileSelect($files)" />
+            <hr/>
+            <section class="selected-point-of-interest" ng-show="selectedPointOfInterest">
+                <h4 ng-switch="selectedPointOfInterest.type">
+                <span class="interest-type interest" ng-switch-when="interest">
+                    <i class="icon glyphicon glyphicon-eye-open"></i> Interest
+                </span>
+                <span class="interest-type bike-shops" ng-switch-when="bike-shops">
+                    <i class="icon glyphicon glyphicon-wrench"></i> Bike shop
+                </span>
+                <span class="interest-type food" ng-switch-when="food">
+                    <i class="icon glyphicon glyphicon-cutlery"></i> Food
+                </span>
+                <span class="interest-type danger" ng-switch-when="danger">
+                    <i class="icon fa fa-exclamation-triangle"></i> Danger
+                </span>
+                <span class="interest-type" ng-switch-default>                               
+                    <i class="icon glyphicon glyphicon-question-sign"></i> Other
+                </span>
+                <span ng-show="selectedPointOfInterest.name">"{{ selectedPointOfInterest.name }}"</span>
+           </h4>
+                <tabset>
+                    <tab>
+                        <tab-heading>
+                            <h4>Propriétés</h4>
+                        </tab-heading>
+
+                        <div ng-if="selectedPointOfInterest.description" ng-hide="editSelectedPointOfInterest">
+                            <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
+                            <p ng-bind-html="selectedPointOfInterest.description"></p>
+                        </div>
+                        <form novalidate role="form" name="editPointForm" ng-submit="submitEditPointForm(editPointForm)">
+                            <div ng-hide="editSelectedPointOfInterest">
+                                <a ng-click="editSelectedPointOfInterest = true" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i></a>
                             </div>
-                        </div>
-                        <div class="form-group" translate="mytourstep.draw_it_manually">
-                            Or draw it manually using the tools in the map!
-                        </div>
-                        <div class="form-group" ng-show="step.isTraceInEdition">
-                            <h4 translate="mytourstep.delete_your_trace">Delete your trace</h4>
-                            <div>
-                                <a title="Delete current trace" ng-click="deleteTrace()" class="btn btn-danger delete-step-button"><i class="fa fa-trash-o"></i> {{ "mytourstep.delete_current_trace" | translate }}</a>
+                            <div ng-show="editSelectedPointOfInterest">
+                                <a ng-click="editSelectedPointOfInterest = false; submitEditPointForm(editPointForm)" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
                             </div>
-                        </div>
-                    </div>
-
-                </section>
-            </form>
-
-            <section class="form-section selected-point-of-interest" ng-show="selectedPointOfInterest">
-                <form novalidate role="form" name="editPointForm" ng-submit="submitEditPointForm(editPointForm)">
-                    <div ng-hide="editSelectedPointOfInterest">
-                        <a ng-click="editSelectedPointOfInterest = true" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i></a>
-                    </div>
-                    <div ng-show="editSelectedPointOfInterest">
-                        <a ng-click="editSelectedPointOfInterest = false; submitEditPointForm(editPointForm)" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
-                    </div>
-                    <h4 ng-switch="selectedPointOfInterest.type">
-                            <span class="interest-type interest" ng-switch-when="interest">
-                                <i class="icon glyphicon glyphicon-eye-open"></i> Interest
-                            </span>
-                            <span class="interest-type bike-shops" ng-switch-when="bike-shops">
-                                <i class="icon glyphicon glyphicon-wrench"></i> Bike shop
-                            </span>
-                            <span class="interest-type food" ng-switch-when="food">
-                                <i class="icon glyphicon glyphicon-cutlery"></i> Food
-                            </span>
-                            <span class="interest-type danger" ng-switch-when="danger">
-                                <i class="icon fa fa-exclamation-triangle"></i> Danger
-                            </span>
-                            <span class="interest-type" ng-switch-default>                               
-                                <i class="icon glyphicon glyphicon-question-sign"></i> Other
-                            </span>
-                            <span ng-show="selectedPointOfInterest.name">"{{ selectedPointOfInterest.name }}"</span>
                             <span ng-if="selectedPointOfInterest.priority == 1">(page d'accueil)</span>
-                        </h4>
-                    <div ng-hide="editSelectedPointOfInterest" class="photos-area">
-                        <p ng-if="selectedPointOfInterest.description" ng-bind-html="selectedPointOfInterest.description"></p>
-                        <h4>Add a photo</h4>
-                        <div class="form-group">
-                            <div class="file-upload btn btn-primary">
-                                <span>Upload a photo (*.img, *.jpg, *.png file):</span>
-                                <input type="file" class="upload" ng-file-select="onPhotoSelect($files)" />
-                            </div>
-                            <div ng-if="photoUploadProgress !== null">
-                                <i class="fa fa-spinner fa-spin"></i> Envoi en cours...
-                                <progressbar max="100" value="photoUploadProgress"></progressbar>
-                            </div>
-                        </div>
 
-                        <div class="row photos-area" ng-if="selectedPointOfInterest.photos.length">
-                            <div class="col-md-6" ng-repeat="photo in selectedPointOfInterest.photos">
-                                <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-default remove-button"><i class="fa fa-times"></i></a>
-                                <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
-                                <p>
-                                    <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
-                                    -
-                                    <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
-                                </p>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div ng-if="editSelectedPointOfInterest">
-                        <div class="form-group required" ng-class="{ 'has-error':  editPointForm.type.$invalid, 'has-success':editPointForm.type.$valid }">
-                            <label class="control-label">Type</label>
-                            <select required name="type" ng-model="selectedPointOfInterest.type" class="form-control">
-                                <option value="interest" translate="mytourstep.interest">interest</option>
-                                <option value="bike-shops" translate="mytourstep.bike-shop">bike-shop</option>
-                                <option value="food" translate="mytourstep.food">food</option>
-                                <option value="danger" translate="mytourstep.danger">danger</option>
-                            </select>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group required" ng-class="{ 'has-error':  editPointForm.name.$dirty && editPointForm.name.$invalid, 'has-success': editPointForm.name.$dirty && editPointForm.name.$valid }">
-                                    <label class="control-label" translate="mytourstep.name">Name</label>
-                                    <input required name="name" ng-model="selectedPointOfInterest.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
-                                    <label class="error-label" ng-show="editPointForm.name.$invalid && editPointForm.name.$dirty" translate="mytourstep.name_warn">The name is required.</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Importance</label>
-                                    <select name="priority" ng-model="selectedPointOfInterest.priority" class="form-control">
-                                        <option value=""></option>
-                                        <option value="1">en page d'accueil</option>
+                            <div ng-if="editSelectedPointOfInterest">
+                                <div class="form-group required" ng-class="{ 'has-error':  editPointForm.type.$invalid, 'has-success':editPointForm.type.$valid }">
+                                    <label class="control-label">Type</label>
+                                    <select required name="type" ng-model="selectedPointOfInterest.type" class="form-control">
+                                        <option value="interest" translate="mytourstep.interest">interest</option>
+                                        <option value="bike-shops" translate="mytourstep.bike-shop">bike-shop</option>
+                                        <option value="food" translate="mytourstep.food">food</option>
+                                        <option value="danger" translate="mytourstep.danger">danger</option>
                                     </select>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group required" ng-class="{ 'has-error':  editPointForm.name.$dirty && editPointForm.name.$invalid, 'has-success': editPointForm.name.$dirty && editPointForm.name.$valid }">
+                                            <label class="control-label" translate="mytourstep.name">Name</label>
+                                            <input required name="name" ng-model="selectedPointOfInterest.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
+                                            <label class="error-label" ng-show="editPointForm.name.$invalid && editPointForm.name.$dirty" translate="mytourstep.name_warn">The name is required.</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Importance</label>
+                                            <select name="priority" ng-model="selectedPointOfInterest.priority" class="form-control">
+                                                <option value=""></option>
+                                                <option value="1">en page d'accueil</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group required" ng-class="{ 'has-error':  editPointForm.description.$dirty && editPointForm.description.$invalid, 'has-success': editPointForm.description.$dirty && editPointForm.description.$valid }">
+                                    <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
+                                    <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="selectedPointOfInterest.description" type="text" class="form-control"></textarea>
+                                    <label class="error-label" ng-show="editPointForm.description.$invalid && editPointForm.description.$dirty" translate="mytourstep.description_warn">The description is required.</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group required" ng-class="{ 'has-error':  editPointForm.description.$dirty && editPointForm.description.$invalid, 'has-success': editPointForm.description.$dirty && editPointForm.description.$valid }">
-                            <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
-                            <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="selectedPointOfInterest.description" type="text" class="form-control"></textarea>
-                            <label class="error-label" ng-show="editPointForm.description.$invalid && editPointForm.description.$dirty" translate="mytourstep.description_warn">The description is required.</label>
-                        </div>
-                        <div class="row photos-area" ng-if="selectedPointOfInterest.photos.length">
-                            <div class="col-md-12 edit-photo-area" ng-repeat="photo in selectedPointOfInterest.photos">
-                                <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
-                                <div class="form-group required">
-                                    <label class="control-label">Author name</label>
-                                    <input ng-model="photo.author.name" type="text" class="form-control" placeholder="Author name">
+                        </form>
+                    </tab>
+                    <tab>
+                        <tab-heading>
+                            <h4>Photos</h4>
+                        </tab-heading>
+                        <div class="photos-area">
+                            <div class="row photos-area" ng-if="selectedPointOfInterest.photos.length">
+                                <div class="col-md-12" ng-repeat="photo in selectedPointOfInterest.photos">
+                                    <div ng-hide="editPhotosOfSelectedPointOfInterest">
+                                        <a ng-click="editPhotosOfSelectedPointOfInterest = true" class="btn btn-default pull-right"><i class="fa fa-pencil-square-o"></i></a>
+                                        <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
+                                        <p>{{ photo.title }}</p>
+                                        <p>
+                                            <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
+                                            -
+                                            <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
+                                        </p>
+                                    </div>
+                                    <div ng-show="editPhotosOfSelectedPointOfInterest">
+                                        <a ng-click="editPhotosOfSelectedPointOfInterest = false; updatePhoto(photo);" class="btn btn-success pull-right"><i class="fa fa-check"></i></a>
+                                        <img class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
+                                        <div class="form-group required">
+                                            <label class="control-label">Title</label>
+                                            <input ng-model="photo.title" type="text" class="form-control" placeholder="Title">
+                                        </div>
+                                        <div class="form-group required">
+                                            <label class="control-label">Author name</label>
+                                            <input ng-model="photo.author.name" type="text" class="form-control" placeholder="Author name">
+                                        </div>
+                                        <div class="form-group required">
+                                            <label class="control-label">Author Web site</label>
+                                            <input ng-model="photo.author.url" type="text" class="form-control" placeholder="Author url">
+                                        </div>
+                                        <div class="form-group required">
+                                            <label class="control-label">License</label>
+                                            <select ng-model="photo.licenseId" ng-options="license._id as license.name for license in licenses"></select>
+                                        </div>
+                                        <a ng-click="removePhoto(selectedPointOfInterest, photo)" class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Remove</a>
+                                    </div>
                                 </div>
-                                <div class="form-group required">
-                                    <label class="control-label">Author Web site</label>
-                                    <input ng-model="photo.author.url" type="text" class="form-control" placeholder="Author url">
-                                </div>
-                                <div class="form-group required">
-                                    <label class="control-label">License</label>
-                                    <select ng-model="photo.licenseId" ng-options="license._id as license.name for license in licenses"></select>
-                                </div>
-
+                                <hr/>
                             </div>
-                        </div>
+                            <div class="form-group">
 
-                    </div>
-                </form>
+                                <div file-upload="photosupload">Ajouter une photo (*.jpg, *.png)</div>
+
+                                <div ng-if="photoUploadProgress !== null">
+                                    <i class="fa fa-spinner fa-spin"></i> Envoi en cours...
+                                    <progressbar max="100" value="photoUploadProgress"></progressbar>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </tab>
+                </tabset>
             </section>
-
         </div>
     </div>
 </div>

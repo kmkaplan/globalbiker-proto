@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .controller('SignupCtrl', function ($scope, Auth, $location, $window, MailingRepository) {
         $scope.user = {};
         $scope.errors = {};

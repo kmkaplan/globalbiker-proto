@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .factory('StepRepository', function ($resource) {
         return $resource('/api/steps/:id/:controller', {
                 id: '@_id'

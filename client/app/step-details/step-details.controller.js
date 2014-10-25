@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
-    .controller('StepDetailsCtrl', function ($scope, $stateParams, $q, $timeout, Auth, TourRepository, StepRepository, InterestRepository, bikeTourMapService, LicenseRepository) {
+angular.module('globalbikerWebApp')
+    .controller('StepDetailsCtrl', function ($scope, $stateParams, $q, $timeout, Auth, TourRepository, StepRepository, InterestRepository, bikeTourMapService, LicenseRepository, interestLoaderService, stepLoaderService) {
 
         $scope.isAdmin = Auth.isAdmin;
 
@@ -33,58 +33,6 @@ angular.module('bikeTouringMapApp')
             $state.go('toulouse', {}, {
                 inherit: false
             });
-        };
-
-        $scope.loadTour = function (tourId) {
-
-            var deffered = $q.defer();
-
-            TourRepository.get({
-                id: tourId
-            }, function (tour) {
-                $scope.tour = tour;
-                deffered.resolve(tour);
-            }, function (err) {
-                deffered.reject(err);
-            });
-
-            return deffered.promise;
-        }
-
-
-        $scope.loadStep = function (stepId) {
-
-            var deffered = $q.defer();
-
-            StepRepository.get({
-                id: stepId
-            }, function (step) {
-                $scope.step = step;
-                deffered.resolve(step);
-            }, function (err) {
-                deffered.reject(err);
-            });
-
-            return deffered.promise;
-        }
-        $scope.loadInterests = function (stepId) {
-
-            // retrieve interests
-            var deffered = $q.defer();
-
-            InterestRepository.getByStep({
-                    stepId: stepId
-                }, function (interests) {
-
-                    $scope.interests = interests;
-                    deffered.resolve(interests);
-
-                },
-                function (err) {
-                    deffered.reject(err);
-                });
-
-            return deffered.promise;
         };
 
         $scope.loadMarkers = function (stepId) {
@@ -136,12 +84,11 @@ angular.module('bikeTouringMapApp')
 
             $scope.stepId = $stateParams.id
 
-            $scope.loadStep($scope.stepId).then(function (step) {
-                $scope.loadTour(step.tourId).then(function (step) {
-                    $scope.loadInterests($scope.stepId).then(function (step) {
-                        $scope.loadMarkers($scope.stepId).then(function (step) {});
-                    });
-                });
+            stepLoaderService.loadStep($scope.stepId, {
+                tour: {},
+                interests: {}
+            }).then(function (step) {
+                $scope.step = step;
             });
 
             $scope.tourMapConfig = {
@@ -159,10 +106,10 @@ angular.module('bikeTouringMapApp')
                             if (step) {
                                 var traceFeature = bikeTourMapService.buildStepTraceFeature(step, {
                                     style: {
-                                        color: '#0c6f32',
+                                        color: '#34a0b4',
                                         width: 3,
-                                        weight: 8,
-                                        opacity: 0.3
+                                        weight: 6,
+                                        opacity: 0.8
                                     },
                                     label: function (step) {
                                         return $scope.getStepLabel(step);

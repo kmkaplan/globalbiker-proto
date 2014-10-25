@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
   .config(function ($stateProvider) {
     $stateProvider
       .state('my-tour', {

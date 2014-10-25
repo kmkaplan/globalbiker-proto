@@ -106,32 +106,72 @@
                 </div>
                 <h3>Propriétés</h3>
                 <form role="form" ng-show="isEditProperties">
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="tour.originalModel.description" type="text" class="form-control"></textarea>
-                    </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Priority (1 to display on main page)</label>
-                                <input type="text" ng-model="tour.originalModel.priority" />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Couleur</label>
-                                <input type="text" ng-model="tour.originalModel.color" />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+                            <div class="input-group select-photo-area">
 
+                                <ui-select ng-model="tour.photo" theme="bootstrap">
+                                    <ui-select-match placeholder="Select photo">{{$select.selected.title}}</ui-select-match>
+                                    <ui-select-choices repeat="photo in tour.photos | filter: $select.search">
+
+                                        <div>
+                                            <img class="photo" ng-src="{{ photo.thumbnails.w600h400 }}">
+                                        </div>
+                                        <small ng-bind-html="photo.title | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="input-group-btn">
+                                     <button ng-click="tour.photo = undefined" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                                </span>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <img class="selected-image" ng-if="tour.photo" class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="tour.originalModel.description" type="text" class="form-control"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Priority (1 to display on main page)</label>
+                                        <input type="text" ng-model="tour.originalModel.priority" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Couleur</label>
+                                        <input type="text" ng-model="tour.originalModel.color" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
                 <div ng-hide="isEditProperties">
-                    <label>Description</label>
-                    <div class="alert alert-success" ng-bind-html="tour.originalModel.description"></div>
-                    <div ng-if="tour.originalModel.priority === 1">Display color on main page: {{ tour.originalModel.color }}</div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img class="selected-image" ng-if="tour.photo" class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
+                        </div>
+                        <div class="col-md-8">
+
+                            <label>Description</label>
+                            <div ng-bind-html="tour.originalModel.description"></div>
+                            <div ng-if="tour.originalModel.priority === 1">Display color on main page: {{ tour.originalModel.color }}</div>
+                        </div>
+                    </div>
                 </div>
 
             </section>

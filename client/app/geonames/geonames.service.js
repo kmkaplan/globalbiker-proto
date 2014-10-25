@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bikeTouringMapApp')
+angular.module('globalbikerWebApp')
     .service('geonames', function ($http, $q) {
         // AngularJS will instantiate a singleton by calling "new" on this function
         return {

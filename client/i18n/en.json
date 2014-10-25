@@ -1,10 +1,12 @@
 {
-    "signup": "Sign up",
-    "login": "Log in",
-    "hello": "Hello",
-    "logout": "Log out",
+    "global": {
+        "signup": "Sign up",
+        "login": "Log in",
+        "hello": "Hello",
+        "logout": "Log out"
+    },
     "signup": {
-        "intro":{
+        "intro": {
             "description": "Globalbiker will soon be open to contributions.",
             "invit_mailing": "To receive a preview account, please enter your email-address bellow.",
             "email_success": "Thanks, your email address has been successfuly saved!"

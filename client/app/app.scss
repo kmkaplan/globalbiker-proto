@@ -25,13 +25,24 @@ footer {
     font-style: italic;
 }
 
-// orange/brown
-$color1: hsl(16, 83%, 54%);
-$textcolor1: lighten(desaturate($color1, 65%), 45%);
+// red
+$color1: #AA3939;
+$color1light1: #D46A6A;
+$color1light2: #FFAAAA;
+$color1dark1: #801515;
+$color1dark2: #550000;
 
-// green
-$color2: #5e8c15;
-$textcolor2: lighten($color2, 40%);
+// blue
+$color2: #226666;
+$color2light1: #407F7F;
+$color2light2: #669999;
+$color2dark1: #0D4D4D;
+$color2dark2: #003333;
+
+$white1: #fff;
+$white2: #eee;
+$white3: #ddd;
+
 
 @media all and (max-width: 1200px) {
     /* screen size until 1200px */
@@ -85,27 +96,21 @@ html {
     min-height: 100%;
     body {
         min-height: 100%;
-        background: linear-gradient(to bottom, lighten(desaturate($color1, 65%), 35%) 0%, lighten($textcolor1, 15%) 100%);
+        background: $white1;
         background-repeat: no-repeat;
         background-attachment: fixed;
     }
     .page {
-        border: 1px rgba(lighten(desaturate($color1, 30%), 90%), 0.7);
-        background: rgba(lighten(desaturate($color1, 50%), 90%), 0.7);
-        padding: 10px;
-        border-radius: 10px 10px 10px 10px;
-        box-shadow: 1px 1px 3px 1px desaturate($color1, 30%);
         padding: 10px 30px;
         .breadcrumb {
-            border: rgba(lighten(desaturate($color2, 40%), 40%), 0.8);
-            background: rgba(lighten(desaturate($color2, 50%), 50%), 0.7);
+            background: rgba($white2, 0.4);
             li {
                 a {
                     color: $color1;
                     font-weight: bold;
                 }
                 &.active {
-                    color: desaturate($color1, 30%);
+                    color: $color1dark1;
                     font-weight: bold;
                 }
             }
@@ -114,10 +119,10 @@ html {
             }
         }
         .form-section {
-            border: 2px solid rgba($color1, 0.3);
+            border: 2px solid rgba($color1, 0.1);
             padding: 10px;
             margin: 0 0 20px 0;
-            box-shadow: 0px 0px 3px 1px rgba($color1, 0.3);
+            box-shadow: 0px 0px 3px 1px rgba(darken($color1, 30%), 0.1);
         }
         .smart-area {
             border: 10px solid #555;
@@ -179,5 +184,9 @@ img.smart-photo {
 }
 
 .btn-primary {
-    @include button-variant($textcolor1, darken($color1, 5%), darken($color1, 10%));
+    @include button-variant($white1, $color1dark1, $color1dark2);
+}
+
+.nav-tabs > li > a:hover{
+    cursor: pointer;
 }

@@ -8,6 +8,7 @@
 
 var Tour = require('../api/tour/tour.model');
 var License = require('../api/license/license.model');
+var Photo = require('../api/photo/photo.model');
 var InterestType = require('../api/interesttype/interesttype.model');
 var Step = require('../api/step/step.model');
 var User = require('../api/user/user.model');
@@ -20,7 +21,79 @@ var config = require('./environment');
 
 var Q = require('q');
 
- 
+var moveInterestPhoto = function (interest, newPhoto) {
+    var deffered = Q.defer();
+
+    Photo.create(newPhoto, function (err, newPhoto) {
+        if (err) {
+            console.error(err);
+            deffered.reject(err);
+        } else {
+            deffered.resolve(newPhoto);
+        }
+    });
+
+    return deffered.promise;
+}
+
+var moveInterestPhotos = function (interest) {
+
+    //   console.info('Create thumbnails for interest %s.', interest.name);
+
+    var deffered = Q.defer();
+
+    if (!interest.photosIds || interest.photosIds.length < interest.photos.length) {
+
+        var defferedArray = interest.photos.reduce(function (defferedArray, photo) {
+
+            var newPhoto = {
+                creationTime: photo.creationTime,
+                title: '-',
+                url: photo.url,
+                thumbnails: {
+                    w600h400: photo.thumbnails.w600h400
+                },
+                author: photo.author,
+                licenseId: photo.licenseId,
+                geometry: {
+                    type: interest.geometry.type,
+                    coordinates: interest.geometry.coordinates
+                }
+            };
+            defferedArray.push(moveInterestPhoto(interest, newPhoto));
+
+            return defferedArray;
+
+        }, []);
+
+        console.log('Move %d photos for interest %s (previous ids size: %d).', defferedArray.length, interest._id, interest.photosIds.length);
+
+        Q.all(defferedArray).then(function (photos) {
+
+            interest.photosIds = photos.reduce(function (photosIds, photo) {
+                photosIds.push(photo._id);
+                return photosIds;
+
+            }, []);
+
+            interest.photos = [];
+
+            console.log('New ids size: %d for interest %s.', interest.photosIds.length, interest._id);
+
+            interest.save(function (err) {
+                if (err) {
+                    console.error(err);
+                    deffered.reject(err);
+                } else {
+                    console.log('success for interest %s.', interest._id);
+                    deffered.resolve('success');
+                }
+            }).done();
+        });
+    }
+    return deffered.promise;
+};
+
 InterestType.find({}, function (err, interesttypes) {
     if (err) {
         console.error(err);
@@ -30,35 +103,35 @@ InterestType.find({}, function (err, interesttypes) {
                 reference: 'interest',
                 color: '#047104',
                 icon: 'eye-open'
-            },{
+            }, {
                 reference: 'danger',
                 color: '#ff0014',
                 icon: 'fa-exclamation-triangle'
-            },{
+            }, {
                 reference: 'bike-shops',
                 color: '#f51e43',
                 icon: 'glyphicon-wrench'
-            },{
+            }, {
                 reference: 'food',
                 color: 'black',
                 icon: 'glyphicon-cutlery'
-            },{
+            }, {
                 reference: 'merimee',
                 color: '#7b188d',
                 icon: null
-            },{
+            }, {
                 reference: 'water-point',
                 color: '#5282ed',
                 icon: null
-            },{
+            }, {
                 reference: 'wc',
                 color: '#7c869b',
                 icon: null
-            },{
+            }, {
                 reference: 'velotoulouse',
                 color: '#ff6c00',
                 icon: null
-            },{
+            }, {
                 reference: 'velotoulouse',
                 color: '#ff6c00',
                 icon: null
@@ -173,7 +246,7 @@ var downloadPhotosFromProd = function (interest) {
 
     return deffered.promise;
 }
-
+/*
 var createThumbnails = function (interest) {
 
     //   console.info('Create thumbnails for interest %s.', interest.name);
@@ -209,7 +282,7 @@ var createThumbnails = function (interest) {
     });
 
     return deffered.promise;
-};
+};*/
 
 Interest.find({
         photos: {
@@ -226,12 +299,14 @@ Interest.find({
 
             interests.reduce(function (o, interest) {
 
+                moveInterestPhotos(interest);
+
                 // console.info('Interest %s with %d photos.', interest.name, interest.photos.length);
 
                 downloadPhotosFromProd(interest).then(function () {
 
                     // create thumbnail
-                    createThumbnails(interest).done();
+                    // createThumbnails(interest).done();
 
                 }).done();
 

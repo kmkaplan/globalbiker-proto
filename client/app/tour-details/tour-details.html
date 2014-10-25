@@ -14,11 +14,11 @@
     <div class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <h3>Choisissez une étape</h3>
             <table class="smart-table table table-striped table-hover">
                 <tbody>
-                    <tr ng-click="openStep(step)" ng-repeat="step in steps">
+                    <tr ng-click="openStep(step)" ng-repeat="step in tour.steps">
                         <td>{{ 'tour-details.step' | translate }} {{ $index + 1 }}</td>
                         <td class="main">
                             <span>{{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</span>
@@ -33,10 +33,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="tour-map-area responsive-map-area smart-area smart-map-area">
                 <div extended-map config="tourMapConfig"></div>
             </div>

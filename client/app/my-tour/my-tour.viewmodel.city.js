@@ -1,4 +1,4 @@
-angular.module('bikeTouringMapApp').factory('MyTourViewModelCity', function (geonames) {
+angular.module('globalbikerWebApp').factory('MyTourViewModelCity', function (geonames) {
     return function (data) {
         //set defaults properties and functions
         angular.extend(this, {

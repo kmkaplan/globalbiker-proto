@@ -3,7 +3,7 @@
 describe('Controller: ToulouseCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('bikeTouringMapApp'));
+  beforeEach(module('globalbikerWebApp'));
 
   var ToulouseCtrl, scope;
 

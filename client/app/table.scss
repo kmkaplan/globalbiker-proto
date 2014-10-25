@@ -1,5 +1,5 @@
 @mixin smart-table($main-color) {
-    background-color: rgba(lighten($main-color, 30%), 0.8);
+   /* background-color: rgba(lighten($main-color, 30%), 0.8);
     color: darken(desaturate($main-color, 30%), 20%);
     border: 1px dotted $main-color;
     thead {
@@ -23,16 +23,16 @@
                 background-color: rgba(lighten($main-color, 30%), 0.8);
             }
         }
-    }
+    }*/
     &.table-hover {
         tr {
             cursor: pointer;
-            &:hover {
+          /*  &:hover {
                 td {
                     background-color: rgba(lighten($main-color, 10%), 0.8);
                     color: lighten(desaturate($main-color, 30%), 50%);
                 }
-            }
+            }*/
         }
     }
 }

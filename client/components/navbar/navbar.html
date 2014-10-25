@@ -11,7 +11,10 @@
     <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li>
-            <a class="main" href="/"><i class="fa fa-bicycle"></i> <span class="global">Global</span><span class="biker">Biker</span></a>
+            <a class="main" href="/">
+                <img class="logo" src="/assets/images/bike.png" title="bike logo provided by http://buzz.icons8.com" />
+                <span class="global">Global</span><span class="biker">Biker</span>
+            </a>
         </li>
         
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}" ng-hide="item.authenticate && !isLoggedIn()">
@@ -23,11 +26,11 @@
 
 
      <ul class="nav navbar-nav navbar-right">
-        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href="/signup" translate="signup">Sign up</a></li>
-        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href="/login" translate="login">Login</a></li>
-        <li ng-show="isLoggedIn()"><p class="navbar-text">{{"hello"|translate}} {{ getCurrentUser().name }}</p> </li>
+        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href="/signup" translate="global.signup">Sign up</a></li>
+        <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href="/login" translate="global.login">Login</a></li>
+        <li ng-show="isLoggedIn()"><p class="navbar-text">{{"global.hello"|translate}} {{ getCurrentUser().name }}</p> </li>
         <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li>
-        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()" translate="logout">Logout</a></li>
+        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()" translate="global.logout">Logout</a></li>
         <li class="dropdown">
             <a href type="button" data-toggle="dropdown">
                <img ng-src="{{languageSelection.current.img}}" />

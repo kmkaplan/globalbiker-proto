@@ -3,7 +3,7 @@
 describe('Controller: MyTourStepCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('bikeTouringMapApp'));
+  beforeEach(module('globalbikerWebApp'));
 
   var MyTourStepCtrl, scope;
 
