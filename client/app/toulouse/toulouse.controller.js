@@ -106,12 +106,8 @@ angular.module('globalbikerWebApp')
                                     opacity: 1
                                 },
                                 callbacks: {
-                                    'click': function (step) {
-                                        $state.go('tour-details', {
-                                            id: step.tourId
-                                        }, {
-                                            inherit: false
-                                        });
+                                    'click': function (step, tour) {
+                                       $scope.openTour(tour);
                                     }
                                 },
                                 label: function (step, tour) {

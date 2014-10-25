@@ -113,7 +113,7 @@ angular.module('globalbikerWebApp')
                             click: function () {
 
                                 if (typeof (options.callbacks) !== 'undefined' && typeof (options.callbacks['click']) === 'function') {
-                                    options.callbacks['click'](step);
+                                    options.callbacks['click'](step, tour);
                                 }
                             }
                         });

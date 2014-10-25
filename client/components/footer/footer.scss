@@ -1,0 +1,12 @@
+footer {
+    background: linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
+    margin-top: 50px;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    color: $white1;
+    font-style: italic;
+    a, a:hover {
+        color: $white3;
+    }
+}

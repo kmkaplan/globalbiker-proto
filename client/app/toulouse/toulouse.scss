@@ -1,19 +1,43 @@
 @import "table";
 
 .toulouse-page {
+    .list-map-area {
+        border: 5px solid $color1;
+        border-bottom: none;
+        border-right: none;
+        border-radius: 10px 0 0 0;
+        padding: 10px;
+        .tour-resume-list {
+            .title {
+                font-weight: bold;
+            }
+            .steps {
+                color: $color2;
+            }
+        }
+    }
     .tour-details-list {
-        background: $color2light1;
-        box-shadow: 1px 1px 2px 1px $color2dark2;
-        color: $white2;
+        /*background: $color2light1;
+        box-shadow: 1px 1px 2px 1px $color2dark2;*/
+        //border: 2px solid $color2;
+       /* border-top: none;
+        border-left: none;*/
+        border-radius:  10px;
+        margin-top: 10px;
+        color: $black1;
         font-size: 16px;
-        text-align: justify;
+        text-align: justify;   
+        background-color: #f9f9f9;
         .tour-details {
             margin: 20px;
+            padding: 20px 10px;
+            vertical-align: middle;
             h2 {
-                text-shadow: 1px 1px 0 $color2dark2;
+                color: $color1;
+                text-shadow: 1px 1px 0 $color1dark2;
             }
             a {
-                color: $white1;
+                color: $color2;
             }
             .photo-area {
                 padding: 10px;

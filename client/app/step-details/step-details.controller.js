@@ -88,10 +88,13 @@ angular.module('globalbikerWebApp')
                 tour: {},
                 step: {
                     distances: true,
-                    interests: {}
+                    interests: {
+                        photos: true
+                    }
                 }
             }).then(function (step) {
                 $scope.step = step;
+                $scope.loadMarkers(step._id);
             });
 
             $scope.tourMapConfig = {
@@ -162,7 +165,7 @@ angular.module('globalbikerWebApp')
                             }
                         });
 
-                        $scope.$watch('interests', function (markers, old) {
+                        $scope.$watch('step.interests', function (markers, old) {
                             if (markers) {
                                 eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(markers, {
                                     mode: 'normal'

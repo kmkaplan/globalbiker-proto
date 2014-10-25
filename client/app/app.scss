@@ -15,16 +15,6 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
     padding: 0.2em 0;
 }
 
-footer {
-    margin-top: 50px;
-    text-align: center;
-    background: rgba(grey, 0.1);
-    padding: 10px 0;
-    font-size: 12px;
-    color: rgba(grey, 0.9);
-    font-style: italic;
-}
-
 // red
 $color1: #AA3939;
 $color1light1: #D46A6A;
@@ -42,6 +32,11 @@ $color2dark2: #003333;
 $white1: #fff;
 $white2: #eee;
 $white3: #ddd;
+
+$black1: #000;
+$black2: #333;
+$black3: #555;
+
 
 
 @media all and (max-width: 1200px) {
@@ -89,6 +84,7 @@ $white3: #ddd;
 @import 'tour-details/tour-details.scss';
 @import 'extendedMap/extendedMap.scss';
 @import 'file-upload/file-upload.scss';
+@import 'footer/footer.scss';
 @import 'navbar/navbar.scss';
 // endinjector
 
@@ -125,8 +121,8 @@ html {
             box-shadow: 0px 0px 3px 1px rgba(darken($color1, 30%), 0.1);
         }
         .smart-area {
-            border: 10px solid #555;
-            border-radius: 10px;
+            border: 7px solid $color2;
+            border-radius: 5px;
         }
     }
 }

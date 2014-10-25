@@ -37,27 +37,6 @@ angular.module('globalbikerWebApp')
             }
         };
 
-        $scope.loadInterests = function (tourId) {
-
-            // retrieve interests
-            var deffered = $q.defer();
-
-            InterestRepository.getByTour({
-                    tourId: tourId
-                }, function (interests) {
-
-                    $scope.interests = interests;
-                    deffered.resolve(interests);
-
-                },
-                function (err) {
-                    deffered.reject(err);
-                });
-
-            return deffered.promise;
-        };
-
-
         $scope.redirectOnError = function () {
             // redirect to 'toulouse' page
             $state.go('toulouse', {}, {
@@ -75,6 +54,7 @@ angular.module('globalbikerWebApp')
         };
 
         $scope.loadTour = function () {
+            
             return tourLoaderService.loadTour($scope.tourId, {
                 steps: {}
             }).then(function (tour) {
@@ -82,7 +62,6 @@ angular.module('globalbikerWebApp')
                 if (tour.steps.length === 1) {
                     console.warn('Only one step: redirect to step details.');
                     $scope.openStep(tour.steps[0]);
-                    deffered.success('Only one step.');
                 } else {
                     $scope.tour = tour;
                 }
@@ -143,17 +122,6 @@ angular.module('globalbikerWebApp')
                                 $timeout(function () {
                                     eMap.config.control.fitBoundsFromGeometries(geometries);
                                 }, 200);
-                            }
-                        });
-
-                        $scope.$watch('interests', function (markers, old) {
-                            if (markers) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(markers, {
-                                    mode: 'normal'
-                                }), {
-                                    name: 'Points d\'intérêt',
-                                    control: true
-                                });
                             }
                         });
                     }

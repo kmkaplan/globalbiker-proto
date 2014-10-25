@@ -82,9 +82,7 @@ angular.module('globalbikerWebApp')
                         var defferedArray = interests.reduce(function (defferedArray, interest) {
 
                             defferedArray.push(interestLoaderService.loadDetails(interest, {
-                                interest: {
-                                    photos: true
-                                }
+                                interest: options.step.interests
                             }));
                             return defferedArray;
 
