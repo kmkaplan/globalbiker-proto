@@ -9,6 +9,7 @@ module.exports = {
     },
 
     seedDB: true,
-    downloadPhotosFromProd: true,
+    downloadPhotosFromProd: false,
+    resetAdminPassword: false,
     prodUrl: 'http://globalbiker.org'
 };

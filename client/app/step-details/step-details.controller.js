@@ -86,7 +86,10 @@ angular.module('globalbikerWebApp')
 
             stepLoaderService.loadStep($scope.stepId, {
                 tour: {},
-                interests: {}
+                step: {
+                    distances: true,
+                    interests: {}
+                }
             }).then(function (step) {
                 $scope.step = step;
             });

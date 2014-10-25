@@ -1,4 +1,10 @@
 .my-tour-step-page {
+    .select-photo-area {
+        img {
+            max-height: 100px;
+            max-width: 100%;
+        }
+    }
     .photos-area {
         img.smart-photo {
             max-width: 100%;

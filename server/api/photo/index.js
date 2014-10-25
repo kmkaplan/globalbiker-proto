@@ -6,6 +6,7 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
+router.get('/search/step', controller.searchAroundStep);
 router.get('/search/tour', controller.searchAroundTour);
 router.get('/', controller.index);
 router.get('/:id', controller.show);

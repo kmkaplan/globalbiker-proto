@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('globalbikerWebApp')
-    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, MyTourStepViewModelStep, MyTourStepMapService, bikeTourMapService, LicenseRepository, PhotoRepository, interestLoaderService) {
+    .controller('MyTourStepCtrl', function ($scope, $stateParams, $q, $upload, $timeout, TourRepository, StepRepository, InterestRepository, MyTourStepMapService, bikeTourMapService, LicenseRepository, PhotoRepository, interestLoaderService, stepLoaderService) {
 
         $scope.licenses = LicenseRepository.query();
 
@@ -82,7 +82,7 @@ angular.module('globalbikerWebApp')
 
         $scope.deleteTrace = function () {
 
-            $scope.step.originalModel.geometry = null;
+            $scope.step.geometry = null;
             $scope.updateStep();
 
         };
@@ -102,13 +102,15 @@ angular.module('globalbikerWebApp')
 
                 $scope.selectedPointOfInterest.$update(function (data, putResponseHeaders) {
 
-                    PhotoRepository.remove({
+                    // TODO remove photo only if it is not used anymore
+
+                    /* PhotoRepository.remove({
                             id: photo._id
                         },
                         function () {
                             $scope.loadStep();
                             console.info('Photo removed.');
-                        });
+                        });*/
                 });
             }
         };
@@ -124,63 +126,36 @@ angular.module('globalbikerWebApp')
 
 
         $scope.loadStep = function () {
+
             var deffered = $q.defer();
 
-            // retrieve step
-            StepRepository.get({
-                id: $scope.stepId
-            }, function (step) {
+            return stepLoaderService.loadStep($scope.stepId, {
+                tour: true,
+                step: {
+                    distances: true,
+                    interests: {},
+                    photosAround: {
+                        distance: 1000
+                    }
+                }
+            }).then(function (step) {
 
-                // retrieve tour
-                TourRepository.get({
-                    id: step.tourId
-                }, function (tour) {
-
-                    $scope.tour = tour;
-
-                    // retrieve interests
-                    InterestRepository.getByStep({
-                        stepId: $scope.stepId
-                    }, function (interests) {
-
-                        $scope.interests = interests;
-
-                        if ($scope.selectedPointOfInterest && $scope.selectedPointOfInterest._id) {
-                            $scope.selectedPointOfInterest = interests.reduce(function (output, interest) {
-                                if ($scope.selectedPointOfInterest._id === interest._id) {
-                                    // update selected interest
-                                    return interest;
-                                }
-                                return output;
-                            }, null);
+                if ($scope.selectedPointOfInterest && $scope.selectedPointOfInterest._id) {
+                    $scope.selectedPointOfInterest = interests.reduce(function (output, interest) {
+                        if ($scope.selectedPointOfInterest._id === interest._id) {
+                            // update selected interest
+                            return interest;
                         }
+                        return output;
+                    }, null);
+                }
 
-                        var stepViewModel = new MyTourStepViewModelStep(step, tour, interests);
+                $scope.step = step;
 
-                        $scope.step = stepViewModel;
-
-                        deffered.resolve($scope.step);
-
-
-                    }, function () {
-                        console.error('Unexpected error while retrieving interests of step %s', $scope.stepId);
-                        deffered.reject('Unexpected error while retrieving interests of step.');
-                    });
-
-                }, function () {
-                    console.error('Unexpected error while retrieving tour %s', step.tourId);
-                    deffered.reject('Unexpected error while retrieving tour.');
-                });
-
-            }, function () {
-                console.error('Unexpected error while retrieving step %s', $scope.stepId);
-                deffered.reject('Unexpected error while retrieving step.');
+                deffered.resolve($scope.step);
             });
 
-            return deffered.promise;
         }
-
-
 
         $scope.editProperties = function () {
             $scope.isEditProperties = true;
@@ -193,10 +168,10 @@ angular.module('globalbikerWebApp')
 
         };
         $scope.updateStep = function () {
-            if ($scope.step && $scope.step.originalModel) {
+            if ($scope.step) {
 
                 // save after a short delay
-                $scope.step.originalModel.$update(function (data, putResponseHeaders) {
+                $scope.step.$update(function (data, putResponseHeaders) {
 
                     $scope.loadStep();
 
@@ -211,12 +186,12 @@ angular.module('globalbikerWebApp')
             var stepRepository;
             if (coordinates.length > 1) {
 
-                $scope.step.originalModel.geometry = {
+                $scope.step.geometry = {
                     coordinates: coordinates,
                     type: 'LineString'
                 };
 
-                $scope.step.originalModel.$update(function (step, putResponseHeaders) {
+                $scope.step.$update(function (step, putResponseHeaders) {
                         console.info('Step updated.');
                         var stepViewModel = new MyTourStepViewModelStep(step, $scope.tour, $scope.interests);
 
@@ -281,7 +256,7 @@ angular.module('globalbikerWebApp')
 
                             $scope.eMap = eMap;
 
-                            $scope.$watch('interests', function (interests, old) {
+                            $scope.$watch('step.interests', function (interests, old) {
                                 if (interests) {
                                     eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(interests, {
                                         mode: 'normal',
@@ -310,7 +285,7 @@ angular.module('globalbikerWebApp')
 
                             $scope.$watch('step', function (step, old) {
 
-                                if (step && step.originalModel && step.originalModel.geometry) {
+                                if (step && step.geometry) {
 
                                     var traceFeatures = [bikeTourMapService.buildStepTraceFeature(step, {
                                         style: {
@@ -326,7 +301,7 @@ angular.module('globalbikerWebApp')
                                         control: true
                                     });
 
-                                    eMap.config.control.fitBoundsFromGeometry(step.originalModel.geometry);
+                                    eMap.config.control.fitBoundsFromGeometry(step.geometry);
 
                                     if ($scope.autozoom) {
                                         $scope.autozoom = false;
@@ -382,6 +357,19 @@ angular.module('globalbikerWebApp')
                 };
 
             }
+            
+            $scope.$watch('selectedPointOfInterest.photoToAdd', function(photo){
+                if (photo){
+                    $scope.selectedPointOfInterest.photos.push(photo);
+                    $scope.selectedPointOfInterest.photosIds.push(photo._id);
+                    $scope.selectedPointOfInterest.$update(function (data, putResponseHeaders) {
+
+                        $scope.loadStep();
+
+                        console.info('Photo associated.');
+                    });
+                }
+            });
 
         };
 

@@ -23,6 +23,15 @@ angular.module('globalbikerWebApp')
                     distance: '@distance'
                 },
                 isArray: true
+            },
+            searchAroundStep: {
+                method: 'GET',
+                url: '/api/photos/search/step',
+                params: {
+                    stepId: '@stepId',
+                    distance: '@distance'
+                },
+                isArray: true
             }
         });
     });

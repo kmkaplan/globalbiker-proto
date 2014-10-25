@@ -88,7 +88,52 @@ exports.searchAroundTour = function (req, res) {
             }
             return promises;
         }, []);
-        
+
+        Q.all(promises).then(
+            function (results) {
+
+                var results = geo.filterDuplicated(results);
+
+                return res.json(200, results);
+            });
+
+    });
+};
+
+exports.searchAroundStep = function (req, res) {
+
+    if (!req.query.stepId) {
+        return res.send(400, 'Parameter stepId is missing');
+    }
+
+    var stepId = req.query.stepId;
+    Step.findById(stepId, function (err, step) {
+        if (err) {
+            console.error(err);
+            return handleError(res, err);
+        }
+
+        var distance;
+        if (req.query.distance) {
+            distance = parseInt(req.query.distance);
+        } else {
+            distance = 200;
+        }
+
+        var criteriaArray = geo.geometryToNearCriterias(step.geometry, distance);
+
+        console.log('Nb of criteria: %d for distance %d', criteriaArray.length, distance);
+
+        // query database
+        var promises = criteriaArray.reduce(function (promises, searchCriteria) {
+
+            if (searchCriteria !== null) {
+                var promise = exports.searchNearPoint(searchCriteria);
+                promises.push(promise);
+            }
+            return promises;
+        }, []);
+
         Q.all(promises).then(
             function (results) {
 

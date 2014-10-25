@@ -18,6 +18,7 @@ exports.downloadFile = function (url, dest) {
 
         if (fs.existsSync(dest)) {
             // file already exists
+            // console.info('File "%s" already exists on local disk.', dest);
             deferred.resolve('File already exists on local disk.');
         } else {
             console.info('Downloading photo from "%s". to local disk "%s"...', url, dest);

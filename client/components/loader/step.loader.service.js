@@ -70,7 +70,7 @@ angular.module('globalbikerWebApp')
             getInterests: function (step, options) {
                 var deffered = $q.defer();
 
-                if (options.interests) {
+                if (options.step.interests) {
                     // retrieve interests
                     var deffered = $q.defer();
 
@@ -106,6 +106,26 @@ angular.module('globalbikerWebApp')
                 return deffered.promise;
             },
 
+            getDistances: function (step, options) {
+                var deffered = $q.defer();
+
+                if (options.step && options.step.distances) {
+
+                    if (step.distance) {
+                        step.readableDistance = L.GeometryUtil.readableDistance(step.distance, 'metric');
+                    }
+                    if (step.positiveElevationGain) {
+                        step.readablePositiveElevationGain = L.GeometryUtil.readableDistance(step.positiveElevationGain, 'metric');
+                    }
+                    if (step.negativeElevationGain) {
+                        step.readableNegativeElevationGain = L.GeometryUtil.readableDistance(step.negativeElevationGain, 'metric');
+                    }
+                }
+                deffered.resolve(step);
+
+                return deffered.promise;
+            },
+
             loadDetails: function (step, options) {
                 var self = this;
 
@@ -117,7 +137,14 @@ angular.module('globalbikerWebApp')
 
                         self.getInterests(step, options).then(function (step) {
 
+                           self.getDistances(step, options).then(function (step) {
+
                             deffered.resolve(step);
+
+                        }, function (err) {
+                            console.error(err);
+                            deffered.reject(err);
+                        });
 
                         }, function (err) {
                             console.error(err);
