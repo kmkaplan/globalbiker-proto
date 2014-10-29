@@ -210,7 +210,7 @@ exports.geometryToNearCriterias = function (geometry, distance) {
         return nearCriterias;
     } else {
         console.log('Invalid geometry.');
-        return null;
+        return [];
     }
 }
 

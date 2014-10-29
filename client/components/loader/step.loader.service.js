@@ -98,6 +98,7 @@ angular.module('globalbikerWebApp')
                     });
                     return deffered.promise;
                 } else {
+                    step.interests = [];
                     deffered.resolve(step);
                 }
 

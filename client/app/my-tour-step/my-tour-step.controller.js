@@ -193,7 +193,7 @@ angular.module('globalbikerWebApp')
 
                 $scope.step.$update(function (step, putResponseHeaders) {
                         console.info('Step updated.');
-                        var stepViewModel = new MyTourStepViewModelStep(step, $scope.tour, $scope.interests);
+                        var stepViewModel = new MyTourStepViewModelStep(step, $scope.tour, $scope.step.interests);
 
                         $scope.step = stepViewModel;
                         deffered.resolve(step);
@@ -394,7 +394,7 @@ angular.module('globalbikerWebApp')
 
                     $('#new-point-of-interest-form').modal('hide');
 
-                    $scope.interests = $scope.interests.concat([interest]);
+                    $scope.step.interests = $scope.step.interests.concat([interest]);
 
                     // FIXME à supprimer MyTourStepMapService.updateInterests($scope.mapConfig, $scope.step);
 
