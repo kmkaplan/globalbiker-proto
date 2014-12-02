@@ -44,7 +44,7 @@
                          return bounds;
 
                      }, bounds);
-                 } else if (geometry.type === 'MultiLineString') {
+                 } else if (geometry.type === 'MultiLineString' || geometry.type === 'Polygon') {
                      bounds = geometry.coordinates.reduce(function (bounds, coordinates) {
 
                          coordinates.reduce(function (bounds, g) {

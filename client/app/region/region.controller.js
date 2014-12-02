@@ -1,39 +1,64 @@
 (function () {
     'use strict';
 
-    angular.module('globalbikerWebApp').controller('ToulouseCtrl', ToulouseCtrl);
+    angular.module('globalbikerWebApp').controller('RegionCtrl', RegionCtrl);
 
-    function ToulouseCtrl($scope, $q, $state, Auth, bikeTourMapService, tourLoaderService) {
+    function RegionCtrl($scope, $q, $state, $stateParams, Auth, bikeTourMapService, tourLoaderService, RegionRepository) {
 
-        /* jshint validthis: true */
-        var vm = this;
-
+        // scope properties
         $scope.isAdmin = Auth.isAdmin;
-
-        $scope.openStep = openStep;
-        $scope.openTour = openTour;
-
-        $scope.isAllowedToEdit = function (tour) {
-            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
-                return true;
-            }
-            return false;
-        }
-
         $scope.mapConfig;
 
+        // scope methods
+        $scope.openStep = openStep;
+        $scope.openTour = openTour;
+        $scope.isAllowedToEdit = isAllowedToEdit;
+
+
+        // init method
         init();
 
         function init() {
 
             $scope.isAdmin = Auth.isAdmin;
 
-            loadTourdDetails().then(function (tours) {
-                $scope.tours = tours;
+            getRegion().then(function (region) {
+
+                $scope.region = region;
+
+                loadToursDetailsByGeometry(region.geometry).then(function (tours) {
+                    $scope.tours = tours;
+                });
+
+                $scope.mapConfig = initMapConfig();
             });
 
-            $scope.mapConfig = initMapConfig();
+        }
 
+        function getRegion() {
+
+            var deffered = $q.defer();
+
+            RegionRepository.findByReference({
+                reference: $stateParams.reference
+            }, function (region) {
+
+                deffered.resolve(region);
+
+            }, function (err) {
+                // error loading tour
+                deffered.reject(err);
+            });
+
+            return deffered.promise;
+
+        }
+
+        function isAllowedToEdit(tour) {
+            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
+                return true;
+            }
+            return false;
         }
 
         function openStep(step) {
@@ -56,7 +81,7 @@
             }
         }
 
-        function loadTourdDetails() {
+        function loadToursDetailsByGeometry(geometry) {
             var deffered = $q.defer();
 
             tourLoaderService.loadToursWithDetails({
@@ -80,13 +105,13 @@
         };
 
         function initMapConfig() {
-            return {
-                class: 'toulouse-map',
-                initialCenter: {
+            var mapConfig = {
+                class: 'region-map',
+               /* initialCenter: {
                     lat: 43.6,
                     lng: 1.45,
                     zoom: 11
-                },
+                },*/
                 callbacks: {
                     'map:created': function (eMap) {
 
@@ -99,6 +124,9 @@
                                     name: 'Tracés des itinéraires',
                                     control: true
                                 });
+                                if ($scope.region) {
+                                    eMap.config.control.fitBoundsFromGeometry($scope.region.geometry, 0);
+                                }
                             }
                         });
 
@@ -108,6 +136,7 @@
                     }
                 },
             };
+            return mapConfig;
         }
 
         function buildFeaturesFromTours(tours) {
@@ -148,5 +177,6 @@
             return features;
 
         }
+
     }
 })();

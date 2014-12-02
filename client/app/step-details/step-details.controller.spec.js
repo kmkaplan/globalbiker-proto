@@ -3,7 +3,7 @@
 <div class="container step-details-page page">
 
     <ol class="breadcrumb">
-        <li><a href="/toulouse" translate="mytours.nav-bar_name">Tours</a>
+        <li><a href="/region/france" translate="mytours.nav-bar_name">Tours</a>
         </li>
         <li class="active">{{ tour.title }}</li>
     </ol>

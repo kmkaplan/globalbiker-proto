@@ -19,6 +19,7 @@ module.exports = function (app) {
 
 
     // Insert routes below
+    app.use('/api/regions', require('./api/region'));
     app.use('/api/photos', require('./api/photo'));
     app.use('/api/interesttypes', require('./api/interesttype'));
     app.use('/api/licenses', require('./api/license'));

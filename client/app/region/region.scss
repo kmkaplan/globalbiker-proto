@@ -1,6 +1,6 @@
 @import "table";
 
-.toulouse-page {
+.region-page {
     .list-map-area {
         border: 5px solid $color1;
         border-bottom: none;
@@ -56,7 +56,7 @@
     .images-bar {
         text-align: center;
     }
-    .toulouse-map-area {
+    .region-map-area {
         margin-top: 20px;
         .alert {
             margin: 0;
@@ -84,8 +84,5 @@
     }
     .city-name {
         color: $color1;
-    }
-    .toulouse-presentation {
-        font-size: 16px;
     }
 }

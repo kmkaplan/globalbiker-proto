@@ -9,6 +9,7 @@
 var Tour = require('../api/tour/tour.model');
 var License = require('../api/license/license.model');
 var Photo = require('../api/photo/photo.model');
+var Region = require('../api/region/region.model');
 var InterestType = require('../api/interesttype/interesttype.model');
 var Step = require('../api/step/step.model');
 var User = require('../api/user/user.model');
@@ -49,12 +50,64 @@ if (config.resetAdminPassword) {
     resetAdmin();
 }
 
+Region.findOne({
+        'name': 'Toulouse'
+    },
+    function (err, region) {
+        if (err) {
+            console.error(err);
+        } else {
+            if (!region) {
+                console.info('Create "Toulouse" region.');
+
+                Region.create({
+                    name: 'Toulouse',
+                   reference: 'toulouse',
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [[[1.0753, 43.7731], [1.9336, 43.7731], [1.9336, 43.4360], [1.0753, 43.4360], [1.0753, 43.7731]]]
+                    }
+                }, function (err, region) {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
+        }
+    });
+
+Region.findOne({
+        'name': 'France'
+    },
+    function (err, region) {
+        if (err) {
+            console.error(err);
+        } else {
+            if (!region) {
+                console.info('Create "France" region.');
+
+                Region.create({
+                    name: 'France',
+                    reference: 'france',
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [[[-5.339, 51.468], [10.854, 51.468], [10.854, 42.229], [-5.339, 42.229], [-5.339, 51.468]]]
+                    }
+                }, function (err, region) {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            }
+        }
+    });
+
 Step.find({
     'cityTo.geometry': null
 }, function (err, steps) {
     if (err) {
         console.error(err);
-    } else {
+    } else if (steps.length !== 0) {
         console.info('Convert %d steps cityTo/cityFrom geometry.', steps.length);
 
         steps.reduce(function (promises, step) {
@@ -67,7 +120,7 @@ Step.find({
                 'type': 'Point',
                 coordinates: step.cityTo.geometry.coordinates
             }
-            if (!step.interest){
+            if (!step.interest) {
                 step.interest = 3;
             }
 
@@ -76,7 +129,6 @@ Step.find({
             return promises;
 
         }, []);
-
 
     }
 });

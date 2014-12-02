@@ -1,24 +1,8 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container toulouse-page page" ng-if="tours">
+<div class="container region-page page" ng-if="tours">
 
-    <h2>Découvrez la région de <span class="city-name"> Toulouse</span> à vélo!</h2>
-    <!--<div class="col-md-4" ng-if="photos">
-            <div class="carousel-area">
-                <div>
-                    <carousel interval="5000">
-                        <slide ng-repeat="photo in photos" active="photo.active">
-                            <img class="smart-area" ng-src="{{ photo.thumbnails.w600h400 }}">
-                            <p>
-                                <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
-                                -
-                                <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
-                            </p>
-                        </slide>
-                    </carousel>
-                </div>
-            </div>
-        </div>-->
+    <h2>Zone géographique: <span class="city-name">{{region.name}}</span></h2>
 
     <div class="list-map-area">
         <div class="row">
@@ -37,7 +21,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="toulouse-map-area responsive-map-area smart-area smart-map-area">
+                <div class="region-map-area responsive-map-area smart-area smart-map-area">
                     <div extended-map config="mapConfig"></div>
                 </div>
             </div>
