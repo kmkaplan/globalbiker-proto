@@ -193,9 +193,9 @@ angular.module('globalbikerWebApp')
 
                 $scope.step.$update(function (step, putResponseHeaders) {
                         console.info('Step updated.');
-                        var stepViewModel = new MyTourStepViewModelStep(step, $scope.tour, $scope.step.interests);
+                       /* var stepViewModel = new MyTourStepViewModelStep(step, $scope.tour, $scope.step.interests);
 
-                        $scope.step = stepViewModel;
+                        $scope.step = stepViewModel;*/
                         deffered.resolve(step);
                     },
                     function () {

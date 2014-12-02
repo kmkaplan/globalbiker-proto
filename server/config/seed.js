@@ -46,8 +46,40 @@ var resetAdmin = function () {
 }
 
 if (config.resetAdminPassword) {
-   resetAdmin();
+    resetAdmin();
 }
+
+Step.find({
+    'cityTo.geometry': null
+}, function (err, steps) {
+    if (err) {
+        console.error(err);
+    } else {
+        console.info('Convert %d steps cityTo/cityFrom geometry.', steps.length);
+
+        steps.reduce(function (promises, step) {
+
+            step.cityFrom.geometry = {
+                'type': 'Point',
+                coordinates: step.cityFrom.geometry.coordinates
+            }
+            step.cityTo.geometry = {
+                'type': 'Point',
+                coordinates: step.cityTo.geometry.coordinates
+            }
+            if (!step.interest){
+                step.interest = 3;
+            }
+
+            promises.push(step.save());
+
+            return promises;
+
+        }, []);
+
+
+    }
+});
 
 InterestType.find({}, function (err, interesttypes) {
     if (err) {

@@ -52,8 +52,10 @@ angular.module('globalbikerWebApp')
 
                 return features;
             },
-            buildStepTraceFeature: function (step, options, tour) {
+            buildStepTraceFeatures: function (step, options, tour) {
 
+                var self = this;
+                
                 if (!options) {
                     options = {};
                 }
@@ -71,7 +73,7 @@ angular.module('globalbikerWebApp')
                 if (!step.geometry) {
                     step.geometry = {
                         type: 'LineString',
-                        coordinates: [[step.cityFrom.longitude, step.cityFrom.latitude], [step.cityTo.longitude, step.cityTo.latitude]]
+                        coordinates: [step.cityFrom.geometry.coordinates, step.cityTo.geometry.coordinates]
                     };
                     style.dashArray = '20 15';
                 }
@@ -83,16 +85,16 @@ angular.module('globalbikerWebApp')
                 } else {
                     overStyle = null
                 }
-                
+
                 var label;
-                if (options.label){
-                    if (typeof(options.label) === 'function'){
+                if (options.label) {
+                    if (typeof (options.label) === 'function') {
                         label = options.label(step, tour);
-                    }else{
+                    } else {
                         label = options.label;
                     }
                 }
-                
+
                 var stepFeature = this._buildFeature(step, {
                     label: label,
                     style: function () {
@@ -122,8 +124,23 @@ angular.module('globalbikerWebApp')
 
                 stepFeature.properties.animate = true;
 
+                var features = [stepFeature];
 
-                return stepFeature;
+                if (options.bounds && options.bounds.show) {
+                    var origin = step.cityFrom;
+                    var feature = self.buildOriginMarker(origin);
+                    if (feature !== null) {
+                        features.push(feature);
+                    }
+
+                    var destination = step.cityTo;
+                    feature = self.buildDestinationMarker(destination);
+                    if (feature !== null) {
+                        features.push(feature);
+                    }
+                }
+
+                return features;
             },
             buildBikelanesFeatures: function (bikelanes) {
                 return this._buildFeatures(bikelanes, {
@@ -137,6 +154,8 @@ angular.module('globalbikerWebApp')
             },
             buildStepsTracesFeatures: function (steps, options, tour) {
                 var self = this;
+
+                var features = [];
 
                 if (steps) {
 
@@ -152,7 +171,7 @@ angular.module('globalbikerWebApp')
 
                     if (steps) {
 
-                        return steps.reduce(function (stepTraceFeatures, step) {
+                        features = steps.reduce(function (stepTraceFeatures, step) {
 
                             var feature = self.buildStepTraceFeature(step, stepsOptions, tour);
                             if (feature) {
@@ -160,12 +179,70 @@ angular.module('globalbikerWebApp')
                             }
                             return stepTraceFeatures;
                         }, []);
+
+                        if (steps && steps.length !== 0 && options.bounds && options.bounds.show) {
+                            var origin = steps[0].cityFrom;
+                            var feature = self.buildOriginMarker(origin);
+                            if (feature !== null) {
+                                features.push(feature);
+                            }
+
+                            var destination = steps[steps.length - 1].cityTo;
+                            feature = self.buildDestinationMarker(steps);
+                            if (feature !== null) {
+                                features.push(feature);
+                            }
+                        }
+
                     }
+
                 }
-
-                return [];
-
+                return features;
             },
+
+            buildOriginMarker: function (origin) {
+
+                var self = this;
+
+                var feature = null;
+
+                feature = self._buildFeature(origin, {
+                    pointToLayer: function (feature, latlng) {
+
+                        return L.marker(latlng, {
+                            icon: L.AwesomeMarkers.icon({
+                                prefix: 'fa',
+                                icon: 'dot-circle-o ',
+                                markerColor: 'black'
+                            })
+                        }).bindLabel(origin.name);;
+                    }
+                });
+
+                return feature;
+            },
+            buildDestinationMarker: function (destination) {
+
+                var self = this;
+
+                var feature = null;
+
+                feature = self._buildFeature(destination, {
+                    pointToLayer: function (feature, latlng) {
+
+                        return L.marker(latlng, {
+                            icon: L.AwesomeMarkers.icon({
+                                prefix: 'fa',
+                                icon: 'flag ',
+                                markerColor: 'black'
+                            })
+                        }).bindLabel(destination.name);;
+                    }
+                });
+
+                return feature;
+            },
+
             buildToursStepTracesFeatures: function (tours, options) {
                 var self = this;
                 var stepTraceFeatures = tours.reduce(function (stepTraceFeatures, tour) {

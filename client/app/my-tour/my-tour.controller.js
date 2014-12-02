@@ -156,7 +156,7 @@ angular.module('globalbikerWebApp')
                                                 $scope.autozoom();
                                             }
 
-                                            $scope.$watch('steps', function (steps, old) {
+                                            $scope.$watchCollection('steps', function (steps, old) {
 
                                                 if (steps) {
                                                     var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
@@ -388,14 +388,16 @@ angular.module('globalbikerWebApp')
                         name: step.cityFrom.name,
                         adminName1: step.cityFrom.adminName1,
                         latitude: step.cityFrom.latitude,
-                        longitude: step.cityFrom.longitude
+                        longitude: step.cityFrom.longitude,
+                        geometry: step.cityFrom.geometry.coordinates
                     },
                     cityTo: {
                         geonameId: step.cityTo.geonameId,
                         name: step.cityTo.name,
                         adminName1: step.cityTo.adminName1,
                         latitude: step.cityTo.latitude,
-                        longitude: step.cityTo.longitude
+                        longitude: step.cityTo.longitude,
+                        geometry: step.cityTo.geometry.coordinates
                     }
                 });
 

@@ -110,7 +110,7 @@ angular.module('globalbikerWebApp')
                         $scope.$watch('step', function (step, old) {
 
                             if (step) {
-                                var traceFeature = bikeTourMapService.buildStepTraceFeature(step, {
+                                var traceFeatures = bikeTourMapService.buildStepTraceFeatures(step, {
                                     style: {
                                         color: '#34a0b4',
                                         width: 3,
@@ -119,10 +119,13 @@ angular.module('globalbikerWebApp')
                                     },
                                     label: function (step) {
                                         return $scope.getStepLabel(step);
+                                    },
+                                    bounds: {
+                                        show: true
                                     }
                                 });
 
-                                eMap.addItemsToGroup([traceFeature], {
+                                eMap.addItemsToGroup(traceFeatures, {
                                     name: 'Tracés de l\'itinéraires',
                                     control: true
                                 });

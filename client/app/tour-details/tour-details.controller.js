@@ -100,6 +100,9 @@ angular.module('globalbikerWebApp')
                                     label: function (step) {
                                         return $scope.getStepLabel(step);
                                     },
+                                    bounds: {
+                                        show: true
+                                    },
                                     callbacks: {
                                         'click': function (step) {
                                             $state.go('step-details', {
@@ -112,13 +115,15 @@ angular.module('globalbikerWebApp')
                                 });
 
                                 eMap.addItemsToGroup(traceFeatures, {
-                                    name: 'Tracé des  l\'itinéraires',
+                                    name: 'Tracé de l\'itinéraire',
                                     control: true
                                 });
+                                
                                 var geometries = steps.reduce(function (geometries, step) {
                                     geometries.push(step.geometry);
                                     return geometries;
                                 }, []);
+                                
                                 $timeout(function () {
                                     eMap.config.control.fitBoundsFromGeometries(geometries);
                                 }, 200);
