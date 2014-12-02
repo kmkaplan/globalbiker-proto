@@ -125,86 +125,86 @@ angular.module('globalbikerWebApp')
 
                 $scope.tourId = $stateParams.id;
 
-                $scope.loadTourWithSteps().then(function () {});
+                $scope.loadTourWithSteps().then(function () {
 
-                $scope.mapConfig = {
-                    class: 'my-tour-map',
-                    callbacks: {
-                        'map:created': function (eMap) {
+                    $scope.mapConfig = {
+                        class: 'my-tour-map',
+                        callbacks: {
+                            'map:created': function (eMap) {
 
-                            $scope.eMap = eMap;
+                                $scope.eMap = eMap;
 
 
-                            $scope.$watch('tour.country', function (newCountry, oldCountry) {
+                                $scope.$watch('tour.country', function (newCountry, oldCountry) {
 
-                                if (typeof (newCountry) !== 'undefined' && newCountry !== null && newCountry.countryCode) {
+                                    if (typeof (newCountry) !== 'undefined' && newCountry !== null && newCountry.countryCode) {
 
-                                    return $http.get('http://api.geonames.org/countryInfoJSON?country=' + newCountry.countryCode + '&username=toub', {
-                                        params: {
-                                            sensor: false
-                                        }
-                                    }).then(function (res) {
-                                        if (res && res.data && res.data.geonames && res.data.geonames[0]) {
+                                        return $http.get('http://api.geonames.org/countryInfoJSON?country=' + newCountry.countryCode + '&username=toub', {
+                                            params: {
+                                                sensor: false
+                                            }
+                                        }).then(function (res) {
+                                            if (res && res.data && res.data.geonames && res.data.geonames[0]) {
 
-                                            var info = res.data.geonames[0];
-                                            $scope.countryBounds = [
+                                                var info = res.data.geonames[0];
+                                                $scope.countryBounds = [
                                                     [info.north, info.west],
                                                     [info.south, info.east]
                                                 ];
-                                        }
-                                        if (!$scope.steps || $scope.steps.length === 0) {
-                                            $scope.autozoom();
-                                        }
-
-                                        $scope.$watch('steps', function (steps, old) {
-
-                                            if (steps) {
-                                                var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
-                                                    style: {
-                                                        color: '#34a0b4',
-                                                        width: 3,
-                                                        weight: 6,
-                                                        opacity: 0.8
-                                                    },
-                                                    label: function (step) {
-                                                        return $scope.getStepLabel(step);
-                                                    },
-                                                    callbacks: {
-                                                        'click': function (step) {
-                                                            $state.go('my-tour-step', {
-                                                                id: step._id
-                                                            }, {
-                                                                inherit: false
-                                                            });
-                                                        }
-                                                    }
-                                                });
-
-                                                eMap.addItemsToGroup(traceFeatures, {
-                                                    name: 'Tracés des itinéraires',
-                                                    control: true
-                                                });
-                                                var geometries = steps.reduce(function (geometries, step) {
-                                                    geometries.push(step.geometry);
-                                                    return geometries;
-                                                }, []);
-                                                $timeout(function () {
-                                                    eMap.config.control.fitBoundsFromGeometries(geometries);
-                                                }, 200);
                                             }
+                                            if (!$scope.steps || $scope.steps.length === 0) {
+                                                $scope.autozoom();
+                                            }
+
+                                            $scope.$watch('steps', function (steps, old) {
+
+                                                if (steps) {
+                                                    var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
+                                                        style: {
+                                                            color: '#34a0b4',
+                                                            width: 3,
+                                                            weight: 6,
+                                                            opacity: 0.8
+                                                        },
+                                                        label: function (step) {
+                                                            return $scope.getStepLabel(step);
+                                                        },
+                                                        callbacks: {
+                                                            'click': function (step) {
+                                                                $state.go('my-tour-step', {
+                                                                    id: step._id
+                                                                }, {
+                                                                    inherit: false
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+
+                                                    eMap.addItemsToGroup(traceFeatures, {
+                                                        name: 'Tracés des itinéraires',
+                                                        control: true
+                                                    });
+                                                    var geometries = steps.reduce(function (geometries, step) {
+                                                        geometries.push(step.geometry);
+                                                        return geometries;
+                                                    }, []);
+                                                    $timeout(function () {
+                                                        eMap.config.control.fitBoundsFromGeometries(geometries);
+                                                    }, 200);
+                                                }
+                                            });
+
                                         });
 
-                                    });
+                                    }
 
-                                }
+                                });
 
-                            });
-
+                            }
                         }
-                    }
-                };
+                    };
 
-
+                });
 
                 return deffered.promise;
 

@@ -199,7 +199,7 @@ exports.geometryToNearCriterias = function (geometry, distance) {
             console.log('MultiLineString');
 
             nearCriterias = geometry.coordinates.reduce(function (nearCriterias, coordinates) {
-                var criteriaArray = exports.coordinatesToNearPromise(coordinates, distance);
+                var criteriaArray = exports.coordinatesToNearCriterias(coordinates, distance);
                 return nearCriterias.concat(criteriaArray);
             }, []);
 
