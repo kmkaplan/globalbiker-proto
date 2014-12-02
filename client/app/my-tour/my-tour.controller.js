@@ -389,7 +389,7 @@ angular.module('globalbikerWebApp')
                         adminName1: step.cityFrom.adminName1,
                         latitude: step.cityFrom.latitude,
                         longitude: step.cityFrom.longitude,
-                        geometry: step.cityFrom.geometry.coordinates
+                        geometry: step.cityFrom.geometry
                     },
                     cityTo: {
                         geonameId: step.cityTo.geonameId,
@@ -397,7 +397,7 @@ angular.module('globalbikerWebApp')
                         adminName1: step.cityTo.adminName1,
                         latitude: step.cityTo.latitude,
                         longitude: step.cityTo.longitude,
-                        geometry: step.cityTo.geometry.coordinates
+                        geometry: step.cityTo.geometry
                     }
                 });
 

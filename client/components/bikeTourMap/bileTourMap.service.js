@@ -173,9 +173,9 @@ angular.module('globalbikerWebApp')
 
                         features = steps.reduce(function (stepTraceFeatures, step) {
 
-                            var feature = self.buildStepTraceFeature(step, stepsOptions, tour);
-                            if (feature) {
-                                stepTraceFeatures.push(feature);
+                            var features = self.buildStepTraceFeatures(step, stepsOptions, tour);
+                            if (features) {
+                                stepTraceFeatures = stepTraceFeatures.concat(features);
                             }
                             return stepTraceFeatures;
                         }, []);

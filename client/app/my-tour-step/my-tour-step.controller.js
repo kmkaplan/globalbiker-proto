@@ -287,14 +287,14 @@ angular.module('globalbikerWebApp')
 
                                 if (step && step.geometry) {
 
-                                    var traceFeatures = [bikeTourMapService.buildStepTraceFeature(step, {
+                                    var traceFeatures = bikeTourMapService.buildStepTraceFeatures(step, {
                                         style: {
                                             color: '#34a0b4',
                                             width: 3,
                                             weight: 6,
                                             opacity: 0.8
                                         }
-                                    })];
+                                    });
 
                                     eMap.addItemsToGroup(traceFeatures, {
                                         name: 'Tracé',
