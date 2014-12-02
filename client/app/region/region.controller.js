@@ -86,10 +86,10 @@
 
             tourLoaderService.loadToursWithDetails({
                 tour: {
-                    photo: true,
+                    photo: true/*,
                     photosAround: {
                         distance: 500
-                    }
+                    }*/
                 },
                 steps: {}
 
