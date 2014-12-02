@@ -52,7 +52,7 @@ angular.module('globalbikerWebApp')
             getTourPhoto: function (tour, options) {
                 var deffered = $q.defer();
 
-                if (tour.photoId && options.tour.photo) {
+                if (tour.photoId && options.tour && options.tour.photo) {
                     photoLoaderService.getPhoto(tour.photoId).then(function (photo) {
                         tour.photo = photo;
                         deffered.resolve(tour);

@@ -30,7 +30,7 @@ angular.module('globalbikerWebApp', [
         });
 
         $translateProvider.determinePreferredLanguage(function () {
-            if (navigator.language.lastIndexOf("fr", 0) === 0) {
+            if (navigator.language && navigator.language.lastIndexOf("fr", 0) === 0) {
                 return "fr";
             } else {
                 return "en";
