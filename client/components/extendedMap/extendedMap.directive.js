@@ -40,7 +40,7 @@ angular.module('globalbikerWebApp')
 
                     $scope.config.control = {
                         fitBounds: function (bounds) {
-                            console.info('Fit to bounds.');
+                            console.info('Fit to bounds: %s.', bounds);
                             if (bounds && bounds.length === 2 && bounds[0].length === 2 && bounds[0][0] && bounds[1].length === 2) {
                                 leafletData.getMap($scope.mapId).then(function (map) {
                                     //$timeout(function () {
@@ -60,7 +60,6 @@ angular.module('globalbikerWebApp')
                         fitBoundsFromGeometry: function (geometry, margin) {
                             var bounds = extendedMapMathsService.getBoundsFromGeometry(geometry, margin);
                             if (bounds) {
-
                                 console.info('Fit to bounds from geometry.');
                                 this.fitBounds(bounds);
                             }
