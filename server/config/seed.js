@@ -62,7 +62,7 @@ Region.findOne({
 
                 Region.create({
                     name: 'Toulouse',
-                   reference: 'toulouse',
+                    reference: 'toulouse',
                     geometry: {
                         type: "Polygon",
                         coordinates: [[[1.0753, 43.7731], [1.9336, 43.7731], [1.9336, 43.4360], [1.0753, 43.4360], [1.0753, 43.7731]]]
@@ -114,11 +114,11 @@ Step.find({
 
             step.cityFrom.geometry = {
                 'type': 'Point',
-                coordinates: step.cityFrom.geometry.coordinates
+                coordinates: [step.cityFrom.longitude, step.cityFrom.latitude]
             }
             step.cityTo.geometry = {
                 'type': 'Point',
-                coordinates: step.cityTo.geometry.coordinates
+                coordinates: [step.cityTo.longitude, step.cityTo.latitude]
             }
             if (!step.interest) {
                 step.interest = 3;
