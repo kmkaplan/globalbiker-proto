@@ -120,8 +120,10 @@ angular.module('globalbikerWebApp')
                                     label: function (step) {
                                         return $scope.getStepLabel(step);
                                     },
-                                    bounds: {
-                                        show: true
+                                    step: {
+                                        bounds: {
+                                            show: true
+                                        }
                                     }
                                 });
 

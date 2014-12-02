@@ -22,6 +22,20 @@ angular.module('globalbikerWebApp')
                 return deffered.promise;
             },
 
+            getTours: function (options) {
+                var deffered = $q.defer();
+
+                TourRepository.query(function (tours) {
+                        deffered.resolve(tours);
+                    },
+                    function (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    });
+
+                return deffered.promise;
+            },
+
             getPhotosAroundTour: function (tour, options) {
                 var deffered = $q.defer();
 
@@ -127,6 +141,31 @@ angular.module('globalbikerWebApp')
 
                 this.getTour(tourId).then(function (tour) {
                         deffered.resolve(self.loadDetails(tour, options));
+                    },
+                    function (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    });
+
+                return deffered.promise;
+            },
+
+            loadToursWithDetails: function (options) {
+                var self = this;
+
+                var deffered = $q.defer();
+
+                this.getTours().then(function (tours) {
+
+                        var promises = tours.reduce(function (promises, tour) {
+
+                            promises.push(self.loadDetails(tour, options));
+                            return promises;
+
+                        }, []);
+
+                        deffered.resolve($q.all(promises));
+
                     },
                     function (err) {
                         console.error(err);

@@ -54,7 +54,7 @@ angular.module('globalbikerWebApp')
         };
 
         $scope.loadTour = function () {
-            
+
             return tourLoaderService.loadTour($scope.tourId, {
                 steps: {}
             }).then(function (tour) {
@@ -92,16 +92,18 @@ angular.module('globalbikerWebApp')
                             if (steps) {
                                 var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
                                     style: {
-                                                        color: '#34a0b4',
-                                                        width: 3,
-                                                        weight: 6,
-                                                        opacity: 0.8
-                                                    },
+                                        color: '#34a0b4',
+                                        width: 3,
+                                        weight: 6,
+                                        opacity: 0.8
+                                    },
                                     label: function (step) {
                                         return $scope.getStepLabel(step);
                                     },
-                                    bounds: {
-                                        show: true
+                                    tour: {
+                                        bounds: {
+                                            show: true
+                                        }
                                     },
                                     callbacks: {
                                         'click': function (step) {
@@ -118,12 +120,12 @@ angular.module('globalbikerWebApp')
                                     name: 'Tracé de l\'itinéraire',
                                     control: true
                                 });
-                                
+
                                 var geometries = steps.reduce(function (geometries, step) {
                                     geometries.push(step.geometry);
                                     return geometries;
                                 }, []);
-                                
+
                                 $timeout(function () {
                                     eMap.config.control.fitBoundsFromGeometries(geometries);
                                 }, 200);

@@ -126,7 +126,7 @@ angular.module('globalbikerWebApp')
 
                 var features = [stepFeature];
 
-                if (options.bounds && options.bounds.show) {
+                if (options.step && options.step.bounds && options.step.bounds.show) {
                     var origin = step.cityFrom;
                     var feature = self.buildOriginMarker(origin);
                     if (feature !== null) {
@@ -180,7 +180,7 @@ angular.module('globalbikerWebApp')
                             return stepTraceFeatures;
                         }, []);
 
-                        if (steps && steps.length !== 0 && options.bounds && options.bounds.show) {
+                        if (steps && steps.length !== 0 && options.tour && options.tour.bounds.show && options.tour.bounds.show) {
                             var origin = steps[0].cityFrom;
                             var feature = self.buildOriginMarker(origin);
                             if (feature !== null) {
@@ -188,7 +188,7 @@ angular.module('globalbikerWebApp')
                             }
 
                             var destination = steps[steps.length - 1].cityTo;
-                            feature = self.buildDestinationMarker(steps);
+                            feature = self.buildDestinationMarker(destination);
                             if (feature !== null) {
                                 features.push(feature);
                             }
@@ -196,6 +196,8 @@ angular.module('globalbikerWebApp')
 
                     }
 
+                }else{
+                    console.warn('No step to display.');
                 }
                 return features;
             },
