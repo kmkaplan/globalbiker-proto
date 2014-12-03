@@ -60,7 +60,7 @@ angular.module('globalbikerWebApp')
                         fitBoundsFromGeometry: function (geometry, margin) {
                             var bounds = extendedMapMathsService.getBoundsFromGeometry(geometry, margin);
                             if (bounds) {
-                                console.info('Fit to bounds from geometry.');
+                                console.info('Fit to bounds from geometry of type "%s" and coordinates %s.', geometry.type, geometry.coordinates);
                                 this.fitBounds(bounds);
                             }
                             return bounds;
