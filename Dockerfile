@@ -20,10 +20,11 @@ RUN apt-get clean
 WORKDIR /app
 
 # pre-install main dependencies (to save time)
-RUN npm install karma karma-phantomjs-launcher grunt-contrib-imagemin grunt-google-cdn grunt-protractor-runner
+RUN npm install karma karma-phantomjs-launcher grunt-contrib-imagemin grunt-google-cdn grunt-protractor-runner lwip express
 
 ADD package.json /app/
-RUN npm install --verbose
+# RUN npm install --verbose
+RUN npm install
 
 ADD bower.json /app/
 RUN bower install --allow-root
