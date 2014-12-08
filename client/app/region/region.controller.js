@@ -7,13 +7,12 @@
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
-        $scope.mapConfig;
+        $scope.mapConfig = {};
 
         // scope methods
         $scope.openStep = openStep;
         $scope.openTour = openTour;
         $scope.isAllowedToEdit = isAllowedToEdit;
-
 
         // init method
         init();
@@ -30,7 +29,32 @@
                     $scope.tours = tours;
                 });
 
-                $scope.mapConfig = initMapConfig();
+                $scope.$watch('tours', function (tours, old) {
+
+                    var features = buildFeaturesFromTours(tours);
+
+                    if (features) {
+                        /*  eMap.addItemsToGroup(features, {
+                                    name: 'Tracés des itinéraires',
+                                    control: true
+                                });*/
+
+                        $scope.mapConfig.items = features;
+
+                        if ($scope.region) {
+                            $timeout(function () {
+                                // eMap.config.control.fitBoundsFromGeometry($scope.region.geometry, 0);
+
+                                $scope.mapConfig.bounds = {
+                                    geometry: $scope.region.geometry
+                                };
+
+
+                            }, 200);
+
+                        }
+                    }
+                });
             });
 
         }
@@ -106,36 +130,23 @@
         };
 
         function initMapConfig() {
+            /* 
             var mapConfig = {
                 class: 'region-map',
-                /* initialCenter: {
+                 initialCenter: {
                     lat: 43.6,
                     lng: 1.45,
                     zoom: 11
-                },*/
+                },
                 callbacks: {
-                    'map:created': function (eMap) {
+                    'map:created': function (eMap) {*/
 
-                        $scope.$watch('tours', function (tours, old) {
+            /*  $scope.mapConfig = {};;
+            return {};*/
 
-                            var features = buildFeaturesFromTours(tours);
 
-                            if (features) {
-                                eMap.addItemsToGroup(features, {
-                                    name: 'Tracés des itinéraires',
-                                    control: true
-                                });
-
-                                if ($scope.region) {
-                                    $timeout(function () {
-                                        eMap.config.control.fitBoundsFromGeometry($scope.region.geometry, 0);
-
-                                    }, 200);
-
-                                }
-                            }
-                        });
-
+        };
+        /*
                     },
                     'step:clicked': function (step, eMap, item, itemLayer, e) {
                         openStep(step);
@@ -143,7 +154,7 @@
                 },
             };
             return mapConfig;
-        }
+        }*/
 
         function buildFeaturesFromTours(tours) {
             var features = null;
@@ -161,10 +172,11 @@
                     style: {
                         width: 3,
                         weight: 6,
-                        opacity: 0.8
+                        opacity: 1,
+                        color: '#34a0b4'
                     },
                     overStyle: {
-                        color: '#34a0b4',
+                        color: '#347eb4',
                         opacity: 1
                     },
                     callbacks: {
