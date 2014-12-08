@@ -10,6 +10,10 @@
         .tour-resume-list {
             .title {
                 font-weight: bold;
+                .tour-rating {
+                    display: inline-block;
+                    width: 100px;
+                }
             }
             .steps {
                 color: $color2;
@@ -20,13 +24,13 @@
         /*background: $color2light1;
         box-shadow: 1px 1px 2px 1px $color2dark2;*/
         //border: 2px solid $color2;
-       /* border-top: none;
-        border-left: none;*/
-        border-radius:  10px;
+        /* border-top: none;
+         border-left: none;*/
+        border-radius: 10px;
         margin-top: 10px;
         color: $black1;
         font-size: 16px;
-        text-align: justify;   
+        text-align: justify;
         background-color: #f9f9f9;
         .tour-details {
             margin: 20px;

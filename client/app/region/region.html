@@ -13,6 +13,13 @@
                         <tbody>
                             <tr class="tour-resume-list" ng-click="openTour(tour)" ng-repeat="tour in tours">
                                 <td class="title">{{ tour.title }}
+                                   <div> <div class="tour-rating">
+                                        <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
+                                    </div>
+
+                                    <div class="tour-rating">
+                                        <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
+                                    </div></div>
                                 </td>
                                 <td class="steps">{{ tour.steps.length }} étape(s)</td>
                             </tr>
