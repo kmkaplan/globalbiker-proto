@@ -7,19 +7,30 @@
         </li>
         <li class="active">{{ tour.title }}</li>
     </ol>
+
     <a ng-if="isAllowedToEdit(tour)" class="pull-right" href="/my-tour/{{ tour._id }}">
         <i class="fa fa-edit"></i> {{ 'tour-details.edit-the-tour' | translate }}
     </a>
     <h1>{{ tour.title }}</h1>
+
+   <div>
+    <div class="tour-rating">
+        <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
+    </div>
+
+    <div class="tour-rating">
+        <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
+    </div>
+</div>
     <div class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="tour-map-area responsive-map-area smart-area smart-map-area">
                 <div map config="mapConfig"></div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <h3>Choisissez une étape</h3>
             <table class="smart-table table table-striped table-hover">
                 <tbody>

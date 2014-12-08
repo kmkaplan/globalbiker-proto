@@ -133,6 +133,62 @@ Step.find({
     }
 });
 
+Tour.find({
+    'difficulty': null
+}, function (err, tours) {
+    if (err) {
+        console.error(err);
+    } else if (tours.length !== 0) {
+        console.info('Calculate %d tours difficulty.', tours.length);
+
+        tours.reduce(function (promises, tour) {
+
+            Step.find({
+                'tourId': tour.id
+            }, function (err, steps) {
+                if (err) {
+                    console.error(err);
+                } else if (steps.length !== 0) {
+                    var difficultySum = steps.reduce(function (difficultySum, step) {
+                        return difficultySum + step.difficulty;
+                    }, 0);
+                    tour.difficulty = Math.round(difficultySum / steps.length);
+                    console.info('Tour %s difficulty: %d.', tour.name, tour.difficulty);
+                    tour.save();
+                }
+
+            });
+        });
+    }
+});
+Tour.find({
+    'interest': null
+}, function (err, tours) {
+    if (err) {
+        console.error(err);
+    } else if (tours.length !== 0) {
+        console.info('Calculate %d tours interest.', tours.length);
+
+        tours.reduce(function (promises, tour) {
+
+            Step.find({
+                'tourId': tour.id
+            }, function (err, steps) {
+                if (err) {
+                    console.error(err);
+                } else if (steps.length !== 0) {
+                    var sum = steps.reduce(function (sum, step) {
+                        return sum + step.interest;
+                    }, 0);
+                    tour.interest = Math.round(sum / steps.length);
+                    console.info('Tour %s interest: %d.', tour.name, tour.interest);
+                    tour.save();
+                }
+
+            });
+        });
+    }
+});
 InterestType.find({}, function (err, interesttypes) {
     if (err) {
         console.error(err);

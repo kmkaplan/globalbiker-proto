@@ -55,6 +55,12 @@ var TourSchema = new Schema({
     photoId: {
         type: Schema.ObjectId,
         ref: 'PhotoSchema'
+    },
+    difficulty: {
+        type: Number
+    },
+    interest: {
+        type: Number
     }
 });
 

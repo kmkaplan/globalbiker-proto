@@ -24,23 +24,6 @@ angular.module('globalbikerWebApp')
             });
         }
 
-        $scope.autozoom = function (step, eMap) {
-            var points = [];
-
-            if (step.cityFrom) {
-                points.push(step.cityFrom);
-            }
-            if (step.cityTo) {
-                points.push(step.cityTo);
-            }
-
-            if (points.length > 1) {
-                if (eMap) {
-                    eMap.config.control.fitBoundsFromPoints(points, 0.2);
-                }
-            }
-        };
-
         $scope.redirectOnError = function () {
             // redirect to 'toulouse' page
             $state.go('toulouse', {}, {
