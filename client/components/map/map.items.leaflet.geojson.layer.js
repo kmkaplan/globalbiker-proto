@@ -45,6 +45,24 @@ L.GeojsonItem = L.FeatureGroup.extend({
 
         switch (item.geometry.type) {
 
+        case 'Point':
+            var latlng = coordsToLatLng(item.geometry.coordinates);
+
+            var markerOptions = {};
+
+            if (item.properties.awesomeIcon) {
+                markerOptions.icon = L.AwesomeMarkers.icon(item.properties.awesomeIcon);
+            }
+            layer = new L.Marker(latlng, markerOptions);
+
+            if (item.properties.label) {
+                layer.bindLabel(item.properties.label);
+            }
+
+            this._addToLayer(item, layer, true);
+
+            break;
+
         case 'LineString':
             var latlngs = this.coordsToLatLngs(item.geometry.coordinates, 0, coordsToLatLng);
 
@@ -91,7 +109,8 @@ L.GeojsonItem = L.FeatureGroup.extend({
             break;
 
         default:
-            throw new Error('Invalid geometry type "%s".', item.geometry.type);
+            console.error('Invalid geometry type "%s".', item.geometry.type);
+            throw new Error('Invalid geometry type.');
         }
 
     },

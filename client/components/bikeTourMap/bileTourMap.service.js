@@ -55,7 +55,7 @@ angular.module('globalbikerWebApp')
             buildStepTraceFeatures: function (step, options, tour) {
 
                 var self = this;
-                
+
                 if (!options) {
                     options = {};
                 }
@@ -129,6 +129,7 @@ angular.module('globalbikerWebApp')
                 if (options.step && options.step.bounds && options.step.bounds.show) {
                     var origin = step.cityFrom;
                     var feature = self.buildOriginMarker(origin);
+
                     if (feature !== null) {
                         features.push(feature);
                     }
@@ -196,7 +197,7 @@ angular.module('globalbikerWebApp')
 
                     }
 
-                }else{
+                } else {
                     console.warn('No step to display.');
                 }
                 return features;
@@ -208,6 +209,8 @@ angular.module('globalbikerWebApp')
 
                 var feature = null;
 
+                // FIXME: remove old map model
+
                 feature = self._buildFeature(origin, {
                     pointToLayer: function (feature, latlng) {
 
@@ -217,9 +220,17 @@ angular.module('globalbikerWebApp')
                                 icon: 'dot-circle-o ',
                                 markerColor: 'black'
                             })
-                        }).bindLabel(origin.name);;
+                        }).bindLabel(origin.name);
                     }
                 });
+
+                // TODO: new map model
+                feature.properties.awesomeIcon = {
+                    prefix: 'fa',
+                    icon: 'dot-circle-o ',
+                    markerColor: 'black'
+                };
+                feature.properties.label = origin.name;
 
                 return feature;
             },
@@ -229,6 +240,8 @@ angular.module('globalbikerWebApp')
 
                 var feature = null;
 
+
+                // FIXME: remove old map model
                 feature = self._buildFeature(destination, {
                     pointToLayer: function (feature, latlng) {
 
@@ -241,6 +254,14 @@ angular.module('globalbikerWebApp')
                         }).bindLabel(destination.name);;
                     }
                 });
+
+                // TODO: new map model
+                feature.properties.awesomeIcon = {
+                    prefix: 'fa',
+                    icon: 'flag ',
+                    markerColor: 'black'
+                };
+                feature.properties.label = destination.name;
 
                 return feature;
             },

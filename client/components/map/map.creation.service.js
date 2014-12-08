@@ -16,13 +16,25 @@ angular.module('globalbikerWebApp')
             },
             fitBounds: function (map, bounds) {
                 if (bounds && bounds.geometry) {
+
                     
-                    console.log('Fit bounds to geometry: ', bounds.geometry);
-                    
-                    var bounds = extendedMapMathsService.getBoundsFromGeometry(bounds.geometry, 0.1);
-                    map.fitBounds(bounds);
-                    // FIXME does not work :
-                    map.setMaxBounds(bounds);
+                    if (L.Util.isArray(bounds.geometry)) {
+
+                        console.log('Fit bounds to %d geometries.', bounds.geometry.length);
+
+                        var bounds = extendedMapMathsService.getBoundsFromGeometries(bounds.geometry, 0.1);
+                        map.fitBounds(bounds);
+                        // FIXME does not work :
+                        map.setMaxBounds(bounds);
+                    } else {
+
+                        console.log('Fit bounds to geometry: ', bounds.geometry);
+
+                        var bounds = extendedMapMathsService.getBoundsFromGeometry(bounds.geometry, 0.1);
+                        map.fitBounds(bounds);
+                        // FIXME does not work :
+                        map.setMaxBounds(bounds);
+                    }
                 }
             }
         }

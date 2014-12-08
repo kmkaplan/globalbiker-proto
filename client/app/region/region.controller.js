@@ -34,10 +34,10 @@
 
                         $scope.mapConfig.items = features;
 
-                        if ($scope.region) {
+                        if (region) {
 
                             $scope.mapConfig.bounds = {
-                                geometry: $scope.region.geometry
+                                geometry: region.geometry
                             };
                         }
                     }

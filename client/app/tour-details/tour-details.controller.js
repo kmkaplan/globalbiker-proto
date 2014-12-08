@@ -3,7 +3,11 @@
 angular.module('globalbikerWebApp')
     .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService, InterestRepository, LicenseRepository, tourLoaderService) {
 
+        // scope properties
         $scope.isAdmin = Auth.isAdmin;
+        $scope.mapConfig = {};
+
+        // scope methods
 
         $scope.isAllowedToEdit = function (tour) {
             if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
@@ -55,17 +59,24 @@ angular.module('globalbikerWebApp')
 
         $scope.loadTour = function () {
 
-            return tourLoaderService.loadTour($scope.tourId, {
+            var deffered = $q.defer();
+
+            tourLoaderService.loadTour($scope.tourId, {
                 steps: {}
             }).then(function (tour) {
 
                 if (tour.steps.length === 1) {
                     console.warn('Only one step: redirect to step details.');
                     $scope.openStep(tour.steps[0]);
+
+                    deffered.reject('Only one step.');
                 } else {
                     $scope.tour = tour;
+                    deffered.resolve(tour);
                 }
             });
+
+            return deffered.promise;
         }
 
         $scope.init = function () {
@@ -77,65 +88,51 @@ angular.module('globalbikerWebApp')
 
             $scope.tourId = $stateParams.id
 
-            $scope.tourMapConfig = {
-                class: 'tour-map',
-                initialCenter: {
-                    lat: 43.6,
-                    lng: 1.45,
-                    zoom: 10
-                },
-                callbacks: {
-                    'map:created': function (eMap) {
+            $scope.loadTour($scope.tourId).then(function (tour) {
 
-                        $scope.$watch('tour.steps', function (steps, old) {
-
-                            if (steps) {
-                                var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(steps, {
-                                    style: {
-                                        color: '#34a0b4',
-                                        width: 3,
-                                        weight: 6,
-                                        opacity: 0.8
-                                    },
-                                    label: function (step) {
-                                        return $scope.getStepLabel(step);
-                                    },
-                                    tour: {
-                                        bounds: {
-                                            show: true
-                                        }
-                                    },
-                                    callbacks: {
-                                        'click': function (step) {
-                                            $state.go('step-details', {
-                                                id: step._id
-                                            }, {
-                                                inherit: false
-                                            });
-                                        }
-                                    }
-                                });
-
-                                eMap.addItemsToGroup(traceFeatures, {
-                                    name: 'Tracé de l\'itinéraire',
-                                    control: true
-                                });
-
-                                var geometries = steps.reduce(function (geometries, step) {
-                                    geometries.push(step.geometry);
-                                    return geometries;
-                                }, []);
-
-                                $timeout(function () {
-                                    eMap.config.control.fitBoundsFromGeometries(geometries);
-                                }, 200);
+                if (tour.steps) {
+                    var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(tour.steps, {
+                        style: {
+                            color: '#34a0b4',
+                            width: 3,
+                            weight: 6,
+                            opacity: 0.8
+                        },
+                        label: function (step) {
+                            return $scope.getStepLabel(step);
+                        },
+                        tour: {
+                            bounds: {
+                                show: true
                             }
-                        });
-                    }
-                }
-            };
+                        },
+                        callbacks: {
+                            'click': function (step) {
+                                $state.go('step-details', {
+                                    id: step._id
+                                }, {
+                                    inherit: false
+                                });
+                            }
+                        }
+                    });
 
-            $scope.loadTour($scope.tourId).catch(function (err) {
+                    var geometries = tour.steps.reduce(function (geometries, step) {
+                        geometries.push(step.geometry);
+                        return geometries;
+                    }, []);
+
+                    if (traceFeatures) {
+                        $scope.mapConfig.items = traceFeatures;
+
+                        $scope.mapConfig.bounds = {
+                            geometry: geometries
+                        };
+                    }
+
+                }
+
+            }).catch(function (err) {
                 $scope.redirectOnError();
             });
         };
