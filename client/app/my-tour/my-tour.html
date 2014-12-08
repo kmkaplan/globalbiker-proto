@@ -141,6 +141,32 @@
                                 <textarea ui-tinymce=" { menubar : false, toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript' }" name="description" ng-model="tour.originalModel.description" type="text" class="form-control"></textarea>
                             </div>
                             <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label translate="my-tour.travel-with.title">Travel with</label>
+                                        <select required name="travelWith" ng-model="tour.originalModel.travelWith" class="form-control">
+                                            <option value="alone" translate="my-tour.travel-with.alone">alone</option>
+                                            <option value="family" translate="my-tour.travel-with.family">family</option>
+                                            <option value="friends" translate="my-tour.travel-with.friends">friends</option>
+                                            <option value="couple" translate="my-tour.travel-with.couple">couple</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                   <div class="form-group">
+                                        <label translate="my-tour.keywords.title">Keywords</label>
+                                        <select required name="keywords" ng-model="tour.originalModel.keywords" multiple="multiple" class="form-control">
+                                            <option value="moutain" translate="my-tour.keywords.moutain">moutain</option>
+                                            <option value="coastline" translate="my-tour.keywords.coastline">coastline</option>
+                                            <option value="historic" translate="my-tour.keywords.historic">historic</option>
+                                            <option value="rivers" translate="my-tour.keywords.rivers">rivers</option>
+                                            <option value="large-spaces" translate="my-tour.keywords.large-spaces">large-spaces</option>
+                                            <option value="local-people" translate="my-tour.keywords.local-people">local-people</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Priority (1 to display on main page)</label>
@@ -156,7 +182,7 @@
                                 <div class="col-md-4">
 
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </form>
@@ -169,7 +195,9 @@
 
                             <label>Description</label>
                             <div ng-bind-html="tour.originalModel.description"></div>
-                            <div ng-if="tour.originalModel.priority === 1">Display color on main page: {{ tour.originalModel.color }}</div>
+                            <!--<div ng-if="tour.originalModel.priority === 1">Display color on main page: {{ tour.originalModel.color }}</div>-->
+                            <div ng-if="tour.originalModel.travelWith"><label translate="my-tour.travel-with.title">Travel with</label>: {{ tour.originalModel.travelWith }}</div>
+                            <div ng-if="tour.originalModel.keywords"><label translate="my-tour.keywords.title">Keywords</label>: {{ tour.originalModel.keywords }}</div>
                         </div>
                     </div>
                 </div>

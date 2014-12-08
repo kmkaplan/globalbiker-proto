@@ -73,7 +73,24 @@
         }
     },
     "my-tour": {
-        "see-the-tour": "voir le tour"
+        "see-the-tour": "voir le tour",
+        "travel-with": {
+            "title": "Voyage avec",
+            "alone": "Seul",
+            "family": "En famille",
+            "friends": "Entre amis",
+            "couple": "En couple"
+        },
+        "keywords": {
+            "title": "Mots clé",
+            "moutain": "Montagne",
+            "coastline": "Littoral",
+            "historic": "Villes & monuments historiques",
+            "rivers": "Fleuves et rivières",
+            "large-spaces": "Grands espaces",
+            "local-people": "Populations locales"
+        }
+
     },
     "mytourstep": {
         "your_itinary_trace": "Tracé de votre itinéraire",

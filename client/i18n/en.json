@@ -73,7 +73,24 @@
         }
     },
     "my-tour": {
-        "see-the-tour": "see the tour"
+        "see-the-tour": "see the tour",
+        "travel-with": {
+            "title": "Travel with",
+            "alone": "Alone",
+            "family": "Family",
+            "friends": "Friends",
+            "couple": "Couple"
+        },
+        "keywords": {
+            "title": "Keywords",
+            "moutain": "Mountain",
+            "coastline": "Coastline",
+            "historic": "Historic towns and monuments",
+            "rivers": "Rivers",
+            "large-spaces": "Large spaces",
+            "local-people": "Local people"
+        }
+
     },
     "mytourstep": {
         "your_itinary_trace": "Your itinary trace",

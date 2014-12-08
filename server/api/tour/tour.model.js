@@ -28,6 +28,12 @@ var TourSchema = new Schema({
         type: String,
         trim: true
     },
+    travelWith: {
+        type: String
+    },
+    keywords: [{
+        type: String
+    }],
     country: {
         geonameId: {
             type: Number,
