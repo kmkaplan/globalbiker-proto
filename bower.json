@@ -32,7 +32,8 @@
     "angular-ui-tinymce": "~0.0.5",
     "tinymce": "~4.1.5",
     "Leaflet.label": "https://github.com/Leaflet/Leaflet.label.git#0.2.1",
-    "angular-ui-select": "~0.8.3"
+    "angular-ui-select": "~0.8.3",
+    "autofill-event": "~1.0.0"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

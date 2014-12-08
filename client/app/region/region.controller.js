@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('RegionCtrl', RegionCtrl);
 
-    function RegionCtrl($scope, $q, $state, $stateParams, $timeout, Auth, bikeTourMapService, tourLoaderService, RegionRepository) {
+    function RegionCtrl($scope, $q, $state, $stateParams, Auth, bikeTourMapService, tourLoaderService, RegionRepository) {
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
@@ -27,34 +27,22 @@
 
                 loadToursDetailsByGeometry(region.geometry).then(function (tours) {
                     $scope.tours = tours;
-                });
-
-                $scope.$watch('tours', function (tours, old) {
 
                     var features = buildFeaturesFromTours(tours);
 
                     if (features) {
-                        /*  eMap.addItemsToGroup(features, {
-                                    name: 'Tracés des itinéraires',
-                                    control: true
-                                });*/
 
                         $scope.mapConfig.items = features;
 
                         if ($scope.region) {
-                            $timeout(function () {
-                                // eMap.config.control.fitBoundsFromGeometry($scope.region.geometry, 0);
 
-                                $scope.mapConfig.bounds = {
-                                    geometry: $scope.region.geometry
-                                };
-
-
-                            }, 200);
-
+                            $scope.mapConfig.bounds = {
+                                geometry: $scope.region.geometry
+                            };
                         }
                     }
                 });
+
             });
 
         }

@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('globalbikerWebApp')
-    .service('tourLoaderService', function ($q, TourRepository, PhotoRepository, StepRepository, photoLoaderService) {
+    .service('tourLoaderService', function ( $q, TourRepository, PhotoRepository, StepRepository, photoLoaderService) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         return {
-
+            
             getTour: function (tourId, options) {
                 var deffered = $q.defer();
 
@@ -109,12 +109,17 @@ angular.module('globalbikerWebApp')
 
                 var deffered = $q.defer();
 
-                this.getTourPhoto(tour, options).then(function (tour) {
+                    self.getTourPhoto(tour, options).then(function (tour) {
 
-                    self.getPhotosAroundTour(tour, options).then(function (tour) {
+                        self.getPhotosAroundTour(tour, options).then(function (tour) {
 
-                        self.getSteps(tour, options).then(function (tour) {
-                            deffered.resolve(tour);
+                            self.getSteps(tour, options).then(function (tour) {
+                                deffered.resolve(tour);
+
+                            }, function (err) {
+                                console.error(err);
+                                deffered.reject(err);
+                            });
 
                         }, function (err) {
                             console.error(err);
@@ -125,11 +130,6 @@ angular.module('globalbikerWebApp')
                         console.error(err);
                         deffered.reject(err);
                     });
-
-                }, function (err) {
-                    console.error(err);
-                    deffered.reject(err);
-                });
 
                 return deffered.promise;
             },
