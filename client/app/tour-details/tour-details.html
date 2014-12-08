@@ -13,15 +13,23 @@
     </a>
     <h1>{{ tour.title }}</h1>
 
-   <div>
-    <div class="tour-rating">
-        <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
-    </div>
+    <div>
+        <div class="tour-icon tour-rating difficulty">
+            <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
+        </div>
 
-    <div class="tour-rating">
-        <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
+        <div class="tour-icon tour-rating interest">
+            <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
+        </div>
+
+        <div class="tour-icon">
+            <span class="travel-with-icon" ng-if="tour.travelWith" ng-class="'icon-travelwith-' + tour.travelWith"></span>
+        </div>
+
+        <div class="tour-icon">
+            <span class="tag-icon" ng-repeat="keyword in tour.keywords" ng-if="tour.travelWith" ng-class="'icon-tag-' + keyword"></span>
+        </div>
     </div>
-</div>
     <div class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
 
     <div class="row">

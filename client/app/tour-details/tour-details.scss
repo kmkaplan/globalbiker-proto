@@ -2,7 +2,24 @@
     .description {
         background: rgba(209, 204, 74, 0.25);
     }
-    .tour-rating{
+    .tour-icon {
         display: inline-block;
+        margin-left: 15px;
+        /* &.difficulty, &.interest{
+             width: 100px;
+         }*/
+        .travel-with-icon {
+            font-size: 30px;
+            padding: 7px;
+            background: #389d0b;
+            box-shadow: 0px 0px 2px 2px #000000;
+        }
+        .tag-icon {
+            font-size: 30px;
+            padding: 7px;
+            background: #f75913;
+            box-shadow: 0px 0px 2px 2px #000000;
+            margin-left: 5px;
+        }
     }
 }
