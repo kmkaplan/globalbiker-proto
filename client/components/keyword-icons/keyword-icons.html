@@ -1,0 +1,8 @@
+<div class="keyword-icons-area" ng-class="{ 'in-edition': inEdition }">
+    <div ng-if="inEdition" class="tour-icon keyword-icons selected-icon glyphicon glyphicon-th-list" ng-click="openClose()"></div>
+    <div ng-if="inEdition" class="keyword-icons-select" ng-class="{ 'visible': isSelectVisible }">
+        <div ng-repeat="option in options" class="tour-icon keyword-icons option" ng-class="option.getClasses()"  ng-click="select(option)"></div>
+    </div>
+    <div ng-if="!inEdition" ng-repeat="key in selectedKeys" class="tour-icon keyword-icons selected-icon" ng-class="'icon-tag-' + key" ng-click="openClose()"></div>
+    
+</div>

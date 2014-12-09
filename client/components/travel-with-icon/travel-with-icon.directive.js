@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('globalbikerWebApp')
-        .directive('travelWith', function () {
+        .directive('travelWithIcon', function () {
             return {
-                templateUrl: 'components/travel-with/travel-with.html',
+                templateUrl: 'components/travel-with-icon/travel-with-icon.html',
                 restrict: 'EA',
                 scope: {
                     inEdition: '=',

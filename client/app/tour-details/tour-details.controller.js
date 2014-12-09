@@ -7,7 +7,7 @@
             // scope properties
             $scope.isAdmin = Auth.isAdmin;
             $scope.mapConfig = {};
-            $scope.inEdition = true;
+            $scope.inEdition = false;
 
             // scope methods
             $scope.isAllowedToEdit = isAllowedToEdit;

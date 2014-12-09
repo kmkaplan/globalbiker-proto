@@ -15,8 +15,8 @@
             .travel-with-select {
                 width: 50px;
                 display: inline-block;
-            }
-            .tour-travel-with-icon {
+            } 
+            .tour-travel-with-icon, .tour-keyword-icons {
                 display: inline-block;
             }
             .tour-icon {
@@ -34,15 +34,6 @@
                         display: block;
                         text-align: center;
                     }
-                }
-                &.tag-icon {
-                    width: 40px;
-                    font-size: 28px;
-                    box-shadow: 0px 0px 1px 2px #555;
-                }
-                &.tag-icon {
-                    background: #f75913;
-                    margin-left: 5px;
                 }
             }
         }

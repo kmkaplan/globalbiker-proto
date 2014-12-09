@@ -1,0 +1,37 @@
+.keyword-icons-area {
+    display: inline-block;
+    position: relative;
+    .keyword-icons {
+        width: 40px;
+        font-size: 28px;
+        box-shadow: 0px 0px 1px 2px #555;
+        background: #aaa;
+        margin-left: 5px;
+        &.selected-icon {
+            background: #f75913;
+        }
+        cursor: default;
+    }
+    &.in-edition .keyword-icons {
+        cursor: pointer;
+        &:hover {
+            background: #aaa;
+        }
+    }
+    .keyword-icons-select {
+        position: absolute;
+        display: none;
+        top: 40px;
+        left: 5px;
+        .keyword-icons.option {
+            display: block;
+            cursor: pointer;
+            &.selected-icon {
+                background: 'black';
+            }
+        }
+        &.visible {
+            display: block;
+        }
+    }
+}
