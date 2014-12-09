@@ -1,0 +1,36 @@
+.travel-with-icon-area {
+    display: inline-block;
+    position: relative;
+    .travel-with-icon {
+        width: 40px;
+        font-size: 28px;
+        box-shadow: 0px 0px 1px 2px #555;
+        background: #aaa;
+        &.selected-icon {
+            background: #389d0b;
+        }
+        cursor: default;
+    }
+    &.in-edition .travel-with-icon {
+        cursor: pointer;
+        &:hover {
+            background: #aaa;
+        }
+    }
+    .travel-with-icon-select {
+        position: absolute;
+        display: none;
+        top: 20px;
+        left: 20px;
+        .option {
+            display: block;
+            cursor: pointer;
+            &:hover {
+                background: #389d0b;
+            }
+        }
+        &.visible {
+            display: block;
+        }
+    }
+}

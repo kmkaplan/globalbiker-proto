@@ -1,6 +1,9 @@
 @import "table";
 
 .region-page {
+    .region-map{
+        height: 400px;
+    }
     .list-map-area {
         border: 5px solid $color1;
         border-bottom: none;

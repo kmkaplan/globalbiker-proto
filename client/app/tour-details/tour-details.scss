@@ -1,14 +1,24 @@
 .tour-details-page {
     width: 95%;
     .tour-details-area {
-        h1{
+        .edit-button {
+            margin: 10px;
+        }
+        h1 {
             font-size: 32px;
+            margin-top: 20px;
         }
         background: rgba($color1, 0.01);
         border: 5px solid $color1;
         border-radius: 10px 5px 5px 5px;
-        padding: 15px;
         .icon-bar {
+            .travel-with-select {
+                width: 50px;
+                display: inline-block;
+            }
+            .tour-travel-with-icon {
+                display: inline-block;
+            }
             .tour-icon {
                 display: inline-block;
                 padding: 5px;
@@ -25,13 +35,10 @@
                         text-align: center;
                     }
                 }
-                &.travel-with-icon, &.tag-icon {
+                &.tag-icon {
                     width: 40px;
                     font-size: 28px;
                     box-shadow: 0px 0px 1px 2px #555;
-                }
-                &.travel-with-icon {
-                    background: #389d0b;
                 }
                 &.tag-icon {
                     background: #f75913;
@@ -39,9 +46,12 @@
                 }
             }
         }
-        .steps-list-area{
-            
+        .description {
+            margin-top: 20px;
+            border: 1px solid rgba($color2, 0.2);
+            background: rgba($color2, 0.01);
         }
+        .steps-list-area {}
     }
     .tour-map-area .tour-map {
         height: 600px;

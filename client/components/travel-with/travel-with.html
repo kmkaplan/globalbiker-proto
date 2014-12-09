@@ -1,0 +1,6 @@
+<div class="travel-with-icon-area" ng-class="{ 'in-edition': inEdition }">
+    <div ng-if="selected.key" class="tour-icon travel-with-icon selected-icon" ng-class="'icon-travelwith-' + selected.key" ng-click="openClose()"></div>
+    <div class="travel-with-icon-select" ng-class="{ 'visible': isSelectVisible }">
+        <div ng-repeat="option in options" class="tour-icon travel-with-icon option" ng-class="'icon-travelwith-' + option.key" ng-click="select(option)"></div>
+    </div>
+</div>

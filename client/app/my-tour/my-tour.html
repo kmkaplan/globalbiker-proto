@@ -113,7 +113,6 @@
                                 <ui-select ng-model="tour.photo" theme="bootstrap">
                                     <ui-select-match placeholder="Select photo">{{$select.selected.title}}</ui-select-match>
                                     <ui-select-choices repeat="photo in tour.photos | filter: $select.search">
-
                                         <div>
                                             <img class="photo" ng-src="{{ photo.thumbnails.w600h400 }}">
                                         </div>

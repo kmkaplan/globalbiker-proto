@@ -85,6 +85,7 @@ $black3: #555;
 @import 'footer/footer.scss';
 @import 'map/map.scss';
 @import 'navbar/navbar.scss';
+@import 'travel-with/travel-with.scss';
 // endinjector
 
 html {
@@ -125,6 +126,17 @@ html {
         .smart-area {
             border: 7px solid $color2;
             border-radius: 5px;
+        }
+        h1, .h1, h2, .h2, h3, .h3 {
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+        h2, h3 {
+            color: $color1;
+            text-shadow: 1px 1px 0 $color1dark2;
+        }
+        .nav-tabs > li > a:hover {
+            cursor: pointer;
         }
     }
 }
@@ -183,18 +195,4 @@ img.smart-photo {
 
 .btn-primary {
     @include button-variant($white1, $color1dark1, $color1dark2);
-}
-
-h1, .h1, h2, .h2, h3, .h3 {
-    margin-top: 5px;
-    margin-bottom: 15px;
-} 
-
-h2, h3 {
-    color: $color1;
-    text-shadow: 1px 1px 0 $color1dark2;
-}
-
-.nav-tabs > li > a:hover {
-    cursor: pointer;
 }

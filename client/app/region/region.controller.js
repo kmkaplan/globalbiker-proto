@@ -117,33 +117,6 @@
             return deffered.promise;
         };
 
-        function initMapConfig() {
-            /* 
-            var mapConfig = {
-                class: 'region-map',
-                 initialCenter: {
-                    lat: 43.6,
-                    lng: 1.45,
-                    zoom: 11
-                },
-                callbacks: {
-                    'map:created': function (eMap) {*/
-
-            /*  $scope.mapConfig = {};;
-            return {};*/
-
-
-        };
-        /*
-                    },
-                    'step:clicked': function (step, eMap, item, itemLayer, e) {
-                        openStep(step);
-                    }
-                },
-            };
-            return mapConfig;
-        }*/
-
         function buildFeaturesFromTours(tours) {
             var features = null;
 
