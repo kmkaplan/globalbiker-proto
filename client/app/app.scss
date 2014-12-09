@@ -37,8 +37,6 @@ $black1: #000;
 $black2: #333;
 $black3: #555;
 
-
-
 @media all and (max-width: 1200px) {
     /* screen size until 1200px */
     h2 {
@@ -51,7 +49,7 @@ $black3: #555;
     /* screen size until 1000px */
     h2 {
         font-size: 1.6em;
-            font-weight: bold;
+        font-weight: bold;
     }
 }
 
@@ -96,11 +94,14 @@ html {
         background: $white1;
         background-repeat: no-repeat;
         background-attachment: fixed;
+        .navbar {
+            margin-bottom: 0;
+        }
     }
     .page {
         padding: 10px 30px;
         .breadcrumb {
-            background: rgba($white2, 0.4);
+            background: transparent;
             li {
                 a {
                     color: $color1;
@@ -184,6 +185,16 @@ img.smart-photo {
     @include button-variant($white1, $color1dark1, $color1dark2);
 }
 
-.nav-tabs > li > a:hover{
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+} 
+
+h2, h3 {
+    color: $color1;
+    text-shadow: 1px 1px 0 $color1dark2;
+}
+
+.nav-tabs > li > a:hover {
     cursor: pointer;
 }

@@ -1,25 +1,49 @@
 .tour-details-page {
-    .description {
-        background: rgba(209, 204, 74, 0.25);
+    width: 95%;
+    .tour-details-area {
+        h1{
+            font-size: 32px;
+        }
+        background: rgba($color1, 0.01);
+        border: 5px solid $color1;
+        border-radius: 10px 5px 5px 5px;
+        padding: 15px;
+        .icon-bar {
+            .tour-icon {
+                display: inline-block;
+                padding: 5px;
+                margin-left: 15px;
+                text-align: center;
+                vertical-align: middle;
+                height: 40px;
+                &.difficulty, &.interest {
+                    width: 80px;
+                    font-size: 12px;
+                    float: right;
+                    label {
+                        display: block;
+                        text-align: center;
+                    }
+                }
+                &.travel-with-icon, &.tag-icon {
+                    width: 40px;
+                    font-size: 28px;
+                    box-shadow: 0px 0px 1px 2px #555;
+                }
+                &.travel-with-icon {
+                    background: #389d0b;
+                }
+                &.tag-icon {
+                    background: #f75913;
+                    margin-left: 5px;
+                }
+            }
+        }
+        .steps-list-area{
+            
+        }
     }
-    .tour-icon {
-        display: inline-block;
-        margin-left: 15px;
-        /* &.difficulty, &.interest{
-             width: 100px;
-         }*/
-        .travel-with-icon {
-            font-size: 30px;
-            padding: 7px;
-            background: #389d0b;
-            box-shadow: 0px 0px 2px 2px #000000;
-        }
-        .tag-icon {
-            font-size: 30px;
-            padding: 7px;
-            background: #f75913;
-            box-shadow: 0px 0px 2px 2px #000000;
-            margin-left: 5px;
-        }
+    .tour-map-area .tour-map {
+        height: 600px;
     }
 }

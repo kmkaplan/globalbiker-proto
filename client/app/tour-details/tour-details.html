@@ -2,60 +2,70 @@
 
 <div class="container tour-details-page page" ng-if="tour">
 
-    <ol class="breadcrumb">
+    <!-- <ol class="breadcrumb">
         <li><a href="/region/france">France</a>
         </li>
         <li class="active">{{ tour.title }}</li>
     </ol>
-
-    <a ng-if="isAllowedToEdit(tour)" class="pull-right" href="/my-tour/{{ tour._id }}">
-        <i class="fa fa-edit"></i> {{ 'tour-details.edit-the-tour' | translate }}
-    </a>
-    <h1>{{ tour.title }}</h1>
-
-    <div>
-        <div class="tour-icon tour-rating difficulty">
-            <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
-        </div>
-
-        <div class="tour-icon tour-rating interest">
-            <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
-        </div>
-
-        <div class="tour-icon">
-            <span class="travel-with-icon" ng-if="tour.travelWith" ng-class="'icon-travelwith-' + tour.travelWith"></span>
-        </div>
-
-        <div class="tour-icon">
-            <span class="tag-icon" ng-repeat="keyword in tour.keywords" ng-if="tour.travelWith" ng-class="'icon-tag-' + keyword"></span>
-        </div>
-    </div>
-    <div class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
-
+-->
     <div class="row">
-        <div class="col-md-5">
-            <div class="tour-map-area responsive-map-area smart-area smart-map-area">
-                <div map config="mapConfig"></div>
+
+        <div class="col-md-6 tour-details-area">
+
+            <a ng-if="isAllowedToEdit(tour)" class="btn btn-default edit-step-button pull-right" ng-click="editStep(step)" ng-title="{{ 'tour-details.edit-the-tour' | translate }}">
+                <i class="fa fa-pencil-square-o"></i>
+            </a>
+            <h1>{{ tour.title }}</h1>
+
+            <div class="icon-bar">
+
+                <div ng-visible="tour.interest" class="tour-icon tour-rating interest">
+                    <label>Interest</label>
+                    <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
+                </div>
+
+                <div ng-visible="tour.difficulty" class="tour-icon tour-rating difficulty">
+                    <label>Difficulty</label>
+                    <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
+                </div>
+
+                <div ng-if="tour.travelWith" class="tour-icon travel-with-icon" ng-class="'icon-travelwith-' + tour.travelWith">
+                </div>
+
+                <div ng-if="tour.keywords" ng-repeat="keyword in tour.keywords" class="tour-icon tag-icon" ng-class="'icon-tag-' + keyword">
+                </div>
+            </div>
+
+            <div class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
+
+            <div ng-if="tour.photo.thumbnails.w600h400" class="photo-area">
+                <img class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
+            </div>
+
+            <div class="steps-list-area">
+                <h3>Choisissez une étape</h3>
+                <table class="smart-table table table-striped table-hover">
+                    <tbody>
+                        <tr ng-click="openStep(step)" ng-repeat="step in tour.steps">
+                            <td>{{ 'tour-details.step' | translate }} {{ $index + 1 }}</td>
+                            <td class="main">
+                                <span>{{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</span>
+                            </td>
+                            <td class="tour-step-rating">
+                                <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="step.difficulty" max="3"></rating>
+                            </td>
+                            <td class="tour-step-rating">
+                                <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="col-md-7">
-            <h3>Choisissez une étape</h3>
-            <table class="smart-table table table-striped table-hover">
-                <tbody>
-                    <tr ng-click="openStep(step)" ng-repeat="step in tour.steps">
-                        <td>{{ 'tour-details.step' | translate }} {{ $index + 1 }}</td>
-                        <td class="main">
-                            <span>{{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</span>
-                        </td>
-                        <td class="tour-step-rating">
-                            <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="step.difficulty" max="3"></rating>
-                        </td>
-                        <td class="tour-step-rating">
-                            <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="col-md-6">
+            <div class="tour-map-area responsive-map-area smart-area smart-map-area">
+                <div class="tour-map" map config="mapConfig"></div>
+            </div>
         </div>
     </div>
 
