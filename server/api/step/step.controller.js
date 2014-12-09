@@ -203,16 +203,22 @@ exports.removeWithChildren = function (stepId) {
         }
 
         // remove step
-        Step.findById(stepId).remove(function (err) {
+        Step.findById(stepId, function (err, step) {
             if (err) {
                 deffered.reject(err);
             }
-            deffered.resolve(step);
+            step.remove(function (err) {
+                if (err) {
+                    deffered.reject(err);
+                }
+                deffered.resolve(stepId);
+            });
+
         });
 
-        return deffered.promise;
-
     });
+
+    return deffered.promise;
 };
 
 // Deletes a step from the DB.

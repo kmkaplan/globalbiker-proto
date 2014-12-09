@@ -387,21 +387,35 @@ angular.module('globalbikerWebApp')
                         geonameId: step.cityFrom.geonameId,
                         name: step.cityFrom.name,
                         adminName1: step.cityFrom.adminName1,
-                        latitude: step.cityFrom.latitude,
-                        longitude: step.cityFrom.longitude,
+                        latitude: parseFloat(step.cityFrom.latitude),
+                        longitude: parseFloat(step.cityFrom.longitude),
                         geometry: step.cityFrom.geometry
                     },
                     cityTo: {
                         geonameId: step.cityTo.geonameId,
                         name: step.cityTo.name,
                         adminName1: step.cityTo.adminName1,
-                        latitude: step.cityTo.latitude,
-                        longitude: step.cityTo.longitude,
+                        latitude: parseFloat(step.cityTo.latitude),
+                        longitude: parseFloat(step.cityTo.longitude),
                         geometry: step.cityTo.geometry
                     }
                 });
+                if (!stepResource.cityFrom.geometry) {
+                    stepResource.cityFrom.geometry = {
+                        type: 'Point',
+                        coordinates: [ parseFloat(step.cityFrom.longitude),  parseFloat(step.cityFrom.latitude)]
+                    };
+                }
+                if (!stepResource.cityTo.geometry) {
+                    stepResource.cityTo.geometry = {
+                        type: 'Point',
+                        coordinates: [ parseFloat(step.cityTo.longitude),  parseFloat(step.cityTo.latitude)]
+                    };
+                }
+
 
                 if (!step.isPersisted()) {
+
                     // create resource
                     stepResource.$save(function (data, putResponseHeaders) {
                         // success

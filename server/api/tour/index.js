@@ -3,6 +3,7 @@
 var express = require('express');
 var controller = require('./tour.controller');
 var auth = require('../../auth/auth.service');
+var TourService = require('../tour/tour.service');
 
 var router = express.Router();
 

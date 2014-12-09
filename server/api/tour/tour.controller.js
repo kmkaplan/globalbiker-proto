@@ -71,12 +71,12 @@ exports.update = function (req, res) {
         if (!tour) {
             return res.send(404);
         }
-       for (var key in req.body) {
+        for (var key in req.body) {
             if (req.body.hasOwnProperty(key)) {
                 tour[key] = req.body[key];
             }
         }
-        
+
         tour.save(function (err) {
             if (err) {
                 return handleError(res, err);

@@ -38,6 +38,7 @@
     "string": "^2.2.0",
     "tcx": "git+https://github.com/mapbox/tcx.git",
     "togeojson": "^0.8.0",
+    "winston": "^0.8.3",
     "xmldom": "^0.1.19"
   },
   "devDependencies": {

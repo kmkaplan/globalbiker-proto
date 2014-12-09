@@ -1,0 +1,70 @@
+'use strict';
+
+var Tour = require('./tour.model');
+var Step = require('../step/step.model');
+var logger = require('../../components/logger/logger');
+
+var Q = require('q');
+
+Step.schema.post('save', function (doc) {
+    exports.updateCalculatedAttributesFromSteps(doc.tourId).done();
+})
+
+Step.schema.post('remove', function (doc) {
+    exports.updateCalculatedAttributesFromSteps(doc.tourId).done();
+})
+
+exports.updateCalculatedAttributesFromSteps = function (tourId) {
+    var deffered = Q.defer();
+
+    Tour.findById(tourId, function (err, tour) {
+        if (err) {
+            logger.error(err);
+            deffered.reject(err);
+        } else {
+            // tour fount
+
+            Step.find({
+                'tourId': tour.id
+            }, function (err, steps) {
+                if (err) {
+                    logger.error(err);
+                    deffered.reject(err);
+                } else {
+
+                    // steps fount
+                    if (steps.length !== 0) {
+                        // update tour interest from step interests
+                        var interestsSum = steps.reduce(function (sum, step) {
+                            return sum + step.interest;
+                        }, 0);
+                        tour.interest = Math.round(interestsSum / steps.length);
+
+                        // update tour difficulty from step difficulties
+                        var difficultySum = steps.reduce(function (sum, step) {
+                            return sum + step.difficulty;
+                        }, 0);
+                        tour.difficulty = Math.round(difficultySum / steps.length);
+
+                    } else {
+                        tour.interest = null;
+                        tour.difficulty = null;
+                    }
+                    tour.save(function (err) {
+                        if (err) {
+                            logger.error(err);
+                            deffered.reject(err);
+                        } else {
+                            // tour updated
+                            logger.info('Tour %s (interest: %d, difficulty: %d).', tour._id, tour.interest, tour.difficulty, {});
+                            return deffered.resolve(tour);
+                        }
+                    });
+                }
+
+            });
+        }
+    });
+
+    return deffered.promise;
+};
