@@ -7,7 +7,6 @@
             // scope properties
             $scope.isAdmin = Auth.isAdmin;
             $scope.mapConfig = {};
-            $scope.inEdition = false;
             $scope.tinymceOptions = {
                 height: '200px',
                 menubar: false,
@@ -20,8 +19,7 @@
             $scope.redirectOnError = redirectOnError;
             $scope.getStepLabel = getStepLabel;
             $scope.loadTour = loadTour;
-            $scope.edit = edit;
-            $scope.save = save;
+            $scope.saveTour = saveTour;
 
             // init method
             init();
@@ -84,18 +82,16 @@
                 });
             };
 
-            function edit() {
-                $scope.inEdition = true;
-            }
+            function saveTour(tour) {
+                var deffered = $q.defer();
 
-            function save() {
-                $scope.tour.$update(function (data, putResponseHeaders) {
+                tour.$update(function (data, putResponseHeaders) {
                     console.info('Tour updated.');
-                    $scope.loadTour($scope.tourId);
-                    $scope.inEdition = false;
+                    deffered.resolve($scope.loadTour($scope.tourId));
                 }, function (err) {
-                    $scope.inEdition = false;
+                    deffered.reject(err);
                 });
+                return deffered.promise;
             }
 
             function isAllowedToEdit(tour) {

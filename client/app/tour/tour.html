@@ -6,25 +6,7 @@
 
         <div class="col-md-6 tour-details-area">
 
-            <a ng-if="isAllowedToEdit(tour) && !inEdition" class="btn btn-default edit-button pull-right" ng-click="edit()" ng-title="{{ 'tour-details.edit-the-tour' | translate }}">
-                <i class="fa fa-pencil-square-o"></i>
-            </a>
-            <a ng-if="isAllowedToEdit(tour) && inEdition" class="btn btn-primary edit-button pull-right" ng-click="save()" ng-title="{{ 'tour-details.edit-the-tour' | translate }}">
-                <i class="fa fa-check"></i>
-            </a>
-            <h1>{{ tour.title }}</h1>
-
-            <div ng-include="'app/tour/tour_icon-bar.html'"></div>
-
-            <div ng-if="inEdition">
-                <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>
-            </div>
-
-            <div ng-if="!inEdition" class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
-
-            <div ng-if="tour.photo.thumbnails.w600h400" class="photo-area">
-                <img class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
-            </div>
+            <div tour-description tour="tour" is-allowed-to-edit="isAllowedToEdit(tour)" save="saveTour(tour)"></div>
 
             <div class="steps-list-area">
                 <h3>Choisissez une étape</h3>
