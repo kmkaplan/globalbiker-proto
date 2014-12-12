@@ -1,13 +1,13 @@
 <div class="icon-bar">
 
-    <div ng-visible="tour.interest" class="tour-icon tour-rating interest">
+    <div ng-visible="tour.interest" class="tour-icon tour-rating interest" ng-class="{ 'in-edition': inEdition }">
         <label>Interest</label>
-        <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
+        <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="!inEdition" ng-model="tour.interest" max="5"></rating>
     </div>
 
-    <div ng-visible="tour.difficulty" class="tour-icon tour-rating difficulty">
+    <div ng-visible="tour.difficulty" class="tour-icon tour-rating difficulty" ng-class="{ 'in-edition': inEdition }">
         <label>Difficulty</label>
-        <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
+        <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="!inEdition" ng-model="tour.difficulty" max="3"></rating>
     </div>
     <div class="tour-travel-with-icon" travel-with-icon model="tour.travelWith" in-edition="inEdition"></div>
 
@@ -16,4 +16,3 @@
 <!--    <div ng-if="tour.keywords" ng-repeat="keyword in tour.keywords" class="tour-icon tag-icon" ng-class="'icon-tag-' + keyword">
     </div>-->
 </div>
-<div ng-if="inEdition">Click on icons to select/unselect travel parners &amp; tags:</div>

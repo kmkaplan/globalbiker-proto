@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('globalbikerWebApp')
-        .directive('keywordIcons', function () {
+        .directive('keywordIcons', function ($timeout) {
             return {
                 templateUrl: 'components/keyword-icons/keyword-icons.html',
                 restrict: 'EA',
@@ -17,9 +17,12 @@
                         $scope.isSelectVisible = false;
                         $scope.options = [];
                         $scope.selectedOptions = [];
+                        $scope.autoCloseTimer = null;
 
                         // scope methods
                         $scope.openClose = openClose;
+                        $scope.open = open;
+                        $scope.closeAfterDelay = closeAfterDelay;
                         $scope.select = select;
 
                         // init method
@@ -79,6 +82,25 @@
                             $scope.isSelectVisible = $scope.inEdition && !$scope.isSelectVisible;
                         }
 
+                        function open() {
+                            if ($scope.autoCloseTimer !== null) {
+                                $timeout.cancel($scope.autoCloseTimer);
+                            }
+                            $scope.isSelectVisible = $scope.inEdition && true;
+                        }
+
+                        function closeAfterDelay() {
+                            if ($scope.isSelectVisible) {
+                                $scope.autoCloseTimer = $timeout(
+                                    function () {
+                                        console.log("Timeout executed", Date.now());
+                                        $scope.isSelectVisible = false;
+                                    },
+                                    300
+                                );
+                            }
+                        }
+
                         function select(option) {
                             if (option.selected) {
                                 // unselect
@@ -95,6 +117,17 @@
                             }
 
                         }
+
+
+                        // cancel timer on leave
+                        $scope.$on(
+                            "$destroy",
+                            function (event) {
+                                if ($scope.autoCloseTimer !== null) {
+                                    $timeout.cancel($scope.autoCloseTimer);
+                                }
+                            }
+                        );
 
                     }
                 }

@@ -1,5 +1,8 @@
-<div class="keyword-icons-area" ng-class="{ 'in-edition': inEdition }">
-    <div ng-if="inEdition" class="tour-icon keyword-icons selected-icon glyphicon glyphicon-th-list" ng-click="openClose()"></div>
+<div class="keyword-icons-area" ng-class="{ 'in-edition': inEdition }" ng-mouseover="open()" ng-mouseleave="closeAfterDelay()">
+    <div ng-if="inEdition" class="tour-icon keyword-icons selected-icon" ng-click="openClose()">
+        <span class="glyphicon glyphicon-th-list" ></span>
+        <span class="caret"></span>
+    </div>
     <div ng-if="inEdition" class="keyword-icons-select" ng-class="{ 'visible': isSelectVisible }">
         <div ng-repeat="option in options" class="tour-icon keyword-icons option" ng-class="option.getClasses()"  ng-click="select(option)"
             tooltip="{{ option.label | translate }}" tooltip-placement="right" 

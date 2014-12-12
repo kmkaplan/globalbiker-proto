@@ -140,6 +140,45 @@ html {
         .nav-tabs > li > a:hover {
             cursor: pointer;
         }
+        .tour-rating, .tour-step-rating {
+            &.in-edition {
+                .rating-bar {
+                    background-clip: padding-box;
+                    background-color: #ffffff;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    border-bottom-left-radius: 3px;
+                    border-bottom-right-radius: 3px;
+                    padding: 3px;
+                    cursor: pointer;
+                    &:hover{
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 2);
+                    }
+                }
+                label {
+                    margin-bottom: 8px;
+                }
+            }
+            .fa-bicycle {
+                margin: 1px 1px;
+                &.selected {
+                    color: #e31414;
+                }
+                &.unselected {
+                    color: #aaa;
+                }
+            }
+            .glyphicon-star {
+                &.selected {
+                    color: #2a8010;
+                }
+                &.unselected {
+                    color: #aaa;
+                }
+            }
+            .glyphicon-star-empty {
+                color: #2a8010;
+            }
+        }
     }
 }
 
@@ -169,29 +208,6 @@ img.smart-photo {
         @media all and (min-height: 700px) {
             height: 450px;
         }
-    }
-}
-
-.tour-rating, .tour-step-rating {
-    .fa-bicycle {
-        margin: 1px 1px;
-        &.selected {
-            color: #e31414;
-        }
-        &.unselected {
-            color: #777;
-        }
-    }
-    .glyphicon-star {
-        &.selected {
-            color: #2a8010;
-        }
-        &.unselected {
-            color: #777;
-        }
-    }
-    .glyphicon-star-empty {
-        color: #2a8010;
     }
 }
 

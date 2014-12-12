@@ -1,6 +1,10 @@
 .tour-details-page {
     width: 95%;
     .tour-details-area {
+        background: rgba($color1, 0.01);
+        border: 5px solid $color1;
+        border-radius: 10px 5px 5px 5px;
+        padding: 5px 25px;
         .edit-button {
             margin: 10px;
         }
@@ -8,14 +12,11 @@
             font-size: 32px;
             margin-top: 20px;
         }
-        background: rgba($color1, 0.01);
-        border: 5px solid $color1;
-        border-radius: 10px 5px 5px 5px;
         .icon-bar {
             .travel-with-select {
                 width: 50px;
                 display: inline-block;
-            } 
+            }
             .tour-travel-with-icon, .tour-keyword-icons {
                 display: inline-block;
             }
@@ -24,8 +25,11 @@
                 padding: 5px;
                 text-align: center;
                 vertical-align: middle;
+                laberl: {
+                    margin: 5px;
+                };
                 &.difficulty, &.interest {
-                    width: 80px;
+                    width: 100px;
                     font-size: 12px;
                     float: right;
                     label {
@@ -33,16 +37,17 @@
                         text-align: center;
                     }
                 }
-                &selected-icon{
-                    margin-left: 15px;
-                    width: 45px;
-                }
             }
         }
         .description {
             margin-top: 20px;
             border: 1px solid rgba($color2, 0.2);
             background: rgba($color2, 0.01);
+            padding: 25px;
+            text-align: justify;
+        }
+        .mce-tinymce {
+            margin: 30px 0;
         }
         .steps-list-area {}
     }

@@ -8,6 +8,11 @@
             $scope.isAdmin = Auth.isAdmin;
             $scope.mapConfig = {};
             $scope.inEdition = true;
+            $scope.tinymceOptions = {
+                height: '200px',
+                menubar: false,
+                toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript'
+            };
 
             // scope methods
             $scope.isAllowedToEdit = isAllowedToEdit;
