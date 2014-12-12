@@ -17,7 +17,7 @@
                     <input required name="title" ng-model="tour.title" type="text" class="form-control" id="tourTitle" placeholder="{{'mytours.edit.title' | translate}}">
                 </div>
                 <div ng-show="tour.isPersisted()">
-                    <a class="pull-right" href="/tour-details/{{ tour._id }}">
+                    <a class="pull-right" href="/tour/{{ tour._id }}">
                         <i class="fa fa-eye"></i> {{ 'my-tour.see-the-tour' | translate }}
                     </a>
                     <h2>{{ tour.title }}</h2>

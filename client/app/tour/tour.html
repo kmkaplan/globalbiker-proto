@@ -1,6 +1,6 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container tour-details-page page" ng-if="tour">
+<div class="container tour-page page" ng-if="tour">
 
     <div class="row">
 
@@ -14,7 +14,7 @@
             </a>
             <h1>{{ tour.title }}</h1>
 
-            <div ng-include="'app/tour-details/tour-details_icon-bar.html'"></div>
+            <div ng-include="'app/tour/tour_icon-bar.html'"></div>
 
             <div ng-if="inEdition">
                 <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>

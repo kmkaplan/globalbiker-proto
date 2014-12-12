@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('globalbikerWebApp')
-        .controller('TourDetailsCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, TourDetailsMapService, bikeTourMapService, InterestRepository, LicenseRepository, tourLoaderService) {
+        .controller('TourCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, bikeTourMapService, InterestRepository, LicenseRepository, tourLoaderService) {
 
             // scope properties
             $scope.isAdmin = Auth.isAdmin;
