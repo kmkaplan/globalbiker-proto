@@ -15,11 +15,11 @@
             <h1>{{ tour.title }}</h1>
 
             <div ng-include="'app/tour-details/tour-details_icon-bar.html'"></div>
-            
+
             <div ng-if="inEdition">
                 <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>
             </div>
-            
+
             <div ng-if="!inEdition" class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
 
             <div ng-if="tour.photo.thumbnails.w600h400" class="photo-area">
@@ -29,9 +29,17 @@
             <div class="steps-list-area">
                 <h3>Choisissez une étape</h3>
                 <table class="smart-table table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>{{ 'tour-details.step' | translate }}</th>
+                            <th class="route">Route</th>
+                            <th>Difficulty</th>
+                            <th>Interest</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr ng-click="openStep(step)" ng-repeat="step in tour.steps">
-                            <td>{{ 'tour-details.step' | translate }} {{ $index + 1 }}</td>
+                            <td class="step-index">{{ $index + 1 }}</td>
                             <td class="main">
                                 <span>{{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</span>
                             </td>

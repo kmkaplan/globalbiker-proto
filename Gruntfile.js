@@ -300,8 +300,8 @@ module.exports = function (grunt) {
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'globalbikerWebApp',
-        htmlmin: {
+        module: 'globalbikerWeb',
+       /* htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
           removeAttributeQuotes: true,
@@ -309,12 +309,33 @@ module.exports = function (grunt) {
           removeRedundantAttributes: true,
           removeScriptTypeAttributes: true,
           removeStyleLinkTypeAttributes: true
-        },
+        },*/
         usemin: 'app/app.js'
       },
       main: {
         cwd: '<%= yeoman.client %>',
         src: ['{app,components}/**/*.html'],
+     /*   src: [
+        '<%= yeoman.client %>/app/account/login/login.html',
+        '<%= yeoman.client %>/app/account/settings/settings.html',
+        '<%= yeoman.client %>/app/account/signup/signup.html',
+        '<%= yeoman.client %>/app/admin-data/admin-data.html',
+        '<%= yeoman.client %>/app/admin/admin.html',
+        '<%= yeoman.client %>/app/home/home.html',
+        '<%= yeoman.client %>/app/my-tour-step/my-tour-step.html',
+        '<%= yeoman.client %>/app/home/my-tour/my-tour.html',
+        '<%= yeoman.client %>/app/my-tours/my-tours.html',
+        '<%= yeoman.client %>/app/region/region.html',
+        '<%= yeoman.client %>/app/step-details/step-details.html',
+        '<%= yeoman.client %>/app/tour-details/tour-details.html',
+        '<%= yeoman.client %>/app/tour-details/tour-details_icon-bar.html',
+        '<%= yeoman.client %>/app/components/extendedMap/extendedMap.html',
+        '<%= yeoman.client %>/app/components/file-upload/file-upload.html',
+        '<%= yeoman.client %>/app/components/footer/footer.html',
+        '<%= yeoman.client %>/app/components/keyword-icons/keyword-icons.html',
+        '<%= yeoman.client %>/app/components/map/map.html',
+        '<%= yeoman.client %>/app/components/navbar/navbar.html'
+        ],  */
         dest: '.tmp/templates.js'
       },
       tmp: {

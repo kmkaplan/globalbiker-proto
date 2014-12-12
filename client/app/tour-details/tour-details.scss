@@ -49,7 +49,17 @@
         .mce-tinymce {
             margin: 30px 0;
         }
-        .steps-list-area {}
+        .steps-list-area {
+            thead tr th{
+                text-align: center;
+                &.route{
+                    text-align: left;
+                }
+            }
+            tbody tr td.step-index{
+                text-align: center;
+            }
+        }
     }
     .tour-map-area .tour-map {
         height: 600px;
