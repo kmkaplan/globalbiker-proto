@@ -16,7 +16,7 @@
                         // scope properties
                         $scope.isSelectVisible = false;
                         $scope.options = [];
-                        $scope.selectedKeys = [];
+                        $scope.selectedOptions = [];
 
                         // scope methods
                         $scope.openClose = openClose;
@@ -29,13 +29,13 @@
 
                             initOptions();
 
-                            $scope.selectedKeys = $scope.options.reduce(function (selectedKeys, option) {
+                            $scope.selectedOptions = $scope.options.reduce(function (selectedOptions, option) {
 
                                 option.iconClass = 'icon-tag-' + option.key;
 
                                 if ($scope.model !== null && $scope.model.indexOf(option.key) !== -1) {
                                     option.selected = true;
-                                    selectedKeys.push(option.key);
+                                    selectedOptions.push(option);
                                 }
                                 option.getClasses = function () {
                                     var s = this.iconClass;
@@ -47,7 +47,7 @@
                                     return s;
                                 }
 
-                                return selectedKeys;
+                                return selectedOptions;
                             }, [])
 
                         }
@@ -64,8 +64,8 @@
                                     key: 'historic',
                                     label: 'my-tour.keywords.historic'
                                 }, {
-                                    key: 'river',
-                                    label: 'my-tour.keywords.river'
+                                    key: 'rivers',
+                                    label: 'my-tour.keywords.rivers'
                                 }, {
                                     key: 'large-spaces',
                                     label: 'my-tour.keywords.large-spaces'
@@ -83,15 +83,15 @@
                             if (option.selected) {
                                 // unselect
                                 option.selected = false;
-                                var index = $scope.selectedKeys.indexOf(option.key);
+                                var index = $scope.selectedOptions.indexOf(option);
                                 if (index > -1) {
-                                    $scope.selectedKeys.splice(index, 1);
+                                    $scope.selectedOptions.splice(index, 1);
                                 }
                             } else {
                                 // select
                                 option.selected = true;
-                                $scope.selectedKeys.push(option.key);
-                                $scope.model = $scope.selectedKeys;
+                                $scope.selectedOptions.push(option);
+                                $scope.model = $scope.selectedOptions;
                             }
 
                         }

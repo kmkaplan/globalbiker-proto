@@ -9,6 +9,9 @@
             <a ng-if="isAllowedToEdit(tour) && !inEdition" class="btn btn-default edit-button pull-right" ng-click="edit()" ng-title="{{ 'tour-details.edit-the-tour' | translate }}">
                 <i class="fa fa-pencil-square-o"></i>
             </a>
+            <a ng-if="isAllowedToEdit(tour) && inEdition" class="btn btn-primary edit-button pull-right" ng-click="save()" ng-title="{{ 'tour-details.edit-the-tour' | translate }}">
+                <i class="fa fa-check"></i>
+            </a>
             <h1>{{ tour.title }}</h1>
 
             <div ng-include="'app/tour-details/tour-details_icon-bar.html'"></div>

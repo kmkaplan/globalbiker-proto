@@ -1,6 +1,14 @@
 <div class="travel-with-icon-area" ng-class="{ 'in-edition': inEdition }">
-    <div ng-if="selected.key" class="tour-icon travel-with-icon selected-icon" ng-class="'icon-travelwith-' + selected.key" ng-click="openClose()"></div>
-    <div class="travel-with-icon-select" ng-class="{ 'visible': isSelectVisible }">
-        <div ng-repeat="option in options" class="tour-icon travel-with-icon option" ng-class="'icon-travelwith-' + option.key" ng-click="select(option)"></div>
+    <div ng-if="inEdition && ! selected.key" class="tour-icon travel-with-icon selected-icon glyphicon glyphicon-th-list" ng-click="openClose()"></div>
+    <div ng-if="selected.key" class="tour-icon travel-with-icon selected-icon"ng-click="openClose()"
+        tooltip="{{ selected.label | translate }}" tooltip-placement="bottom">
+        <span  ng-class="'icon-travelwith-' + selected.key" ></span>
+        <span ng-if="inEdition" class="caret"></span>
+    </div>
+    <div ng-if="inEdition" class="travel-with-icon-select" ng-class="{ 'visible': isSelectVisible }">
+        <div ng-repeat="option in options" class="tour-icon travel-with-icon option" ng-click="select(option)"
+            tooltip="{{ option.label | translate }}" tooltip-placement="right" >
+                <span ng-class="'icon-travelwith-' + option.key" ></span>
+        </div>
     </div>
 </div>

@@ -7,7 +7,7 @@
             // scope properties
             $scope.isAdmin = Auth.isAdmin;
             $scope.mapConfig = {};
-            $scope.inEdition = false;
+            $scope.inEdition = true;
 
             // scope methods
             $scope.isAllowedToEdit = isAllowedToEdit;
@@ -16,6 +16,7 @@
             $scope.getStepLabel = getStepLabel;
             $scope.loadTour = loadTour;
             $scope.edit = edit;
+            $scope.save = save;
 
             // init method
             init();
@@ -80,6 +81,10 @@
 
             function edit() {
                 $scope.inEdition = true;
+            }
+
+            function save() {
+                $scope.inEdition = false;
             }
 
             function isAllowedToEdit(tour) {

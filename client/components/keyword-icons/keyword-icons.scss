@@ -2,10 +2,10 @@
     display: inline-block;
     position: relative;
     .keyword-icons {
-        width: 40px;
+        width: 45px;
         font-size: 28px;
         box-shadow: 0px 0px 1px 2px #555;
-        background: #aaa;
+        background:  #e36d39;
         margin-left: 5px;
         &.selected-icon {
             background: #f75913;
@@ -15,19 +15,30 @@
     &.in-edition .keyword-icons {
         cursor: pointer;
         &:hover {
-            background: #aaa;
+            background:  #f75913;
         }
     }
     .keyword-icons-select {
         position: absolute;
         display: none;
-        top: 40px;
         left: 5px;
+        padding: 7px;
+        background-clip: padding-box;
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.25);
         .keyword-icons.option {
+            width: 45px;
             display: block;
             cursor: pointer;
+            border: 3px solid #f88f60;
+            background:  #f48656;
+            margin: 2px;
             &.selected-icon {
-                background: 'black';
+                background:  #f75913;
+                border-color: #a73a09;
             }
         }
         &.visible {
