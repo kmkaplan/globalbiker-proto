@@ -7,7 +7,7 @@
             // scope properties
             $scope.isAdmin = Auth.isAdmin;
             $scope.mapConfig = {};
-            $scope.inEdition = true;
+            $scope.inEdition = false;
             $scope.tinymceOptions = {
                 height: '200px',
                 menubar: false,
@@ -89,7 +89,13 @@
             }
 
             function save() {
-                $scope.inEdition = false;
+                $scope.tour.$update(function (data, putResponseHeaders) {
+                    console.info('Tour updated.');
+                    $scope.loadTour($scope.tourId);
+                    $scope.inEdition = false;
+                }, function (err) {
+                    $scope.inEdition = false;
+                });
             }
 
             function isAllowedToEdit(tour) {

@@ -5,7 +5,7 @@
         width: 45px;
         font-size: 28px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 1);
-        background:  #e36d39;
+        background: #e36d39;
         margin-left: 5px;
         &.selected-icon {
             background: #f75913;
@@ -16,12 +16,13 @@
         cursor: pointer;
         width: auto;
         &:hover {
-            background:  #f75913;
+            background: #f75913;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
     }
     .keyword-icons-select {
         position: absolute;
+        z-index: 100;
         display: none;
         left: 5px;
         padding: 7px;
@@ -36,10 +37,10 @@
             display: block;
             cursor: pointer;
             border: 3px solid #f88f60;
-            background:  #f48656;
+            background: #f48656;
             margin: 2px;
             &.selected-icon {
-                background:  #f75913;
+                background: #f75913;
                 border-color: #a73a09;
             }
         }
