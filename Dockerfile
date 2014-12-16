@@ -32,15 +32,14 @@ RUN rm -r /.build-tmp
 
 RUN grunt build:dist --force
 
-# RUN chmod 755 /app/scripts/*.sh
-# RUN /app/scripts/build.sh
+RUN chmod 755 /app/scripts/*.sh
 
 ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
 
 VOLUME ["/app/server/dist/upload"]
 VOLUME ["/app/server/dist/photos"]
 
-CMD ["/bin/sh /app/scripts/run.sh"]
+CMD ["/app/scripts/run.sh"]
 
 # Expose ports.
 EXPOSE 8080
