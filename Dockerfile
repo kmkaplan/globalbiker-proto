@@ -6,7 +6,7 @@ MAINTAINER Nicolas Toublanc <nicolas.toublanc@gmail.com>
 # update APT
 RUN apt-get update && \
     apt-get install -q -y ruby-compass ruby-sass libvips-dev && \
-    apt-get clean
+    rm -rf /var/lib/apt/lists/*
 
 RUN gem install --no-ri --no-rdoc compass
 
@@ -15,11 +15,11 @@ WORKDIR /.build-tmp
 # pre-install main dependencies (to save time)
 RUN npm install karma karma-phantomjs-launcher grunt-contrib-imagemin grunt-google-cdn grunt-protractor-runner lwip express
 
-# ADD package.json /app/
+ADD package.json /.build-tmp
 RUN npm install --verbose
 # RUN npm install
 
-# ADD bower.json /app/
+ADD bower.json /.build-tmp
 RUN bower install --allow-root --config.interactive=false
 
 WORKDIR /app
