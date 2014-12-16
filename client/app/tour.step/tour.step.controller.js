@@ -7,6 +7,7 @@
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
+        $scope.inEdition = isAllowedToEdit(step) && $state.current.data.edit | false;
         $scope.tinymceOptions = {
             height: '200px',
             menubar: false,
@@ -46,7 +47,7 @@
         }
         
         function editStep(step) {
-            $scope.inEdition = true;
+            $state.go('tour.edit-step', $stateParams);
         }
 
         function saveStep(step) {
@@ -54,10 +55,10 @@
 
             step.$update(function (data, putResponseHeaders) {
                 console.info('Step updated.');
-                $scope.inEdition = false;
             }, function (err) {
                 deffered.reject(err);
-                $scope.inEdition = false;
+            }).finally(function(){
+                $state.go('tour.step', $stateParams);
             });
             return deffered.promise;
         }

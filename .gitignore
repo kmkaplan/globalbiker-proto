@@ -9,3 +9,4 @@ dist
 server/uploads
 server/photos
 /npm-debug.log
+logs

@@ -17,7 +17,7 @@ angular.module('globalbikerWebApp')
             fitBounds: function (map, bounds) {
                 if (bounds && bounds.geometry) {
 
-                    
+
                     if (L.Util.isArray(bounds.geometry)) {
 
                         console.log('Fit bounds to %d geometries.', bounds.geometry.length);
@@ -36,6 +36,26 @@ angular.module('globalbikerWebApp')
                         map.setMaxBounds(bounds);
                     }
                 }
+            },
+            enableDrawing: function (map, drawingOptions) {
+                // TODO 
+                
+                var defaultDrawOptions = {
+                    polyline: true,
+                    marker: false,
+                    circle: false,
+                    rectangle: false,
+                    polygon: false
+                };
+
+                var drawControl = new L.Control.Draw({
+                   /* edit: {
+                        featureGroup: drawLayer
+                    },*/
+                    draw: $.extend({}, defaultDrawOptions, drawingOptions)
+                });
+                map.addControl(drawControl);
+                
             }
         }
 

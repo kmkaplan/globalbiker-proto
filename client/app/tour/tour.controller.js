@@ -81,7 +81,7 @@
                     label: function (step) {
                         return getStepLabel(step);
                     },
-                    tour: {
+                    step: {
                         bounds: {
                             show: true
                         }
