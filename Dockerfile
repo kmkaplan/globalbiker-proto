@@ -40,7 +40,7 @@ ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
 VOLUME ["/app/server/dist/upload"]
 VOLUME ["/app/server/dist/photos"]
 
-CMD ["/app/scripts/run.sh"]
+CMD ["/bin/sh /app/scripts/run.sh"]
 
 # Expose ports.
 EXPOSE 8080

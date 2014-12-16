@@ -29,6 +29,7 @@ angular.module('globalbikerWebApp')
                     });
                     
                     $scope.$watch('config.items', function(items){
+                        mapItemsService.clearMap($scope.map);
                         mapItemsService.drawItems($scope.map, items, $scope.config);
                     });
                 }

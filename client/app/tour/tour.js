@@ -29,7 +29,7 @@ angular.module('globalbikerWebApp')
                             console.error('Tour id is not defined.');
                             deffered.resolve(null);
                         }
-
+                        
                         return deffered.promise;
                     }
                 }

@@ -5,9 +5,20 @@ angular.module('globalbikerWebApp')
         // AngularJS will instantiate a singleton by calling "new" on this function
 
 
-
-
         return {
+
+            clearMap: function (map) {
+                if (map._gb) {
+                    if (map._gb.layers.length !== 0) {
+                        console.debug('Remove %d layers.', map._gb.layers.length);
+                        map._gb.layers.reduce(function (o, layer) {
+                            map.removeLayer(layer);
+                        }, null);
+                        map._gb.layers = [];
+                    }
+
+                }
+            },
 
             drawItems: function (map, items, config) {
 
@@ -34,6 +45,14 @@ angular.module('globalbikerWebApp')
 
                         // add it to the layer
                         map.addLayer(itemLayer);
+
+                        if (!map._gb) {
+                            map._gb = {
+                                layers: []
+                            };
+                        }
+
+                        map._gb.layers.push(itemLayer);
 
                     }, []);
                 }

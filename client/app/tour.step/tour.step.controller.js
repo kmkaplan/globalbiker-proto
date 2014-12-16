@@ -29,6 +29,8 @@
             } else {
                 $scope.tour = tour;
                 $scope.step = step;
+                
+                $scope.$parent.selectStep(tour, step);
             }
         };
 
