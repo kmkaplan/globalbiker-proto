@@ -1,0 +1,27 @@
+<div class="steps-list-area">
+    <h3>Choisissez une étape</h3>
+    <table class="smart-table table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'tour-details.step' | translate }}</th>
+                <th class="route">Route</th>
+                <th>Difficulty</th>
+                <th>Interest</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-click="openStep(step)" ng-repeat="step in steps">
+                <td class="step-index">{{ $index + 1 }}</td>
+                <td class="main">
+                    <span>{{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</span>
+                </td>
+                <td class="tour-step-rating">
+                    <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="step.difficulty" max="3"></rating>
+                </td>
+                <td class="tour-step-rating">
+                    <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

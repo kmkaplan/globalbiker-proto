@@ -1,151 +1,83 @@
 (function () {
     'use strict';
 
-    angular.module('globalbikerWebApp')
-        .controller('TourCtrl', function ($scope, $stateParams, $state, $q, $timeout, Auth, TourRepository, StepRepository, bikeTourMapService, InterestRepository, LicenseRepository, tourLoaderService) {
+    angular.module('globalbikerWebApp').controller('TourCtrl', TourCtrl);
 
-            // scope properties
-            $scope.isAdmin = Auth.isAdmin;
-            $scope.mapConfig = {};
-            $scope.tinymceOptions = {
-                height: '200px',
-                menubar: false,
-                toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript'
-            };
+    function TourCtrl(tour, $scope, $stateParams, $state, $q, bikeTourMapService) {
 
-            // scope methods
-            $scope.isAllowedToEdit = isAllowedToEdit;
-            $scope.openStep = openStep;
-            $scope.redirectOnError = redirectOnError;
-            $scope.getStepLabel = getStepLabel;
-            $scope.loadTour = loadTour;
-            $scope.saveTour = saveTour;
+        // scope properties
+        $scope.mapConfig = {};
 
-            // init method
-            init();
+        // scope methods
 
-            function init() {
+        // init method
+        init();
 
-                if (!$stateParams.id) {
-                    $scope.redirectOnError();
-                    return;
-                }
+        function init() {
 
-                $scope.tourId = $stateParams.id
+            if (!tour) {
+                $state.go('home');
+            } else {
+                $scope.tour = tour;
 
-                $scope.loadTour($scope.tourId).then(function (tour) {
+                $state.go('tour.presentation');
 
-                    if (tour.steps) {
-                        var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(tour.steps, {
-                            style: {
-                                color: '#34a0b4',
-                                width: 3,
-                                weight: 6,
-                                opacity: 0.8
-                            },
-                            label: function (step) {
-                                return $scope.getStepLabel(step);
-                            },
-                            tour: {
-                                bounds: {
-                                    show: true
-                                }
-                            },
-                            callbacks: {
-                                'click': function (step) {
-                                    $state.go('step-details', {
-                                        id: step._id
-                                    }, {
-                                        inherit: false
-                                    });
-                                }
-                            }
-                        });
+                showTourOnMap($scope.tour);
+            }
+        };
 
-                        var geometries = tour.steps.reduce(function (geometries, step) {
-                            geometries.push(step.geometry);
-                            return geometries;
-                        }, []);
-
-                        if (traceFeatures) {
-                            $scope.mapConfig.items = traceFeatures;
-
-                            $scope.mapConfig.bounds = {
-                                geometry: geometries
-                            };
+        function showTourOnMap(tour) {
+            if (tour.steps) {
+                var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(tour.steps, {
+                    style: {
+                        color: '#34a0b4',
+                        width: 3,
+                        weight: 6,
+                        opacity: 0.8
+                    },
+                    label: function (step) {
+                        return getStepLabel(step);
+                    },
+                    tour: {
+                        bounds: {
+                            show: true
                         }
-
-                    }
-
-                }).catch(function (err) {
-                    $scope.redirectOnError();
-                });
-            };
-
-            function saveTour(tour) {
-                var deffered = $q.defer();
-
-                tour.$update(function (data, putResponseHeaders) {
-                    console.info('Tour updated.');
-                    deffered.resolve($scope.loadTour($scope.tourId));
-                }, function (err) {
-                    deffered.reject(err);
-                });
-                return deffered.promise;
-            }
-
-            function isAllowedToEdit(tour) {
-                if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
-                    return true;
-                }
-                return false;
-            }
-
-            function openStep(step) {
-                $state.go('step-details', {
-                    id: step._id
-                }, {
-                    inherit: false
-                });
-            }
-
-            function redirectOnError() {
-                // redirect to 'toulouse' page
-                $state.go('toulouse', {}, {
-                    inherit: false
-                });
-            };
-
-            function getStepLabel(step) {
-                if (step.cityFrom.name === step.cityTo.name) {
-                    // same source & destination
-                    return step.cityFrom.name;
-                } else {
-                    return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
-                }
-            };
-
-            function loadTour() {
-
-                var deffered = $q.defer();
-
-                tourLoaderService.loadTour($scope.tourId, {
-                    steps: {}
-                }).then(function (tour) {
-
-                    if (tour.steps.length === 1) {
-                        console.warn('Only one step: redirect to step details.');
-                        $scope.openStep(tour.steps[0]);
-
-                        deffered.reject('Only one step.');
-                    } else {
-                        $scope.tour = tour;
-                        deffered.resolve(tour);
+                    },
+                    callbacks: {
+                        'click': function (step) {
+                            $state.go('step-details', {
+                                id: step._id
+                            }, {
+                                inherit: false
+                            });
+                        }
                     }
                 });
 
-                return deffered.promise;
-            }
+                var geometries = tour.steps.reduce(function (geometries, step) {
+                    geometries.push(step.geometry);
+                    return geometries;
+                }, []);
 
-        });
+                if (traceFeatures) {
+                    $scope.mapConfig.items = traceFeatures;
+
+                    $scope.mapConfig.bounds = {
+                        geometry: geometries
+                    };
+                }
+
+            }
+        }
+
+        function getStepLabel(step) {
+            if (step.cityFrom.name === step.cityTo.name) {
+                // same source & destination
+                return step.cityFrom.name;
+            } else {
+                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
+            }
+        };
+
+    };
 })();

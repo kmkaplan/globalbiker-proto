@@ -7,7 +7,7 @@
     </a>
     <h1>{{ tour.title }}</h1>
 
-    <div ng-include="'app/tour/tour-description_icon-bar.html'"></div>
+    <div ng-include="'app/tour.presentation/tour.presentation.main_icon-bar.html'"></div>
 
     <div ng-if="inEdition">
         <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>
