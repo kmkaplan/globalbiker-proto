@@ -10,17 +10,16 @@ RUN apt-get update && \
 
 RUN gem install --no-ri --no-rdoc compass
 
-
 RUN mkdir /.build-tmp
 WORKDIR /.build-tmp
 
 # pre-install main dependencies (to save time)
 RUN npm install karma karma-phantomjs-launcher grunt-contrib-imagemin grunt-google-cdn grunt-protractor-runner lwip express
 
-ADD package.json /.build-tmp
+ADD package.json /.build-tmp/
 RUN npm install --verbose
 
-ADD bower.json /.build-tmp
+ADD bower.json /.build-tmp/
 RUN bower install --allow-root --config.interactive=false
 
 WORKDIR /app
