@@ -15,6 +15,8 @@ WORKDIR /.build-tmp
 # pre-install main dependencies (to save time)
 RUN npm install karma karma-phantomjs-launcher grunt-contrib-imagemin grunt-google-cdn grunt-protractor-runner lwip express
 
+RUN mkdir /.build-tmp
+
 ADD package.json /.build-tmp
 RUN npm install --verbose
 # RUN npm install
@@ -27,6 +29,8 @@ WORKDIR /app
 ADD . /app
 RUN mv /.build-tmp/node_modules /app
 RUN mv /.build-tmp/bower_components /app/client/
+
+RUN rm -r /.build-tmp
 
 RUN grunt build:dist --force
 
