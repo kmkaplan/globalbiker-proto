@@ -13,11 +13,11 @@
                         <tbody>
                             <tr class="tour-resume-list" ng-click="openTour(tour)" ng-repeat="tour in tours">
                                 <td class="title">{{ tour.title }}
-                                   <div> <div class="tour-rating">
+                                   <div> <div class="rating">
                                         <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
                                     </div>
 
-                                    <div class="tour-rating">
+                                    <div class="rating">
                                         <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
                                     </div></div>
                                 </td>
@@ -42,7 +42,7 @@
             </div>
             <div class="col-md-9">
                 <a ng-if="isAllowedToEdit(tour)" class="pull-right" href="/my-tour/{{ tour._id }}">
-                    <i class="fa fa-edit"></i> {{ 'tour-details.edit-the-tour' | translate }}
+                    <i class="fa fa-edit"></i> {{ 'global.actions.edit' | translate }}
                 </a>
                 <h2>{{ tour.title }}</h2>
                 <div ng-bind-html="tour.description"></div>

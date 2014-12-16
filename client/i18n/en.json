@@ -3,7 +3,15 @@
         "signup": "Sign up",
         "login": "Log in",
         "hello": "Hello",
-        "logout": "Log out"
+        "logout": "Log out",
+        "actions": {
+            "edit": "edit",
+            "save": "save"
+        },
+        "stepLabel": {
+            "from": "From",
+            "to": "to"
+        }
     },
     "signup": {
         "intro": {

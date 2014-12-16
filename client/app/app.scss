@@ -102,6 +102,11 @@ html {
         }
     }
     .page {
+        
+        .link{
+            cursor: pointer;
+        }
+        
         padding: 10px 30px;
         .breadcrumb {
             background: transparent;
@@ -126,21 +131,25 @@ html {
             box-shadow: 0px 0px 3px 1px rgba(darken($color1, 30%), 0.1);
         }
         .smart-area {
-            border: 7px solid $color2;
+            border: 2px solid $color2;
             border-radius: 5px;
         }
         h1, .h1, h2, .h2, h3, .h3 {
             margin-top: 5px;
             margin-bottom: 15px;
         }
+        h1{
+            color: $color2;
+            text-shadow: 1px 1px 0 $color2dark2;
+        }
         h2, h3 {
             color: $color1;
-            text-shadow: 1px 1px 0 $color1dark2;
+            text-shadow: 1px 0px 0 $color1dark2;
         }
         .nav-tabs > li > a:hover {
             cursor: pointer;
         }
-        .tour-rating, .tour-step-rating {
+        .rating, .rating {
             &.in-edition {
                 .rating-bar {
                     background-clip: padding-box;

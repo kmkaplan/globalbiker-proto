@@ -4,6 +4,7 @@ angular.module('globalbikerWebApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('tour', {
+                abstract: true,
                 url: '/tour/:id',
                 templateUrl: 'app/tour/tour.html',
                 controller: 'TourCtrl',

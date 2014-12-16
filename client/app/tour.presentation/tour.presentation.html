@@ -1,4 +1,41 @@
-<div class="tour-details-area" ng-if="!step">
-    <div tour-presentation-main tour="tour" is-allowed-to-edit="isAllowedToEdit(tour)" save="saveTour(tour)"></div>
+<div class="tour-details-area">
+   
+    <div class="tour-description-area">
+        <a ng-if="isAllowedToEdit(tour) && !inEdition" class="btn btn-default edit-button pull-right" ng-click="editTour(tour)" ng-title="{{ 'global.actions.edit' | translate }}">
+            <i class="fa fa-pencil-square-o"></i>
+        </a>
+        <a ng-if="isAllowedToEdit(tour) && inEdition" class="btn btn-primary edit-button pull-right" ng-click="saveTour(tour)" ng-title="{{ 'global.actions.save' | translate }}">
+            <i class="fa fa-check"></i>
+        </a>
+        <h1>{{ tour.title }}</h1>
+
+        <div class="icon-bar">
+
+            <div ng-visible="tour.interest" class="tour-icon rating interest" ng-class="{ 'in-edition': inEdition }">
+                <label>Interest</label>
+                <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="!inEdition" ng-model="tour.interest" max="5"></rating>
+            </div>
+
+            <div ng-visible="tour.difficulty" class="tour-icon rating difficulty" ng-class="{ 'in-edition': inEdition }">
+                <label>Difficulty</label>
+                <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="!inEdition" ng-model="tour.difficulty" max="3"></rating>
+            </div>
+            <div class="tour-travel-with-icon" travel-with-icon model="tour.travelWith" in-edition="inEdition"></div>
+
+            <div class="tour-keyword-icons" keyword-icons model="tour.keywords" in-edition="inEdition"></div>
+
+        </div>
+
+        <div ng-if="inEdition">
+            <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>
+        </div>
+
+        <div ng-if="!inEdition" class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
+
+        <div ng-if="tour.photo.thumbnails.w600h400" class="photo-area">
+            <img class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
+        </div>
+    </div>
+
     <div tour-presentation-steps-list steps="tour.steps"></div>
 </div>

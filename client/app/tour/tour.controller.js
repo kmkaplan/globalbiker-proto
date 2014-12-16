@@ -20,8 +20,6 @@
             } else {
                 $scope.tour = tour;
 
-                $state.go('tour.presentation');
-
                 showTourOnMap($scope.tour);
             }
         };

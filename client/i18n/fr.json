@@ -3,7 +3,15 @@
         "signup": "S'inscrire",
         "login": "Se connecter",
         "hello": "Bonjour",
-        "logout": "Se déconnecter"
+        "logout": "Se déconnecter",
+        "actions": {
+            "edit": "éditer",
+            "save": "sauvegarder"
+        },
+        "stepLabel": {
+            "from": "De",
+            "to": "à"
+        }
     },
     "signup": {
         "intro": {

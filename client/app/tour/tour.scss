@@ -1,16 +1,30 @@
 .tour-page {
     width: 95%;
-    .tour-details-area {
+    .details-area {
         background: rgba($color1, 0.01);
-        border: 5px solid $color1;
+        border: 2px solid $color1;
         border-radius: 10px 5px 5px 5px;
         padding: 5px 25px;
         .edit-button {
-            margin: 10px;
+            margin: 2px;
         }
         h1 {
             font-size: 32px;
             margin-top: 20px;
+            &:after {
+                content: '';
+                display: block;
+                clear: both;
+            }
+        }
+        h2 {
+            font-size: 25px;
+            margin-top: 20px;
+            &:after {
+                content: '';
+                display: block;
+                clear: both;
+            }
         }
         .icon-bar {
             .travel-with-select {
@@ -32,6 +46,11 @@
                     width: 100px;
                     font-size: 12px;
                     float: right;
+                   /* background: #eee;
+                    border: 1px solid #ccc;
+                    margin: 5px;
+                    line-height: 14px;
+                    border-radius: 10px;*/
                     label {
                         display: block;
                         text-align: center;
@@ -50,13 +69,13 @@
             margin: 30px 0;
         }
         .steps-list-area {
-            thead tr th{
+            thead tr th {
                 text-align: center;
-                &.route{
+                &.route {
                     text-align: left;
                 }
             }
-            tbody tr td.step-index{
+            tbody tr td.step-index {
                 text-align: center;
             }
         }

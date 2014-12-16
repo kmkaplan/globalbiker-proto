@@ -8,7 +8,7 @@
         <li class="active">{{ tour.title }}</li>
     </ol>
     <a ng-if="isAllowedToEdit(tour)" class="pull-right" href="/my-tour/{{ tour._id }}">
-        <i class="fa fa-edit"></i> {{ 'tour-details.edit-the-tour' | translate }}
+        <i class="fa fa-edit"></i> {{ 'global.actions.edit' | translate }}
     </a>
     <h1>{{ tour.title }}</h1>
     <div class="alert tour-description" ng-if="tour.description" ng-bind-html="tour.description"></div>

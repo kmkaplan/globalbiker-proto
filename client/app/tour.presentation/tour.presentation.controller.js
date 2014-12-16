@@ -7,6 +7,7 @@
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
+        $scope.inEdition = false;
         $scope.tinymceOptions = {
             height: '200px',
             menubar: false,
@@ -15,8 +16,8 @@
 
         // scope methods
         $scope.isAllowedToEdit = isAllowedToEdit;
-        $scope.getStepLabel = getStepLabel;
         $scope.saveTour = saveTour;
+        $scope.editTour = editTour;
 
         // init method
         init();
@@ -30,15 +31,22 @@
             }
         };
 
+        function editTour(tour) {
+            $scope.inEdition = true;
+        }
+
         function saveTour(tour) {
             var deffered = $q.defer();
 
+            var steps = tour.steps;
+            
             tour.$update(function (data, putResponseHeaders) {
                 console.info('Tour updated.');
-                // TODO
-                // deffered.resolve($scope.loadTour($scope.tourId));
+                tour.steps = steps;
+                $scope.inEdition = false;
             }, function (err) {
                 deffered.reject(err);
+                $scope.inEdition = false;
             });
             return deffered.promise;
         }
@@ -49,15 +57,5 @@
             }
             return false;
         }
-
-        function getStepLabel(step) {
-            if (step.cityFrom.name === step.cityTo.name) {
-                // same source & destination
-                return step.cityFrom.name;
-            } else {
-                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
-            }
-        };
-
     }
 })();

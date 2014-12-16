@@ -85,7 +85,7 @@
             if (tour.steps && tour.steps.length === 1) {
                 $scope.openStep(tour.steps[0]);
             } else {
-                $state.go('tour', {
+                $state.go('tour.presentation', {
                     id: tour._id
                 }, {
                     inherit: false
