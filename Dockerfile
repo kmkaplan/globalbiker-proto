@@ -10,23 +10,14 @@ RUN apt-get update && \
 
 RUN gem install --no-ri --no-rdoc compass
 
-# use changes to package.json to force Docker not to use the cache
-# when we change our application's nodejs dependencies:
-ADD package.json /tmp/package.json
-RUN cd /tmp && npm install
-
-ADD bower.json /tmp/bower.json
-RUN cd /tmp && bower install --allow-root --config.interactive=false
-
-RUN mkdir -p /app && \
-    cp -a /tmp/node_modules /app/ && \
-    cp -a /tmp/bower_components /app/client/ && \
-    rm -rf /tmp/node_modules && \
-    rm -rf /tmp/bower_components && \
-    rm /tmp/package.json && \
-    rm /tmp/bower.json
-
 WORKDIR /app
+
+ADD package.json /app/package.json
+RUN npm install
+
+ADD bower.json /app/bower.json
+RUN bower install --allow-root --config.interactive=false
+
 ADD . /app
 
 RUN grunt build:dist --force
