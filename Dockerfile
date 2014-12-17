@@ -20,7 +20,7 @@ RUN bower install --allow-root --config.interactive=false
 
 ADD . /app
 
-RUN grunt build:dist
+RUN grunt build:dist --force
 
 RUN chmod 755 /app/scripts/*.sh
 
