@@ -13,7 +13,8 @@
             "arrival": "Ville de destination",
             "from": "De",
             "to": "à",
-            "remove": "Supprimer cette étape"
+            "remove": "Supprimer cette étape",
+            "create": "Créer une nouvelle étape"
         }
     },
     "signup": {

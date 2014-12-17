@@ -44,6 +44,7 @@
     </div>
 
     <div ng-if="inEdition">
+        <label>Description</label>
         <textarea ui-tinymce="tinymceOptions" name="description" ng-model="step.description" type="text" class="form-control"></textarea>
     </div>
 
@@ -53,11 +54,19 @@
         <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
     </div>
 
-    <div class="row">
-        <a ng-if="isAllowedToEdit(step)" class="btn btn-danger pull-left" ng-click="deleteStep(step)" title="Delete step">
-            <i class="fa fa-trash-o"></i>
-            <span translate="global.step.remove"> Remove this step</span>
-        </a>
+    <div class="row" ng-if="!inEdition">
+        <div class="col-md-6 text-center">
+            <a class="btn btn-primary" ng-click="createStep()">
+                <i class="fa fa-plus"></i>
+                <span translate="global.step.create">Create a new step</span>
+            </a>
+        </div>
+        <div class="col-md-6 text-center">
+            <a ng-if="isAllowedToEdit(step)" class="btn btn-primary" ng-click="deleteStep(step)" title="Delete step">
+                <i class="fa fa-trash-o"></i>
+                <span translate="global.step.remove"> Remove this step</span>
+            </a>
+        </div>
     </div>
 
 </div>

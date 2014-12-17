@@ -1,5 +1,5 @@
 <div class="tour-details-area">
-   
+
     <div class="tour-description-area">
         <a ng-if="isAllowedToEdit(tour) && !inEdition" class="btn btn-default edit-button pull-right" ng-click="editTour(tour)" ng-title="{{ 'global.actions.edit' | translate }}">
             <i class="fa fa-pencil-square-o"></i>
@@ -27,6 +27,7 @@
         </div>
 
         <div ng-if="inEdition">
+            <label>Description</label>
             <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>
         </div>
 
@@ -38,4 +39,15 @@
     </div>
 
     <div tour-presentation-steps-list steps="tour.steps"></div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <a class="btn btn-primary" ng-click="createStep()">
+                <i class="fa fa-plus"></i>
+                <span translate="global.step.create">Create a new step</span>
+            </a>
+        </div>
+    </div>
+
+
 </div>

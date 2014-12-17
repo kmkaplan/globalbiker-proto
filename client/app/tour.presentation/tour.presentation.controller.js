@@ -18,6 +18,7 @@
         $scope.isAllowedToEdit = isAllowedToEdit;
         $scope.saveTour = saveTour;
         $scope.editTour = editTour;
+        $scope.createStep = createStep;
 
         // init method
         init();
@@ -43,6 +44,10 @@
                 location: true,
                 notify: false
             });
+        }
+        
+        function createStep(){
+            $state.go('tour.create-step');
         }
 
         function saveTour(tour) {

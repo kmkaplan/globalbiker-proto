@@ -20,6 +20,7 @@
         $scope.editStep = editStep;
         $scope.openTour = openTour;
         $scope.deleteStep = deleteStep;
+        $scope.createStep = createStep;
 
         // init method
         init();
@@ -35,6 +36,10 @@
                 $scope.$parent.selectStep(tour, step);
             }
         };
+
+        function createStep() {
+            $state.go('tour.create-step');
+        }
 
         function isAllowedToEdit(tour) {
             if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {

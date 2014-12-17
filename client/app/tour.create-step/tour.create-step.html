@@ -1,0 +1,53 @@
+<div class="create-step-area">
+
+    <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>
+
+    <h2 translate="global.step.create">Create a new step</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label translate="global.step.departure">City of departure</label>
+                <div geonames-city-input ng-model="step.cityFrom" placeholder="'Paris, Lyon...'"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label translate="global.step.arrival">City of arrival</label>
+                <div geonames-city-input ng-model="step.cityTo" placeholder="'Nantes, Bordeaux...'"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="progress() >= 1">
+        <div class="col-md-6">
+            <div class="tour-icon rating interest in-edition">
+                <label>Interest</label>
+                <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" ng-model="step.interest" max="5"></rating>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="tour-icon rating difficulty in-edition">
+                <label>Difficulty</label>
+                <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" ng-model="step.difficulty" max="3"></rating>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="progress() >= 2">
+        <div class="col-md-12">
+            <label>Description</label>
+            <textarea ui-tinymce="tinymceOptions" name="description" ng-model="step.description" type="text" class="form-control"></textarea>
+        </div>
+    </div>
+
+    <div class="save-area row" ng-if="progress() >= 3">
+        <div class="col-md-12 text-center">
+            <a class="btn btn-primary" ng-click="createStep(step)">
+                <i class="fa fa-plus"></i>
+                <span translate="global.actions.save">Save</span>
+            </a>
+        </div>
+    </div>
+
+</div>

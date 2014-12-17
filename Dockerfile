@@ -1,7 +1,7 @@
 ## Adapted from https://github.com/dockerfile/nodejs-bower-grunt-runtime
 FROM dockerfile/nodejs-bower-grunt
 
-MAINTAINER Nicolas Toublanc <nicolas.toublanc@gmail.com>
+MAINTAINER Nicolas Toublanc <n.toublanc@gmail.com>
 
 # update APT
 RUN apt-get update && \
@@ -20,7 +20,7 @@ RUN bower install --allow-root --config.interactive=false
 
 ADD . /app
 
-RUN grunt build:dist --force
+RUN grunt build:dist
 
 RUN chmod 755 /app/scripts/*.sh
 

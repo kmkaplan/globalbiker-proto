@@ -13,7 +13,8 @@
             "arrival": "City of arrival",
             "from": "From",
             "to": "to",
-            "remove": "Remove this step"
+            "remove": "Remove this step",
+            "create": "Create a new step"
         }
     },
     "signup": {
