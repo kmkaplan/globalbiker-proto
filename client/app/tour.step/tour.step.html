@@ -1,4 +1,7 @@
 <div class="step-description-area">
+
+    <a ng-if="isAllowedToEdit(step) && !inEdition" class="btn btn-danger pull-left" ng-click="deleteStep(step)" title="Delete step"><i class="fa fa-trash-o"></i></a>
+
     <a ng-if="isAllowedToEdit(step) && !inEdition" class="btn btn-default edit-button pull-right" ng-click="editStep(step)" ng-title="{{ 'global.actions.edit' | translate }}">
         <i class="fa fa-pencil-square-o"></i>
     </a>

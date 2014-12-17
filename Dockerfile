@@ -10,23 +10,19 @@ RUN apt-get update && \
 
 RUN gem install --no-ri --no-rdoc compass
 
-RUN mkdir /.build-tmp
-WORKDIR /.build-tmp
+# use changes to package.json to force Docker not to use the cache
+# when we change our application's nodejs dependencies:
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
 
-# pre-install main dependencies (to save time)
-RUN npm install karma karma-phantomjs-launcher grunt-contrib-imagemin grunt-google-cdn grunt-protractor-runner lwip express
+ADD bower.json /tmp/bower.json
+RUN cd /tmp && bower install --allow-root --config.interactive=false
 
-ADD package.json /.build-tmp/
-RUN npm install --verbose
+RUN mkdir -p /app && cp -a /tmp/node_modules /app/ && cp -a /tmp/bower_components /app/client/
 
-ADD bower.json /.build-tmp/
-RUN bower install --allow-root --config.interactive=false
 
 WORKDIR /app
-
 ADD . /app
-RUN mv /.build-tmp/node_modules /app
-RUN mv /.build-tmp/bower_components /app/client/
 
 RUN rm -r /.build-tmp
 
