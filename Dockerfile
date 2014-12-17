@@ -24,12 +24,10 @@ RUN mkdir -p /app && \
     rm -rf /tmp/node_modules && \
     rm -rf /tmp/bower_components && \
     rm /tmp/package.json && \
-    rm /tmp/bower.json
+    rm /tmp/bower.json\
 
 WORKDIR /app
 ADD . /app
-
-RUN 
 
 RUN grunt build:dist --force
 
