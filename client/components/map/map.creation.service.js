@@ -38,7 +38,6 @@ angular.module('globalbikerWebApp')
                 }
             },
             enableDrawing: function (map, drawingOptions) {
-                // TODO 
                 
                 var defaultDrawOptions = {
                     polyline: true,

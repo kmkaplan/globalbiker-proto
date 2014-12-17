@@ -11,7 +11,6 @@
         // scope methods
         $scope.selectStep = selectStep;
         $scope.selectTour = selectTour;
-        
 
         // init method
         init();

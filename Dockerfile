@@ -12,13 +12,13 @@ RUN gem install --no-ri --no-rdoc compass
 
 WORKDIR /app
 
-ADD package.json /app/package.json
+ADD . /app
+
+# ADD package.json /app/package.json
 RUN npm install
 
-ADD bower.json /app/bower.json
+# ADD bower.json /app/bower.json
 RUN bower install --allow-root --config.interactive=false
-
-ADD . /app
 
 RUN grunt build:dist --force
 
