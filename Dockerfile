@@ -18,13 +18,18 @@ RUN cd /tmp && npm install
 ADD bower.json /tmp/bower.json
 RUN cd /tmp && bower install --allow-root --config.interactive=false
 
-RUN mkdir -p /app && cp -a /tmp/node_modules /app/ && cp -a /tmp/bower_components /app/client/
-
+RUN mkdir -p /app && \
+    cp -a /tmp/node_modules /app/ && \
+    cp -a /tmp/bower_components /app/client/ && \
+    rm -rf /tmp/node_modules && \
+    rm -rf /tmp/bower_components && \
+    rm /tmp/package.json && \
+    rm /tmp/bower.json && \
 
 WORKDIR /app
 ADD . /app
 
-RUN rm -r /.build-tmp
+RUN 
 
 RUN grunt build:dist --force
 
