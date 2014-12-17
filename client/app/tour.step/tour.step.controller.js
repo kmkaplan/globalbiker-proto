@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourStepCtrl', TourStepCtrl);
 
-    function TourStepCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth) {
+    function TourStepCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository) {
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
@@ -19,6 +19,7 @@
         $scope.saveStep = saveStep;
         $scope.editStep = editStep;
         $scope.openTour = openTour;
+        $scope.deleteStep = deleteStep;
 
         // init method
         init();
@@ -30,7 +31,7 @@
             } else {
                 $scope.tour = tour;
                 $scope.step = step;
-                
+
                 $scope.$parent.selectStep(tour, step);
             }
         };
@@ -41,13 +42,27 @@
             }
             return false;
         }
-        
-        function openTour(tour){
+
+        function openTour(tour) {
             $state.go('tour.presentation');
         }
-        
+
         function editStep(step) {
             $state.go('tour.edit-step', $stateParams);
+        }
+
+        function deleteStep(step) {
+            if (confirm('Are you sure do you want to delete this step ?')) {
+
+                StepRepository.remove({
+                        id: step._id
+                    },
+                    function () {
+                        $state.go('tour.presentation', {}, {
+                            'reload': true
+                        });
+                    });
+            }
         }
 
         function saveStep(step) {
@@ -57,7 +72,7 @@
                 console.info('Step updated.');
             }, function (err) {
                 deffered.reject(err);
-            }).finally(function(){
+            }).finally(function () {
                 $state.go('tour.step', $stateParams);
             });
             return deffered.promise;

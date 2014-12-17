@@ -12,7 +12,8 @@
             "departure": "Ville de départ",
             "arrival": "Ville de destination",
             "from": "De",
-            "to": "à"
+            "to": "à",
+            "remove": "Supprimer cette étape"
         }
     },
     "signup": {
