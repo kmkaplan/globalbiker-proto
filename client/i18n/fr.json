@@ -8,7 +8,9 @@
             "edit": "éditer",
             "save": "sauvegarder"
         },
-        "stepLabel": {
+        "step": {
+            "departure": "Ville de départ",
+            "arrival": "Ville de destination",
             "from": "De",
             "to": "à"
         }

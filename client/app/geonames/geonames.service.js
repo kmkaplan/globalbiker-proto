@@ -97,6 +97,24 @@ angular.module('globalbikerWebApp')
                 }
             },
 
+            getFullLabel: function (city) {
+                if (city && city.toponymName) {
+                    var s = city.toponymName;
+                    if (city.adminName1) {
+                        s += ' (' + city.adminName1 + ')';
+                    }
+                    return s;
+                } else {
+                    return '';
+                }
+            },
+            getShortLabel: function (city) {
+                 if (city && city.toponymName) {
+                    return city.toponymName;
+                } else {
+                    return '';
+                }
+            },
             cityToNameAndAdminName1: function (city) {
                 if (city && city.name) {
                     var s = city.name;

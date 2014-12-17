@@ -31,10 +31,10 @@
                         <td class="main">
                             <span>{{ 'mytours.steps.from' | translate }} {{ step.cityFrom.name }} {{ 'mytours.steps.to' | translate }} {{ step.cityTo.name }}</span>
                         </td>
-                        <td class="tour-step-rating">
+                        <td class="rating">
                             <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="step.difficulty" max="3"></rating>
                         </td>
-                        <td class="tour-step-rating">
+                        <td class="rating">
                             <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>
                         </td>
                     </tr>

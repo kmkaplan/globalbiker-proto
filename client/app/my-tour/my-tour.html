@@ -78,10 +78,10 @@
                                 </div>
                                 <div ng-hide="step.isInEdition()">{{ step.cityTo.name }}</div>
                             </td>
-                            <td class="tour-step-rating">
+                            <td class="rating">
                                 <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="step.status == 'read-only'" ng-show="step.isValidCityTo()" ng-model="step.difficulty" max="3" on-leave="overStar = null"></rating>
                             </td>
-                            <td class="tour-step-rating">
+                            <td class="rating">
                                 <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="step.status == 'read-only'" ng-show="step.isValidCityTo() && step.difficulty" ng-model="step.interest" max="5" on-leave="overStar = null"></rating>
                             </td>
                             <td>

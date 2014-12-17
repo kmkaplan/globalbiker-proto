@@ -18,7 +18,7 @@
             <label>Difficulty</label>
             <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="!inEdition" ng-model="step.difficulty" max="3"></rating>
         </div>
-        
+
         <div class="tour-travel-with-icon" travel-with-icon model="tour.travelWith" in-edition="false"></div>
 
         <div class="tour-keyword-icons" keyword-icons model="tour.keywords" in-edition="false"></div>
@@ -26,11 +26,21 @@
     </div>
 
     <h2>{{ step | stepLabel }}</h2>
-    
-    <!--<div class="form-group" ng-show="inEdition">
-        <input typeahead-min-length="2" ng-model="step.cityFrom" placeholder="City of departure" typeahead="city as city.label for city in getCity($viewValue)" typeahead-loading="place.cityFromLoading" typeahead-input-formatter="cityToName($model)" typeahead-on-select="updateMap()" class="form-control">
-        <i ng-show="place.cityFromLoading" class="glyphicon glyphicon-refresh"></i>
-    </div>-->
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group" ng-show="inEdition">
+                <label translate="global.step.departure">City of departure</label>
+                <div geonames-city-input ng-model="step.cityFrom" placeholder="'Paris, Lyon...'"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group" ng-show="inEdition">
+                <label translate="global.step.arrival">City of arrival</label>
+                <div geonames-city-input ng-model="step.cityTo" placeholder="'Nantes, Bordeaux...'"></div>
+            </div>
+        </div>
+    </div>
 
     <div ng-if="inEdition">
         <textarea ui-tinymce="tinymceOptions" name="description" ng-model="step.description" type="text" class="form-control"></textarea>

@@ -13,22 +13,26 @@
 
         var filterFn = function initialFilter(step) {
             var label;
-            if (step.cityFrom.name === step.cityTo.name) {
-                // same source & destination
-                label = step.cityFrom.name;
+            if (step.cityFrom && step.cityTo) {
+                if (step.cityFrom.name === step.cityTo.name) {
+                    // same source & destination
+                    label = step.cityFrom.name;
+                } else {
+                    label = fromToLabel(step);
+                }
             } else {
-                label = fromToLabel(step);
+                label = '';
             }
-            
+
             return label;
         };
 
         var updateLocalization = function () {
-            $translate(['global.stepLabel.from', 'global.stepLabel.to']).then(function (translations) {
+            $translate(['global.step.from', 'global.step.to']).then(function (translations) {
                 console.log(translations);
                 filter.labels = {
-                    from: translations['global.stepLabel.from'],
-                    to: translations['global.stepLabel.to']
+                    from: translations['global.step.from'],
+                    to: translations['global.step.to']
                 };
                 fromToLabel = function (step) {
                     return filter.labels.from + ' ' + step.cityFrom.name + ' ' + filter.labels.to + ' ' + step.cityTo.name;
@@ -38,7 +42,7 @@
 
         // first i18n
         updateLocalization();
-        
+
         // event listner when local changes
         $rootScope.$on('$translateChangeSuccess', function () {
             updateLocalization();

@@ -8,7 +8,9 @@
             "edit": "edit",
             "save": "save"
         },
-        "stepLabel": {
+        "step": {
+            "departure": "City of departure",
+            "arrival": "City of arrival",
             "from": "From",
             "to": "to"
         }
@@ -68,8 +70,8 @@
             "to": "to",
             "difficulty": "Difficulty",
             "interest": "Interest",
-            "departure": "Departure city",
-            "arrival": "Arrival city",
+            "departure": "City of departure",
+            "arrival": "City of arrival",
             "edit_daily": "Edit the detail of the day's stage"
         },
         "steps": {

@@ -41,16 +41,6 @@ var StepSchema = new Schema({
             type: String,
             required: 'Please fill cityFrom adminName1'
         },
-        // @deprecated: use geometry instead
-        latitude: {
-            type: Number,
-            required: 'Please fill cityFrom latitude'
-        },
-        // @deprecated: use geometry instead
-        longitude: {
-            type: Number,
-            required: 'Please fill cityFrom longitude'
-        },
         geometry: {
             type: Object,
             index: '2dsphere',
@@ -69,16 +59,6 @@ var StepSchema = new Schema({
         adminName1: {
             type: String,
             required: 'Please fill cityFrom adminName1'
-        },
-        // @deprecated: use geometry instead
-        latitude: {
-            type: Number,
-            required: 'Please fill cityTo latitude'
-        },
-        // @deprecated: use geometry instead
-        longitude: {
-            type: Number,
-            required: 'Please fill cityTo longitude'
         },
         geometry: {
             type: Object,
