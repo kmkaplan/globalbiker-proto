@@ -6,7 +6,7 @@
 
             <div class="details-area">
 
-                <a ng-if="isAllowedToEdit(step)" class="btn btn-default edit-button pull-right" ng-click="editStep(step)" ng-title="{{ 'global.actions.edit' | translate }}">
+                <a ng-if="securityService.isTourEditable(tour)" class="btn btn-default edit-button pull-right" ng-click="editStep(step)" ng-title="{{ 'global.actions.edit' | translate }}">
                     <i class="fa fa-pencil-square-o"></i>
                 </a>
 
@@ -42,7 +42,7 @@
                         <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
                     </div>
 
-                    <div class="row" ng-if="isAllowedToEdit(step)">
+                    <div class="row" ng-if="securityService.isTourEditable(tour)">
                         <div class="col-md-6 text-center">
                             <a class="btn btn-primary" ng-click="createStep()">
                                 <i class="fa fa-plus"></i>

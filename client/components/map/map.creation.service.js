@@ -33,16 +33,12 @@
 
                     var bounds = extendedMapMathsService.getBoundsFromGeometries(bounds.geometry, 0.1);
                     map.fitBounds(bounds);
-                    // FIXME does not work :
-                    map.setMaxBounds(bounds);
                 } else {
 
                     console.log('Fit bounds to geometry: ', bounds.geometry);
 
                     var bounds = extendedMapMathsService.getBoundsFromGeometry(bounds.geometry, 0.1);
                     map.fitBounds(bounds);
-                    // FIXME does not work :
-                    map.setMaxBounds(bounds);
                 }
             }
         }

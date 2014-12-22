@@ -39,6 +39,10 @@ L.GeojsonItem = L.FeatureGroup.extend({
 
         // console.log('Create layer for item:', item);
 
+        if (!item.properties.options){
+            item.properties.options = {};
+        }
+        
         var layer;
 
         var coordsToLatLng = this.coordsToLatLng;

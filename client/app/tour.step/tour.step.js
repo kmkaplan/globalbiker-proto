@@ -18,7 +18,11 @@ angular.module('globalbikerWebApp')
                                 tour: {},
                                 step: {
                                     distances: true,
-                                    interestsAround: {},
+                                    interestsAround: {
+                                        distance: 200, //[10000, 1000, 10, 5000],
+                                        // missing: 'water-point', 
+                                        type: ['interest', 'bike-shops', 'danger', 'food']
+                                    },
                                     photosAround: {}
                                 }
                             }).then(function (step) {

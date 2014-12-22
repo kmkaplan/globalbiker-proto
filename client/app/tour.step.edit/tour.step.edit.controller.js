@@ -3,10 +3,11 @@
 
     angular.module('globalbikerWebApp').controller('TourStepEditCtrl', TourStepEditCtrl);
 
-    function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService) {
+    function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService) {
 
         // scope properties
         $scope.mapConfig = {};
+        $scope.securityService = securityService;
 
         $scope.tinymceOptions = {
             height: '200px',
@@ -26,7 +27,7 @@
             if (!tour || !step) {
                 $state.go('home');
             } else {
-                if (isAllowedToEdit(step)) {
+                if (securityService.isTourEditable(tour)) {
                     $scope.tour = tour;
                     $scope.step = step;
 

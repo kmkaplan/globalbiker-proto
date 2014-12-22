@@ -84,7 +84,28 @@ exports.searchAroundStep = function (req, res) {
 
     var distance;
     if (req.query.distance) {
-        distance = parseInt(req.query.distance);
+
+
+        if (Object.prototype.toString.call(req.query.distance) === '[object Array]') {
+            // different distance depending of type of point
+            /* distance = req.query.distance.reduce(function (maxDistance, distance) {
+                distance = parseInt(distance);
+                if (distance > maxDistance) {
+                    maxDistance = distance;
+                }
+                return distance;
+            }, 0);*/
+
+            distance = req.query.distance.reduce(function (distances, distance) {
+                distance = parseInt(distance);
+                distances.push(distance);
+                return distances;
+            }, []);
+
+        } else {
+            distance = parseInt(req.query.distance);
+        }
+
     } else {
         distance = 200;
     }
@@ -95,14 +116,48 @@ exports.searchAroundStep = function (req, res) {
         }
 
         // convert geometry to search criteria array
-        var criteriaArray = geo.geometryToNearCriterias(step.geometry, distance);
 
-        // query database
-        var promises = criteriaArray.reduce(function (promises, searchCriteria) {
-            var promise = exports.searchNearPoint(searchCriteria, extraCriteria);
-            promises.push(promise);
-            return promises;
-        }, []);
+        if (Object.prototype.toString.call(distance) === '[object Array]') {
+            // different distance depending of type of point
+
+            // TODO regrouper par distance
+
+            var i = 0;
+
+            var promises = distance.reduce(function (promises, distance) {
+                
+                var criteriaArray = geo.geometryToNearCriterias(step.geometry, 2000 /*distance*/);
+
+                // TODO cloner l'objet si on ajoute d'autres extra criteria
+
+                var extraCriteriaForDistance = {
+                    type: extraCriteria.type[i++]
+                };
+
+                // query database
+                promises = criteriaArray.reduce(function (promises, searchCriteria) {
+                    var promise = exports.searchNearPoint(searchCriteria, extraCriteriaForDistance);
+                    promises.push(promise);
+                    return promises;
+                }, promises);
+
+                return promises;
+
+            }, []);
+
+
+        } else {
+
+            var criteriaArray = geo.geometryToNearCriterias(step.geometry, distance);
+
+            // query database
+            var promises = criteriaArray.reduce(function (promises, searchCriteria) {
+                var promise = exports.searchNearPoint(searchCriteria, extraCriteria);
+                promises.push(promise);
+                return promises;
+            }, []);
+
+        }
 
         Q.all(promises).then(
             function (results) {

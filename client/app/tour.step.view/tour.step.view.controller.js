@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourStepViewCtrl', TourStepViewCtrl);
 
-    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestLoaderService) {
+    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestLoaderService, interestsMarkerBuilderService) {
 
         // scope properties
         $scope.securityService = securityService;
@@ -74,36 +74,11 @@
                         bounds: {
                             show: true
                         }
-                    },
-                    callbacks: {
-                        'click': function (step) {
-                            $state.go('step-details', {
-                                id: step._id
-                            }, {
-                                inherit: false
-                            });
-                        }
                     }
                 }, tour);
 
                 if (step.interests) {
-
-                    traceFeatures = traceFeatures.concat(bikeTourMapService.buildInterestsFeatures(step.interests, {
-                        mode: 'normal',
-                        callbacks: {
-                            'click': function (interest, markerLayer) {
-
-                                interestLoaderService.loadDetails(interest, {
-                                    interest: {
-                                        photos: true
-                                    }
-                                }).then(function (interest) {
-                                    $scope.selectedPointOfInterest = interest;
-                                    $scope.editSelectedPointOfInterest = false;
-                                });
-                            }
-                        }
-                    }));
+                    traceFeatures = traceFeatures.concat(interestsMarkerBuilderService.build(step.interests));
                 }
 
                 if (traceFeatures) {

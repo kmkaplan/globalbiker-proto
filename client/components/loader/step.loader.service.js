@@ -72,18 +72,19 @@ angular.module('globalbikerWebApp')
                 if (options.step && options.step.interestsAround) {
 
                     if (!options.step.interestsAround.distance) {
-                        options.step.interestsAround.distance = 10000;
+                        options.step.interestsAround.distance = 10;
                     }
 
                     InterestRepository.searchAroundStep({
                         stepId: step._id,
-                        distance: options.step.interestsAround.distance
+                        distance: options.step.interestsAround.distance,
+                        type: options.step.interestsAround.type
                     }, function (interests) {
 
                         var defferedArray = interests.reduce(function (defferedArray, interest) {
 
                             defferedArray.push(interestLoaderService.loadDetails(interest, {
-                                interest: options.step.interests
+                                interest: options.step.interestsAround
                             }));
                             return defferedArray;
 
@@ -107,7 +108,7 @@ angular.module('globalbikerWebApp')
 
                 return deffered.promise;
             },
-           /* getInterests: function (step, options) {
+            /* getInterests: function (step, options) {
                 var deffered = $q.defer();
 
                 if (options.step.interests) {
