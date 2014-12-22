@@ -16,7 +16,7 @@
                         $scope.openStep = openStep;
 
                         function openStep(step) {
-                            $state.go('tour.step', {
+                            $state.go('tour.step.view', {
                                 stepId: step._id
                             }, {});
                         };

@@ -63,7 +63,7 @@
             new StepRepository(step).$save(function (step, putResponseHeaders) {
                 // success
                 deffered.resolve(step);
-                $state.go('tour.step', {
+                $state.go('tour.step.view', {
                     id: tour._id,
                     stepId: step._id
                 }, {

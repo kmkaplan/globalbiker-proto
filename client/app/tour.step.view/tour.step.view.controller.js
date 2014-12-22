@@ -1,22 +1,15 @@
 (function () {
     'use strict';
 
-    angular.module('globalbikerWebApp').controller('TourStepCtrl', TourStepCtrl);
+    angular.module('globalbikerWebApp').controller('TourStepViewCtrl', TourStepViewCtrl);
 
-    function TourStepCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository) {
+    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository) {
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
-        $scope.inEdition = isAllowedToEdit(step) && $state.current.data.edit | false;
-        $scope.tinymceOptions = {
-            height: '200px',
-            menubar: false,
-            toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript'
-        };
 
         // scope methods
         $scope.isAllowedToEdit = isAllowedToEdit;
-        $scope.saveStep = saveStep;
         $scope.editStep = editStep;
         $scope.openTour = openTour;
         $scope.deleteStep = deleteStep;
@@ -56,7 +49,7 @@
         }
 
         function editStep(step) {
-            $state.go('tour.edit-step', $stateParams);
+            $state.go('tour.step.edit', $stateParams);
         }
 
         function deleteStep(step) {
@@ -72,19 +65,5 @@
                     });
             }
         }
-
-        function saveStep(step) {
-            var deffered = $q.defer();
-
-            step.$update(function (data, putResponseHeaders) {
-                console.info('Step updated.');
-            }, function (err) {
-                deffered.reject(err);
-            }).finally(function () {
-                $state.go('tour.step', $stateParams);
-            });
-            return deffered.promise;
-        }
-
     }
 })();

@@ -47,7 +47,7 @@
             }
         }
 
-        function configureDrawTools(map, tools, config) {
+        function configureDrawTools(map, drawingTools, config) {
 
             var defaultDrawingOptions = {
                 polyline: false,
@@ -59,7 +59,7 @@
             var callbacks = {
                 created: {}
             };
-            var drawingOptions = tools.reduce(function (drawingOptions, tool) {
+            var drawingOptions = drawingTools ? drawingTools.reduce(function (drawingOptions, tool) {
                 switch (tool.type) {
                 case 'polyline':
                 case 'marker':
@@ -77,7 +77,7 @@
                     break;
                 }
                 return drawingOptions;
-            }, defaultDrawingOptions);
+            }, defaultDrawingOptions) : defaultDrawingOptions;
 
             if (typeof (map.drawControl) !== 'undefined') {
                 // remove previous control

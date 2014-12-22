@@ -1,21 +1,18 @@
 <div class="step-description-area">
 
-    <a ng-if="isAllowedToEdit(step) && !inEdition" class="btn btn-default edit-button pull-right" ng-click="editStep(step)" ng-title="{{ 'global.actions.edit' | translate }}">
-        <i class="fa fa-pencil-square-o"></i>
-    </a>
-    <a ng-if="isAllowedToEdit(step) && inEdition" class="btn btn-primary edit-button pull-right" ng-click="saveStep(step)" ng-title="{{ 'global.actions.save' | translate }}">
+    <a class="btn btn-primary edit-button pull-right" ng-click="saveStep(step)" ng-title="{{ 'global.actions.save' | translate }}">
         <i class="fa fa-check"></i>
     </a>
     <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>
 
     <div class="icon-bar">
 
-        <div ng-visible="step.interest" class="tour-icon rating interest" ng-class="{ 'in-edition': inEdition }">
+        <div ng-visible="step.interest" class="tour-icon rating interest in-edition">
             <label>Interest</label>
             <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="!inEdition" ng-model="step.interest" max="5"></rating>
         </div>
 
-        <div ng-visible="step.difficulty" class="tour-icon rating difficulty" ng-class="{ 'in-edition': inEdition }">
+        <div ng-visible="step.difficulty" class="tour-icon rating difficulty in-edition">
             <label>Difficulty</label>
             <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="!inEdition" ng-model="step.difficulty" max="3"></rating>
         </div>
@@ -30,43 +27,26 @@
 
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group" ng-show="inEdition">
+            <div class="form-group">
                 <label translate="global.step.departure">City of departure</label>
                 <div geonames-city-input ng-model="step.cityFrom" placeholder="'Paris, Lyon...'"></div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="form-group" ng-show="inEdition">
+            <div class="form-group">
                 <label translate="global.step.arrival">City of arrival</label>
                 <div geonames-city-input ng-model="step.cityTo" placeholder="'Nantes, Bordeaux...'"></div>
             </div>
         </div>
     </div>
 
-    <div ng-if="inEdition">
+    <div>
         <label>Description</label>
         <textarea ui-tinymce="tinymceOptions" name="description" ng-model="step.description" type="text" class="form-control"></textarea>
     </div>
 
-    <div ng-if="!inEdition" class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
-
     <div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
         <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
-    </div>
-
-    <div class="row" ng-if="!inEdition">
-        <div class="col-md-6 text-center">
-            <a class="btn btn-primary" ng-click="createStep()">
-                <i class="fa fa-plus"></i>
-                <span translate="global.step.create">Create a new step</span>
-            </a>
-        </div>
-        <div class="col-md-6 text-center">
-            <a ng-if="isAllowedToEdit(step)" class="btn btn-primary" ng-click="deleteStep(step)" title="Delete step">
-                <i class="fa fa-trash-o"></i>
-                <span translate="global.step.remove"> Remove this step</span>
-            </a>
-        </div>
     </div>
 
 </div>

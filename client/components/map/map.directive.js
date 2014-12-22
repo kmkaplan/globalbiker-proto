@@ -33,8 +33,8 @@ angular.module('globalbikerWebApp')
                         mapItemsService.drawItems($scope.map, items, $scope.config);
                     });
                     
-                    $scope.$watch('config.drawingTools', function(tools){
-                        mapCreationService.configureDrawTools($scope.map, tools, $scope.config);
+                    $scope.$watch('config.drawingTools', function(drawingTools){
+                         mapCreationService.configureDrawTools($scope.map, drawingTools, $scope.config);
                     });
                 }
             }
