@@ -19,20 +19,20 @@ RUN apt-get update && \
 # install via gem
 RUN gem install --no-ri --no-rdoc compass
 
-# production mode
-ENV NODE_ENV production
-
 # define working directory (to build app)
 WORKDIR /app
 
-# install npm dependencies
+# install npm dependencies (dev + prod)
 ADD package.json /app/
-RUN npm install --production
+RUN npm install --dev
 
-# install bower dependencies
+# install bower dependencies (prod only)
 ADD bower.json /app/
 ADD .bowerrc /app/
 RUN bower install --production --allow-root --config.interactive=false
+
+# production mode
+ENV NODE_ENV production
 
 # buid application
 ADD . /app
