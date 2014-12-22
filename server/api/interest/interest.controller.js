@@ -519,11 +519,6 @@ exports.deletePhoto = function (req, res) {
 // Creates a new interest in the DB.
 exports.create = function (req, res) {
 
-    req.body.geometry = {
-        type: 'Point',
-        coordinates: [req.body.longitude, req.body.latitude]
-    }
-
     Interest.create(req.body, function (err, interest) {
         if (err) {
             console.error(err);

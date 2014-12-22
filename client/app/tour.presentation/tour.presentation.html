@@ -5,10 +5,10 @@
         <div class="col-md-6">
             <div class="details-area">
                 <div class="tour-description-area">
-                    <a ng-if="isAllowedToEdit(tour) && !inEdition" class="btn btn-default edit-button pull-right" ng-click="editTour(tour)" ng-title="{{ 'global.actions.edit' | translate }}">
+                    <a ng-if="securityService.isTourEditable(tour) && !inEdition" class="btn btn-default edit-button pull-right" ng-click="editTour(tour)" ng-title="{{ 'global.actions.edit' | translate }}">
                         <i class="fa fa-pencil-square-o"></i>
                     </a>
-                    <a ng-if="isAllowedToEdit(tour) && inEdition" class="btn btn-primary edit-button pull-right" ng-click="saveTour(tour)" ng-title="{{ 'global.actions.save' | translate }}">
+                    <a ng-if="securityService.isTourEditable(tour) && inEdition" class="btn btn-primary edit-button pull-right" ng-click="saveTour(tour)" ng-title="{{ 'global.actions.save' | translate }}">
                         <i class="fa fa-check"></i>
                     </a>
                     <h1>{{ tour.title }}</h1>

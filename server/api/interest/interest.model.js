@@ -22,17 +22,10 @@ var InterestSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'StepSchema'
     },
-    latitude: {
-        type: Number,
-        required: 'Please fill latitude'
-    },
-    longitude: {
-        type: Number,
-        required: 'Please fill longitude'
-    },
     geometry: {
         type: Object,
-        index: '2dsphere'
+        index: '2dsphere',
+        required: 'Please fill geometry'
     },
     type: {
         type: String,

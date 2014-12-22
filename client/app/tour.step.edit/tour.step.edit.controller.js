@@ -37,13 +37,6 @@
             }
         };
 
-        function isAllowedToEdit(tour) {
-            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
-                return true;
-            }
-            return false;
-        }
-
         function openTour(tour) {
             $state.go('tour.presentation');
         }

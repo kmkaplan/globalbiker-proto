@@ -27,7 +27,7 @@ angular.module('globalbikerWebApp')
                 if (options.step && options.step.photosAround) {
 
                     if (!options.step.photosAround.distance) {
-                        options.step.photosAround.distance = 200;
+                        options.step.photosAround.distance = 10000;
                     }
 
                     PhotoRepository.searchAroundStep({
@@ -66,8 +66,48 @@ angular.module('globalbikerWebApp')
 
                 return deffered.promise;
             },
+            getInterestsAround: function (step, options) {
+                var deffered = $q.defer();
 
-            getInterests: function (step, options) {
+                if (options.step && options.step.interestsAround) {
+
+                    if (!options.step.interestsAround.distance) {
+                        options.step.interestsAround.distance = 10000;
+                    }
+
+                    InterestRepository.searchAroundStep({
+                        stepId: step._id,
+                        distance: options.step.interestsAround.distance
+                    }, function (interests) {
+
+                        var defferedArray = interests.reduce(function (defferedArray, interest) {
+
+                            defferedArray.push(interestLoaderService.loadDetails(interest, {
+                                interest: options.step.interests
+                            }));
+                            return defferedArray;
+
+                        }, []);
+
+                        $q.all(defferedArray).then(function (interests) {
+                                step.interests = interests;
+                                deffered.resolve(step);
+                            },
+                            function (err) {
+                                deffered.reject(err);
+                            });
+                    }, function (err) {
+                        deffered.reject(err);
+                    });
+
+                } else {
+                    step.interests = [];
+                    deffered.resolve(step);
+                }
+
+                return deffered.promise;
+            },
+           /* getInterests: function (step, options) {
                 var deffered = $q.defer();
 
                 if (options.step.interests) {
@@ -77,7 +117,6 @@ angular.module('globalbikerWebApp')
                     InterestRepository.getByStep({
                         stepId: step._id
                     }, function (interests) {
-
 
                         var defferedArray = interests.reduce(function (defferedArray, interest) {
 
@@ -103,7 +142,7 @@ angular.module('globalbikerWebApp')
                 }
 
                 return deffered.promise;
-            },
+            },*/
 
             getDistances: function (step, options) {
                 var deffered = $q.defer();
@@ -134,16 +173,16 @@ angular.module('globalbikerWebApp')
 
                     self.getPhotosAroundStep(step, options).then(function (step) {
 
-                        self.getInterests(step, options).then(function (step) {
+                        self.getInterestsAround(step, options).then(function (step) {
 
-                           self.getDistances(step, options).then(function (step) {
+                            self.getDistances(step, options).then(function (step) {
 
-                            deffered.resolve(step);
+                                deffered.resolve(step);
 
-                        }, function (err) {
-                            console.error(err);
-                            deffered.reject(err);
-                        });
+                            }, function (err) {
+                                console.error(err);
+                                deffered.reject(err);
+                            });
 
                         }, function (err) {
                             console.error(err);

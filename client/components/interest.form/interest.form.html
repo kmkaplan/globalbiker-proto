@@ -1,0 +1,52 @@
+<form novalidate role="form" name="form" ng-submit="submitForm(form)">
+    <section class="form-section">
+        <h4>Point of interest</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group required" ng-class="{ 'has-error':  form.type.$invalid, 'has-success':form.type.$valid }">
+                    <label class="control-label">Type</label>
+                    <select required name="type" ng-model="interest.type" class="form-control">
+                        <option value="interest" translate="mytourstep.interest">interest</option>
+                        <option value="bike-shops" translate="mytourstep.bike-shop">bike-shop</option>
+                        <option value="food" translate="mytourstep.food">food</option>
+                        <option value="danger" translate="mytourstep.danger">danger</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group required" ng-class="{ 'has-error':  form.name.$dirty && form.name.$invalid, 'has-success': form.name.$dirty && form.name.$valid }">
+                    <label class="control-label" translate="mytourstep.name">Name</label>
+                    <input required name="name" ng-model="interest.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
+                    <label class="error-label" ng-show="form.name.$invalid && form.name.$dirty" translate="mytourstep.name_warn">The name is required.</label>
+                </div>
+            </div>
+        </div>
+        <!--
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group required" ng-class="{ 'has-error':  form.latitude.$dirty && form.latitude.$invalid, 'has-success': form.latitude.$dirty && form.latitude.$valid }">
+                    <label class="control-label" translate="mytourstep.latitude">Latitude</label>
+                    <input required name="latitude" ng-model="interest.latitude" type="text" class="form-control" placeholder="Enter the latitude of this point ...">
+                    <label class="error-label" ng-show="form.latitude.$invalid && form.latitude.$dirty" translate="mytourstep.name_warn">The latitude is required.</label>
+                </div>
+            </div>
+             <div class="col-md-6">
+                <div class="form-group required" ng-class="{ 'has-error':  form.longitude.$dirty && form.longitude.$invalid, 'has-success': form.longitude.$dirty && form.longitude.$valid }">
+                    <label class="control-label" translate="mytourstep.longitude">Longitude</label>
+                    <input required name="longitude" ng-model="interest.longitude" type="text" class="form-control" placeholder="Enter the longitude of this point ...">
+                    <label class="error-label" ng-show="form.longitude.$invalid && form.longitude.$dirty" translate="mytourstep.name_warn">The longitude is required.</label>
+                </div>
+            </div>
+        </div>-->
+
+        <div class="form-group required" ng-class="{ 'has-error':  form.description.$dirty && form.description.$invalid, 'has-success': form.description.$dirty && form.description.$valid }">
+            <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
+            <textarea required name="description" ng-model="interest.description" type="text" class="form-control" placeholder="Enter the description of this point ..." ></textarea>
+            <label class="error-label" ng-show="form.description.$invalid && form.description.$dirty" translate="mytourstep.description_warn">The description is required.</label>
+        </div>
+
+        <div class="form-group">
+            <a ng-disabled="form.$invalid" class="btn btn-primary" ng-click="submitForm(form)"><i class="icon fa fa-plus-square"></i> {{ "mytourstep.add_to_map" | translate }}</a>
+        </div>
+    </section>
+</form>

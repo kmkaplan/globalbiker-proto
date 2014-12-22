@@ -29,6 +29,10 @@ angular.module('globalbikerWebApp')
                 var self = this;
 
                 var deffered = $q.defer();
+                
+                if (!options.interest){
+                    options.interest = {};
+                }
 
                 self.getPhotos(interest, options).then(function (photos) {
                     interest.photos = photos;

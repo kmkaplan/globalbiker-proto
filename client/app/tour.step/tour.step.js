@@ -8,21 +8,27 @@ angular.module('globalbikerWebApp')
                 abstract: true,
                 template: '<ui-view/>',
                 resolve: {
-                    step: function (tour, $stateParams, $q, tourLoaderService) {
+                    step: function (tour, $stateParams, $q, stepLoaderService) {
 
                         var deffered = $q.defer();
 
                         if ($stateParams.stepId) {
-                            var step = tour.steps.reduce(function (step, currentStep) {
-                                if (currentStep._id === $stateParams.stepId) {
-                                    return currentStep;
+
+                            stepLoaderService.loadStep($stateParams.stepId, {
+                                tour: {},
+                                step: {
+                                    distances: true,
+                                    interestsAround: {},
+                                    photosAround: {}
                                 }
-                                return step;
+                            }).then(function (step) {
+                                console.info('Step %s loaded successfully.', step._id);
+                                deffered.resolve(step);
+                            }, function (err) {
+                                console.error(err);
+                                deffered.resolve(null);
+                            });
 
-                            }, null);
-
-                            console.info('Step %s loaded successfully.', step._id);
-                            deffered.resolve(step);
                         } else {
                             console.error('Step id is not defined.');
                             deffered.resolve(null);

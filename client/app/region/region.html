@@ -41,7 +41,7 @@
                 <img ng-if="tour.photo.thumbnails.w600h400" class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
             </div>
             <div class="col-md-9">
-                <a ng-if="isAllowedToEdit(tour)" class="pull-right" href="/my-tour/{{ tour._id }}">
+                <a ng-if="securityService.isTourEditable(tour)" class="pull-right" href="/my-tour/{{ tour._id }}">
                     <i class="fa fa-edit"></i> {{ 'global.actions.edit' | translate }}
                 </a>
                 <h2>{{ tour.title }}</h2>

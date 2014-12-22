@@ -5,12 +5,6 @@ angular.module('globalbikerWebApp')
 
         $scope.isAdmin = Auth.isAdmin;
 
-        $scope.isAllowedToEdit = function (tour) {
-            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
-                return true;
-            }
-            return false;
-        }
         $scope.licenses = LicenseRepository.query();
 
         $scope.getLicense = function (photo) {

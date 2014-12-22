@@ -3,11 +3,12 @@
 
     angular.module('globalbikerWebApp').controller('TourPresentationCtrl', TourPresentationCtrl);
 
-    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService) {
+    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService) {
 
         // scope properties
+        $scope.securityService = securityService;
         $scope.mapConfig = {};
-        $scope.inEdition = isAllowedToEdit(tour) && $state.current.data.edit | false;
+        $scope.inEdition = securityService.isTourEditable(tour) && $state.current.data.edit | false;
         $scope.tinymceOptions = {
             height: '200px',
             menubar: false,
@@ -15,7 +16,6 @@
         };
 
         // scope methods
-        $scope.isAllowedToEdit = isAllowedToEdit;
         $scope.saveTour = saveTour;
         $scope.editTour = editTour;
         $scope.createStep = createStep;
@@ -120,13 +120,6 @@
                 $state.go('tour.presentation', $stateParams);
             });
             return deffered.promise;
-        }
-
-        function isAllowedToEdit(tour) {
-            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
-                return true;
-            }
-            return false;
         }
     }
 })();

@@ -3,9 +3,10 @@
 
     angular.module('globalbikerWebApp').controller('TourCreateStepCtrl', TourCreateStepCtrl);
 
-    function TourCreateStepCtrl(tour, $scope, $q, $state, Auth, StepRepository) {
+    function TourCreateStepCtrl(tour, $scope, $q, $state, Auth, StepRepository, securityService) {
 
         // scope properties
+        $scope.securityService = securityService;
         $scope.isAdmin = Auth.isAdmin;
         $scope.tinymceOptions = {
             height: '200px',
@@ -17,7 +18,6 @@
         };
 
         // scope methods
-        $scope.isAllowedToEdit = isAllowedToEdit;
         $scope.createStep = createStep;
         $scope.progress = progress;
 
@@ -26,19 +26,12 @@
 
         function init() {
 
-            if (!tour || !isAllowedToEdit(tour)) {
+            if (!tour || !securityService.isTourEditable(tour)) {
                 $state.go('home');
             } else {
                 $scope.tour = tour;
             }
         };
-
-        function isAllowedToEdit(tour) {
-            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
-                return true;
-            }
-            return false;
-        }
 
         function progress() {
             var progress = 0;

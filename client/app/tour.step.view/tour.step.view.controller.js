@@ -3,17 +3,19 @@
 
     angular.module('globalbikerWebApp').controller('TourStepViewCtrl', TourStepViewCtrl);
 
-    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService) {
+    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestLoaderService) {
 
         // scope properties
+        $scope.securityService = securityService;
         $scope.mapConfig = {};
+        $scope.interest = null
 
         // scope methods
-        $scope.isAllowedToEdit = isAllowedToEdit;
         $scope.editStep = editStep;
         $scope.openTour = openTour;
         $scope.deleteStep = deleteStep;
         $scope.createStep = createStep;
+        $scope.updateInterest = updateInterest;
 
         // init method
         init();
@@ -32,13 +34,6 @@
 
         function createStep() {
             $state.go('tour.create-step');
-        }
-
-        function isAllowedToEdit(tour) {
-            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
-                return true;
-            }
-            return false;
         }
 
         function openTour(tour) {
@@ -91,6 +86,26 @@
                     }
                 }, tour);
 
+                if (step.interests) {
+
+                    traceFeatures = traceFeatures.concat(bikeTourMapService.buildInterestsFeatures(step.interests, {
+                        mode: 'normal',
+                        callbacks: {
+                            'click': function (interest, markerLayer) {
+
+                                interestLoaderService.loadDetails(interest, {
+                                    interest: {
+                                        photos: true
+                                    }
+                                }).then(function (interest) {
+                                    $scope.selectedPointOfInterest = interest;
+                                    $scope.editSelectedPointOfInterest = false;
+                                });
+                            }
+                        }
+                    }));
+                }
+
                 if (traceFeatures) {
                     $scope.mapConfig.items = traceFeatures;
 
@@ -99,14 +114,29 @@
                     };
                 }
 
-                $scope.mapConfig.drawingTools = [{
-                    type: 'marker',
-                    created: function (map, config, point, e) {
-                        alert("created");
-                    }
+                if ($scope.securityService.isTourEditable(tour)) {
+
+                    $scope.mapConfig.drawingTools = [{
+                        type: 'marker',
+                        created: function (map, config, geometry, e) {
+                            $scope.interest = {
+                                type: 'interest',
+                                geometry: geometry
+                            };
+                            console.log('Create interest', $scope.interest);
+                            $scope.$apply();
+                        }
                     }];
+
+
+                }
             }
         };
+
+
+        function updateInterest(interest) {
+            showStepOnMap($scope.tour, $scope.step);
+        }
 
         function getStepLabel(step) {
             if (step.cityFrom.name === step.cityTo.name) {

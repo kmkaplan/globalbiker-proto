@@ -3,16 +3,16 @@
 
     angular.module('globalbikerWebApp').controller('RegionCtrl', RegionCtrl);
 
-    function RegionCtrl($scope, $q, $state, $stateParams, Auth, bikeTourMapService, tourLoaderService, RegionRepository) {
+    function RegionCtrl($scope, $q, $state, $stateParams, Auth, bikeTourMapService, tourLoaderService, RegionRepository, securityService) {
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
         $scope.mapConfig = {};
+        $scope.securityService = securityService;
 
         // scope methods
         $scope.openStep = openStep;
         $scope.openTour = openTour;
-        $scope.isAllowedToEdit = isAllowedToEdit;
 
         // init method
         init();
@@ -64,13 +64,6 @@
 
             return deffered.promise;
 
-        }
-
-        function isAllowedToEdit(tour) {
-            if (tour && Auth.isLoggedIn() && (Auth.isAdmin() || tour.userId === Auth.getCurrentUser()._id)) {
-                return true;
-            }
-            return false;
         }
 
         function openStep(step) {

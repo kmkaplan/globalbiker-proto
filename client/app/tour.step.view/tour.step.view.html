@@ -3,7 +3,7 @@
     <div class="row">
 
         <div class="col-md-6">
-           
+
             <div class="details-area">
 
                 <a ng-if="isAllowedToEdit(step)" class="btn btn-default edit-button pull-right" ng-click="editStep(step)" ng-title="{{ 'global.actions.edit' | translate }}">
@@ -32,24 +32,29 @@
 
                 <h2>{{ step | stepLabel }}</h2>
 
-                <div class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
+                <div ng-if="interest" interest-form interest="interest" on-save="updateInterest(interest)"></div>
 
-                <div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
-                    <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
-                </div>
+                <div ng-if="!interest">
 
-                <div class="row" ng-if="isAllowedToEdit(step)">
-                    <div class="col-md-6 text-center">
-                        <a class="btn btn-primary" ng-click="createStep()">
-                            <i class="fa fa-plus"></i>
-                            <span translate="global.step.create">Create a new step</span>
-                        </a>
+                    <div class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
+
+                    <div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
+                        <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
                     </div>
-                    <div class="col-md-6 text-center">
-                        <a class="btn btn-primary" ng-click="deleteStep(step)">
-                            <i class="fa fa-trash-o"></i>
-                            <span translate="global.step.remove"> Remove this step</span>
-                        </a>
+
+                    <div class="row" ng-if="isAllowedToEdit(step)">
+                        <div class="col-md-6 text-center">
+                            <a class="btn btn-primary" ng-click="createStep()">
+                                <i class="fa fa-plus"></i>
+                                <span translate="global.step.create">Create a new step</span>
+                            </a>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <a class="btn btn-primary" ng-click="deleteStep(step)">
+                                <i class="fa fa-trash-o"></i>
+                                <span translate="global.step.remove"> Remove this step</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
