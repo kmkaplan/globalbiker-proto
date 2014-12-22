@@ -11,6 +11,7 @@
         // scope methods
         $scope.selectStep = selectStep;
         $scope.selectTour = selectTour;
+        $scope.enableEdition = enableEdition;
 
         // init method
         init();
@@ -25,6 +26,7 @@
         };
 
         function selectTour(tour) {
+            enableEdition(false);
             if (tour.steps) {
                 var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(tour.steps, {
                     style: {
@@ -67,8 +69,9 @@
 
             }
         }
-        
-        function selectStep (tour, step) {
+
+        function selectStep(tour, step) {
+            enableEdition(false);
             if (tour && step) {
                 var traceFeatures = bikeTourMapService.buildStepTraceFeatures(step, {
                     style: {
@@ -103,7 +106,6 @@
                         geometry: step.geometry
                     };
                 }
-
             }
         };
 
@@ -115,6 +117,19 @@
                 return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
             }
         };
+
+        function enableEdition(enable) {
+            if (enable) {
+                $scope.mapConfig.drawingTools = [{
+                    type: 'marker',
+                    created: function (map, config, point, e) {
+                        alert("created");
+                    }
+                    }];
+            } else {
+                $scope.mapConfig.drawingTools = [];
+            }
+        }
 
     };
 })();

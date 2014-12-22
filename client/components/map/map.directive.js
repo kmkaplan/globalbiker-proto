@@ -32,6 +32,10 @@ angular.module('globalbikerWebApp')
                         mapItemsService.clearMap($scope.map);
                         mapItemsService.drawItems($scope.map, items, $scope.config);
                     });
+                    
+                    $scope.$watch('config.drawingTools', function(tools){
+                        mapCreationService.configureDrawTools($scope.map, tools, $scope.config);
+                    });
                 }
             }
         };

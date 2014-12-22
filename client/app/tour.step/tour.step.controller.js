@@ -34,6 +34,9 @@
                 $scope.step = step;
 
                 $scope.$parent.selectStep(tour, step);
+                if (isAllowedToEdit(step) && !$scope.inEdition){
+                    $scope.$parent.enableEdition(true);
+                }
             }
         };
 
