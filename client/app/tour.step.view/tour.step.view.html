@@ -1,50 +1,64 @@
 <div class="step-description-area">
 
-    <a ng-if="isAllowedToEdit(step)" class="btn btn-default edit-button pull-right" ng-click="editStep(step)" ng-title="{{ 'global.actions.edit' | translate }}">
-        <i class="fa fa-pencil-square-o"></i>
-    </a>
+    <div class="row">
 
-    <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>
+        <div class="col-md-6">
+           
+            <div class="details-area">
 
-    <div class="icon-bar">
+                <a ng-if="isAllowedToEdit(step)" class="btn btn-default edit-button pull-right" ng-click="editStep(step)" ng-title="{{ 'global.actions.edit' | translate }}">
+                    <i class="fa fa-pencil-square-o"></i>
+                </a>
 
-        <div ng-visible="step.interest" class="tour-icon rating interest">
-            <label>Interest</label>
-            <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>
+                <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>
+
+                <div class="icon-bar">
+
+                    <div ng-visible="step.interest" class="tour-icon rating interest">
+                        <label>Interest</label>
+                        <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>
+                    </div>
+
+                    <div ng-visible="step.difficulty" class="tour-icon rating difficulty">
+                        <label>Difficulty</label>
+                        <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="step.difficulty" max="3"></rating>
+                    </div>
+
+                    <div class="tour-travel-with-icon" travel-with-icon model="tour.travelWith" in-edition="false"></div>
+
+                    <div class="tour-keyword-icons" keyword-icons model="tour.keywords" in-edition="false"></div>
+
+                </div>
+
+                <h2>{{ step | stepLabel }}</h2>
+
+                <div class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
+
+                <div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
+                    <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
+                </div>
+
+                <div class="row" ng-if="isAllowedToEdit(step)">
+                    <div class="col-md-6 text-center">
+                        <a class="btn btn-primary" ng-click="createStep()">
+                            <i class="fa fa-plus"></i>
+                            <span translate="global.step.create">Create a new step</span>
+                        </a>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <a class="btn btn-primary" ng-click="deleteStep(step)">
+                            <i class="fa fa-trash-o"></i>
+                            <span translate="global.step.remove"> Remove this step</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div ng-visible="step.difficulty" class="tour-icon rating difficulty">
-            <label>Difficulty</label>
-            <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="step.difficulty" max="3"></rating>
+        <div class="col-md-6">
+            <div class="tour-map-area responsive-map-area smart-area smart-map-area">
+                <div class="tour-map" map config="mapConfig"></div>
+            </div>
         </div>
-
-        <div class="tour-travel-with-icon" travel-with-icon model="tour.travelWith" in-edition="false"></div>
-
-        <div class="tour-keyword-icons" keyword-icons model="tour.keywords" in-edition="false"></div>
-
     </div>
-
-    <h2>{{ step | stepLabel }}</h2>
-
-    <div class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
-
-    <div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
-        <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
-    </div>
-
-    <div class="row" ng-if="isAllowedToEdit(step)">
-        <div class="col-md-6 text-center">
-            <a class="btn btn-primary" ng-click="createStep()">
-                <i class="fa fa-plus"></i>
-                <span translate="global.step.create">Create a new step</span>
-            </a>
-        </div>
-        <div class="col-md-6 text-center">
-            <a class="btn btn-primary" ng-click="deleteStep(step)">
-                <i class="fa fa-trash-o"></i>
-                <span translate="global.step.remove"> Remove this step</span>
-            </a>
-        </div>
-    </div>
-
 </div>

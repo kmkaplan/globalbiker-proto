@@ -3,10 +3,10 @@
 
     angular.module('globalbikerWebApp').controller('TourPresentationCtrl', TourPresentationCtrl);
 
-    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth) {
+    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService) {
 
         // scope properties
-        $scope.isAdmin = Auth.isAdmin;
+        $scope.mapConfig = {};
         $scope.inEdition = isAllowedToEdit(tour) && $state.current.data.edit | false;
         $scope.tinymceOptions = {
             height: '200px',
@@ -32,7 +32,7 @@
             } else {
                 $scope.tour = tour;
 
-                $scope.$parent.selectTour(tour);
+                showTourOnMap(tour);
             }
         };
 
@@ -45,10 +45,63 @@
                 notify: false
             });
         }
-        
-        function createStep(){
+
+        function createStep() {
             $state.go('tour.create-step');
         }
+        
+        function showTourOnMap(tour) {
+            if (tour.steps) {
+                var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(tour.steps, {
+                    style: {
+                        color: '#34a0b4',
+                        width: 3,
+                        weight: 6,
+                        opacity: 0.8
+                    },
+                    label: function (step) {
+                        return getStepLabel(step);
+                    },
+                    tour: {
+                        bounds: {
+                            show: true
+                        }
+                    },
+                    callbacks: {
+                        'click': function (step) {
+                            $state.go('step-details', {
+                                id: step._id
+                            }, {
+                                inherit: false
+                            });
+                        }
+                    }
+                });
+
+                var geometries = tour.steps.reduce(function (geometries, step) {
+                    geometries.push(step.geometry);
+                    return geometries;
+                }, []);
+
+                if (traceFeatures) {
+                    $scope.mapConfig.items = traceFeatures;
+
+                    $scope.mapConfig.bounds = {
+                        geometry: geometries
+                    };
+                }
+
+            }
+        }
+        
+        function getStepLabel(step) {
+            if (step.cityFrom.name === step.cityTo.name) {
+                // same source & destination
+                return step.cityFrom.name;
+            } else {
+                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
+            }
+        };
 
         function saveTour(tour) {
             var deffered = $q.defer();

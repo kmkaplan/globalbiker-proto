@@ -1,52 +1,66 @@
 <div class="step-description-area">
 
-    <a class="btn btn-primary edit-button pull-right" ng-click="saveStep(step)" ng-title="{{ 'global.actions.save' | translate }}">
-        <i class="fa fa-check"></i>
-    </a>
-    <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>
-
-    <div class="icon-bar">
-
-        <div ng-visible="step.interest" class="tour-icon rating interest in-edition">
-            <label>Interest</label>
-            <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="!inEdition" ng-model="step.interest" max="5"></rating>
-        </div>
-
-        <div ng-visible="step.difficulty" class="tour-icon rating difficulty in-edition">
-            <label>Difficulty</label>
-            <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="!inEdition" ng-model="step.difficulty" max="3"></rating>
-        </div>
-
-        <div class="tour-travel-with-icon" travel-with-icon model="tour.travelWith" in-edition="false"></div>
-
-        <div class="tour-keyword-icons" keyword-icons model="tour.keywords" in-edition="false"></div>
-
-    </div>
-
-    <h2>{{ step | stepLabel }}</h2>
-
     <div class="row">
+
         <div class="col-md-6">
-            <div class="form-group">
-                <label translate="global.step.departure">City of departure</label>
-                <div geonames-city-input ng-model="step.cityFrom" placeholder="'Paris, Lyon...'"></div>
+
+            <div class="details-area">
+
+                <a class="btn btn-primary edit-button pull-right" ng-click="saveStep(step)" ng-title="{{ 'global.actions.save' | translate }}">
+                    <i class="fa fa-check"></i>
+                </a>
+                <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>
+
+                <div class="icon-bar">
+
+                    <div ng-visible="step.interest" class="tour-icon rating interest in-edition">
+                        <label>Interest</label>
+                        <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" ng-model="step.interest" max="5"></rating>
+                    </div>
+
+                    <div ng-visible="step.difficulty" class="tour-icon rating difficulty in-edition">
+                        <label>Difficulty</label>
+                        <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" ng-model="step.difficulty" max="3"></rating>
+                    </div>
+
+                    <div class="tour-travel-with-icon" travel-with-icon model="tour.travelWith" in-edition="false"></div>
+
+                    <div class="tour-keyword-icons" keyword-icons model="tour.keywords" in-edition="false"></div>
+
+                </div>
+
+                <h2>{{ step | stepLabel }}</h2>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label translate="global.step.departure">City of departure</label>
+                            <div geonames-city-input ng-model="step.cityFrom" placeholder="'Paris, Lyon...'"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label translate="global.step.arrival">City of arrival</label>
+                            <div geonames-city-input ng-model="step.cityTo" placeholder="'Nantes, Bordeaux...'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Description</label>
+                    <textarea ui-tinymce="tinymceOptions" name="description" ng-model="step.description" type="text" class="form-control"></textarea>
+                </div>
+
+                <div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
+                    <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
+                </div>
             </div>
         </div>
+
         <div class="col-md-6">
-            <div class="form-group">
-                <label translate="global.step.arrival">City of arrival</label>
-                <div geonames-city-input ng-model="step.cityTo" placeholder="'Nantes, Bordeaux...'"></div>
+            <div class="tour-map-area responsive-map-area smart-area smart-map-area">
+                <div class="tour-map" map config="mapConfig"></div>
             </div>
         </div>
     </div>
-
-    <div>
-        <label>Description</label>
-        <textarea ui-tinymce="tinymceOptions" name="description" ng-model="step.description" type="text" class="form-control"></textarea>
-    </div>
-
-    <div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
-        <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
-    </div>
-
 </div>

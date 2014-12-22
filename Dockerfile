@@ -1,54 +1,35 @@
-#
-# Node.js w/ Bower & Grunt runtime Dockerfile
-#
-# https://github.com/dockerfile/nodejs-bower-grunt-runtime
-#
-# inspired by DigitallySeamless/nodejs-bower-grunt-runtime
-#
-
-# Pull base image.
+## Adapted from https://github.com/dockerfile/nodejs-bower-grunt-runtime
 FROM dockerfile/nodejs-bower-grunt
 
 MAINTAINER Nicolas Toublanc <n.toublanc@gmail.com>
 
-# install via APT
+# update APT
 RUN apt-get update && \
     apt-get install -q -y ruby-compass ruby-sass libvips-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# install via gem
 RUN gem install --no-ri --no-rdoc compass
 
-# define working directory (to build app)
 WORKDIR /app
 
-# install npm dependencies (dev + prod)
-ADD package.json /app/
-RUN npm install --dev
-
-# install bower dependencies (prod only)
-ADD bower.json /app/
-ADD .bowerrc /app/
-RUN bower install --production --allow-root --config.interactive=false
-
-# production mode
-ENV NODE_ENV production
-
-# buid application
 ADD . /app
-RUN grunt build:dist
 
-# define working directory (to run app)
-WORKDIR /app/dist
+# ADD package.json /app/package.json
+RUN npm install
 
-# set mongo URL (using mongodb linked docker container)
-ENV MONGOLAB_URI mongodb://mongodb/biketouringmap
+# ADD bower.json /app/bower.json
+RUN bower install --allow-root --config.interactive=false
+
+RUN grunt build:dist --force
+
+RUN chmod 755 /app/scripts/*.sh
+
+ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
 
 VOLUME ["/app/server/dist/upload"]
 VOLUME ["/app/server/dist/photos"]
 
-# define default command.
-CMD ["npm", "start"]
+CMD ["/app/scripts/run.sh"]
 
 # Expose ports.
 EXPOSE 8080

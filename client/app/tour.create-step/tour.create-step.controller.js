@@ -30,8 +30,6 @@
                 $state.go('home');
             } else {
                 $scope.tour = tour;
-
-                $scope.$parent.selectTour(tour);
             }
         };
 

@@ -1,17 +1,5 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container tour-page page" ng-if="tour">
-
-    <div class="row">
-
-        <div class="col-md-6">
-            <div class="details-area" ui-view></div>
-        </div>
-        <div class="col-md-6">
-            <div class="tour-map-area responsive-map-area smart-area smart-map-area">
-                <div class="tour-map" map config="mapConfig"></div>
-            </div>
-        </div>
-    </div>
+<div class="container tour-page page" ng-if="tour" ui-view>
 
 </div>

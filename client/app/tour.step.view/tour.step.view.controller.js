@@ -3,10 +3,10 @@
 
     angular.module('globalbikerWebApp').controller('TourStepViewCtrl', TourStepViewCtrl);
 
-    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository) {
+    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService) {
 
         // scope properties
-        $scope.isAdmin = Auth.isAdmin;
+        $scope.mapConfig = {};
 
         // scope methods
         $scope.isAllowedToEdit = isAllowedToEdit;
@@ -26,10 +26,7 @@
                 $scope.tour = tour;
                 $scope.step = step;
 
-                $scope.$parent.selectStep(tour, step);
-                if (isAllowedToEdit(step) && !$scope.inEdition){
-                    $scope.$parent.enableEdition(true);
-                }
+                showStepOnMap(tour, step);
             }
         };
 
@@ -65,5 +62,59 @@
                     });
             }
         }
+
+        function showStepOnMap(tour, step) {
+            if (tour && step) {
+                var traceFeatures = bikeTourMapService.buildStepTraceFeatures(step, {
+                    style: {
+                        color: '#34a0b4',
+                        width: 3,
+                        weight: 6,
+                        opacity: 0.8
+                    },
+                    label: function (step) {
+                        return getStepLabel(step);
+                    },
+                    step: {
+                        bounds: {
+                            show: true
+                        }
+                    },
+                    callbacks: {
+                        'click': function (step) {
+                            $state.go('step-details', {
+                                id: step._id
+                            }, {
+                                inherit: false
+                            });
+                        }
+                    }
+                }, tour);
+
+                if (traceFeatures) {
+                    $scope.mapConfig.items = traceFeatures;
+
+                    $scope.mapConfig.bounds = {
+                        geometry: step.geometry
+                    };
+                }
+
+                $scope.mapConfig.drawingTools = [{
+                    type: 'marker',
+                    created: function (map, config, point, e) {
+                        alert("created");
+                    }
+                    }];
+            }
+        };
+
+        function getStepLabel(step) {
+            if (step.cityFrom.name === step.cityTo.name) {
+                // same source & destination
+                return step.cityFrom.name;
+            } else {
+                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
+            }
+        };
     }
 })();
