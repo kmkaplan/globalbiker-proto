@@ -11,7 +11,6 @@
         $scope.securityService = securityService;
 
         // scope methods
-        $scope.openStep = openStep;
         $scope.openTour = openTour;
 
         // init method
@@ -66,24 +65,12 @@
 
         }
 
-        function openStep(step) {
-            $state.go('step-details', {
-                id: step._id
+        function openTour(tour) {
+            $state.go('tour.presentation', {
+                id: tour._id
             }, {
                 inherit: false
             });
-        }
-
-        function openTour(tour) {
-            if (tour.steps && tour.steps.length === 1) {
-                $scope.openStep(tour.steps[0]);
-            } else {
-                $state.go('tour.presentation', {
-                    id: tour._id
-                }, {
-                    inherit: false
-                });
-            }
         }
 
         function loadToursDetailsByGeometry(geometry) {

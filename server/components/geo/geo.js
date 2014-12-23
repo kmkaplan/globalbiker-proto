@@ -161,7 +161,13 @@ exports.buildLine = function (coordinates) {
 }
 
 exports.coordinatesToNearCriterias = function (coordinates, distance) {
+    
+    if (coordinates.length === 0){
+        return [];
+    }
 
+    distance = parseInt(distance);
+    
     var simplifiedCoordinates = coordinates; //geo.simplify(coordinates, 0.1, false)
 
     var points = geojsonTools.complexify(simplifiedCoordinates, distance / 1000);
@@ -190,6 +196,9 @@ exports.coordinatesToNearCriterias = function (coordinates, distance) {
 };
 
 exports.geometryToNearCriterias = function (geometry, distance) {
+    
+    distance = parseInt(distance);
+    
     if (geometry && geometry.coordinates) {
         var nearCriterias;
         if (geometry.type === 'LineString') {
