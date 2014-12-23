@@ -39,10 +39,10 @@ L.GeojsonItem = L.FeatureGroup.extend({
 
         // console.log('Create layer for item:', item);
 
-        if (!item.properties.options){
+        if (!item.properties.options) {
             item.properties.options = {};
         }
-        
+
         var layer;
 
         var coordsToLatLng = this.coordsToLatLng;
@@ -63,6 +63,18 @@ L.GeojsonItem = L.FeatureGroup.extend({
                 layer.bindLabel(item.properties.label);
             }
 
+            if (item.properties.events) {
+                // register events
+                for (var eventKey in item.properties.events) {
+                    if (item.properties.events.hasOwnProperty(eventKey)) {
+                        
+                        layer.on(eventKey, function(event){
+                            item.properties.events[eventKey](item, event);
+                        });
+                    }
+                }
+
+            }
             this._addToLayer(item, layer, true);
 
             break;
@@ -82,16 +94,6 @@ L.GeojsonItem = L.FeatureGroup.extend({
             } else {
                 polylineOptions = {}
             }
-
-            /*//  add background layer
-            var backgroundPolylineOptions = angular.copy(polylineOptions);
-            backgroundPolylineOptions.opacity = 0.4;
-            backgroundPolylineOptions.color = 'black';
-            backgroundPolylineOptions.weight = 10;
-
-            layer = new L.Polyline(latlngs, backgroundPolylineOptions);
-
-            this._addToLayer(item, layer, false);*/
 
             //  add foreground layer
             layer = new L.Polyline(latlngs, polylineOptions);

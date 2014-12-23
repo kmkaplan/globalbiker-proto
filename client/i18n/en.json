@@ -6,7 +6,8 @@
         "logout": "Log out",
         "actions": {
             "edit": "edit",
-            "save": "save"
+            "save": "save",
+            "remove": "remove"
         },
         "step": {
             "departure": "City of departure",

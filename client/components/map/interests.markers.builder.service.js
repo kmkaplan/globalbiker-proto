@@ -12,8 +12,11 @@
 
         return service;
 
-        function build(interests) {
+        function build(interests, events) {
 
+            if (!interests) {
+                interests = [];
+            }
             var features = interests.reduce(function (features, interest) {
                 var feature = {
                     type: 'Point',
@@ -66,7 +69,14 @@
                     console.warn('Unknown type "%s" for interest %s.', interest.type, interest._id);
                     break;
                 }
-
+                if (events) {
+                    feature.properties.events = events
+                };
+                feature.model = {
+                    type: 'interest',
+                    interest: interest
+                }
+                feature.properties.label = interest.name;
                 features.push(feature);
                 return features;
             }, []);

@@ -8,14 +8,12 @@
         // scope properties
         $scope.securityService = securityService;
         $scope.mapConfig = {};
-        $scope.interest = null
 
         // scope methods
         $scope.editStep = editStep;
         $scope.openTour = openTour;
         $scope.deleteStep = deleteStep;
         $scope.createStep = createStep;
-        $scope.updateInterest = updateInterest;
 
         // init method
         init();
@@ -77,9 +75,7 @@
                     }
                 }, tour);
 
-                if (step.interests) {
-                    traceFeatures = traceFeatures.concat(interestsMarkerBuilderService.build(step.interests));
-                }
+                traceFeatures = traceFeatures.concat(interestsMarkerBuilderService.build(step.interests));
 
                 if (traceFeatures) {
                     $scope.mapConfig.items = traceFeatures;
@@ -88,32 +84,10 @@
                         geometry: step.geometry
                     };
                 }
-
-                if ($scope.securityService.isTourEditable(tour)) {
-
-                    $scope.mapConfig.drawingTools = [{
-                        type: 'marker',
-                        created: function (map, config, geometry, e) {
-                            $scope.interest = {
-                                type: 'interest',
-                                geometry: geometry
-                            };
-                            console.log('Create interest', $scope.interest);
-                            $scope.$apply();
-                        }
-                    }];
-
-
-                }
             }
         };
 
-
-        function updateInterest(interest) {
-            showStepOnMap($scope.tour, $scope.step);
-        }
-
-        function getStepLabel(step) {
+       function getStepLabel(step) {
             if (step.cityFrom.name === step.cityTo.name) {
                 // same source & destination
                 return step.cityFrom.name;

@@ -6,7 +6,8 @@
         "logout": "Se déconnecter",
         "actions": {
             "edit": "éditer",
-            "save": "sauvegarder"
+            "save": "sauvegarder",
+            "remove": "supprimer"
         },
         "step": {
             "departure": "Ville de départ",

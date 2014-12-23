@@ -120,13 +120,23 @@ exports.searchAroundStep = function (req, res) {
         if (Object.prototype.toString.call(distance) === '[object Array]') {
             // different distance depending of type of point
 
+            var extraCriteriaByDistance = distance.reduce(function (extraCriteriaByDistance, distance){
+
+                if (typeof(extraCriteriaByDistance[distance]) === 'undefined'){
+                    extraCriteriaByDistance[distance] = [];
+                }
+                
+                extraCriteriaByDistance[distance].push(extraCriteria[extraCriteriaByDistance.length]);
+
+                return extraCriteriaByDistance;
+
+            }, []);
+
             // TODO regrouper par distance
 
-            var i = 0;
-
             var promises = distance.reduce(function (promises, distance) {
-                
-                var criteriaArray = geo.geometryToNearCriterias(step.geometry, 2000 /*distance*/);
+
+                var criteriaArray = geo.geometryToNearCriterias(step.geometry, 2000 /*distance*/ );
 
                 // TODO cloner l'objet si on ajoute d'autres extra criteria
 
