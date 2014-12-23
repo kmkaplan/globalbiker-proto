@@ -54,12 +54,33 @@ L.GeojsonItem = L.FeatureGroup.extend({
 
             var markerOptions = {};
 
-            if (item.properties.awesomeIcon) {
-                markerOptions.icon = L.AwesomeMarkers.icon(item.properties.awesomeIcon);
+            if (item.properties.circle) {
+                
+                markerOptions = {
+                        radius: 5,
+                        fillColor: 'grey',
+                        color: 'black',
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.3
+                    };
+                
+                angular.extend(markerOptions, item.properties.circle);
+                
+                // circle marker
+                layer = L.circleMarker(latlng, markerOptions);
+            } else {
+                // classic marker
+                if (item.properties.awesomeIcon) {
+                    // marker with icon
+                    markerOptions.icon = L.AwesomeMarkers.icon(item.properties.awesomeIcon);
+                }
+
+                layer = new L.Marker(latlng, markerOptions);
             }
-            layer = new L.Marker(latlng, markerOptions);
 
             if (item.properties.label) {
+                // bind label
                 layer.bindLabel(item.properties.label);
             }
 
@@ -67,8 +88,8 @@ L.GeojsonItem = L.FeatureGroup.extend({
                 // register events
                 for (var eventKey in item.properties.events) {
                     if (item.properties.events.hasOwnProperty(eventKey)) {
-                        
-                        layer.on(eventKey, function(event){
+
+                        layer.on(eventKey, function (event) {
                             item.properties.events[eventKey](item, event);
                         });
                     }

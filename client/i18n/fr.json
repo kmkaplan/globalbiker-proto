@@ -16,6 +16,17 @@
             "to": "à",
             "remove": "Supprimer cette étape",
             "create": "Créer une nouvelle étape"
+        },
+        "interest":{
+            "type": {
+                "interest": "intérêt",
+                "bike-shop": "magasin de vélo",
+                "food": "nourriture",
+                "danger": "danger",
+                "accomodation": "logement",
+                "hobbies": "loisirs",
+                "information": "points d'information"
+            }
         }
     },
     "signup": {
@@ -113,10 +124,6 @@
         "negative_elevation_gain": "Dénivelé négatif",
         "points_number": "Nombre de points",
         "new": "Nouveau point d'intérêt",
-        "interest": "intérêt",
-        "bike-shop": "magasin de vélo",
-        "food": "nourriture",
-        "danger": "danger",
         "name": "name",
         "name_warn": "Le nom est requis.",
         "description": "description",

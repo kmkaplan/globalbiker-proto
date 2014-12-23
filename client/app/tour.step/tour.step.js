@@ -20,8 +20,7 @@ angular.module('globalbikerWebApp')
                                     distances: true,
                                     interestsAround: {
                                         distance: 200, //[10000, 1000, 10, 5000],
-                                        // missing: 'water-point', 
-                                        type: ['interest', 'bike-shops', 'danger', 'food']
+                                        type: ['danger', 'information', 'water-point', 'bike-shops', 'interest', 'hobbies', 'accomodation', 'food', 'water-point', 'wc', 'velotoulouse'/*, 'merimee'*/]
                                     },
                                     photosAround: {}
                                 }

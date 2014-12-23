@@ -35,7 +35,7 @@ angular.module('globalbikerWebApp')
             InterestRepository.searchAroundStep({
                     stepId: stepId,
                     distance: 200,
-                    type: ['water-point', 'velotoulouse', 'interest', 'food', 'bike-shops', 'wc']
+                    type: ['water-point', 'velotoulouse', 'interest', 'food', 'bike-shops', 'wc', 'merimee', 'water-point', 'wc', 'velotoulouse']
                 }, function (markers) {
                     $scope.waterPoints = [];
                     $scope.velotoulouses = [];

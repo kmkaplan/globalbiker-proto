@@ -16,6 +16,17 @@
             "to": "to",
             "remove": "Remove this step",
             "create": "Create a new step"
+        },
+        "interest":{
+            "type": {
+                "interest": "interest",
+                "bike-shop": "bike shop",
+                "food": "food",
+                "danger": "danger",
+                "accomodation": "accomodation",
+                "hobbies": "hobbies",
+                "information": "information"
+            }
         }
     },
     "signup": {
@@ -113,10 +124,6 @@
         "negative_elevation_gain": "Negative elevation gain",
         "points_number": "Number of points",
         "new": "New point of interest",
-        "interest": "interest",
-        "bike-shop": "bike-shop",
-        "food": "food",
-        "danger": "danger",
         "name": "name",
         "name_warn": "The name is required.",
         "description": "description",
