@@ -78,6 +78,73 @@ exports.searchNearPoint = function (searchCriteria, types) {
     return deffered.promise;
 };
 
+exports._getStepPromisesSearchAroundStep = function (step, distance, types) {
+
+    var stepId = step._id;
+    
+    var promises = [];
+
+    if (step.geometry && step.geometry.coordinates && step.geometry.coordinates !== null) {
+
+        if (Object.prototype.toString.call(distance) === '[object Array]') {
+            // different distance depending of type of point
+
+            var i = 0;
+
+            var typesByDistance = distance.reduce(function (typesByDistance, d) {
+
+                if (typeof (typesByDistance[d]) === 'undefined') {
+                    typesByDistance[d] = [];
+                }
+
+                var t = types[i++];
+
+                typesByDistance[d].push(t);
+
+                return typesByDistance;
+
+            }, []);
+
+            for (var d in typesByDistance) {
+                if (typesByDistance.hasOwnProperty(d)) {
+
+                    var typesForDistance = typesByDistance[d];
+
+                    console.info('Search interests for distance %d with %d types.', d, typesForDistance.length);
+
+                    var criteriaArray = geo.geometryToNearCriterias(step.geometry, d);
+
+                    // query database
+                    promises = criteriaArray.reduce(function (promises, searchCriteria) {
+                        var promise = exports.searchNearPoint(searchCriteria, typesForDistance);
+                        promises.push(promise);
+                        return promises;
+                    }, promises);
+                }
+            }
+
+        } else {
+
+            console.info('Search interests for distance %d.', distance);
+
+            var criteriaArray = geo.geometryToNearCriterias(step.geometry, distance);
+
+            // query database
+            promises = criteriaArray.reduce(function (promises, searchCriteria) {
+                var promise = exports.searchNearPoint(searchCriteria, types);
+                promises.push(promise);
+                return promises;
+            }, []);
+
+        }
+    }
+
+    // add interests linked to this step
+    promises.push(exports.findByStep(stepId));
+
+    return promises;
+}
+
 exports.searchAroundStep = function (req, res) {
 
     var stepId = req.query.stepId;
@@ -116,68 +183,7 @@ exports.searchAroundStep = function (req, res) {
             return handleError(step, err);
         }
 
-        // convert geometry to search criteria array
-
-        var promises = [];
-
-        if (step.geometry && step.geometry.coordinates && step.geometry.coordinates !== null) {
-
-            if (Object.prototype.toString.call(distance) === '[object Array]') {
-                // different distance depending of type of point
-
-                var i = 0;
-
-                var typesByDistance = distance.reduce(function (typesByDistance, d) {
-
-                    if (typeof (typesByDistance[d]) === 'undefined') {
-                        typesByDistance[d] = [];
-                    }
-
-                    var t = types[i++];
-
-                    typesByDistance[d].push(t);
-
-                    return typesByDistance;
-
-                }, []);
-
-                for (var d in typesByDistance) {
-                    if (typesByDistance.hasOwnProperty(d)) {
-
-                        var typesForDistance = typesByDistance[d];
-
-                        console.info('Search interests for distance %d with %d types.', d, typesForDistance.length);
-
-                        var criteriaArray = geo.geometryToNearCriterias(step.geometry, d);
-
-                        // query database
-                        promises = criteriaArray.reduce(function (promises, searchCriteria) {
-                            var promise = exports.searchNearPoint(searchCriteria, typesForDistance);
-                            promises.push(promise);
-                            return promises;
-                        }, promises);
-                    }
-                }
-
-            } else {
-
-                console.info('Search interests for distance %d.', distance);
-
-                var criteriaArray = geo.geometryToNearCriterias(step.geometry, distance);
-
-                // query database
-                promises = criteriaArray.reduce(function (promises, searchCriteria) {
-                    var promise = exports.searchNearPoint(searchCriteria, types);
-                    promises.push(promise);
-                    return promises;
-                }, []);
-
-            }
-
-        }
-
-        // add interests linked to this step
-        promises.push(exports.findByStep(stepId));
+        var promises = exports._getStepPromisesSearchAroundStep(step, distance, types);
 
         console.info('Synchronize %d promises.', promises.length);
 
@@ -197,6 +203,31 @@ exports.searchAroundTour = function (req, res) {
     if (!req.query.tourId) {
         return res.send(400, 'Parameter tourId is missing');
     }
+    
+    var types = null;
+
+    if (req.query.type) {
+        types = req.query.type;
+    }
+
+    var distance;
+    if (req.query.distance) {
+        if (Object.prototype.toString.call(req.query.distance) === '[object Array]') {
+
+            if (Object.prototype.toString.call(req.query.type) !== '[object Array]') {
+                return res.send(400, 'Type should be an array.');
+            }
+
+            if (req.query.distance.length !== req.query.type.length) {
+                return res.send(400, 'Type and distance arrays should have the same size (%d != %d)', req.query.distance.length, req.query.type.length);
+            }
+        }
+
+        distance = req.query.distance;
+
+    } else {
+        distance = 200;
+    }
 
     var tourId = req.query.tourId;
     Step.find({
@@ -208,34 +239,13 @@ exports.searchAroundTour = function (req, res) {
             return handleError(res, err);
         }
 
+        var promises = steps.reduce(function (promises, step) {
+            var stepPromises = exports._getStepPromisesSearchAroundStep(step, distance, types);
 
-        var extraCriteria = {};
-
-        if (req.query.type) {
-            extraCriteria.type = req.query.type;
-        }
-
-        var distance;
-        if (req.query.distance) {
-            distance = parseInt(req.query.distance);
-        } else {
-            distance = 200;
-        }
-
-        var criteriaArray = steps.reduce(function (criteriaArray, step) {
-
-            // convert geometry to search criteria array
-            return criteriaArray.concat(geo.geometryToNearCriterias(step.geometry, distance));
-
-            return criteriaArray;
+            return promises.concat(stepPromises);
         }, []);
 
-        // query database
-        var promises = criteriaArray.reduce(function (promises, searchCriteria) {
-            var promise = exports.searchNearPoint(searchCriteria, extraCriteria);
-            promises.push(promise);
-            return promises;
-        }, []);
+        console.info('Synchronize %d promises.', promises.length);
 
         Q.all(promises).then(
             function (results) {

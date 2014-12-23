@@ -17,7 +17,6 @@ angular.module('globalbikerWebApp')
                             stepLoaderService.loadStep($stateParams.stepId, {
                                 tour: {},
                                 step: {
-                                    distances: true,
                                     interestsAround: {
                                         distance: [100, 2000, 100, 2000, 7000, 7000, 2000, 2000, 100, 100, 100],
                                         type: ['danger', 'information', 'water-point', 'bike-shops', 'interest', 'hobbies', 'accomodation', 'food', 'water-point', 'wc', 'velotoulouse'/*, 'merimee'*/]

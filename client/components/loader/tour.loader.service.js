@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('globalbikerWebApp')
-    .service('tourLoaderService', function ( $q, TourRepository, PhotoRepository, StepRepository, photoLoaderService) {
+    .service('tourLoaderService', function ($q, TourRepository, PhotoRepository, InterestRepository, StepRepository, photoLoaderService) {
         // AngularJS will instantiate a singleton by calling "new" on this function
 
         return {
-            
+
             getTour: function (tourId, options) {
                 var deffered = $q.defer();
 
@@ -104,16 +104,45 @@ angular.module('globalbikerWebApp')
                 return deffered.promise;
 
             },
+            getInterestsAround: function (tour, options) {
+                var deffered = $q.defer();
+
+                if (options.interestsAround) {
+
+                    if (!options.interestsAround.distance) {
+                        options.interestsAround.distance = 10;
+                    }
+
+                    InterestRepository.searchAroundTour({
+                        tourId: tour._id,
+                        distance: options.interestsAround.distance,
+                        type: options.interestsAround.type
+                    }, function (interests) {
+                        tour.interests = interests;
+                        deffered.resolve(tour);
+                    }, function (err) {
+                        deffered.reject(err);
+                    });
+
+                } else {
+                    tour.interests = [];
+                    deffered.resolve(tour);
+                }
+
+                return deffered.promise;
+            },
             loadDetails: function (tour, options) {
                 var self = this;
 
                 var deffered = $q.defer();
 
-                    self.getTourPhoto(tour, options).then(function (tour) {
+                self.getTourPhoto(tour, options).then(function (tour) {
 
-                        self.getPhotosAroundTour(tour, options).then(function (tour) {
+                    self.getPhotosAroundTour(tour, options).then(function (tour) {
 
-                            self.getSteps(tour, options).then(function (tour) {
+                        self.getSteps(tour, options).then(function (tour) {
+
+                            self.getInterestsAround(tour, options).then(function (tour) {
                                 deffered.resolve(tour);
 
                             }, function (err) {
@@ -130,6 +159,11 @@ angular.module('globalbikerWebApp')
                         console.error(err);
                         deffered.reject(err);
                     });
+
+                }, function (err) {
+                    console.error(err);
+                    deffered.reject(err);
+                });
 
                 return deffered.promise;
             },

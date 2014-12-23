@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourPresentationCtrl', TourPresentationCtrl);
 
-    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService) {
+    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService, interestsMarkerBuilderService) {
 
         // scope properties
         $scope.securityService = securityService;
@@ -82,6 +82,8 @@
                     geometries.push(step.geometry);
                     return geometries;
                 }, []);
+
+                traceFeatures = traceFeatures.concat(interestsMarkerBuilderService.build(tour.interests));
 
                 if (traceFeatures) {
                     $scope.mapConfig.items = traceFeatures;

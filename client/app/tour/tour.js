@@ -16,7 +16,11 @@ angular.module('globalbikerWebApp')
                         if ($stateParams.id) {
 
                             tourLoaderService.loadTour($stateParams.id, {
-                                steps: {}
+                                steps: {},
+                                interestsAround: {
+                                    distance: 10000,
+                                    type: ['interest', 'hobbies']
+                                }
                             }).then(function (tour) {
                                 console.info('Tour "%s" loaded successfully.', tour.title);
                                 deffered.resolve(tour);
@@ -29,7 +33,7 @@ angular.module('globalbikerWebApp')
                             console.error('Tour id is not defined.');
                             deffered.resolve(null);
                         }
-                        
+
                         return deffered.promise;
                     }
                 }

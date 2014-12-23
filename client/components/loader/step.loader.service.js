@@ -81,22 +81,9 @@ angular.module('globalbikerWebApp')
                         type: options.step.interestsAround.type
                     }, function (interests) {
 
-                        var defferedArray = interests.reduce(function (defferedArray, interest) {
+                        step.interests = interests;
 
-                            defferedArray.push(interestLoaderService.loadDetails(interest, {
-                                interest: options.step.interestsAround
-                            }));
-                            return defferedArray;
-
-                        }, []);
-
-                        $q.all(defferedArray).then(function (interests) {
-                                step.interests = interests;
-                                deffered.resolve(step);
-                            },
-                            function (err) {
-                                deffered.reject(err);
-                            });
+                        deffered.resolve(step);
                     }, function (err) {
                         deffered.reject(err);
                     });
