@@ -4,7 +4,7 @@
 
     angular.module('globalbikerWebApp').factory('mapCreationService', mapCreationService);
 
-    function mapCreationService(extendedMapMathsService, leafletGeojsonService) {
+    function mapCreationService(extendedMapMathsService) {
 
         var service = {
             create: create,
@@ -18,7 +18,14 @@
 
             var map = L.map(element, {});
 
-            L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg', {}).addTo(map);
+            var url;
+            if (config.url){
+                url = config.url;
+            }else{
+                url = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg';
+            }
+            
+            L.tileLayer(url, {}).addTo(map);
 
             return map;
         }
@@ -104,16 +111,11 @@
 
                 if (callback) {
 
-                    if (type === 'marker') {
-                        var geometry = leafletGeojsonService.pointToGeoJSON(layer)
 
-                        callback(map, config, geometry, e);
-                    } else if (type === 'polyline') {
+                    var geojson = layer.toGeoJSON();
 
-                        /*  var points = getPointsFromLayer(layer);
+                    callback(map, config, geojson, e);
 
-                        callback(map, config, points, e);*/
-                    }
                 }
 
             });

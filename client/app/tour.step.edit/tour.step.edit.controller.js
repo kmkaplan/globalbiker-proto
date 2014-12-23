@@ -6,7 +6,10 @@
     function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestsMarkerBuilderService) {
 
         // scope properties
-        $scope.mapConfig = {};
+        $scope.mapConfig = {
+            url: 'http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png'
+        };
+
         $scope.securityService = securityService;
         $scope.interest = null
 
@@ -60,7 +63,7 @@
             });
             return deffered.promise;
         }
-        
+
         function removeInterest(interest) {
             $scope.step.interests = $scope.step.interests.reduce(function (interests, currentInterest) {
                 if (currentInterest._id !== interest._id) {
@@ -145,17 +148,27 @@
 
                     $scope.mapConfig.drawingTools = [{
                         type: 'marker',
-                        created: function (map, config, geometry, e) {
+                        created: function (map, config, geojson, e) {
                             $scope.interest = {
                                 type: 'interest',
                                 stepId: step._id,
-                                geometry: geometry
+                                geometry: geojson.geometry
                             };
                             console.log('Create interest', $scope.interest);
                             $scope.$apply();
                         }
-                    }];
+                    }, {
+                        type: 'polyline',
+                        created: function (map, config, geojson, e) {
+                            console.log('Trace drawn', geojson.geometry.coordinates);
+                            step.geometry = geojson.geometry;
 
+                            saveStep(step).then(function (step) {
+                                showStepOnMap(tour, step);
+                                $scope.$apply();
+                            });
+                        }
+                    }];
 
                 }
 

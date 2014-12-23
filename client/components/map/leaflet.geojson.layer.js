@@ -211,7 +211,7 @@ L.GeojsonItem = L.FeatureGroup.extend({
     }
 });
 
-
+/*
 var PointToGeoJSON = {
     toGeoJSON: function () {
         return L.GeojsonItem.getFeature(this, {
@@ -314,7 +314,7 @@ L.Polygon.include({
         }
     });
 }());
-
+*/
 L.geojsonLayer = function (item) {
     return new L.GeojsonItem(item);
 };
