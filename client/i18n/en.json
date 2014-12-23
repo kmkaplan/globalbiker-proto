@@ -25,7 +25,10 @@
                 "danger": "danger",
                 "accomodation": "accomodation",
                 "hobbies": "hobbies",
-                "information": "information"
+                "information": "information",
+                "water-point": "water point",
+                "wc": "wc",
+                "velotoulouse": "velo toulouse"
             }
         }
     },

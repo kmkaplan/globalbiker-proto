@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('globalbikerWebApp')
-        .directive('interestForm', function (InterestRepository) {
+        .directive('interestForm', function (InterestRepository, interestLoaderService) {
             return {
                 templateUrl: 'components/interest.form/interest.form.html',
                 restrict: 'EA',
@@ -15,7 +15,7 @@
                     pre: function preLink($scope, $element, $attrs) {
 
                         // scope properties
-
+                        $scope.photosupload;
 
                         // scope methods
                         $scope.submitForm = submitForm;
@@ -26,8 +26,33 @@
 
                         function init() {
 
-                        }
+                            interestLoaderService.loadDetails($scope.interest, {
+                                interest: {
+                                    photos: true
+                                }
+                            }).then(function (interest) {
+                                $scope.interest = interest;
+                            });
 
+                            $scope.photosupload = {
+                                // TODO manage multiple photos
+                                multiple: false,
+                                url: function () {
+                                    return '/api/photos/upload';
+                                },
+                                data: function () {
+                                    return {
+                                        geometry: $scope.interest.geometry
+                                    }
+                                },
+                                callbacks: {
+                                    success: function (photo) {
+                                        $scope.interest.photos.push(photo);
+                                        $scope.interest.photosIds.push(photo._id);
+                                    }
+                                }
+                            };
+                        }
 
                         function remove(interest) {
 

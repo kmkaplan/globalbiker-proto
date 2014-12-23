@@ -6,13 +6,16 @@
                 <div class="form-group required" ng-class="{ 'has-error':  form.type.$invalid, 'has-success':form.type.$valid }">
                     <label class="control-label">Type</label>
                     <select required name="type" ng-model="interest.type" class="form-control">
-                        <option value="interest" translate="global.interest.type.interest">interest</option>
-                        <option value="bike-shops" translate="global.interest.type.bike-shop">bike-shop</option>
-                        <option value="food" translate="global.interest.type.food">food</option>
                         <option value="danger" translate="global.interest.type.danger">danger</option>
-                        <option value="accomodation" translate="global.interest.type.accomodation">accomodation</option>
-                        <option value="hobbies" translate="global.interest.type.hobbies">hobbies</option>
                         <option value="information" translate="global.interest.type.information">information</option>
+                        <option value="water-point" translate="global.interest.type.water-point">water point</option>
+                        <option value="wc" translate="global.interest.type.wc">wc</option>
+                        <option value="bike-shops" translate="global.interest.type.bike-shop">bike-shop</option>
+                        <option value="interest" translate="global.interest.type.interest">interest</option>
+                        <option value="hobbies" translate="global.interest.type.hobbies">hobbies</option>
+                        <option value="accomodation" translate="global.interest.type.accomodation">accomodation</option>
+                        <option value="food" translate="global.interest.type.food">food</option>
+                        <option value="velotoulouse" translate="global.interest.type.velotoulouse">velo toulouse</option>
                     </select>
                 </div>
             </div>
@@ -43,9 +46,17 @@
         </div>-->
 
         <div class="form-group required" ng-class="{ 'has-error':  form.description.$dirty && form.description.$invalid, 'has-success': form.description.$dirty && form.description.$valid }">
-            <label accesskey="" class="control-label" translate="mytourstep.description">Description</label>
-            <textarea required name="description" ng-model="interest.description" type="text" class="form-control" placeholder="Enter the description of this point ..." ></textarea>
+            <label class="control-label" translate="mytourstep.description">Description</label>
+            <textarea required name="description" ng-model="interest.description" type="text" class="form-control" placeholder="Enter the description of this point ..."></textarea>
             <label class="error-label" ng-show="form.description.$invalid && form.description.$dirty" translate="mytourstep.description_warn">The description is required.</label>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Photos</label>
+            <div file-upload="photosupload">Ajouter une photo depuis le disque (*.jpg, *.png)</div>
+            <div>
+                <img ng-repeat="photo in interest.photos" class="smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" />
+            </div>
         </div>
 
         <div class="form-group">
@@ -61,7 +72,7 @@
                 <i class="fa fa-trash"></i>
                 <span translate="global.actions.remove">Remove</span>
             </a>
-            
+
         </div>
     </section>
 </form>

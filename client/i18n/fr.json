@@ -17,7 +17,7 @@
             "remove": "Supprimer cette étape",
             "create": "Créer une nouvelle étape"
         },
-        "interest":{
+        "interest": {
             "type": {
                 "interest": "intérêt",
                 "bike-shop": "magasin de vélo",
@@ -25,7 +25,10 @@
                 "danger": "danger",
                 "accomodation": "logement",
                 "hobbies": "loisirs",
-                "information": "points d'information"
+                "information": "points d'information",
+                "water-point": "point d'eau",
+                "wc": "wc",
+                "velotoulouse": "vélo toulouse"
             }
         }
     },

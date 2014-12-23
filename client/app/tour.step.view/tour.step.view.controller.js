@@ -65,9 +65,6 @@
                         weight: 6,
                         opacity: 0.8
                     },
-                    label: function (step) {
-                        return getStepLabel(step);
-                    },
                     step: {
                         bounds: {
                             show: true
@@ -84,15 +81,6 @@
                         geometry: step.geometry
                     };
                 }
-            }
-        };
-
-       function getStepLabel(step) {
-            if (step.cityFrom.name === step.cityTo.name) {
-                // same source & destination
-                return step.cityFrom.name;
-            } else {
-                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
             }
         };
     }
