@@ -113,12 +113,11 @@
                                 // select
                                 option.selected = true;
                                 $scope.selectedOptions.push(option);
-                                $scope.model = $scope.selectedOptions.reduce(function (selectedOptionsKeys, selectedOption) {
-                                    selectedOptionsKeys.push(selectedOption.key);
-                                    return selectedOptionsKeys;
-                                }, []);
                             }
-
+                            $scope.model = $scope.selectedOptions.reduce(function (selectedOptionsKeys, selectedOption) {
+                                selectedOptionsKeys.push(selectedOption.key);
+                                return selectedOptionsKeys;
+                            }, []);
                         }
 
 

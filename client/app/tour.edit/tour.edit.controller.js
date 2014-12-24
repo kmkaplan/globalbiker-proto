@@ -1,14 +1,13 @@
 (function () {
     'use strict';
 
-    angular.module('globalbikerWebApp').controller('TourPresentationCtrl', TourPresentationCtrl);
+    angular.module('globalbikerWebApp').controller('TourEditCtrl', TourEditCtrl);
 
-    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService, interestsMarkerBuilderService, PhotoRepository) {
+    function TourEditCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService, interestsMarkerBuilderService, PhotoRepository) {
 
         // scope properties
         $scope.securityService = securityService;
         $scope.mapConfig = {};
-        $scope.inEdition = securityService.isTourEditable(tour) && $state.current.data.edit | false;
         $scope.tinymceOptions = {
             height: '200px',
             menubar: false,
@@ -17,7 +16,6 @@
 
         // scope methods
         $scope.saveTour = saveTour;
-        $scope.editTour = editTour;
         $scope.createStep = createStep;
         $scope.selectPhoto = selectPhoto;
 
@@ -31,24 +29,31 @@
             if (!tour) {
                 $state.go('home');
             } else {
-                $scope.tour = tour;
-
-                showTourOnMap(tour);
-
                 if (securityService.isTourEditable(tour)) {
+                    $scope.tour = tour;
 
-                    PhotoRepository.searchAroundTour({
-                            tourId: tour._id,
-                            distance: 10000
-                        }, function (photos) {
-                            tour.photos = photos;
-                        },
-                        function (err) {
-                            console.error(err);
-                        });
+                    showTourOnMap(tour);
+
+                    loadPhotos(tour);
+
+                } else {
+                    $state.go('tour.view');
                 }
             }
         };
+
+        function loadPhotos(tour) {
+
+            PhotoRepository.searchAroundTour({
+                    tourId: tour._id,
+                    distance: 10000
+                }, function (photos) {
+                    $scope.photos = photos;
+                },
+                function (err) {
+                    console.error(err);
+                });
+        }
 
         function selectPhoto(photo) {
             $scope.tour.photo = photo;
@@ -57,9 +62,8 @@
 
 
         function editTour(tour) {
-            $scope.inEdition = true;
             // update location without reloading
-            $state.go('tour.edition', $stateParams, {
+            $state.go('tour.edit', $stateParams, {
                 location: true,
                 notify: false
             });
@@ -129,19 +133,20 @@
 
             var steps = tour.steps;
             var photo = tour.photo;
+
+            delete tour.steps;
+            delete tour.photo;
             
             tour.$update(function (data, putResponseHeaders) {
                 console.info('Tour updated.');
                 tour.steps = steps;
                 tour.photo = photo;
-                
+
                 deffered.resolve(steps);
             }, function (err) {
                 deffered.reject(err);
             }).finally(function () {
-
-                $scope.inEdition = false;
-                $state.go('tour.presentation', $stateParams);
+                $state.go('tour.view', $stateParams);
             });
             return deffered.promise;
         }

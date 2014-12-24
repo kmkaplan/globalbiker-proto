@@ -35,7 +35,7 @@
         }
 
         function openTour(tour) {
-            $state.go('tour.presentation');
+            $state.go('tour.view');
         }
 
         function editStep(step) {
@@ -49,7 +49,7 @@
                         id: step._id
                     },
                     function () {
-                        $state.go('tour.presentation', {}, {
+                        $state.go('tour.view', {}, {
                             'reload': true
                         });
                     });

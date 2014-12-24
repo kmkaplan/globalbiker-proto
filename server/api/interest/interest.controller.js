@@ -180,10 +180,10 @@ exports.filterInterestsByDistanceByType = function (interests, distanceByType) {
             if (interest.distance <= d) {
                 interests.push(interest);
             } else {
-                console.warn('Type %s filtered off by distance (%d > %d).', interest.type, d, interest.distance);
+                // console.warn('Type %s filtered off by distance (%d > %d).', interest.type, d, interest.distance);
             }
         } else {
-            console.warn('Type %s filtered off.', interest.type);
+            // console.warn('Type %s filtered off.', interest.type);
         }
 
         return interests;

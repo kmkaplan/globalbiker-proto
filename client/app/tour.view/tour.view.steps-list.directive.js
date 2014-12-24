@@ -4,7 +4,7 @@
     angular.module('globalbikerWebApp')
         .directive('tourPresentationStepsList', function ($state) {
             return {
-                templateUrl: 'app/tour.presentation/tour.presentation.steps-list.html',
+                templateUrl: 'app/tour.view/tour.view.steps-list.html',
                 restrict: 'EA',
                 scope: {
                     steps: '='

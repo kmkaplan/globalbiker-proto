@@ -66,7 +66,7 @@
         }
 
         function openTour(tour) {
-            $state.go('tour.presentation');
+            $state.go('tour.view');
         }
 
         function saveStep(step) {
