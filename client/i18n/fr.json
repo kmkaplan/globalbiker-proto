@@ -7,7 +7,8 @@
         "actions": {
             "edit": "éditer",
             "save": "sauvegarder",
-            "remove": "supprimer"
+            "remove": "supprimer",
+            "uploadphoto": "ajouter une photo"
         },
         "step": {
             "departure": "Ville de départ",

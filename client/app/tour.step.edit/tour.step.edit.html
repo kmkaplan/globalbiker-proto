@@ -6,7 +6,7 @@
 
             <div class="details-area">
 
-                <a class="btn btn-primary edit-button pull-right" ng-click="saveStep(step)" ng-title="{{ 'global.actions.save' | translate }}">
+                <a ng-if="!interest" class="btn btn-primary edit-button pull-right" ng-click="saveStep(step)" ng-title="{{ 'global.actions.save' | translate }}">
                     <i class="fa fa-check"></i>
                 </a>
                 <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>

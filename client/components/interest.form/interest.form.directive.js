@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('globalbikerWebApp')
-        .directive('interestForm', function (InterestRepository, interestLoaderService) {
+        .directive('interestForm', function (InterestRepository, interestLoaderService, LicenseRepository) {
             return {
                 templateUrl: 'components/interest.form/interest.form.html',
                 restrict: 'EA',
@@ -16,23 +16,35 @@
 
                         // scope properties
                         $scope.photosupload;
+                        $scope.licenses = LicenseRepository.query();
 
                         // scope methods
                         $scope.submitForm = submitForm;
                         $scope.remove = remove;
+                        $scope.selectPhoto = selectPhoto;
+                        $scope.getLicense = getLicense;
+                        $scope.updatePhoto = updatePhoto;
+                        $scope.removePhoto = removePhoto;
 
                         // init method
                         init();
 
                         function init() {
 
-                            interestLoaderService.loadDetails($scope.interest, {
-                                interest: {
-                                    photos: true
-                                }
-                            }).then(function (interest) {
-                                $scope.interest = interest;
-                            });
+                            if ($scope.interest._id) {
+
+                                interestLoaderService.loadDetails($scope.interest, {
+                                    interest: {
+                                        photos: true
+                                    }
+                                }).then(function (interest) {
+                                    $scope.interest = interest;
+                                });
+
+                            } else {
+                                $scope.interest.photos = [];
+                                $scope.interest.photosIds = [];
+                            }
 
                             $scope.photosupload = {
                                 // TODO manage multiple photos
@@ -52,6 +64,51 @@
                                     }
                                 }
                             };
+                        }
+
+                        function updatePhoto(photo) {
+                            if (photo && photo._id) {
+
+                                photo.$update(function (data, putResponseHeaders) {
+                                    console.info('Photo updated.');
+                                });
+                            }
+                            $scope.photo = null;
+                        };
+
+                        function removePhoto(interest, photo) {
+                            if (interest && photo && photo._id) {
+
+                                var index = interest.photos.indexOf(photo);
+                                if (index > -1) {
+                                    interest.photos.splice(index, 1);
+                                }
+
+                                index = interest.photosIds.indexOf(photo._id);
+                                if (index > -1) {
+                                    interest.photosIds.splice(index, 1);
+                                }
+                            }
+                            
+                             $scope.photo = null;
+                        };
+
+                        function getLicense(photo) {
+                            if (!photo || !photo.licenseId) {
+                                return null;
+                            }
+                            var license = $scope.licenses.reduce(function (photoLicense, license) {
+                                    if (license._id === photo.licenseId) {
+                                        return license;
+                                    }
+                                    return photoLicense;
+                                },
+                                null);
+                            return license;
+                        }
+
+                        function selectPhoto(photo) {
+                            $scope.photo = photo;
                         }
 
                         function remove(interest) {
