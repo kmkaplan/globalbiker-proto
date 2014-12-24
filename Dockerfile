@@ -24,7 +24,7 @@ RUN grunt build:dist --force
 
 RUN chmod 755 /app/scripts/*.sh
 
-ENV MONGOHQ_URL mongodb://mongodb/biketouringmap
+ENV MONGOLAB_URI mongodb://mongodb/biketouringmap
 
 VOLUME ["/app/server/dist/upload"]
 VOLUME ["/app/server/dist/photos"]
