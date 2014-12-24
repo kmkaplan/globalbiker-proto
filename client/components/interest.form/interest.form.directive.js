@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('globalbikerWebApp')
-        .directive('interestForm', function (InterestRepository, interestLoaderService, LicenseRepository) {
+        .directive('interestForm', function (InterestRepository, interestLoaderService, LicenseRepository, PhotoRepository) {
             return {
                 templateUrl: 'components/interest.form/interest.form.html',
                 restrict: 'EA',
@@ -61,6 +61,7 @@
                                     success: function (photo) {
                                         $scope.interest.photos.push(photo);
                                         $scope.interest.photosIds.push(photo._id);
+                                        $scope.photo = new PhotoRepository(photo);
                                     }
                                 }
                             };

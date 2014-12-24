@@ -39,24 +39,28 @@
                     $scope.step = step;
 
                     showStepOnMap(tour, step);
-                    
-                     PhotoRepository.searchAroundStep({
-                            stepId: step._id,
-                            distance: 10000
-                        }, function (photos) {
-                            step.photos = photos;
-                        },
-                        function (err) {
-                            console.error(err);
-                        });
-                    
+
+                    loadPhotos(step);
+
                 } else {
                     $state.go('tour.step.view');
                 }
             }
         };
-        
-        function selectPhoto(photo){
+
+        function loadPhotos(step) {
+            PhotoRepository.searchAroundStep({
+                    stepId: step._id,
+                    distance: 10000
+                }, function (photos) {
+                    step.photos = photos;
+                },
+                function (err) {
+                    console.error(err);
+                });
+        }
+
+        function selectPhoto(photo) {
             $scope.step.photo = photo;
             $scope.step.photoId = photo._id;
         }
@@ -69,6 +73,7 @@
             var deffered = $q.defer();
 
             var interests = step.interests;
+            var photo = step.photo;
 
             step.$update(function (data, putResponseHeaders) {
                 console.info('Step updated.');
@@ -77,6 +82,7 @@
             }).finally(function () {
                 $state.go('tour.step.view', $stateParams);
                 step.interests = interests;
+                step.photo = photo;
             });
             return deffered.promise;
         }
@@ -105,6 +111,7 @@
                     return interests;
                 }, []);
             }
+            loadPhotos(step);
             $scope.interest = null;
             showStepOnMap($scope.tour, $scope.step);
         }

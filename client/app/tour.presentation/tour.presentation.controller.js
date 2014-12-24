@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourPresentationCtrl', TourPresentationCtrl);
 
-    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService, interestsMarkerBuilderService) {
+    function TourPresentationCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService, interestsMarkerBuilderService, PhotoRepository) {
 
         // scope properties
         $scope.securityService = securityService;
@@ -19,6 +19,7 @@
         $scope.saveTour = saveTour;
         $scope.editTour = editTour;
         $scope.createStep = createStep;
+        $scope.selectPhoto = selectPhoto;
 
         // init method
         init();
@@ -33,8 +34,26 @@
                 $scope.tour = tour;
 
                 showTourOnMap(tour);
+
+                if (securityService.isTourEditable(tour)) {
+
+                    PhotoRepository.searchAroundTour({
+                            tourId: tour._id,
+                            distance: 10000
+                        }, function (photos) {
+                            tour.photos = photos;
+                        },
+                        function (err) {
+                            console.error(err);
+                        });
+                }
             }
         };
+
+        function selectPhoto(photo) {
+            $scope.tour.photo = photo;
+            $scope.tour.photoId = photo._id;
+        }
 
 
         function editTour(tour) {
@@ -49,7 +68,7 @@
         function createStep() {
             $state.go('tour.create-step');
         }
-        
+
         function showTourOnMap(tour) {
             if (tour.steps) {
                 var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(tour.steps, {
@@ -95,7 +114,7 @@
 
             }
         }
-        
+
         function getStepLabel(step) {
             if (step.cityFrom.name === step.cityTo.name) {
                 // same source & destination
@@ -109,10 +128,13 @@
             var deffered = $q.defer();
 
             var steps = tour.steps;
-
+            var photo = tour.photo;
+            
             tour.$update(function (data, putResponseHeaders) {
                 console.info('Tour updated.');
                 tour.steps = steps;
+                tour.photo = photo;
+                
                 deffered.resolve(steps);
             }, function (err) {
                 deffered.reject(err);

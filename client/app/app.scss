@@ -81,6 +81,7 @@ $black3: #555;
 @import 'step-details/step-details.scss';
 @import 'table.scss';
 @import 'tour.create-step/tour.create-step.scss';
+@import 'tour.presentation/tour.presentation.scss';
 @import 'tour.step.edit/tour.step.edit.scss';
 @import 'tour.step.view/tour.step.view.scss';
 @import 'tour/tour.scss';
@@ -111,6 +112,9 @@ html {
             .image-horizontal-scroll {
                 float: left;
                 margin-right: -999em;
+                .selected {
+                    border: 2px solid #555;
+                }
             }
         }
         .link {

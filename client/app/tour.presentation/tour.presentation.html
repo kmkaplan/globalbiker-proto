@@ -35,10 +35,14 @@
                         <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>
                     </div>
 
+                   <img ng-if="!inEdition && tour.photo.thumbnails.w600h400" class="photo smart-photo tour-main-photo pull-right" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
                     <div ng-if="!inEdition" class="alert description" ng-if="tour.description" ng-bind-html="tour.description"></div>
 
-                    <div ng-if="tour.photo.thumbnails.w600h400" class="photo-area">
-                        <img class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
+                    <div ng-if="inEdition"  class="image-horizontal-selector">
+                        <div class="image-horizontal-scroll">
+                            <img ng-repeat="photo in tour.photos" class="link smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}"
+                            ng-class="{selected: tour.photo._id === photo._id }" ng-click="selectPhoto(photo)" />
+                        </div>
                     </div>
                 </div>
 

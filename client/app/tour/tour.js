@@ -9,7 +9,7 @@ angular.module('globalbikerWebApp')
                 templateUrl: 'app/tour/tour.html',
                 controller: 'TourCtrl',
                 resolve: {
-                    tour: function ($stateParams, $q, tourLoaderService) {
+                    tour: function ($stateParams, $q, tourLoaderService, PhotoRepository) {
 
                         var deffered = $q.defer();
 
@@ -24,6 +24,18 @@ angular.module('globalbikerWebApp')
                             }).then(function (tour) {
                                 console.info('Tour "%s" loaded successfully.', tour.title);
                                 deffered.resolve(tour);
+                                
+                                if (tour.photoId) {
+                                    PhotoRepository.get({
+                                        id: tour.photoId
+                                    }, function (photo) {
+                                        tour.photo = photo;
+                                    }, function (err) {
+                                        console.error(err);
+                                    });
+
+                                }
+                                
                             }, function (err) {
                                 console.error('Error while loading tour %s.', $stateParams.id, err);
                                 deffered.resolve(null);
