@@ -9,7 +9,6 @@
         </li>
         <li class="active"><span>{{ 'mytours.steps.from' | translate }} "{{ step.cityFrom.name }}" {{ 'mytours.steps.to' | translate }} "{{ step.cityTo.name }}"</span>
         </li>
-
     </ol>
     <a ng-if="isAllowedToEdit(step.tour)" class="pull-right" href="/my-tour-step/{{ step._id }}">
         <i class="fa fa-edit"></i> {{ 'tour-details.edit-the-step' | translate }}

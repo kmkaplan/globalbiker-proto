@@ -3,11 +3,12 @@
 
     angular.module('globalbikerWebApp').controller('TourStepViewCtrl', TourStepViewCtrl);
 
-    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestLoaderService, interestsMarkerBuilderService) {
+    function TourStepViewCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestLoaderService, interestsMarkerBuilderService, photoLoaderService) {
 
         // scope properties
         $scope.securityService = securityService;
         $scope.mapConfig = {};
+        $scope.interestsDetails;
 
         // scope methods
         $scope.editStep = editStep;
@@ -27,6 +28,37 @@
                 $scope.step = step;
 
                 showStepOnMap(tour, step);
+
+                $scope.$watch('step.interests', function (interests) {
+                    if (interests && interests.length > 0) {
+                        
+                        interests = interests.reduce(function(interests, interest){
+                            if (interest.type === 'interest'){
+                                
+                                interest.photos = [];
+                                
+                                if (interest.photosIds && interest.photosIds.length > 0){
+                                    
+                                    interest.photosIds.reduce(function(o, photoId){
+                                        
+                                         photoLoaderService.getPhoto(photoId).then(function(photo){
+
+                                             interest.photos.push(photo);
+                                             
+                                         });
+                                    }, null);
+                                   
+                                }
+                                
+                                interests.push(interest);
+                            } 
+                            return interests;
+                        }, []);
+                        
+                        $scope.interestsDetails = interests
+                    }
+                });
+
             }
         };
 
