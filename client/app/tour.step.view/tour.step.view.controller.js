@@ -33,7 +33,8 @@
                     if (interests && interests.length > 0) {
                         
                         interests = interests.reduce(function(interests, interest){
-                            if (interest.type === 'interest'){
+                            // ['interest', 'hobbies'].indexOf(interest.type) !== -1 || 
+                            if (interest.photosIds && interest.photosIds.length > 0){
                                 
                                 interest.photos = [];
                                 

@@ -32,45 +32,47 @@
 
                 <h2>{{ step | stepLabel }}</h2>
 
-                <div class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
+                <tabset>
+                    <tab heading="Description">
 
-                <div ng-if="!inEdition && step.photo.thumbnails.w600h400" class="text-center">
-                    <img class="step smart-photo step-main-photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
-                </div>
+                        <div class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
 
-                <div class="interests-area" ng-if="interestsDetails">
-                    <h2>Points d'intérêt le long du parcours</h2>
-                    <div ng-repeat="interest in interestsDetails">
-                        <div class="form-section">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="description">
-                                        <h3>{{ interest.name }}</h3>
-                                        <p ng-bind-html="interest.description"></p>
+                        <div ng-if="!inEdition && step.photo.thumbnails.w600h400" class="text-center">
+                            <img class="step smart-photo step-main-photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
+                        </div>
+                    </tab>
+                    <tab heading="Photos des points d'intérêt le long du parcours" ng-if="interestsDetails">
+                        <div class="interests-area">
+                            <div ng-repeat="interest in interestsDetails">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="interest-description">
+                                            <h3>{{ interest.name }}</h3>
+                                            <p ng-bind-html="interest.description"></p>
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6" ng-if="interest.photos">
-                                    <div class="carousel-area ">
-                                        <div class="">
-                                            <carousel>
-                                                <slide ng-repeat="photo in interest.photos" active="photo.active">
-                                                    <img class="photo smart-area" ng-src="{{ photo.thumbnails.w600h400 }}" style="margin:auto;">
-                                                    <p>
-                                                        <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
-                                                        -
-                                                        <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
-                                                    </p>
-                                                </slide>
-                                            </carousel>
+                                    <div class="col-md-6" ng-if="interest.photos">
+                                        <div class="carousel-area ">
+                                            <div class="">
+                                                <carousel>
+                                                    <slide ng-repeat="photo in interest.photos" active="photo.active">
+                                                        <img class="photo smart-area" ng-src="{{ photo.thumbnails.w600h400 }}" style="margin:auto;">
+                                                        <p>
+                                                            <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
+                                                            -
+                                                            <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
+                                                        </p>
+                                                    </slide>
+                                                </carousel>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
+                    </tab>
+                </tabset>
                 <div class="row" ng-if="securityService.isTourEditable(tour)">
                     <div class="col-md-6 text-center">
                         <a class="btn btn-primary" ng-click="createStep()">

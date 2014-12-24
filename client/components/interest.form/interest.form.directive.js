@@ -59,6 +59,9 @@
                                 },
                                 callbacks: {
                                     success: function (photo) {
+                                        if (! $scope.interest.photosIds){
+                                            $scope.interest.photosIds = [];
+                                        }
                                         $scope.interest.photos.push(photo);
                                         $scope.interest.photosIds.push(photo._id);
                                         $scope.photo = new PhotoRepository(photo);
