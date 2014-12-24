@@ -81,6 +81,8 @@ $black3: #555;
 @import 'step-details/step-details.scss';
 @import 'table.scss';
 @import 'tour.create-step/tour.create-step.scss';
+@import 'tour.step.edit/tour.step.edit.scss';
+@import 'tour.step.view/tour.step.view.scss';
 @import 'tour/tour.scss';
 @import 'extendedMap/extendedMap.scss';
 @import 'file-upload/file-upload.scss';
@@ -103,11 +105,17 @@ html {
         }
     }
     .page {
-        
-        .link{
+        .image-horizontal-selector {
+            max-width: 100%;
+            overflow: auto;
+            .image-horizontal-scroll {
+                float: left;
+                margin-right: -999em;
+            }
+        }
+        .link {
             cursor: pointer;
         }
-        
         padding: 10px 30px;
         .breadcrumb {
             background: transparent;
@@ -139,7 +147,7 @@ html {
             margin-top: 5px;
             margin-bottom: 15px;
         }
-        h1{
+        h1 {
             color: $color2;
             text-shadow: 1px 1px 0 $color2dark2;
         }
@@ -160,7 +168,7 @@ html {
                     border-bottom-right-radius: 3px;
                     padding: 3px;
                     cursor: pointer;
-                    &:hover{
+                    &:hover {
                         box-shadow: 0 2px 5px rgba(0, 0, 0, 2);
                     }
                 }

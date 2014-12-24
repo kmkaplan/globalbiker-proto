@@ -8,7 +8,7 @@ angular.module('globalbikerWebApp')
                 abstract: true,
                 template: '<ui-view/>',
                 resolve: {
-                    step: function (tour, $stateParams, $q, stepLoaderService) {
+                    step: function (tour, $stateParams, $q, stepLoaderService, PhotoRepository) {
 
                         var deffered = $q.defer();
 
@@ -19,13 +19,25 @@ angular.module('globalbikerWebApp')
                                 step: {
                                     interestsAround: {
                                         distance: [100, 2000, 100, 2000, 7000, 7000, 2000, 2000, 100, 100, 100],
-                                        type: ['danger', 'information', 'water-point', 'bike-shops', 'interest', 'hobbies', 'accomodation', 'food', 'water-point', 'wc', 'velotoulouse'/*, 'merimee'*/]
+                                        type: ['danger', 'information', 'water-point', 'bike-shops', 'interest', 'hobbies', 'accomodation', 'food', 'water-point', 'wc', 'velotoulouse' /*, 'merimee'*/ ]
                                     },
                                     photosAround: {}
                                 }
                             }).then(function (step) {
                                 console.info('Step %s loaded successfully.', step._id);
                                 deffered.resolve(step);
+
+                                if (step.photoId) {
+                                    PhotoRepository.get({
+                                        id: step.photoId
+                                    }, function (photo) {
+                                        step.photo = photo;
+                                    }, function (err) {
+                                        console.error(err);
+                                    });
+
+                                }
+
                             }, function (err) {
                                 console.error(err);
                                 deffered.resolve(null);

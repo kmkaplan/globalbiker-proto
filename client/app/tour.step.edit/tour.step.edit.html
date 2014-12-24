@@ -31,7 +31,7 @@
 
                 <h2>{{ step | stepLabel }}</h2>
 
-                <div ng-if="interest" interest-form interest="interest" on-save="saveOrUpdateInterest(interest, isNew)", on-remove="removeInterest(interest)"></div>
+                <div ng-if="interest" interest-form interest="interest" on-save="saveOrUpdateInterest(interest, isNew)" , on-remove="removeInterest(interest)"></div>
 
                 <div ng-if="!interest">
                     <div class="row">
@@ -54,8 +54,14 @@
                         <textarea ui-tinymce="tinymceOptions" name="description" ng-model="step.description" type="text" class="form-control"></textarea>
                     </div>
 
-                    <div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
+                    <!--<div ng-if="step.photo.thumbnails.w600h400" class="photo-area">
                         <img class="photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
+                    </div>-->
+                    <div class="image-horizontal-selector">
+                        <div class="image-horizontal-scroll">
+                            <img ng-repeat="photo in step.photos" class="link smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}"
+                            ng-class="{selected: step.photo._id === photo._id }" ng-click="selectPhoto(photo)" />
+                        </div>
                     </div>
                 </div>
             </div>

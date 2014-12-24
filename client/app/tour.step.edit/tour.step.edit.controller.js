@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourStepEditCtrl', TourStepEditCtrl);
 
-    function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestsMarkerBuilderService) {
+    function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestsMarkerBuilderService, PhotoRepository) {
 
         // scope properties
         $scope.mapConfig = {
@@ -24,6 +24,7 @@
         $scope.openTour = openTour;
         $scope.saveOrUpdateInterest = saveOrUpdateInterest;
         $scope.removeInterest = removeInterest;
+        $scope.selectPhoto = selectPhoto;
 
         // init method
         init();
@@ -38,11 +39,27 @@
                     $scope.step = step;
 
                     showStepOnMap(tour, step);
+                    
+                     PhotoRepository.searchAroundStep({
+                            stepId: step._id,
+                            distance: 10000
+                        }, function (photos) {
+                            step.photos = photos;
+                        },
+                        function (err) {
+                            console.error(err);
+                        });
+                    
                 } else {
                     $state.go('tour.step.view');
                 }
             }
         };
+        
+        function selectPhoto(photo){
+            $scope.step.photo = photo;
+            $scope.step.photoId = photo._id;
+        }
 
         function openTour(tour) {
             $state.go('tour.presentation');

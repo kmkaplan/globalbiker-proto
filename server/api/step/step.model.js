@@ -28,6 +28,10 @@ var StepSchema = new Schema({
         type: Number,
         required: 'Please fill interest'
     },
+    photoId: {
+        type: Schema.ObjectId,
+        ref: 'PhotoSchema'
+    },
     cityFrom: {
         geonameId: {
             type: Number,
