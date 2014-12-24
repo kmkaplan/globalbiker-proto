@@ -37,7 +37,7 @@ exports.find = function (schema, geometry, maxDistance) {
                         entity.distance = result.dis
                         resultsWithDistance.push(entity);
                     } else {
-                        if (entities[entity._id].distance > result.dis){
+                        if (entities[entity._id].distance > result.dis) {
                             // update distance to minimal one
                             console.warn('Update distance %d to minimal one %d', entities[entity._id].distance, result.dis);
                             entities[entity._id].distance = result.dis;
@@ -145,7 +145,29 @@ exports.geometryToPoints = function (geometry, distance) {
         }
         return points;
     } else {
-        console.log('Invalid geometry.');
+        console.log('geometryToPoints: Invalid geometry.', geometry);
         return [];
     }
 }
+
+exports.concatenateGeometries = function (geometries) {
+    var coordinatesArray = geometries.reduce(function (coordinatesArray, geometry) {
+        if (geometry !== null && geometry.coordinates && geometry.coordinates.length > 0) {
+            if (geometry.type == 'LineString') {
+                coordinatesArray.push(geometry.coordinates);
+            } else if (geometry.type == 'MultiLineString') {
+                coordinatesArray = coordinatesArray.concat(geometry.coordinates);
+            } else {
+                console.error('Geometry type "%s" not supported.', geometry.type);
+            }
+        }
+
+        return coordinatesArray;
+
+    }, []);
+
+    return {
+        type: 'MultiLineString',
+        coordinates: coordinatesArray
+    };
+};

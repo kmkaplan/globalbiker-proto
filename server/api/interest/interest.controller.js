@@ -170,13 +170,30 @@ exports.getByStep = function (req, res) {
 
 }
 
-exports.searchAroundStep = function (req, res) {
+exports.filterInterestsByDistanceByType = function (interests, distanceByType) {
+    // filter
+    var filtered = interests.reduce(function (interests, interest) {
 
-    var stepId = req.query.stepId;
-    if (!stepId) {
-        return res.send(400, 'Parameter stepId is missing');
-    }
+        var d = distanceByType[interest.type];
 
+        if (d) {
+            if (interest.distance <= d) {
+                interests.push(interest);
+            } else {
+                console.warn('Type %s filtered off by distance (%d > %d).', interest.type, d, interest.distance);
+            }
+        } else {
+            console.warn('Type %s filtered off.', interest.type);
+        }
+
+        return interests;
+
+    }, []);
+
+    return filtered;
+}
+
+exports.initSearchAroundParams = function (req, res) {
     var types = null;
 
     if (req.query.type) {
@@ -184,11 +201,8 @@ exports.searchAroundStep = function (req, res) {
     }
 
     var distanceByType = {};
-    var distance;
     var maxDistance;
     if (req.query.distance) {
-        distance = req.query.distance;
-        maxDistance = distance;
 
         if (Object.prototype.toString.call(req.query.distance) === '[object Array]') {
 
@@ -201,7 +215,7 @@ exports.searchAroundStep = function (req, res) {
             }
 
             var i = 0;
-            maxDistance = distance.reduce(function (maxDistance, d) {
+            maxDistance = req.query.distance.reduce(function (maxDistance, d) {
 
                 var type = types[i++];
 
@@ -213,15 +227,36 @@ exports.searchAroundStep = function (req, res) {
                 return maxDistance;
 
             }, 0);
-            
-            console.log('distanceByType: ', distanceByType);
+
+        } else {
+            maxDistance = req.query.distance;
+            distanceByType[types] = maxDistance;
         }
 
     } else {
-        distance = 200;
-        maxDistance = distance;
-        distanceByType[type] = distance;
+        maxDistance = 200;
+        distanceByType[type] = 200;
     }
+
+    console.log('distanceByType: ', distanceByType);
+
+    return {
+        maxDistance: maxDistance,
+        distanceByType: distanceByType
+    };
+}
+
+exports.searchAroundStep = function (req, res) {
+
+    var stepId = req.query.stepId;
+    if (!stepId) {
+        return res.send(400, 'Parameter stepId is missing');
+    }
+
+    var params = exports.initSearchAroundParams(req, res);
+
+    var maxDistance = params.maxDistance;
+    var distanceByType = params.distanceByType;
 
     Step.findById(stepId).exec(function (err, step) {
 
@@ -234,25 +269,8 @@ exports.searchAroundStep = function (req, res) {
             geospacialFinder.find(Interest, step.geometry, maxDistance).then(
                 function (interests) {
 
-
                     // filter
-                    var filtered = interests.reduce(function (interests, interest) {
-
-                        var d = distanceByType[interest.type];
-
-                        if (d) {
-                            if (interest.distance <= d) {
-                                interests.push(interest);
-                            } else {
-                                console.warn('Type %s filtered off by distance (%d > %d).', interest.type, d, interest.distance);
-                            }
-                        } else {
-                            console.warn('Type %s filtered off.', interest.type);
-                        }
-
-                        return interests;
-
-                    }, []);
+                    var filtered = exports.filterInterestsByDistanceByType(interests, distanceByType);
 
                     console.info('Filtered results: %d / %d', filtered.length, interests.length);
 
@@ -272,19 +290,6 @@ exports.searchAroundStep = function (req, res) {
                 return res.json(200, interests);
             });
         }
-        return;
-
-        /*        var promises = exports._getStepPromisesSearchAroundStep(step, distance, types);
-
-        console.info('Synchronize %d promises.', promises.length);
-
-        Q.all(promises).then(
-            function (results) {
-
-                var results = geo.filterDuplicated(results);
-
-                return res.json(200, results);
-            });*/
 
     });
 };
@@ -307,36 +312,16 @@ exports.findByStep = function (stepId) {
 
 exports.searchAroundTour = function (req, res) {
 
-    if (!req.query.tourId) {
+    var tourId = req.query.tourId;
+    if (!tourId) {
         return res.send(400, 'Parameter tourId is missing');
     }
 
-    var types = null;
+    var params = exports.initSearchAroundParams(req, res);
 
-    if (req.query.type) {
-        types = req.query.type;
-    }
+    var maxDistance = params.maxDistance;
+    var distanceByType = params.distanceByType;
 
-    var distance;
-    if (req.query.distance) {
-        if (Object.prototype.toString.call(req.query.distance) === '[object Array]') {
-
-            if (Object.prototype.toString.call(req.query.type) !== '[object Array]') {
-                return res.send(400, 'Type should be an array.');
-            }
-
-            if (req.query.distance.length !== req.query.type.length) {
-                return res.send(400, 'Type and distance arrays should have the same size (%d != %d)', req.query.distance.length, req.query.type.length);
-            }
-        }
-
-        distance = req.query.distance;
-
-    } else {
-        distance = 200;
-    }
-
-    var tourId = req.query.tourId;
     Step.find({
         'tourId': new ObjectId(tourId)
     }).sort({
@@ -346,21 +331,28 @@ exports.searchAroundTour = function (req, res) {
             return handleError(res, err);
         }
 
-        var promises = steps.reduce(function (promises, step) {
-            var stepPromises = exports._getStepPromisesSearchAroundStep(step, distance, types);
-
-            return promises.concat(stepPromises);
+        var geometries = steps.reduce(function (geometries, step) {
+            if (step.geometry) {
+                geometries.push(step.geometry);
+            }
+            return geometries;
         }, []);
 
-        console.info('Synchronize %d promises.', promises.length);
+        var tourGeometry = geospacialFinder.concatenateGeometries(geometries);
 
-        Q.all(promises).then(
-            function (results) {
+        geospacialFinder.find(Interest, tourGeometry, maxDistance).then(
+            function (interests) {
 
-                var results = geo.filterDuplicated(results);
+                // filter
+                var filtered = exports.filterInterestsByDistanceByType(interests, distanceByType);
 
-                return res.json(200, results);
-            });
+                console.info('Filtered results: %d / %d', filtered.length, interests.length);
+
+                return res.status(200).json(filtered)
+            }, function (err) {
+                console.log(err);
+                return handleError(res, err);
+            }).done();
 
     });
 };

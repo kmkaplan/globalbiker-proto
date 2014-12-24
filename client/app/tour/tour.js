@@ -18,13 +18,20 @@ angular.module('globalbikerWebApp')
                             tourLoaderService.loadTour($stateParams.id, {
                                 steps: {},
                                 interestsAround: {
-                                    distance: 10000,
-                                    type: ['interest', 'hobbies']
+                                    distance: [
+                                            // large distance types
+                                            10000, 10000, 10000,
+                                            // medium distance types
+                                            2000, 2000, 2000],
+                                    type: [ // large distance types
+                                            'interest', 'hobbies', 'accomodation',
+                                            // medium distance types
+                                            'information', 'bike-shops', 'food']
                                 }
                             }).then(function (tour) {
                                 console.info('Tour "%s" loaded successfully.', tour.title);
                                 deffered.resolve(tour);
-                                
+
                                 if (tour.photoId) {
                                     PhotoRepository.get({
                                         id: tour.photoId
@@ -35,7 +42,7 @@ angular.module('globalbikerWebApp')
                                     });
 
                                 }
-                                
+
                             }, function (err) {
                                 console.error('Error while loading tour %s.', $stateParams.id, err);
                                 deffered.resolve(null);
