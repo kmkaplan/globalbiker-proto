@@ -32,10 +32,11 @@
 
                 <h2>{{ step | stepLabel }}</h2>
 
-                <img ng-if="step.photo.thumbnails.w600h400" class="photo smart-photo step-main-photo pull-right" ng-src="{{ step.photo.thumbnails.w600h400 }}">
-                
                 <div class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
                
+                <div ng-if="!inEdition && step.photo.thumbnails.w600h400" class="text-center">
+                    <img class="step smart-photo step-main-photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
+                </div>
 
                 <div class="row" ng-if="securityService.isTourEditable(tour)">
                     <div class="col-md-6 text-center">
