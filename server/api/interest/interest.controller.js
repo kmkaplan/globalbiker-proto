@@ -8,6 +8,7 @@ var io = require('../../components/io/io');
 var path = require('path');
 var fs = require('fs');
 var geo = require('../../components/geo/geo');
+var geospacialFinder = require('../../components/geo/geospacial.finder');
 var Q = require('q');
 
 var ObjectId = require('mongoose').Types.ObjectId;
@@ -26,22 +27,6 @@ exports.index = function (req, res) {
         }
         return res.json(200, interests);
     });
-};
-
-exports.findByStep = function (stepId) {
-    var deffered = Q.defer();
-
-    Interest.find({
-        'stepId': stepId
-    }).exec(function (err, interests) {
-        if (err) {
-            console.error(err);
-            deffered.reject(err);
-        }
-        deffered.resolve(interests);
-    });
-
-    return deffered.promise;
 };
 
 exports.searchNearPoint = function (searchCriteria, types) {
@@ -81,7 +66,7 @@ exports.searchNearPoint = function (searchCriteria, types) {
 exports._getStepPromisesSearchAroundStep = function (step, distance, types) {
 
     var stepId = step._id;
-    
+
     var promises = [];
 
     if (step.geometry && step.geometry.coordinates && step.geometry.coordinates !== null) {
@@ -145,6 +130,46 @@ exports._getStepPromisesSearchAroundStep = function (step, distance, types) {
     return promises;
 }
 
+exports.getByStep = function (req, res) {
+
+    var stepId = req.params.stepId;
+    if (!stepId) {
+        return res.send(400, 'Parameter stepId is missing');
+    }
+
+    Step.findById(stepId).exec(function (err, step) {
+
+        if (err) {
+            return handleError(step, err);
+        }
+
+        var maxDistance = 1000;
+
+        if (step.geometry) {
+
+            geospacialFinder.find(Interest, step.geometry, maxDistance).then(
+                function (interests) {
+                    return res.status(200).json(interests)
+                }, function (err) {
+                    console.log(err);
+                    return handleError(res, err);
+                }).done();
+
+        } else {
+            Interest.find({
+                'stepId': stepId
+            }, function (err, interests) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                return res.json(200, interests);
+            });
+        }
+
+    });
+
+}
+
 exports.searchAroundStep = function (req, res) {
 
     var stepId = req.query.stepId;
@@ -158,8 +183,13 @@ exports.searchAroundStep = function (req, res) {
         types = req.query.type;
     }
 
+    var distanceByType = {};
     var distance;
+    var maxDistance;
     if (req.query.distance) {
+        distance = req.query.distance;
+        maxDistance = distance;
+
         if (Object.prototype.toString.call(req.query.distance) === '[object Array]') {
 
             if (Object.prototype.toString.call(req.query.type) !== '[object Array]') {
@@ -169,12 +199,28 @@ exports.searchAroundStep = function (req, res) {
             if (req.query.distance.length !== req.query.type.length) {
                 return res.send(400, 'Type and distance arrays should have the same size (%d != %d)', req.query.distance.length, req.query.type.length);
             }
-        }
 
-        distance = req.query.distance;
+            var i = 0;
+            maxDistance = distance.reduce(function (maxDistance, d) {
+
+                var type = types[i++];
+
+                distanceByType[type] = d;
+
+                if (d > maxDistance) {
+                    maxDistance = d;
+                }
+                return maxDistance;
+
+            }, 0);
+            
+            console.log('distanceByType: ', distanceByType);
+        }
 
     } else {
         distance = 200;
+        maxDistance = distance;
+        distanceByType[type] = distance;
     }
 
     Step.findById(stepId).exec(function (err, step) {
@@ -183,7 +229,52 @@ exports.searchAroundStep = function (req, res) {
             return handleError(step, err);
         }
 
-        var promises = exports._getStepPromisesSearchAroundStep(step, distance, types);
+        if (step.geometry) {
+
+            geospacialFinder.find(Interest, step.geometry, maxDistance).then(
+                function (interests) {
+
+
+                    // filter
+                    var filtered = interests.reduce(function (interests, interest) {
+
+                        var d = distanceByType[interest.type];
+
+                        if (d) {
+                            if (interest.distance <= d) {
+                                interests.push(interest);
+                            } else {
+                                console.warn('Type %s filtered off by distance (%d > %d).', interest.type, d, interest.distance);
+                            }
+                        } else {
+                            console.warn('Type %s filtered off.', interest.type);
+                        }
+
+                        return interests;
+
+                    }, []);
+
+                    console.info('Filtered results: %d / %d', filtered.length, interests.length);
+
+                    return res.status(200).json(filtered)
+                }, function (err) {
+                    console.log(err);
+                    return handleError(res, err);
+                }).done();
+
+        } else {
+            Interest.find({
+                'stepId': stepId
+            }, function (err, interests) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                return res.json(200, interests);
+            });
+        }
+        return;
+
+        /*        var promises = exports._getStepPromisesSearchAroundStep(step, distance, types);
 
         console.info('Synchronize %d promises.', promises.length);
 
@@ -193,9 +284,25 @@ exports.searchAroundStep = function (req, res) {
                 var results = geo.filterDuplicated(results);
 
                 return res.json(200, results);
-            });
+            });*/
 
     });
+};
+
+exports.findByStep = function (stepId) {
+    var deffered = Q.defer();
+
+    Interest.find({
+        'stepId': stepId
+    }).exec(function (err, interests) {
+        if (err) {
+            console.error(err);
+            deffered.reject(err);
+        }
+        deffered.resolve(interests);
+    });
+
+    return deffered.promise;
 };
 
 exports.searchAroundTour = function (req, res) {
@@ -203,7 +310,7 @@ exports.searchAroundTour = function (req, res) {
     if (!req.query.tourId) {
         return res.send(400, 'Parameter tourId is missing');
     }
-    
+
     var types = null;
 
     if (req.query.type) {
@@ -318,23 +425,6 @@ exports.show = function (req, res) {
             return res.send(404);
         }
         return res.json(interest);
-    });
-};
-
-/**
- * Get interests by step.
- */
-exports.getByStep = function (req, res) {
-
-    var stepId = req.params.stepId;
-
-    Interest.find({
-        'stepId': stepId
-    }, function (err, interests) {
-        if (err) {
-            return handleError(res, err);
-        }
-        return res.json(200, interests);
     });
 };
 

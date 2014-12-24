@@ -18,8 +18,19 @@ angular.module('globalbikerWebApp')
                                 tour: {},
                                 step: {
                                     interestsAround: {
-                                        distance: [100, 2000, 100, 2000, 7000, 7000, 2000, 2000, 100, 100, 100],
-                                        type: ['danger', 'information', 'water-point', 'bike-shops', 'interest', 'hobbies', 'accomodation', 'food', 'water-point', 'wc', 'velotoulouse' /*, 'merimee'*/ ]
+                                        distance: [
+                                            // large distance types
+                                            10000, 10000, 10000,
+                                            // medium distance types
+                                            2000, 2000, 2000, 2000,
+                                            // low distance types
+                                            200, 200, 200, 200],
+                                        type: [ // large distance types
+                                            'interest', 'hobbies', 'accomodation',
+                                            // medium distance types
+                                            'information', 'water-point', 'bike-shops', 'food',
+                                            // low distance types
+                                            'danger', 'water-point', 'wc', 'velotoulouse']
                                     },
                                     photosAround: {}
                                 }

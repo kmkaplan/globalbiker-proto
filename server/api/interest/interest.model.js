@@ -38,29 +38,7 @@ var InterestSchema = new Schema({
     photosIds: [{
         type: Schema.ObjectId,
         ref: 'PhotoSchema'
-    }],
-    photos: [{
-            url: {
-                type: String,
-                required: 'Please fill url'
-            },
-            thumbnail200: String,
-            thumbnail400: String,
-            thumbnail600: String,
-            thumbnails: {
-                w600: String,
-                w600h400: {
-                    type: String,
-                    required: 'Please fill thumbnails.600'
-                }
-            },
-            author: {
-                name: String,
-                url: String
-            },
-            licenseId: Schema.ObjectId
-        }
-    ]
+    }]
 });
 
 module.exports = mongoose.model('Interest', InterestSchema);
