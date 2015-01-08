@@ -14,7 +14,6 @@ angular.module('globalbikerWebApp', [
 ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider, uiSelectConfig) {
 
-
         tinyMCE.baseURL = '/bower_components/tinymce';
 
         uiSelectConfig.theme = 'bootstrap';

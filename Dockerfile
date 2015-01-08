@@ -15,7 +15,7 @@ WORKDIR /app
 ADD . /app
 
 # ADD package.json /app/package.json
-RUN npm install
+RUN npm install --verbose
 
 # ADD bower.json /app/bower.json
 RUN bower install --allow-root --config.interactive=false
