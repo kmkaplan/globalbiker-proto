@@ -1,3 +1,4 @@
+/*
 'use strict';
 
 angular.module('globalbikerWebApp')
@@ -10,3 +11,4 @@ angular.module('globalbikerWebApp')
         authenticate: true
       });
   });
+*/

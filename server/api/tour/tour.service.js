@@ -36,15 +36,30 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                     if (steps.length !== 0) {
                         // update tour interest from step interests
                         var interestsSum = steps.reduce(function (sum, step) {
-                            return sum + step.interest;
+                            if (step.interest){
+                                sum + step.interest;
+                            }
+                            return sum;
                         }, 0);
                         tour.interest = Math.round(interestsSum / steps.length);
 
                         // update tour difficulty from step difficulties
                         var difficultySum = steps.reduce(function (sum, step) {
-                            return sum + step.difficulty;
+                            if (step.difficulty){
+                                sum + step.difficulty;
+                            }
+                            return sum;
                         }, 0);
                         tour.difficulty = Math.round(difficultySum / steps.length);
+                        
+                        // update tour difficulty from step difficulties
+                        var distance = steps.reduce(function (sum, step) {
+                            if (step.distance){
+                                sum += step.distance;
+                            }
+                            return sum;
+                        }, 0);
+                        tour.distance = distance;
 
                     } else {
                         tour.interest = null;

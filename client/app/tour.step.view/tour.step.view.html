@@ -14,6 +14,13 @@
 
                 <div class="icon-bar">
 
+                    <div ng-if="step.distance" class="tour-icon distance">
+                        <label>Distance</label>
+                        <div>
+                            {{ step.distance / 1000 }} kms
+                        </div>
+                    </div>
+
                     <div ng-visible="step.interest" class="tour-icon rating interest">
                         <label>Interest</label>
                         <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="step.interest" max="5"></rating>

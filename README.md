@@ -13,24 +13,6 @@ The project just started a few days ago, is unstable and has a lack of documenta
 
 FIXME: work in progress
 
-### Pre-requisites
-
-#### Libvips Image processing library
-
-Install [Libvips](https://github.com/jcupitt/libvips).
-
-##### Debian/Ubuntu installer
-
-    sudo apt-get install libvips-dev
-
-##### Windows installer
-
-[Windows installer](http://www.vips.ecs.soton.ac.uk/supported/current/win32/)
-
-##### Max OSX installer
-
-[Max OSX installer](http://www.vips.ecs.soton.ac.uk/supported/current/osx/)
-        
 ## Import / Export database
 
 Export from prod database (throw SSH tunel):
