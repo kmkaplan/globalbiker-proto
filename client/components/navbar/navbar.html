@@ -1,4 +1,4 @@
-<div class="navbar navbar-default navbar-static-top" ng-controller="NavbarCtrl">
+<div class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarCtrl">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" ng-click="isCollapsed = !isCollapsed">
@@ -18,7 +18,7 @@
         </li>
         
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}" ng-hide="item.authenticate && !isLoggedIn()">
-            <a ng-href="{{item.link}}">{{item.title}}</a>
+            <a ng-href="{{ item.link }}">{{ item.title | translate }}</a>
         </li>
         <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin">Admin</a></li>
         <li ng-show="isAdmin()" ng-class="{active: isActive('/admin-data')}"><a href="/admin-data">Admin data</a></li>

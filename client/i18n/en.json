@@ -41,6 +41,9 @@
             "email_success": "Thanks, your email address has been successfuly saved!"
         }
     },
+    "menu": {
+        "search-a-tour": "Search a tour"
+    },
     "home": {
         "main": {
             "slogan": "Ride Global, Ride GlobalBiker"

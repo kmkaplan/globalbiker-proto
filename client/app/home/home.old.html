@@ -1,41 +1,6 @@
 <div id="welcomepage" class="content">
     <!-- landing page -->
-    <nav class="intro section navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="col-xs-12 col-sm-7 logo-container">
-                <h1 class="logo">
-                <img src="/assets/images/bike.png" title="bike logo provided by http://buzz.icons8.com" />
-                <span class="global">Global</span><span class="biker">Biker</span>
-<!--
-                <p class="hidden-xs slogan" translate="home.main.slogan">Ride Global, Ride GlobalBiker</p>
--->
-            </h1>
-            </div>
-            <div class="hidden-xs col-sm-4 contacts">
-
-                <!-- <img src="/assets/images/contact.png" title="e-mail" />-->
-
-                <a href="https://www.facebook.com/globalbikercommunity" target="_blank">
-                    <img src="/assets/images/facebook.png" title="facebook" />
-                </a>
-                <a href="https://twitter.com/GlobalBiker_org" target="_blank">
-                    <img src="/assets/images/twitter.png" title="twitter" />
-                </a>
-            </div>
-            <div class="col-sm-1 contacts dropdown">
-                <a href type="button" data-toggle="dropdown">
-                    <img ng-src="{{languageSelection.current.img}}" />
-                </a>
-                <ul class="dropdown-menu" role="menu">
-                    <li role="presentation" ng-repeat="lang in languageSelection.others">
-                        <a href="" ng-click="switchLanguage(lang.code)">
-                            <img ng-src="{{lang.img}}"></img>{{lang.name}}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div ng-include="'components/navbar/navbar.html'"></div>
 
     <section class="section welcome-page">
         <div class="welcome container">

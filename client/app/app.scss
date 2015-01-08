@@ -107,6 +107,7 @@ html {
         }
     }
     .page {
+        padding: 50px 30px;
         .image-horizontal-selector {
             max-width: 100%;
             overflow: auto;
@@ -121,7 +122,6 @@ html {
         .link {
             cursor: pointer;
         }
-        padding: 10px 30px;
         .breadcrumb {
             background: transparent;
             li {

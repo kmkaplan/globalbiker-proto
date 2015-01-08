@@ -41,6 +41,9 @@
             "email_success": "Merci, votre adresse est bien enregistrée!"
         }
     },
+    "menu": {
+        "search-a-tour": "Rechercher un parcours"
+    },
     "home": {
         "main": {
             "slogan": "Ride Global, Ride GlobalBiker"

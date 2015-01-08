@@ -1,15 +1,22 @@
-
 .navbar {
     background: linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
+    min-height: 25px;
+    border: 0;
     .navbar-text {
         color: $white1;
+        font-size: 15px;
+        line-height: 15px;
+        padding: 10px 20px;
+        margin: 0;
     }
     .navbar-nav > li > a {
         color: $white1;
-        font-size: 20px;
-        line-height: 20px;
+        font-size: 15px;
+        line-height: 15px;
+        padding: 10px 20px;
         &.main {
-            font-size: 25px;
+            font-size: 20px;
+            padding: 10px 20px;
             font-weight: bold;
             &:hover, &:focus {
                 color: #333333;
@@ -22,13 +29,13 @@
             }
         }
         .logo {
-            height: 35px;
+            height: 15px;
         }
     }
 }
 
 .navbar .navbar-nav > li.active > a {
-    line-height: 25px;
+    line-height: 20px;
     background: lighten($color1, 55%);
     color: #555;
     font-weight: bold;

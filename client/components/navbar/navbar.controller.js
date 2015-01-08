@@ -8,11 +8,11 @@ angular.module('globalbikerWebApp')
             $translate(['mytours.nav-bar_name']).then(function(trans) {
                 $scope.menu = [
                 {
-                    'title': "France",
+                    'title': 'menu.search-a-tour',
                     'link': '/region/france'
                 },
                 {
-                    'title': trans['mytours.nav-bar_name'],
+                    'title': 'mytours.nav-bar_name',
                     'link': '/my-tours',
                     authenticate: true
                 }];
