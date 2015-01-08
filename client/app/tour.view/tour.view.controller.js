@@ -54,10 +54,8 @@
                     },
                     callbacks: {
                         'click': function (step) {
-                            $state.go('step-details', {
-                                id: step._id
-                            }, {
-                                inherit: false
+                            $state.go('tour.step.view', {
+                                stepId: step._id
                             });
                         }
                     }

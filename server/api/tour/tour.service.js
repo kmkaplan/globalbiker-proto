@@ -26,7 +26,10 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
 
             Step.find({
                 'tourId': tour.id
-            }, function (err, steps) {
+            }).sort({
+                '_id': 1
+            }).exec(function (err, steps) {
+                
                 if (err) {
                     logger.error(err);
                     deffered.reject(err);
@@ -36,8 +39,8 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                     if (steps.length !== 0) {
                         // update tour interest from step interests
                         var interestsSum = steps.reduce(function (sum, step) {
-                            if (step.interest){
-                                sum + step.interest;
+                            if (step.interest) {
+                                sum += step.interest;
                             }
                             return sum;
                         }, 0);
@@ -45,16 +48,16 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
 
                         // update tour difficulty from step difficulties
                         var difficultySum = steps.reduce(function (sum, step) {
-                            if (step.difficulty){
-                                sum + step.difficulty;
+                            if (step.difficulty) {
+                                sum += step.difficulty;
                             }
                             return sum;
                         }, 0);
                         tour.difficulty = Math.round(difficultySum / steps.length);
-                        
+
                         // update tour difficulty from step difficulties
                         var distance = steps.reduce(function (sum, step) {
-                            if (step.distance){
+                            if (step.distance) {
                                 sum += step.distance;
                             }
                             return sum;
@@ -65,6 +68,7 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                         tour.interest = null;
                         tour.difficulty = null;
                     }
+                    
                     tour.save(function (err) {
                         if (err) {
                             logger.error(err);

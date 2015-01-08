@@ -1,4 +1,4 @@
-<div class="step-description-area">
+<div class="tour-step-edit-page">
 
     <div class="row">
 
@@ -19,7 +19,7 @@
                             {{ step.distance / 1000 }} kms
                         </div>
                     </div>
-                    
+
                     <div class="tour-icon rating interest in-edition">
                         <label>Interest</label>
                         <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" ng-model="step.interest" max="5"></rating>
@@ -36,7 +36,13 @@
 
                 </div>
 
-                <h2>{{ step | stepLabel }}</h2>
+                <h2>
+                    <span ng-if="step.tourStepIndex">
+                        <span translate="global.step.label">Step</span> 
+                        {{ step.tourStepIndex }}/{{ step.tourStepsNumber }} - 
+                    </span>
+                    {{ step | stepLabel }} 
+                </h2>
 
                 <div ng-if="interest" interest-form interest="interest" on-save="saveOrUpdateInterest(interest, isNew)" , on-remove="removeInterest(interest)"></div>
 
@@ -63,8 +69,7 @@
 
                     <div class="image-horizontal-selector">
                         <div class="image-horizontal-scroll">
-                            <img ng-repeat="photo in step.photos" class="link smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}"
-                            ng-class="{selected: step.photo._id === photo._id }" ng-click="selectPhoto(photo)" />
+                            <img ng-repeat="photo in step.photos" class="link smart-photo" alt="-" ng-src="{{ photo.thumbnails.w600h400 }}" ng-class="{selected: step.photo._id === photo._id }" ng-click="selectPhoto(photo)" />
                         </div>
                     </div>
                 </div>

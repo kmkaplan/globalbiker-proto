@@ -11,6 +11,7 @@
             "uploadphoto": "add a picture"
         },
         "step": {
+            "label": "Step",
             "departure": "City of departure",
             "arrival": "City of arrival",
             "from": "From",

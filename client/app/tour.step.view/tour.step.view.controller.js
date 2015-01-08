@@ -12,6 +12,7 @@
 
         // scope methods
         $scope.editStep = editStep;
+        $scope.openStep = openStep;
         $scope.openTour = openTour;
         $scope.deleteStep = deleteStep;
         $scope.createStep = createStep;
@@ -31,31 +32,31 @@
 
                 $scope.$watch('step.interests', function (interests) {
                     if (interests && interests.length > 0) {
-                        
-                        interests = interests.reduce(function(interests, interest){
-                            // ['interest', 'hobbies'].indexOf(interest.type) !== -1 || 
-                            if (interest.photosIds && interest.photosIds.length > 0){
-                                
-                                interest.photos = [];
-                                
-                                if (interest.photosIds && interest.photosIds.length > 0){
-                                    
-                                    interest.photosIds.reduce(function(o, photoId){
-                                        
-                                         photoLoaderService.getPhoto(photoId).then(function(photo){
 
-                                             interest.photos.push(photo);
-                                             
-                                         });
+                        interests = interests.reduce(function (interests, interest) {
+                            // ['interest', 'hobbies'].indexOf(interest.type) !== -1 || 
+                            if (interest.photosIds && interest.photosIds.length > 0) {
+
+                                interest.photos = [];
+
+                                if (interest.photosIds && interest.photosIds.length > 0) {
+
+                                    interest.photosIds.reduce(function (o, photoId) {
+
+                                        photoLoaderService.getPhoto(photoId).then(function (photo) {
+
+                                            interest.photos.push(photo);
+
+                                        });
                                     }, null);
-                                   
+
                                 }
-                                
+
                                 interests.push(interest);
-                            } 
+                            }
                             return interests;
                         }, []);
-                        
+
                         $scope.interestsDetails = interests
                     }
                 });
@@ -70,6 +71,13 @@
         function openTour(tour) {
             $state.go('tour.view');
         }
+
+        function openStep(step) {
+            console.info('Open step %d', step._id);
+            $state.go('tour.step.view', {
+                stepId: step._id
+            }, {});
+        };
 
         function editStep(step) {
             $state.go('tour.step.edit', $stateParams);

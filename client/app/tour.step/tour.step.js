@@ -36,6 +36,36 @@ angular.module('globalbikerWebApp')
                                 }
                             }).then(function (step) {
                                 console.info('Step %s loaded successfully.', step._id);
+
+                                if (tour.steps) {
+                                    var res = tour.steps.reduce(function (res, stepInLoop) {
+                                        if (!res.found) {
+                                            res.index++;
+                                            if (step._id === stepInLoop._id) {
+                                                res.found = true;
+                                            }
+                                        }
+                                        return res;
+                                    }, {
+                                        found: false,
+                                        index: 0
+                                    });
+
+                                    if (res.found) {
+                                        step.tourStepIndex = res.index;
+                                        step.tourStepsNumber = tour.steps.length;
+                                        console.log('Step %d/%d', step.tourStepIndex, step.tourStepsNumber);
+
+                                        var i = step.tourStepIndex - 1;
+                                        if (i !== 0) {
+                                            step.previous = tour.steps[i - 1];
+                                        }
+                                        if (i !== (tour.steps.length - 1)) {
+                                            step.next = tour.steps[i + 1];
+                                        }
+                                    }
+                                }
+
                                 deffered.resolve(step);
 
                                 if (step.photoId) {

@@ -74,6 +74,8 @@
 
             var interests = step.interests;
             var photo = step.photo;
+            var tourStepIndex = step.tourStepIndex;
+            var tourStepsNumber = step.tourStepIndex;
 
             step.$update(function (data, putResponseHeaders) {
                 console.info('Step updated.');
@@ -83,6 +85,9 @@
                 $state.go('tour.step.view', $stateParams);
                 step.interests = interests;
                 step.photo = photo;
+
+                step.tourStepIndex = tourStepIndex;
+                step.tourStepsNumber = tourStepIndex;
             });
             return deffered.promise;
         }
@@ -135,10 +140,8 @@
                     },
                     callbacks: {
                         'click': function (step) {
-                            $state.go('step-details', {
-                                id: step._id
-                            }, {
-                                inherit: false
+                            $state.go('tour.step.view', {
+                                stepId: step._id
                             });
                         }
                     }

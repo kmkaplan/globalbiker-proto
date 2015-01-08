@@ -1,50 +1,16 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('globalbikerWebApp')
-    .controller('HomeCtrl', function ($scope, MailingRepository, $translate) {
-        $scope.addMail = function ($email, $) {
-            var mailingRepository;
-            mailingRepository = new MailingRepository({
-                email: $email
-            });
-            mailingRepository.$save(function () {
-                $scope.mailSuccess = true;
-            });
-        }
+    angular.module('globalbikerWebApp').controller('HomeCtrl', HomeCtrl);
 
-        $scope.languageApp = [
-            {
-                code: "en",
-                img: "/assets/images/languages/gb.png",
-                name: "English"
-            },
-            {
-                code: "fr",
-                img: "/assets/images/languages/fr.png",
-                name: "Français"
-            }
-        ];
+    function HomeCtrl($scope, $stateParams, $state, $q) {
 
-        $scope.languageSelectionApp = function ($used) {
-            var result = {
-                current: null,
-                others: []
-            }
-            for (var i in $scope.languageApp) {
-                if ($scope.languageApp[i].code === $used) {
-                    result.current = $scope.languageApp[i];
-                } else {
-                    result.others.push($scope.languageApp[i]);
-                }
-            }
-            return result;
+        // init method
+        init();
+
+        function init() {
+
         };
 
-        $scope.languageSelection = $scope.languageSelectionApp($translate.use());
-
-        $scope.switchLanguage = function ($code) {
-            $translate.use($code);
-            $scope.languageSelection = $scope.languageSelectionApp($code);
-        };
-
-    });
+    };
+})();

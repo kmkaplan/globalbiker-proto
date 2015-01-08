@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 angular.module('globalbikerWebApp')
   .config(function ($stateProvider) {
@@ -8,4 +8,4 @@ angular.module('globalbikerWebApp')
         templateUrl: 'app/step-details/step-details.html',
         controller: 'StepDetailsCtrl'
       });
-  });
+  });*/

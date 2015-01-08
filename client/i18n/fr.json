@@ -11,6 +11,7 @@
             "uploadphoto": "ajouter une photo"
         },
         "step": {
+            "label": "&Eacute;tape",
             "departure": "Ville de départ",
             "arrival": "Ville de destination",
             "from": "De",
