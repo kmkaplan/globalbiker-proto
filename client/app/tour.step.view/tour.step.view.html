@@ -38,14 +38,18 @@
                 </div>
 
                 <h2>
-                    <a ng-if="step.previous" class="link" title="{{ step.previous.name }}" ng-click="openStep(step.previous)">
-                        <i class="pull-left fa fa-caret-square-o-left"></i> 
-                    </a>
-                    <span ng-if="step.tourStepIndex"><span translate="global.step.label">Step</span> {{ step.tourStepIndex }}/{{ step.tourStepsNumber }} - </span>
-                    {{ step | stepLabel }} 
-                    <a ng-if="step.next" class="link" title="{{ step.next.name }}" ng-click="openStep(step.next)">
-                        <i class="pull-right fa fa-caret-square-o-right"></i> 
-                    </a>
+                   <div ng-if="step.tourStepsNumber && step.tourStepsNumber > 1">
+                        <a ng-if="step.previous" class="link" title="{{ step.previous.name }}" ng-click="openStep(step.previous)">
+                            <i class="pull-left fa fa-caret-square-o-left"></i> 
+                        </a>
+                        <span ng-if="step.tourStepIndex">
+                            <span translate="global.step.label">Step</span> {{ step.tourStepIndex }}/{{ step.tourStepsNumber }}
+                        </span>
+                        <a ng-if="step.next" class="link" title="{{ step.next.name }}" ng-click="openStep(step.next)">
+                            <i class="pull-right fa fa-caret-square-o-right"></i> 
+                        </a>
+                    </div>
+                    <div>{{ step | stepLabel }}</div> 
                 </h2>
 
                 <tabset>
