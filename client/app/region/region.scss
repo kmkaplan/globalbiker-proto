@@ -1,11 +1,11 @@
 @import "table";
 
 .region-page {
-     width: 95%;
-    .alert{
+    width: 95%;
+    .alert {
         margin-top: 20px;
     }
-    .region-map{
+    .region-map {
         height: 600px;
     }
     .list-map-area {
@@ -24,6 +24,28 @@
             }
             .steps {
                 color: $color2;
+                .steps-number {}
+                .distance {
+                    font-weight: bold;
+                }
+            }
+            .small-tag-icon {
+                display: inline-block;
+                .keyword-icons-area{
+                    display: inline-block;
+                }
+                .tour-icon {
+                    display: inline-block;
+                    text-align: center;
+                    vertical-align: middle;
+                    height: 30px;
+                    width: 30px;
+                    padding: 2px 2px;
+                    font-size: 18px;
+                }
+                &.keyword .tour-icon {
+                    padding: 5px 2px;
+                }
             }
         }
     }

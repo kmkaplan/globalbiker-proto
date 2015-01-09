@@ -12,7 +12,7 @@
                         <div ng-if="tour.distance" class="tour-icon distance">
                             <label>Distance</label>
                             <div>
-                                {{ tour.distance / 1000 }} kms
+                                {{ tour.distance / 1000 | number: 0 }} kms
                             </div>
                         </div>
                         <div ng-visible="tour.interest" class="tour-icon rating interest">

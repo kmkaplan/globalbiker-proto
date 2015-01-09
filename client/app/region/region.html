@@ -21,8 +21,19 @@
                                             <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
                                         </div>
                                     </div>
+                                    <div style="margin-top: 10px">
+                                        <div class="small-tag-icon travel-with" travel-with-icon model="tour.travelWith" in-edition="false"></div>
+                                        <div class="small-tag-icon keyword" keyword-icons model="tour.keywords" in-edition="false"></div>
+                                    </div>
                                 </td>
-                                <td class="steps">{{ tour.steps.length }} étape(s)</td>
+                                <td class="steps">
+                                    <div class="steps-number">
+                                        {{ tour.steps.length }} étape(s)
+                                    </div>
+                                    <div class="distance" ng-if="tour.distance">
+                                        {{ tour.distance / 1000 | number: 0 }} kms
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
