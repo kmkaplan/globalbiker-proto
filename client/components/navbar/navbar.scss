@@ -2,7 +2,7 @@
     background: linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
     min-height: 25px;
     border: 0;
-    .link{
+    .link {
         cursor: pointer;
     }
     .navbar-text {
@@ -27,15 +27,15 @@
                     color: lighten(#333333, 10%);
                 }
             }
-            .biker {
-                color: white2;
+            &.main {
+                padding: 5px 20px 0 0;
             }
         }
         .logo {
-            height: 15px;
+            height: 30px;
         }
     }
-    .navbar-nav > li.icon > a{
+    .navbar-nav > li.icon > a {
         padding: 10px 10px;
     }
 }
