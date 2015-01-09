@@ -15,6 +15,9 @@ $fa-font-path: "/bower_components/font-awesome/fonts";
     padding: 0.2em 0;
 }
 
+// fonts
+$fontFamilly: "Open Sans", Helvetica, Arial, sans-serif;
+
 // red
 $color1: #AA3939;
 $color1light1: #D46A6A;
@@ -69,6 +72,7 @@ $black3: #555;
 
 // Component styles are injected through grunt
 // injector
+@import 'about-us/about-us.scss';
 @import 'account/login/login.scss';
 @import 'admin-data/admin-data.scss';
 @import 'admin/admin.scss';
@@ -96,12 +100,15 @@ $black3: #555;
 // endinjector
 
 html {
+    font-family: $fontFamilly;
     min-height: 100%;
     body {
+        font-family: $fontFamilly;
         min-height: 100%;
-        background: $white1;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
+        /*        background: $white1;
+                background-repeat: no-repeat;
+                background-attachment: fixed;*/
+        background: url("/assets/images/bg.png") repeat scroll 0 0 #fdfefe;
         .navbar {
             margin-bottom: 0;
         }
@@ -148,17 +155,27 @@ html {
             border: 2px solid $color2;
             border-radius: 5px;
         }
-        h1, .h1, h2, .h2, h3, .h3 {
-            margin-top: 5px;
-            margin-bottom: 15px;
-        }
         h1 {
+            font-size: 30px;
             color: $color2;
             text-shadow: 1px 1px 0 $color2dark2;
+            margin-top: 20px;
+            margin-bottom: 15px;
         }
-        h2, h3 {
+        h2 {
+            font-size: 25px;
             color: $color1;
             text-shadow: 1px 0px 0 $color1dark2;
+            margin-top: 15px;
+            margin-bottom: 12px;
+        }
+        h3 {
+            font-size: 20px;
+            font-style: italic;
+            color: $color1;
+            text-shadow: 1px 0px 0 $color1dark2;
+            margin-top: 10px;
+            margin-bottom: 12px;
         }
         .nav-tabs > li > a:hover {
             cursor: pointer;

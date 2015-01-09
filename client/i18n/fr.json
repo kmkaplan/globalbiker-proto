@@ -42,7 +42,10 @@
         }
     },
     "menu": {
-        "search-a-tour": "Rechercher un parcours"
+        "search-a-tour": "Rechercher un parcours",
+        "my-tours": "Mes parcours",
+        "blog": "Blog",
+        "about-us": "A propos de GlobalBiker"
     },
     "home": {
         "main": {

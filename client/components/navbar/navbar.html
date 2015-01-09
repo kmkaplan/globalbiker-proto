@@ -20,16 +20,20 @@
         <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}" ng-hide="item.authenticate && !isLoggedIn()">
             <a ng-href="{{ item.link }}">{{ item.title | translate }}</a>
         </li>
-        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin">Admin</a></li>
-        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin-data')}"><a href="/admin-data">Admin data</a></li>
+       
       </ul>
-
-
      <ul class="nav navbar-nav navbar-right">
         <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/signup')}"><a href="/signup" translate="global.signup">Sign up</a></li>
         <li ng-hide="isLoggedIn()" ng-class="{active: isActive('/login')}"><a href="/login" translate="global.login">Login</a></li>
-        <li ng-show="isLoggedIn()"><p class="navbar-text">{{"global.hello"|translate}} {{ getCurrentUser().name }}</p> </li>
-        <li ng-show="isLoggedIn()" ng-class="{active: isActive('/settings')}"><a href="/settings"><span class="glyphicon glyphicon-cog"></span></a></li>
+        <li ng-show="isLoggedIn()" class="dropdown">
+          <a class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-expanded="false">{{ getCurrentUser().name }} <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li ng-class="{ active: isActive('/settings') }"><a href="/settings"><span class="glyphicon glyphicon-cog"></span> Change password</a></li>
+            <li class="divider"></li>
+             <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin"><i class="fa fa-users"></i> Manage users</a></li>
+             <li ng-show="isAdmin()" ng-class="{active: isActive('/admin-data')}"><a href="/admin-data"><i class="fa fa-database"></i> Manage open-data</a></li>
+          </ul>
+        </li>
         <li ng-show="isLoggedIn()" ng-class="{active: isActive('/logout')}"><a href="" ng-click="logout()" translate="global.logout">Logout</a></li>
         <li class="dropdown">
             <a href type="button" data-toggle="dropdown">

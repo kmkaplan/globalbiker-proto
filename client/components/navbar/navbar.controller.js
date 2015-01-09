@@ -12,9 +12,17 @@ angular.module('globalbikerWebApp')
                     'link': '/region/france'
                 },
                 {
-                    'title': 'mytours.nav-bar_name',
+                    'title': 'menu.my-tours',
                     'link': '/my-tours',
                     authenticate: true
+                },
+                {
+                    'title': 'menu.about-us',
+                    'link': '/about'
+                },
+                {
+                    'title': 'menu.blog',
+                    'link': 'http://blog.globalbiker.org'
                 }];
             });
         }

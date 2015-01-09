@@ -42,7 +42,10 @@
         }
     },
     "menu": {
-        "search-a-tour": "Search a tour"
+        "search-a-tour": "Search a tour",
+        "my-tours": "My tours",
+        "blog": "Blog",
+        "about-us": "About GlobalBiker"
     },
     "home": {
         "main": {
