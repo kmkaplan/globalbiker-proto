@@ -2,24 +2,25 @@
 
 <div class="container region-page page" ng-if="tours">
 
-    <h1><span translate="region.title">Search a tour in </span><span class="city-name">{{region.name}}</span></h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="list-map-area bordered-area large-area">
+                <h1><span translate="region.title">Search a tour in </span><span class="city-name">{{region.name}}</span></h1>
 
-    <div class="list-map-area">
-        <div class="row">
-            <div class="col-md-6">
                 <div class="tours-resume-list-area">
-                    <h3>Choisissez un trajet</h3>
                     <table class="smart-table table table-striped table-hover">
                         <tbody>
                             <tr class="tour-resume-list" ng-click="openTour(tour)" ng-repeat="tour in tours">
                                 <td class="title">{{ tour.title }}
-                                   <div> <div class="rating">
-                                        <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
-                                    </div>
+                                    <div>
+                                        <div class="rating">
+                                            <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
+                                        </div>
 
-                                    <div class="rating">
-                                        <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
-                                    </div></div>
+                                        <div class="rating">
+                                            <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="steps">{{ tour.steps.length }} étape(s)</td>
                             </tr>
@@ -27,19 +28,18 @@
                     </table>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="region-map-area responsive-map-area smart-area smart-map-area">
-                    <div class="region-map" map config="mapConfig"></div>
-                </div>
+        </div>
+        <div class="col-md-6">
+            <div class="region-map-area responsive-map-area smart-area smart-map-area">
+                <div class="region-map" map config="mapConfig"></div>
             </div>
         </div>
     </div>
 
     <div class="alert alert-warning" translate="region.warning">
-        GlobalBiker is early stage of development. 
-        The geographical area is restricted to France for now, and is not yet open to public contribution.
+        GlobalBiker is early stage of development. The geographical area is restricted to France for now, and is not yet open to public contribution.
     </div>
-   
+
     <div class="tour-details-list" ng-repeat="tour in tours">
         <div class="row tour-details">
             <div class="col-md-3 photo-area">

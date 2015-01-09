@@ -115,6 +115,15 @@ html {
     }
     .page {
         padding: 50px 30px;
+        .bordered-area {
+            background: rgba($color1, 0.01);
+            border: 2px solid $color1;
+            border-radius: 10px 5px 5px 5px;
+            padding: 5px 25px;
+        }
+        .large-area{
+            min-height: 604px;
+        }
         .image-horizontal-selector {
             max-width: 100%;
             overflow: auto;

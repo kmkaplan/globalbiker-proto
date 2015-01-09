@@ -2,8 +2,11 @@
 
 .region-page {
      width: 95%;
+    .alert{
+        margin-top: 20px;
+    }
     .region-map{
-        height: 400px;
+        height: 600px;
     }
     .list-map-area {
         border: 2px solid $color1;
@@ -61,7 +64,6 @@
         text-align: center;
     }
     .region-map-area {
-        margin-top: 20px;
         .alert {
             margin: 0;
             border-radius: 0px;
