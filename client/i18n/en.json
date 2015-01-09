@@ -82,6 +82,10 @@
             "test_beta": "Test the prototype!"
         }
     },
+    "region": {
+        "warning": "GlobalBiker is early stage of development. The geographical area is restricted to France for now, and is not yet open to public contribution.",
+        "title": "Search a tour in "
+    },
     "mytours": {
         "nav-bar_name": "My tours",
         "create": "Create a new tour",

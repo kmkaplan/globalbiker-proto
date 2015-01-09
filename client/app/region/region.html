@@ -2,7 +2,7 @@
 
 <div class="container region-page page" ng-if="tours">
 
-    <h2>Zone géographique: <span class="city-name">{{region.name}}</span></h2>
+    <h1><span translate="region.title">Search a tour in </span><span class="city-name">{{region.name}}</span></h1>
 
     <div class="list-map-area">
         <div class="row">
@@ -35,6 +35,11 @@
         </div>
     </div>
 
+    <div class="alert alert-warning" translate="region.warning">
+        GlobalBiker is early stage of development. 
+        The geographical area is restricted to France for now, and is not yet open to public contribution.
+    </div>
+   
     <div class="tour-details-list" ng-repeat="tour in tours">
         <div class="row tour-details">
             <div class="col-md-3 photo-area">
