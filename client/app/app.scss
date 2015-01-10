@@ -118,8 +118,10 @@ html {
     }
     .page {
         padding: 50px 30px;
-        a, .link {
+        .link {
             cursor: pointer;
+        }
+        a:not(.btn) {
             color: $color2;
         }
         .bordered-area {

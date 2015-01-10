@@ -20,14 +20,14 @@
         .tour-resume-list {
             .list-group-item {
                 padding: 0 15px 10px 15px;
-                cursor: pointer;
                 h2.list-group-item-heading {
                     font-size: 24px;
                     margin: 5px 0 10px 0;
                     clear: none;
+                    font-weight: normal;
                 }
                 .small-tag-icons-area {
-                    margin: 0 0 10px 0;
+                    margin: 10px 0 10px 0;
                     .small-tag-icon {
                         display: inline-block;
                         .keyword-icons-area {
@@ -57,13 +57,19 @@
                             margin: 5px 0 0 5px;
                         }
                     }
-                    .distance-info{
+                    .distance-info {
                         font-size: 12px;
                         font-style: italic;
+                        color: $color2;
+                        .steps-number {}
+                        .distance {
+                            font-weight: bold;
+                        }
                     }
                 }
                 .tour-description {
                     max-height: 80px;
+                    overflow: hidden;
                 }
                 .photo-area {
                     padding: 0 0 0 15px;
@@ -77,12 +83,9 @@
                         padding: 6px;
                     }
                 }
-                .steps {
-                    color: $color2;
-                    .steps-number {}
-                    .distance {
-                        font-weight: bold;
-                    }
+                .detail-btn {
+                    padding: 1px 5px;
+                    margin-top: 10px;
                 }
             }
         }

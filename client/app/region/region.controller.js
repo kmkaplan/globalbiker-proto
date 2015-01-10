@@ -27,6 +27,8 @@
 
         // scope methods
         $scope.openTour = openTour;
+        $scope.showTourDetails = showTourDetails;
+        $scope.isCollapsed = isCollapsed;
 
         // init method
         init();
@@ -61,6 +63,14 @@
 
         }
 
+        function showTourDetails(tour){
+            $scope.showTourDetailsId = tour._id;
+        }
+        
+        function isCollapsed(tour){
+            return ($scope.showTourDetailsId !== tour._id);
+        }
+        
         function getRegion() {
 
             var deffered = $q.defer();
