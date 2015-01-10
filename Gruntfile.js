@@ -225,6 +225,8 @@ module.exports = function (grunt) {
             '<%= yeoman.dist %>/public/{,*/}*.js',
             '<%= yeoman.dist %>/public/{,*/}*.css',
             '<%= yeoman.dist %>/public/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
+            '!<%= yeoman.dist %>/public/assets/images/logo-globalbiker.png',
+            '!<%= yeoman.dist %>/public/assets/images/static/**',
             '<%= yeoman.dist %>/public/assets/fonts/*'
           ]
         }
@@ -688,4 +690,5 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
 };

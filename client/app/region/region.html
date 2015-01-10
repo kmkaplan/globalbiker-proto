@@ -11,9 +11,6 @@
                     <div class="list-group tour-resume-list">
                         <div class="list-group-item link" ng-repeat="tour in tours" ng-click="openTour(tour)">
                            
-                            <a ng-if="securityService.isTourEditable(tour)" class="pull-right" href="/tour/{{ tour._id }}/edit">
-                                <i class="fa fa-edit"></i> {{ 'global.actions.edit' | translate }}
-                            </a>
                             <div class="quick-info-area">
                                 <div class="rating-area">
                                     <div class="rating">

@@ -10,6 +10,9 @@
                     <i class="fa fa-pencil-square-o"></i>
                 </a>
 
+                <a ng-href="/tour/{{ tour._id }}/" class="btn btn-default pull-left back-to-list-button" title="Back to list of steps">
+                    <i class="glyphicon glyphicon-align-justify"></i>
+                </a>
                 <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>
 
                 <h2>
@@ -61,17 +64,18 @@
                             <img class="step smart-photo step-main-photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
                         </div>
                     </tab>
-                    <tab heading="Photos des points d'intérêt le long du parcours" ng-if="interestsDetails">
+                    <tab heading="Principaux points d'intérêt" ng-if="interestsDetails">
                         <div class="interests-area">
                             <div ng-repeat="interest in interestsDetails">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div ng-class="{ 'col-md-12': interest.photos.length === 0, 'col-md-6': interest.photos.length !== 0 }">
                                         <div class="interest-description">
                                             <h3>{{ interest.name }}</h3>
                                             <p ng-bind-html="interest.description"></p>
                                         </div>
                                     </div>
-                                    <div class="col-md-6" ng-if="interest.photos">
+                                    {{ interest.photos.length }}
+                                    <div class="col-md-6" ng-if="interest.photos.length !== 0">
                                         <div class="carousel-area ">
                                             <div class="">
                                                 <carousel>

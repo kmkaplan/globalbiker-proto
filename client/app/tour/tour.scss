@@ -6,7 +6,9 @@
         }
         h1 {
             font-size: 32px;
-            margin-top: 20px;
+            margin-top: 10px;
+            text-align: center;
+            clear: none;
             &:after {
                 content: '';
                 display: block;
@@ -23,6 +25,7 @@
             }
         }
         .icon-bar {
+            margin-bottom: 25px;
             .travel-with-select {
                 width: 50px;
                 display: inline-block;
