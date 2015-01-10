@@ -17,22 +17,11 @@
         font-size: 15px;
         line-height: 15px;
         padding: 10px 20px;
-        &.main {
+        &.logo {
             font-size: 20px;
             padding: 10px 20px;
             font-weight: bold;
-            &:hover, &:focus {
-                color: #333333;
-                .biker {
-                    color: lighten(#333333, 10%);
-                }
-            }
-            &.main {
-                padding: 5px 20px 0 0;
-            }
-        }
-        .logo {
-            height: 30px;
+            font-family: 'Gloria Hallelujah';
         }
     }
     .navbar-nav > li.icon > a {
