@@ -118,6 +118,10 @@ html {
     }
     .page {
         padding: 50px 30px;
+        a, .link {
+            cursor: pointer;
+            color: $color2;
+        }
         .bordered-area {
             background: rgba($color1, 0.01);
             border: 2px solid $color1;
@@ -137,9 +141,6 @@ html {
                     border: 2px solid #555;
                 }
             }
-        }
-        .link {
-            cursor: pointer;
         }
         .breadcrumb {
             background: transparent;
