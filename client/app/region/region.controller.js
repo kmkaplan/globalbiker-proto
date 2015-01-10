@@ -1,6 +1,21 @@
 (function () {
     'use strict';
 
+    angular.module('globalbikerWebApp').directive('truncateText', truncateText);
+
+    function truncateText() {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attributes) {
+                scope.$watch(function () {
+                    element.dotdotdot({
+                        watch: true
+                    });
+                });
+            }
+        }
+    };
+
     angular.module('globalbikerWebApp').controller('RegionCtrl', RegionCtrl);
 
     function RegionCtrl($scope, $q, $state, $stateParams, Auth, bikeTourMapService, tourLoaderService, RegionRepository, securityService) {

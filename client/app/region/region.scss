@@ -6,7 +6,10 @@
         margin-top: 20px;
     }
     .region-map {
-        height: 600px;
+        height: 500px;
+    }
+    .city-name {
+        color: $color1;
     }
     .list-map-area {
         border: 2px solid $color1;
@@ -15,102 +18,73 @@
         border-radius: 10px 0 0 0;
         padding: 10px;
         .tour-resume-list {
-            .title {
-                font-weight: bold;
-                .rating {
-                    display: inline-block;
-                    width: 100px;
+            .list-group-item {
+                padding: 0 15px 10px 15px;
+                cursor: pointer;
+                h2.list-group-item-heading {
+                    font-size: 24px;
+                    margin: 5px 0 10px 0;
+                    clear: none;
                 }
-            }
-            .steps {
-                color: $color2;
-                .steps-number {}
-                .distance {
-                    font-weight: bold;
+                .small-tag-icons-area {
+                    margin: 0 0 10px 0;
+                    .small-tag-icon {
+                        display: inline-block;
+                        .keyword-icons-area {
+                            display: inline-block;
+                        }
+                        .tour-icon {
+                            display: inline-block;
+                            text-align: center;
+                            vertical-align: middle;
+                            height: 25px;
+                            width: 25px;
+                            padding: 2px 2px;
+                            font-size: 18px;
+                        }
+                        &.keyword .tour-icon {
+                            padding: 5px 2px;
+                        }
+                    }
                 }
-            }
-            .small-tag-icon {
-                display: inline-block;
-                .keyword-icons-area{
-                    display: inline-block;
-                }
-                .tour-icon {
-                    display: inline-block;
+                .quick-info-area {
+                    float: right;
                     text-align: center;
-                    vertical-align: middle;
-                    height: 30px;
-                    width: 30px;
-                    padding: 2px 2px;
-                    font-size: 18px;
+                    .rating-area {
+                        .rating {
+                            font-size: 12px;
+                            display: inline-block;
+                            margin: 5px 0 0 5px;
+                        }
+                    }
+                    .distance-info{
+                        font-size: 12px;
+                        font-style: italic;
+                    }
                 }
-                &.keyword .tour-icon {
-                    padding: 5px 2px;
+                .tour-description {
+                    max-height: 80px;
+                }
+                .photo-area {
+                    padding: 0 0 0 15px;
+                    text-align: left;
+                    vertical-align: top;
+                    .photo {
+                        max-height: 100px;
+                        max-width: 100%;
+                        background-color: white;
+                        box-shadow: 2px 5px 10px #000000;
+                        padding: 6px;
+                    }
+                }
+                .steps {
+                    color: $color2;
+                    .steps-number {}
+                    .distance {
+                        font-weight: bold;
+                    }
                 }
             }
         }
-    }
-    .tour-details-list {
-        /*background: $color2light1;
-        box-shadow: 1px 1px 2px 1px $color2dark2;*/
-        //border: 2px solid $color2;
-        /* border-top: none;
-         border-left: none;*/
-        border-radius: 10px;
-        margin-top: 10px;
-        color: $black1;
-        font-size: 16px;
-        text-align: justify;
-        background-color: #f9f9f9;
-        .tour-details {
-            margin: 20px;
-            padding: 20px 10px;
-            vertical-align: middle;
-            a {
-                color: $color2;
-            }
-            .photo-area {
-                padding: 10px;
-                text-align: center;
-                vertical-align: middle;
-            }
-            .photo {
-                max-height: 200px;
-                max-width: 100%;
-                background-color: white;
-                box-shadow: 2px 5px 10px #000000;
-                padding: 6px;
-            }
-        }
-    }
-    .images-bar {
-        text-align: center;
-    }
-    .region-map-area {
-        .alert {
-            margin: 0;
-            border-radius: 0px;
-        }
-    }
-    .carousel-area {
-        //height: 258px;
-        text-align: center;
-        overflow: hidden;
-        background: transparent;
-        vertical-align: middle;
-        .carousel-control {
-            background: transparent;
-            cursor: pointer;
-        }
-        .carousel-indicators {
-            // margin-bottom: 0px;
-       
-        }
-        img {
-            display: inline;
-            height: 200px;
-        }
-    }
-    .city-name {
-        color: $color1;
     }
 }

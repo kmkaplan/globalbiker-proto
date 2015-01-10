@@ -8,35 +8,48 @@
                 <h1><span translate="region.title">Search a tour in </span><span class="city-name">{{region.name}}</span></h1>
 
                 <div class="tours-resume-list-area">
-                    <table class="smart-table table table-striped table-hover">
-                        <tbody>
-                            <tr class="tour-resume-list" ng-click="openTour(tour)" ng-repeat="tour in tours">
-                                <td class="title">{{ tour.title }}
-                                    <div>
-                                        <div class="rating">
-                                            <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
-                                        </div>
-
-                                        <div class="rating">
-                                            <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
-                                        </div>
+                    <div class="list-group tour-resume-list">
+                        <div class="list-group-item" ng-click="openTour(tour)" ng-repeat="tour in tours">
+                            <a ng-if="securityService.isTourEditable(tour)" class="pull-right" href="/tour/{{ tour._id }}/edit">
+                                <i class="fa fa-edit"></i> {{ 'global.actions.edit' | translate }}
+                            </a>
+                            <div class="quick-info-area">
+                                <div class="rating-area">
+                                    <div class="rating">
+                                        <rating state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" readonly="true" ng-model="tour.difficulty" max="3"></rating>
                                     </div>
-                                    <div style="margin-top: 10px">
-                                        <div class="small-tag-icon travel-with" travel-with-icon model="tour.travelWith" in-edition="false"></div>
-                                        <div class="small-tag-icon keyword" keyword-icons model="tour.keywords" in-edition="false"></div>
+                                    <div class="rating">
+                                        <rating state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" readonly="true" ng-model="tour.interest" max="5"></rating>
                                     </div>
-                                </td>
-                                <td class="steps">
-                                    <div class="steps-number">
+                                </div>
+                                <div class="distance-info">
+                                    <span class="distance" ng-if="tour.distance">
+                                        {{ tour.distance / 1000 | number: 0 }} kms - 
+                                    </span>
+                                    <span class="steps-number">
                                         {{ tour.steps.length }} étape(s)
+                                    </span>
+                                </div>
+                            </div>
+                            <h2 class="list-group-item-heading">
+                                {{ tour.title }}
+                            </h2>
+                            <div class="list-group-item-text">
+                                <div class="row">
+                                    <div ng-if="tour.photo.thumbnails.w600h400" class="col-md-3 photo-area">
+                                        <img class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
                                     </div>
-                                    <div class="distance" ng-if="tour.distance">
-                                        {{ tour.distance / 1000 | number: 0 }} kms
+                                    <div ng-class="{ 'col-md-9': tour.photo.thumbnails.w600h400, 'col-md-12': !tour.photo.thumbnails.w600h400 }">
+                                        <p class="tour-description" truncate-text ng-bind-html="tour.description"></p>
+                                        <div class="small-tag-icons-area">
+                                            <div class="small-tag-icon travel-with" travel-with-icon model="tour.travelWith" in-edition="false"></div>
+                                            <div class="small-tag-icon keyword" keyword-icons model="tour.keywords" in-edition="false"></div>
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,26 +60,10 @@
         </div>
     </div>
 
-    <div class="alert alert-warning" translate="region.warning">
+    <div class="alert alert-danger" translate="region.warning">
         GlobalBiker is early stage of development. The geographical area is restricted to France for now, and is not yet open to public contribution.
     </div>
 
-    <div class="tour-details-list" ng-repeat="tour in tours">
-        <div class="row tour-details">
-            <div class="col-md-3 photo-area">
-                <img ng-if="tour.photo.thumbnails.w600h400" class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
-            </div>
-            <div class="col-md-9">
-                <a ng-if="securityService.isTourEditable(tour)" class="pull-right" href="/tour/{{ tour._id }}/edit">
-                    <i class="fa fa-edit"></i> {{ 'global.actions.edit' | translate }}
-                </a>
-                <h2>{{ tour.title }}</h2>
-                <div ng-bind-html="tour.description"></div>
-
-            </div>
-
-        </div>
-    </div>
 </div>
 
 <div ng-include="'components/footer/footer.html'"></div>
