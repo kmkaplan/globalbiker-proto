@@ -19,14 +19,15 @@
         padding: 10px;
         .tour-resume-list {
             .list-group-item {
-                padding: 0 15px 10px 15px;
-                h2.list-group-item-heading {
-                    font-size: 24px;
+                padding: 0px 15px 10px 15px;
+                .list-group-item-heading {
+                    font-size: 14px;
                     margin: 5px 0 10px 0;
                     clear: none;
-                    font-weight: normal;
+                    font-weight: bold;
                 }
                 .small-tag-icons-area {
+                    clear: both;
                     margin: 10px 0 10px 0;
                     .small-tag-icon {
                         display: inline-block;
@@ -67,20 +68,25 @@
                         }
                     }
                 }
-                .tour-description {
-                    max-height: 80px;
-                    overflow: hidden;
-                }
-                .photo-area {
-                    padding: 0 0 0 15px;
-                    text-align: left;
-                    vertical-align: top;
-                    .photo {
+                .collapsable-area {
+                    margin-top: 20px;
+                    clear: both;
+                    .tour-description {
                         max-height: 100px;
-                        max-width: 100%;
-                        background-color: white;
-                        box-shadow: 2px 5px 10px #000000;
-                        padding: 6px;
+                        overflow: hidden;
+                        text-align: justify;
+                    }
+                    .photo-area {
+                        padding: 0 0 0 15px;
+                        text-align: left;
+                        vertical-align: top;
+                        .photo {
+                            max-height: 100px;
+                            max-width: 100%;
+                            background-color: white;
+                            box-shadow: 2px 5px 10px #000000;
+                            padding: 6px;
+                        }
                     }
                 }
                 .detail-btn {
