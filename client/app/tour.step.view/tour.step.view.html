@@ -12,6 +12,21 @@
 
                 <h1 class="link" ng-click="openTour(tour)">{{ tour.title }}</h1>
 
+                <h2>
+                   <div class="steps-pagination">
+                        <a ng-if="step.previous" class="link previous-step-button pull-left" title="{{ step.previous.name }}" ng-click="openStep(step.previous)">
+                            <i class="fa fa-caret-square-o-left"></i> 
+                        </a>
+                        <span ng-if="step.tourStepsNumber && step.tourStepsNumber > 1">
+                            <span translate="global.step.label">Step</span> {{ step.tourStepIndex }}/{{ step.tourStepsNumber }} :
+                        </span>
+                        <div class="step-title">{{ step | stepLabel }}</div> 
+                        <a ng-if="step.next" class="link next-step-button pull-right" title="{{ step.next.name }}" ng-click="openStep(step.next)">
+                            <i class="fa fa-caret-square-o-right"></i> 
+                        </a>
+                    </div>
+                </h2>
+
                 <div class="icon-bar">
 
                     <div ng-if="step.distance" class="tour-icon distance">
@@ -37,21 +52,6 @@
 
                 </div>
 
-                <h2>
-                   <div ng-if="step.tourStepsNumber && step.tourStepsNumber > 1">
-                        <a ng-if="step.previous" class="link" title="{{ step.previous.name }}" ng-click="openStep(step.previous)">
-                            <i class="pull-left fa fa-caret-square-o-left"></i> 
-                        </a>
-                        <span ng-if="step.tourStepIndex">
-                            <span translate="global.step.label">Step</span> {{ step.tourStepIndex }}/{{ step.tourStepsNumber }}
-                        </span>
-                        <a ng-if="step.next" class="link" title="{{ step.next.name }}" ng-click="openStep(step.next)">
-                            <i class="pull-right fa fa-caret-square-o-right"></i> 
-                        </a>
-                    </div>
-                    <div>{{ step | stepLabel }}</div> 
-                </h2>
-
                 <tabset>
                     <tab heading="Description">
 
@@ -69,7 +69,6 @@
                                         <div class="interest-description">
                                             <h3>{{ interest.name }}</h3>
                                             <p ng-bind-html="interest.description"></p>
-
                                         </div>
                                     </div>
                                     <div class="col-md-6" ng-if="interest.photos">

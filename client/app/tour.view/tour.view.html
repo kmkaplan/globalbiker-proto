@@ -1,11 +1,17 @@
-<div class="tour-details-area">
+<div class="tour-view-page">
         <div class="col-md-6">
             <div class="details-area bordered-area large-area">
                 <div class="tour-description-area">
                     <a ng-if="securityService.isTourEditable(tour)" class="btn btn-default edit-button pull-right" ng-click="editTour(tour)" ng-title="{{ 'global.actions.edit' | translate }}">
                         <i class="fa fa-pencil-square-o"></i>
                     </a>
-                    <h1>{{ tour.title }}</h1>
+                    <a href="/region/france" class="btn btn-default pull-left back-to-list-button"
+                        title="Back to list">
+                        <i class="glyphicon glyphicon-align-justify"></i>
+                    </a>
+                    <h1>
+                        {{ tour.title }}
+                    </h1>
 
                     <div class="icon-bar">
 

@@ -9,7 +9,8 @@
 
                 <div class="tours-resume-list-area">
                     <div class="list-group tour-resume-list">
-                        <div class="list-group-item" ng-repeat="tour in tours">
+                        <div class="list-group-item link" ng-repeat="tour in tours" ng-click="openTour(tour)">
+                           
                             <a ng-if="securityService.isTourEditable(tour)" class="pull-right" href="/tour/{{ tour._id }}/edit">
                                 <i class="fa fa-edit"></i> {{ 'global.actions.edit' | translate }}
                             </a>
@@ -31,14 +32,14 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="list-group-item-heading link" ng-click="openTour(tour)">
+                            <div class="list-group-item-heading">
                                 {{ tour.title }}
                             </div>
                             <div collapse="isCollapsed(tour)">
                                 <div class="collapsable-area">
                                     <div class="row">
                                         <div ng-if="tour.photo.thumbnails.w600h400" class="col-md-3 photo-area">
-                                            <img class="photo link" ng-click="openTour(tour)" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
+                                            <img class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
                                         </div>
                                         <div ng-class="{ 'col-md-9': tour.photo.thumbnails.w600h400, 'col-md-12': !tour.photo.thumbnails.w600h400 }">
                                             <p class="tour-description" truncate-text ng-bind-html="tour.description"></p>
@@ -49,8 +50,8 @@
                             <div class="small-tag-icons-area">
                                 <div class="small-tag-icon travel-with" travel-with-icon model="tour.travelWith" in-edition="false"></div>
                                 <div class="small-tag-icon keyword" keyword-icons model="tour.keywords" in-edition="false"></div>
-                                <a ng-show="isCollapsed(tour)" class="btn btn-sm btn-default pull-right detail-btn" ng-click="showTourDetails(tour)">Show details</a>
-                                <a ng-hide="isCollapsed(tour)" class="btn btn-primary btn-default pull-right" ng-click="openTour(tour)">Open tour</a>
+                                <a ng-show="isCollapsed(tour)" class="btn btn-sm btn-default pull-right detail-btn" ng-click="$event.stopPropagation(); showTourDetails(tour)">Show details</a>
+                                <a ng-hide="isCollapsed(tour)" class="btn btn-primary btn-default pull-right" >Open tour</a>
                             </div>
                         </div>
                     </div>

@@ -6,7 +6,7 @@
         margin-top: 20px;
     }
     .region-map {
-        height: 500px;
+        height: 600px;
     }
     .city-name {
         color: $color1;
@@ -20,6 +20,9 @@
         .tour-resume-list {
             .list-group-item {
                 padding: 0px 15px 10px 15px;
+                &:hover {
+                    background: rgba($color2light2, 0.05);
+                }
                 .list-group-item-heading {
                     font-size: 14px;
                     margin: 5px 0 10px 0;
