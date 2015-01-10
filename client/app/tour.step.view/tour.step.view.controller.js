@@ -35,6 +35,7 @@
 
                         interests = interests.reduce(function (interests, interest) {
                             // ['interest', 'hobbies'].indexOf(interest.type) !== -1 || 
+
                             if (interest.photosIds && interest.photosIds.length > 0) {
 
                                 interest.photos = [];
@@ -51,9 +52,12 @@
                                     }, null);
 
                                 }
+                            }
 
+                            if (interest.description || (interest.photosIds && interest.photosIds.length > 0)) {
                                 interests.push(interest);
                             }
+
                             return interests;
                         }, []);
 
