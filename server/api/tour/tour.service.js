@@ -80,13 +80,15 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
 
                     tour.geometry = geospacialFinder.concatenateGeometries(geometries);
 
+                    tour.numberOfSteps = steps.length;
+                    
                     tour.save(function (err) {
                         if (err) {
                             logger.error(err);
                             deffered.reject(err);
                         } else {
                             // tour updated
-                            logger.info('Tour %s (interest: %d, difficulty: %d).', tour._id, tour.interest, tour.difficulty, {});
+                            logger.info('Tour %s (interest: %d, difficulty: %d, steps: %d).', tour._id, tour.interest, tour.difficulty, steps.length, {});
                             return deffered.resolve(tour);
                         }
                     });

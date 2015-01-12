@@ -15,7 +15,7 @@
         function build(interests, events) {
 
             if (!interests) {
-                interests = [];
+                features = [];
             }
             var features = interests.reduce(function (features, interest) {
 

@@ -63,6 +63,7 @@ var TourSchema = new Schema({
         type: Number
     },
     distance: Number,
+    numberOfSteps: Number,
     geometry: {
         type: Object,
         index: '2dsphere'

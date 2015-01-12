@@ -137,6 +137,58 @@ L.GeojsonItem = L.FeatureGroup.extend({
 
             break;
 
+        case 'MultiLineString':
+
+            var latlngs = this.coordsToLatLngs(item.geometry.coordinates, 1, coordsToLatLng);
+
+            // http://leafletjs.com/reference.html#polyline-options 
+            var polylineOptions;
+
+            if (item.properties.options.style) {
+                if (typeof (item.properties.options.style) === 'function') {
+                    polylineOptions = item.properties.options.style(item);
+                } else {
+                    polylineOptions = item.properties.options.style;
+                }
+            } else {
+                polylineOptions = {}
+            }
+
+            //  add foreground layer
+            var layer1 = new L.MultiPolyline(latlngs, polylineOptions);
+
+            this._addToLayer(item, layer1, false);
+
+            var polylineOptionsOnOver = angular.copy(polylineOptions);
+            polylineOptionsOnOver.color = 'blue';
+
+
+            // add transparent layer
+            var transparentPolylineOptions = angular.copy(polylineOptions);
+            transparentPolylineOptions.color = 'transparent';
+            transparentPolylineOptions.weight = 30;
+
+            var layer2 = new L.MultiPolyline(latlngs, transparentPolylineOptions);
+
+            if (item.properties.options.label) {
+                layer2.bindLabel(item.properties.options.label);
+            }
+
+            this._addToLayer(item, layer2, true);
+
+            layer2.on('mouseover', function () {
+                if (polylineOptionsOnOver !== null) {
+                    layer1.setStyle(polylineOptionsOnOver);
+                }
+            });
+            layer2.on('mouseout', function () {
+                if (polylineOptionsOnOver !== null) {
+                    layer1.setStyle(polylineOptions);
+                }
+            });
+
+            break;
+
         default:
             console.error('Invalid geometry type "%s".', item.geometry.type);
             throw new Error('Invalid geometry type.');

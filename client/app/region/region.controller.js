@@ -18,7 +18,7 @@
 
     angular.module('globalbikerWebApp').controller('RegionCtrl', RegionCtrl);
 
-    function RegionCtrl($scope, $q, $state, $stateParams, Auth, bikeTourMapService, tourLoaderService, RegionRepository, securityService) {
+    function RegionCtrl($scope, $q, $state, $stateParams, Auth, tourFeaturesBuilderService, tourLoaderService, RegionRepository, securityService) {
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
@@ -108,8 +108,7 @@
                     photosAround: {
                         distance: 500
                     }*/
-                },
-                steps: {}
+                }
 
             }).then(function (tours) {
                     deffered.resolve(tours);
@@ -134,7 +133,7 @@
                     return toursToDisplayInMap;
                 }, []);
 
-                features = bikeTourMapService.buildToursStepTracesFeatures(toursToDisplayInMap, {
+               /* features = bikeTourMapService.buildToursStepTracesFeatures(toursToDisplayInMap, {
                     style: {
                         width: 3,
                         weight: 6,
@@ -153,9 +152,9 @@
                     label: function (step, tour) {
                         return tour.title;
                     }
-                });
-
-
+                });*/
+                
+                features = tourFeaturesBuilderService.build(tours);
 
             }
             return features;
