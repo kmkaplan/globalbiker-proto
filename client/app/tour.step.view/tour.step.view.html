@@ -56,7 +56,7 @@
                 </div>
 
                 <tabset>
-                    <tab heading="Description">
+                    <tab heading="Description" ng-click="selection.interest = null">
 
                         <div class="alert description" ng-if="step.description" ng-bind-html="step.description"></div>
 
@@ -64,34 +64,16 @@
                             <img class="step smart-photo step-main-photo" ng-src="{{ step.photo.thumbnails.w600h400 }}">
                         </div>
                     </tab>
-                    <tab heading="Principaux points d'intérêt" ng-if="interestsDetails">
+                    <tab heading="Principaux points d'intérêt" ng-if="interestsDetails" ng-click="selection.interest = null">
                         <div class="interests-area">
                             <div ng-repeat="interest in interestsDetails">
-                                <div class="row">
-                                    <div ng-class="{ 'col-md-12': interest.photos.length === 0, 'col-md-6': interest.photos.length !== 0 }">
-                                        <div class="interest-description">
-                                            <h3>{{ interest.name }}</h3>
-                                            <p ng-bind-html="interest.description"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6" ng-if="interest.photos.length !== 0">
-                                        <div class="carousel-area ">
-                                            <div class="">
-                                                <carousel>
-                                                    <slide ng-repeat="photo in interest.photos" active="photo.active">
-                                                        <img class="photo smart-area" ng-src="{{ photo.thumbnails.w600h400 }}" style="margin:auto;">
-                                                        <p>
-                                                            <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
-                                                            -
-                                                            <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
-                                                        </p>
-                                                    </slide>
-                                                </carousel>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div interest-details interest="interest" />
                             </div>
+                        </div>
+                    </tab>
+                    <tab heading="Sélection" active="isSelectionTabActive" ng-if="selection.interest">
+                        <div>
+                            <div interest-details interest="selection.interest" />
                         </div>
                     </tab>
                 </tabset>

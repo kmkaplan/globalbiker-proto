@@ -87,6 +87,7 @@ $black3: #555;
 @import 'table.scss';
 @import 'tour.create-step/tour.create-step.scss';
 @import 'tour.step.edit/tour.step.edit.scss';
+@import 'tour.step.view/interest-details.scss';
 @import 'tour.step.view/tour.step.view.scss';
 @import 'tour.view/tour.view.scss';
 @import 'tour/tour.scss';
@@ -191,8 +192,27 @@ html {
             margin-top: 10px;
             margin-bottom: 12px;
         }
-        .nav-tabs > li > a:hover {
-            cursor: pointer;
+        .nav-tabs > li {
+            font-weight: bold;
+            &.active a {
+                background: white;
+                color: $color1;
+            }
+            a {
+                background: rgba(white, 0.5);
+                color: $color2;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+        .description {
+            clear: both;
+            margin-top: 20px;
+            border: 1px solid rgba($color2, 0.2);
+            background: rgba($color2, 0.01);
+            padding: 25px;
+            text-align: justify;
         }
         .rating, .rating {
             &.in-edition {

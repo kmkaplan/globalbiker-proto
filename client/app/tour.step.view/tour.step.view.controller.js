@@ -9,6 +9,7 @@
         $scope.securityService = securityService;
         $scope.mapConfig = {};
         $scope.interestsDetails;
+        $scope.selection;
 
         // scope methods
         $scope.editStep = editStep;
@@ -31,71 +32,77 @@
                 showStepOnMap(tour, step);
 
                 $scope.$watch('step.interests', function (interests) {
-                    if (interests && interests.length > 0) {
-
-                        interests = interests.reduce(function (interests, interest) {
-                            // ['interest', 'hobbies'].indexOf(interest.type) !== -1 || 
-
-                            if (interest.photosIds && interest.photosIds.length > 0) {
-
-                                interest.photos = [];
-
-                                if (interest.photosIds && interest.photosIds.length > 0) {
-
-                                    interest.photosIds.reduce(function (o, photoId) {
-
-                                        photoLoaderService.getPhoto(photoId).then(function (photo) {
-
-                                            interest.photos.push(photo);
-
-                                        });
-                                    }, null);
-
-                                }
-                            }
-
-                            if (interest.description || (interest.photosIds && interest.photosIds.length > 0)) {
-                                switch (interest.type) {
-
-                                case 'danger':
-                                    break;
-                                case 'information':
-                                    break;
-                                case 'water-point':
-                                    break;
-                                case 'wc':
-                                    break;
-                                case 'velotoulouse':
-                                    break;
-                                case 'bike-shops':
-                                    break;
-                                case 'accomodation':
-                                    break;
-                                case 'food':
-                                    break;
-                                        
-                                case 'hobbies':
-                                case 'interest':
-                                    interests.push(interest);
-                                    break;
-
-                                default:
-
-                                    console.warn('Unknown type "%s" for interest %s.', interest.type, interest._id);
-                                    break;
-                                }
-
-                            }
-
-                            return interests;
-                        }, []);
-
-                        $scope.interestsDetails = interests
-                    }
+                    $scope.interestsDetails = getRelevantInterests(interests);
                 });
 
             }
         };
+
+        function getRelevantInterests(interests) {
+
+            if (interests && interests.length > 0) {
+
+                return interests.reduce(function (interests, interest) {
+                    // ['interest', 'hobbies'].indexOf(interest.type) !== -1 || 
+
+                    if (interest.photosIds && interest.photosIds.length > 0) {
+
+                        interest.photos = [];
+
+                        if (interest.photosIds && interest.photosIds.length > 0) {
+
+                            interest.photosIds.reduce(function (o, photoId) {
+
+                                photoLoaderService.getPhoto(photoId).then(function (photo) {
+
+                                    interest.photos.push(photo);
+
+                                });
+                            }, null);
+
+                        }
+                    }
+
+                    if (interest.description || (interest.photosIds && interest.photosIds.length > 0)) {
+                        switch (interest.type) {
+
+                        case 'danger':
+                            break;
+                        case 'information':
+                            break;
+                        case 'water-point':
+                            break;
+                        case 'wc':
+                            break;
+                        case 'velotoulouse':
+                            break;
+                        case 'bike-shops':
+                            break;
+                        case 'accomodation':
+                            break;
+                        case 'food':
+                            break;
+
+                        case 'hobbies':
+                        case 'interest':
+                            interests.push(interest);
+                            break;
+
+                        default:
+
+                            console.warn('Unknown type "%s" for interest %s.', interest.type, interest._id);
+                            break;
+                        }
+
+                    }
+
+                    return interests;
+                }, []);
+
+            } else {
+                return [];
+            }
+        }
 
         function createStep() {
             $state.go('tour.create-step');
@@ -132,7 +139,7 @@
 
         function showStepOnMap(tour, step) {
             if (tour && step) {
-                var traceFeatures = bikeTourMapService.buildStepTraceFeatures(step, {
+                var features = bikeTourMapService.buildStepTraceFeatures(step, {
                     style: {
                         color: '#34a0b4',
                         width: 3,
@@ -146,10 +153,19 @@
                     }
                 }, tour);
 
-                traceFeatures = traceFeatures.concat(interestsMarkerBuilderService.build(step.interests));
+                var interestsFeatures = interestsMarkerBuilderService.build(step.interests, {
+                    click: function (item, event) {
+                        // select interest on click
+                        $scope.selection = item.model;
+                        $scope.isSelectionTabActive = true;
+                        $scope.$apply()
+                    }
+                });
 
-                if (traceFeatures) {
-                    $scope.mapConfig.items = traceFeatures;
+                features = features.concat(interestsFeatures);
+
+                if (features) {
+                    $scope.mapConfig.items = features;
 
                     $scope.mapConfig.bounds = {
                         geometry: step.geometry

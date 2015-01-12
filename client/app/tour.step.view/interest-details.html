@@ -1,0 +1,60 @@
+<div class="row interest-details">
+    <div ng-class="{ 'col-md-12': interest.photos.length === 0, 'col-md-6': interest.photos.length !== 0 }">
+        <div class="interest-description">
+            <h3>{{ interest.name }}</h3>
+
+            <div ng-switch="interest.type" class="interest-type">
+                <div ng-switch-when="danger" style="color: red">
+                    <i class="fa fa-exclamation-triangle"></i> Point d'eau
+                </div>
+                <div ng-switch-when="information" style="color: blue">
+                    <i class="icon icon-interest-information"></i> information
+                </div>
+                <div ng-switch-when="water-point" style="color: blue">
+                    <i class="fa fa-glass"></i> Point d'eau
+                </div>
+                <div ng-switch-when="wc" style="color: blue">
+                    <i class="fa fa-home"></i> WC
+                </div>
+                <div ng-switch-when="velotoulouse">
+                    <div style="color: #ff0014">vélo toulouse</div>                    
+                </div>
+                <div ng-switch-when="bike-shops" style="color: blue">
+                    <i class="glyphicon glyphicon-wrench"></i> magasin de vélo
+                </div>
+                <div ng-switch-when="accomodation" style="color: orange">
+                    <i class="icon icon-interest-accomodation"></i> hébergement (hotel, camping)
+                </div>
+                <div ng-switch-when="hobbies" style="color: green">
+                    <i class="icon icon-interest-hobbies"></i> alimentation (restaurant, magasin)
+                </div>
+                <div ng-switch-when="interest" style="color: green">
+                    <i class="glyphicon glyphicon-eye-open"></i> point d'intérêt
+                </div>
+                <div ng-switch-when="food" style="color: orange">
+                    <i class="glyphicon glyphicon-cutlery"></i> alimentation (restaurant, magasin)
+                </div>
+                <div ng-switch-default>{{ interest.type }}</div>
+            </div>
+            
+            <p class="alert description" ng-bind-html="interest.description"></p>
+            
+        </div>
+    </div>
+    <div class="col-md-6" ng-if="interest.photos.length !== 0">
+        <div class="carousel-area ">
+            <div class="">
+                <carousel>
+                    <slide ng-repeat="photo in interest.photos" active="photo.active">
+                        <img class="photo smart-area" ng-src="{{ photo.thumbnails.w600h400 }}" style="margin:auto;">
+                        <p>
+                            <a ng-if="photo.author" class="author" rel="author" ng-href="{{ photo.author.url }}">{{ photo.author.name }}</a>
+                            -
+                            <a ng-if="getLicense(photo)" class="license" rel="license" ng-href="{{ getLicense(photo).url }}">{{ getLicense(photo).name }}</a>
+                        </p>
+                    </slide>
+                </carousel>
+            </div>
+        </div>
+    </div>
+</div>

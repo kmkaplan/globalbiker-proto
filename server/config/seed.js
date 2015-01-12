@@ -161,34 +161,7 @@ Tour.find({
         });
     }
 });
-Tour.find({
-    'interest': null
-}, function (err, tours) {
-    if (err) {
-        console.error(err);
-    } else if (tours.length !== 0) {
-        console.info('Calculate %d tours interest.', tours.length);
 
-        tours.reduce(function (promises, tour) {
-
-            Step.find({
-                'tourId': tour.id
-            }, function (err, steps) {
-                if (err) {
-                    console.error(err);
-                } else if (steps.length !== 0) {
-                    var sum = steps.reduce(function (sum, step) {
-                        return sum + step.interest;
-                    }, 0);
-                    tour.interest = Math.round(sum / steps.length);
-                    console.info('Tour %s interest: %d.', tour.name, tour.interest);
-                    tour.save();
-                }
-
-            });
-        });
-    }
-});
 InterestType.find({}, function (err, interesttypes) {
     if (err) {
         console.error(err);
@@ -221,10 +194,6 @@ InterestType.find({}, function (err, interesttypes) {
             }, {
                 reference: 'wc',
                 color: '#7c869b',
-                icon: null
-            }, {
-                reference: 'velotoulouse',
-                color: '#ff6c00',
                 icon: null
             }, {
                 reference: 'velotoulouse',

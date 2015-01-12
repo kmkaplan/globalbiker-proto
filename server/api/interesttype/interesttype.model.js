@@ -13,6 +13,16 @@ var InteresttypeSchema = new Schema({
         trim: true,
         required: 'Please fill reference'
     },
+    color: {
+        type: String,
+        trim: true,
+        required: 'Please fill color'
+    },
+    icon: {
+        type: String,
+        trim: true,
+        required: 'Please fill icon'
+    },
 });
 
 module.exports = mongoose.model('Interesttype', InteresttypeSchema);
