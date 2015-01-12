@@ -45,9 +45,10 @@
                                 color: color,
                                 opacity: 1,
                                 weight: 8
-                            }
+                            },
+                            selected: tour.selected
                         }
-                    },
+                    }
                 };
 
                 if (events) {

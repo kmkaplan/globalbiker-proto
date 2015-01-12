@@ -159,9 +159,6 @@ L.GeojsonItem = L.FeatureGroup.extend({
 
             this._addToLayer(item, layer1, false);
 
-            var polylineOptionsOnOver = angular.copy(polylineOptions);
-            polylineOptionsOnOver.color = 'blue';
-
 
             // add transparent layer
             var transparentPolylineOptions = angular.copy(polylineOptions);
@@ -169,23 +166,42 @@ L.GeojsonItem = L.FeatureGroup.extend({
             transparentPolylineOptions.weight = 30;
 
             var layer2 = new L.MultiPolyline(latlngs, transparentPolylineOptions);
-
             if (item.properties.options.label) {
                 layer2.bindLabel(item.properties.options.label);
             }
 
             this._addToLayer(item, layer2, true);
 
+            var polylineOptionsOnOver = angular.copy(transparentPolylineOptions);
+            polylineOptionsOnOver.color = polylineOptions.color;
+            polylineOptionsOnOver.opacity = 0.2;
+
             layer2.on('mouseover', function () {
                 if (polylineOptionsOnOver !== null) {
-                    layer1.setStyle(polylineOptionsOnOver);
+                    layer2.setStyle(polylineOptionsOnOver);
                 }
             });
             layer2.on('mouseout', function () {
                 if (polylineOptionsOnOver !== null) {
-                    layer1.setStyle(polylineOptions);
+                    layer2.setStyle(transparentPolylineOptions);
                 }
             });
+
+            if (item && item.model && item.model.tour && item.model.tour.selected) {
+                layer2.setStyle(polylineOptionsOnOver);
+            }
+
+            if (item.properties.events) {
+                // register events
+                for (var eventKey in item.properties.events) {
+                    if (item.properties.events.hasOwnProperty(eventKey)) {
+
+                        layer2.on(eventKey, function (event) {
+                            item.properties.events[eventKey](item, event);
+                        });
+                    }
+                }
+            }
 
             break;
 

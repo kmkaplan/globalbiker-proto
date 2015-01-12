@@ -27,6 +27,7 @@
 
         // scope methods
         $scope.openTour = openTour;
+        $scope.overTour = overTour;
         $scope.showTourDetails = showTourDetails;
         $scope.isCollapsed = isCollapsed;
 
@@ -63,14 +64,14 @@
 
         }
 
-        function showTourDetails(tour){
+        function showTourDetails(tour) {
             $scope.showTourDetailsId = tour._id;
         }
-        
-        function isCollapsed(tour){
+
+        function isCollapsed(tour) {
             return ($scope.showTourDetailsId !== tour._id);
         }
-        
+
         function getRegion() {
 
             var deffered = $q.defer();
@@ -98,16 +99,22 @@
             });
         }
 
+        function overTour(tour) {
+            $scope.currentTour = tour;
+
+            var features = buildFeaturesFromTours($scope.tours);
+
+            if (features) {
+                $scope.mapConfig.items = features;
+            }
+        }
+
         function loadToursDetailsByGeometry(geometry) {
             var deffered = $q.defer();
 
             tourLoaderService.loadToursWithDetails({
                 tour: {
                     photo: true
-                    /*,
-                    photosAround: {
-                        distance: 500
-                    }*/
                 }
 
             }).then(function (tours) {
@@ -128,33 +135,19 @@
 
                 var toursToDisplayInMap = tours.reduce(function (toursToDisplayInMap, tour) {
                     if (tour.priority === 1) {
+
+                        tour.selected = ($scope.currentTour && $scope.currentTour._id === tour._id)
+
                         toursToDisplayInMap.push(tour);
                     }
                     return toursToDisplayInMap;
                 }, []);
 
-               /* features = bikeTourMapService.buildToursStepTracesFeatures(toursToDisplayInMap, {
-                    style: {
-                        width: 3,
-                        weight: 6,
-                        opacity: 1,
-                        color: '#34a0b4'
-                    },
-                    overStyle: {
-                        color: '#347eb4',
-                        opacity: 1
-                    },
-                    callbacks: {
-                        'click': function (step, tour) {
-                            $scope.openTour(tour);
-                        }
-                    },
-                    label: function (step, tour) {
-                        return tour.title;
+                features = tourFeaturesBuilderService.build(tours, {
+                    click: function (item, event) {
+                        $scope.openTour(item.model.tour);
                     }
-                });*/
-                
-                features = tourFeaturesBuilderService.build(tours);
+                });
 
             }
             return features;
