@@ -52,21 +52,23 @@ L.GeojsonItem = L.FeatureGroup.extend({
         case 'Point':
             var latlng = coordsToLatLng(item.geometry.coordinates);
 
-            var markerOptions = {};
+            var markerOptions = {
+                riseOnHover: true
+            };
 
             if (item.properties.circle) {
-                
+
                 markerOptions = {
-                        radius: 5,
-                        fillColor: 'grey',
-                        color: 'black',
-                        weight: 1,
-                        opacity: 1,
-                        fillOpacity: 0.3
-                    };
-                
+                    radius: 5,
+                    fillColor: 'grey',
+                    color: 'black',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.3
+                };
+
                 angular.extend(markerOptions, item.properties.circle);
-                
+
                 // circle marker
                 layer = L.circleMarker(latlng, markerOptions);
             } else {
