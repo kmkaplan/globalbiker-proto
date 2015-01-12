@@ -62,7 +62,11 @@ var TourSchema = new Schema({
     interest: {
         type: Number
     },
-    distance: Number
+    distance: Number,
+    geometry: {
+        type: Object,
+        index: '2dsphere'
+    }
 });
 
 module.exports = mongoose.model('Tour', TourSchema);

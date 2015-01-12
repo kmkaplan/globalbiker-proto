@@ -7,6 +7,7 @@
 'use strict';
 
 var Tour = require('../api/tour/tour.model');
+var TourService = require('../api/tour/tour.service');
 var License = require('../api/license/license.model');
 var Photo = require('../api/photo/photo.model');
 var Region = require('../api/region/region.model');
@@ -18,21 +19,28 @@ var InterestCtrl = require('../api/interest/interest.controller');
 var io = require('../components/io/io');
 var path = require('path');
 var config = require('./environment');
-var SeedInit = require('./seed.init');
-var SeedReset = require('./seed.reset');
-var SeedUpgrade = require('./seed.upgrade');
-
 
 var Q = require('q');
 
-SeedInit.init();
+exports.upgradeTourAttributes = function () {
 
-if (config.resetAdminPassword) {
-    SeedReset.resetAdmin();
+    Tour.find({}, function (err, tours) {
+        if (err) {
+            console.error(err);
+        } else if (tours.length !== 0) {
+            console.info('Upgrade %d tours attributes.', tours.length);
+
+            var promises = tours.reduce(function (promises, tour) {
+                promises.push(TourService.updateCalculatedAttributesFromSteps(tour._id));
+                return promises;
+            }, []);
+
+            Q.all(promises).then(function () {
+                console.info('%d tours attributes upgraded successfully.', tours.length);
+            }, function (err) {
+                console.error(err);
+            });
+        }
+    });
+
 }
-
-if (config.downloadPhotosFromProd) {
-    SeedReset.downloadPhotosFromProd();
-}
-
-SeedUpgrade.upgradeTourAttributes();

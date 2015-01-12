@@ -3,6 +3,8 @@
 var Tour = require('./tour.model');
 var Step = require('../step/step.model');
 var logger = require('../../components/logger/logger');
+var geospacialFinder = require('../../components/geo/geospacial.finder');
+geospacialFinder
 
 var Q = require('q');
 
@@ -22,14 +24,14 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
             logger.error(err);
             deffered.reject(err);
         } else {
-            // tour fount
+            // tour found
 
             Step.find({
                 'tourId': tour.id
             }).sort({
                 '_id': 1
             }).exec(function (err, steps) {
-                
+
                 if (err) {
                     logger.error(err);
                     deffered.reject(err);
@@ -68,7 +70,16 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                         tour.interest = null;
                         tour.difficulty = null;
                     }
-                    
+
+                    var geometries = steps.reduce(function (geometries, step) {
+                        if (step.geometry) {
+                            geometries.push(step.geometry);
+                        }
+                        return geometries;
+                    }, []);
+
+                    tour.geometry = geospacialFinder.concatenateGeometries(geometries);
+
                     tour.save(function (err) {
                         if (err) {
                             logger.error(err);
