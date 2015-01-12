@@ -55,7 +55,36 @@
                             }
 
                             if (interest.description || (interest.photosIds && interest.photosIds.length > 0)) {
-                                interests.push(interest);
+                                switch (interest.type) {
+
+                                case 'danger':
+                                    break;
+                                case 'information':
+                                    break;
+                                case 'water-point':
+                                    break;
+                                case 'wc':
+                                    break;
+                                case 'velotoulouse':
+                                    break;
+                                case 'bike-shops':
+                                    break;
+                                case 'accomodation':
+                                    break;
+                                case 'food':
+                                    break;
+                                        
+                                case 'hobbies':
+                                case 'interest':
+                                    interests.push(interest);
+                                    break;
+
+                                default:
+
+                                    console.warn('Unknown type "%s" for interest %s.', interest.type, interest._id);
+                                    break;
+                                }
+
                             }
 
                             return interests;
