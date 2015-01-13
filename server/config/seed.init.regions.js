@@ -20,7 +20,7 @@ exports.init = function () {
     return Q.all([exports.initFrance(), exports.initToulouse()]);
 };
 
-exports.initToulouse = function() {
+exports.initToulouse = function () {
     var deffered = Q.defer();
 
     // create Toulouse region
@@ -59,7 +59,7 @@ exports.initToulouse = function() {
 };
 
 
-exports.initFrance = function() {
+exports.initFrance = function () {
     var deffered = Q.defer();
 
     // create Toulouse region
@@ -74,12 +74,17 @@ exports.initFrance = function() {
                 if (!region) {
                     console.info('Create "France" region.');
 
+                    var lngMin = -4.5;
+                    var lngMax = 8;
+                    var latMin = 43;
+                    var latMax = 50.5;
+
                     Region.create({
                         name: 'France',
                         reference: 'france',
                         geometry: {
-                            type: "Polygon",
-                            coordinates: [[[-4, 70], [10, 70], [10, 40], [-4, 40], [-4, 70]]]
+                            "type": "Polygon",
+                            "coordinates": [[[lngMin, latMax], [lngMax, latMax], [lngMax, latMin], [lngMin, latMin], [lngMin, latMax]]]
                         }
                     }, function (err, region) {
                         if (err) {

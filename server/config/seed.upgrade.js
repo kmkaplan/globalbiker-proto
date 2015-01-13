@@ -19,6 +19,7 @@ var InterestCtrl = require('../api/interest/interest.controller');
 var io = require('../components/io/io');
 var path = require('path');
 var config = require('./environment');
+var referenceCreator = require('../components/string/reference.creator');
 
 var Q = require('q');
 
@@ -43,7 +44,36 @@ exports.upgradeTourAttributes = function () {
         }
     });
 
-}
+};
+
+exports.patchToursReferences = function () {
+
+    Tour.find({}, function (err, tours) {
+        if (err) {
+            console.error(err);
+        } else if (tours.length !== 0) {
+            console.info('Upgrade %d tours reference.', tours.length);
+
+            var promises = tours.reduce(function (promises, tour) {
+
+                if (!tour.reference) {
+                    var reference = referenceCreator.createReferenceFromString(tour.title);
+                    tour.reference = reference;
+                    console.log('Tour reference: "%s": ', reference);
+                }
+                promises.push(tour.save());
+                return promises;
+            }, []);
+
+            Q.all(promises).then(function () {
+                console.info('%d tours references upgraded successfully.', tours.length);
+            }, function (err) {
+                console.error(err);
+            });
+        }
+    });
+
+};
 
 exports.patchFrance = function () {
     Region.findOne({
@@ -56,22 +86,15 @@ exports.patchFrance = function () {
                 if (region) {
                     console.info('Update "France" region coordinates.');
 
-        /*            var lngMin = -4.8;
-                    var lngMax = 8.9;
-                    var latMin = 42;
-                    var latMax = 51;*/
-                    
                     var lngMin = -4.5;
                     var lngMax = 8;
                     var latMin = 43;
                     var latMax = 50.5;
-                    
+
                     region.geometry = {
                         "type": "Polygon",
                         "coordinates": [[[lngMin, latMax], [lngMax, latMax], [lngMax, latMin], [lngMin, latMin], [lngMin, latMax]]]
                     };
-
-                    region.name = 'France';
 
                     region.save(function (err, region) {
                         if (err) {
@@ -83,4 +106,4 @@ exports.patchFrance = function () {
                 }
             }
         });
-}
+};

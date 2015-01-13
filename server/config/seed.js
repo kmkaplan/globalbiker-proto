@@ -29,6 +29,7 @@ var functions = [
     SeedInit.init,
     SeedReset.reset,
     SeedUpgrade.upgradeTourAttributes,
+    SeedUpgrade.patchToursReferences,
     SeedUpgrade.patchFrance
 ];
 

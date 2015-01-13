@@ -10,6 +10,7 @@ var router = express.Router();
 router.get('/', controller.index);
 router.get('/mines', auth.isAuthenticated(), controller.mines);
 router.get('/:id', controller.show);
+router.get('/reference/:reference', controller.getByReference);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);
 router.patch('/:id', auth.isAuthenticated(), controller.update);

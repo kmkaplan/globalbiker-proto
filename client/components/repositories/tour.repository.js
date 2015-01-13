@@ -11,6 +11,13 @@ angular.module('globalbikerWebApp')
                     id: 'me'
                 }
             },
+            getByReference: {
+                method: 'GET',
+                params: {
+                    reference: '@reference'
+                },
+                url: '/api/tours/reference/:reference'
+            },
             update: {
                 method: 'PUT',
                 url: '/api/tours/:id'

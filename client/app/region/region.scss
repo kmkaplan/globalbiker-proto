@@ -19,6 +19,7 @@
         padding: 10px;
         .tour-resume-list {
             .list-group-item {
+                display: block;
                 padding: 0px 15px 10px 15px;
                 &:hover {
                     background: rgba($color2light2, 0.05);

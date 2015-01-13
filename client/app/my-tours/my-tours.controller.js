@@ -27,7 +27,7 @@ angular.module('globalbikerWebApp')
 
         $scope.viewTour = function (tour) {
             $state.go('tour.view', {
-                id: tour._id
+                reference: tour.reference
             }, {
                 inherit: false
             });

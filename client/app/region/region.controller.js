@@ -93,7 +93,7 @@
 
         function openTour(tour) {
             $state.go('tour.view', {
-                id: tour._id
+                reference: tour.reference
             }, {
                 inherit: false
             });

@@ -4,7 +4,7 @@ var Tour = require('./tour.model');
 var Step = require('../step/step.model');
 var logger = require('../../components/logger/logger');
 var geospacialFinder = require('../../components/geo/geospacial.finder');
-geospacialFinder
+var referenceCreator = require('../../components/string/reference.creator');
 
 var Q = require('q');
 
@@ -81,6 +81,10 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                     tour.geometry = geospacialFinder.concatenateGeometries(geometries);
 
                     tour.numberOfSteps = steps.length;
+                    
+                    if (!tour.reference){
+                        tour.reference = referenceCreator.createReferenceFromString(tour.title);
+                    }
                     
                     tour.save(function (err) {
                         if (err) {

@@ -11,16 +11,22 @@ var TourSchema = new Schema({
     userId: {
         type: Schema.ObjectId,
         ref: 'UserSchema',
-        required: 'Please fill user id'
+        required: true
     },
     title: {
         type: String,
-        required: 'Please fill tour title',
+        required: true,
         trim: true
+    },
+    reference: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true
     },
     color: {
         type: String,
-        required: 'Please fill tour color',
+        required: true,
         trim: true,
         default: 'blue'
     },
@@ -37,15 +43,15 @@ var TourSchema = new Schema({
     country: {
         geonameId: {
             type: Number,
-            required: 'Please fill country geonames id'
+            required: true
         },
         name: {
             type: String,
-            required: 'Please fill country name'
+            required: true
         },
         countryCode: {
             type: String,
-            required: 'Please fill country code'
+            required: true
         }
     },
     priority: {

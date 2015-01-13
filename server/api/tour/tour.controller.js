@@ -5,6 +5,7 @@ var Tour = require('./tour.model');
 var Step = require('../step/step.model');
 var stepController = require('../step/step.controller');
 var auth = require('../../auth/auth.service');
+var referenceCreator = require('../../components/string/reference.creator');
 
 var Q = require('q');
 
@@ -22,6 +23,20 @@ exports.index = function (req, res) {
 // Get a single tour
 exports.show = function (req, res) {
     Tour.findById(req.params.id, function (err, tour) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!tour) {
+            return res.send(404);
+        }
+        return res.json(tour);
+    });
+};
+
+exports.getByReference = function (req, res) {
+    Tour.findOne({
+        reference: req.params.reference
+    }, function (err, tour) {
         if (err) {
             return handleError(res, err);
         }
@@ -51,6 +66,7 @@ exports.mines = function (req, res) {
 
 // Creates a new tour in the DB.
 exports.create = function (req, res) {
+
     Tour.create(req.body, function (err, tour) {
         if (err) {
             return handleError(res, err);

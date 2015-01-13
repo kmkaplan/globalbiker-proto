@@ -6,11 +6,27 @@ angular.module('globalbikerWebApp')
 
         return {
 
-            getTour: function (tourId, options) {
+            getTour: function (id, options) {
                 var deffered = $q.defer();
 
                 TourRepository.get({
-                        id: tourId
+                        id: id
+                    }, function (tour) {
+                        deffered.resolve(tour);
+                    },
+                    function (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    });
+
+                return deffered.promise;
+            },
+
+            getTourByReference: function (reference, options) {
+                var deffered = $q.defer();
+
+                TourRepository.getByReference({
+                        reference: reference
                     }, function (tour) {
                         deffered.resolve(tour);
                     },
@@ -168,12 +184,12 @@ angular.module('globalbikerWebApp')
                 return deffered.promise;
             },
 
-            loadTour: function (tourId, options) {
+            loadTour: function (reference, options) {
                 var self = this;
 
                 var deffered = $q.defer();
 
-                this.getTour(tourId).then(function (tour) {
+                this.getTour(reference).then(function (tour) {
                         deffered.resolve(self.loadDetails(tour, options));
                     },
                     function (err) {
@@ -183,7 +199,21 @@ angular.module('globalbikerWebApp')
 
                 return deffered.promise;
             },
+            loadTourByReference: function (reference, options) {
+                var self = this;
 
+                var deffered = $q.defer();
+
+                this.getTourByReference(reference).then(function (tour) {
+                        deffered.resolve(self.loadDetails(tour, options));
+                    },
+                    function (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    });
+
+                return deffered.promise;
+            },
             loadToursWithDetails: function (options) {
                 var self = this;
 
