@@ -16,15 +16,17 @@
 
         function create(element, config) {
 
-            var map = L.map(element, {});
+            var map = L.map(element, {
+                scrollWheelZoom: false
+            });
 
             var url;
-            if (config.url){
+            if (config.url) {
                 url = config.url;
-            }else{
+            } else {
                 url = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg';
             }
-            
+
             L.tileLayer(url, {}).addTo(map);
 
             return map;

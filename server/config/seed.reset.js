@@ -21,25 +21,35 @@ var config = require('./environment');
 
 var Q = require('q');
 
+exports.reset = function () {
+    return Q.all([
+        exports.resetAdmin(),
+        exports.downloadPhotosFromProd()]);
+}
+
 exports.resetAdmin = function () {
 
     var deffered = Q.defer();
 
-    User.find({
-        email: 'admin@admin.com'
-    }).remove(function () {
-        User.create({
-            provider: 'local',
-            role: 'admin',
-            name: 'Admin',
-            email: 'admin@admin.com',
-            password: 'admin'
-        }, function () {
-            console.log('finished populating users');
-            deffered.resolve('finished populating users');
-        });
+    if (config.resetAdminPassword) {
+        User.find({
+            email: 'admin@admin.com'
+        }).remove(function () {
+            User.create({
+                provider: 'local',
+                role: 'admin',
+                name: 'Admin',
+                email: 'admin@admin.com',
+                password: 'admin'
+            }, function () {
+                console.log('finished populating admin');
+                deffered.resolve('finished populating admin');
+            });
 
-    });
+        });
+    } else {
+        deffered.resolve('Do not reset users');
+    }
 
     return deffered.promise;
 
@@ -49,28 +59,31 @@ exports.resetAdmin = function () {
 exports.downloadPhotosFromProd = function () {
     var deffered = Q.defer();
 
-    Photo.find({}, function (err, photos) {
+    if (config.downloadPhotosFromProd) {
+        Photo.find({}, function (err, photos) {
 
-        if (err) {
-            console.error(err);
-            deffered.reject(err);
-        }
+            if (err) {
+                console.error(err);
+                deffered.reject(err);
+            }
 
-        var defferedArray = photos.reduce(function (defferedArray, photo) {
+            var defferedArray = photos.reduce(function (defferedArray, photo) {
 
-            var localDiskPath = path.resolve(__dirname, '..' + photo.url);
-            defferedArray.push(io.downloadFile(config.prodUrl + photo.url, localDiskPath));
-            return defferedArray;
+                var localDiskPath = path.resolve(__dirname, '..' + photo.url);
+                defferedArray.push(io.downloadFile(config.prodUrl + photo.url, localDiskPath));
+                return defferedArray;
+            }, []);
+
+            console.log('Download %d photos from prod.', defferedArray.length);
+
+            Q.all(defferedArray).then(function (photos) {
+                deffered.resolve('success');
+            }).done();
+
         }, []);
-
-        console.log('Download %d photos from prod.', defferedArray.length);
-
-        Q.all(defferedArray).then(function (photos) {
-            deffered.resolve('success');
-        }).done();
-
-    }, []);
-
+    } else {
+        deffered.resolve('Do not download photos from prod');
+    }
     return deffered.promise;
 
 };

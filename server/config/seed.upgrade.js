@@ -44,3 +44,43 @@ exports.upgradeTourAttributes = function () {
     });
 
 }
+
+exports.patchFrance = function () {
+    Region.findOne({
+            'reference': 'france'
+        },
+        function (err, region) {
+            if (err) {
+                console.error(err);
+            } else {
+                if (region) {
+                    console.info('Update "France" region coordinates.');
+
+        /*            var lngMin = -4.8;
+                    var lngMax = 8.9;
+                    var latMin = 42;
+                    var latMax = 51;*/
+                    
+                    var lngMin = -4.5;
+                    var lngMax = 8;
+                    var latMin = 43;
+                    var latMax = 50.5;
+                    
+                    region.geometry = {
+                        "type": "Polygon",
+                        "coordinates": [[[lngMin, latMax], [lngMax, latMax], [lngMax, latMin], [lngMin, latMin], [lngMin, latMax]]]
+                    };
+
+                    region.name = 'France';
+
+                    region.save(function (err, region) {
+                        if (err) {
+                            console.error(err);
+                        } else {
+                            console.info('"France" region updated.', region.geometry.coordinates);
+                        }
+                    });
+                }
+            }
+        });
+}

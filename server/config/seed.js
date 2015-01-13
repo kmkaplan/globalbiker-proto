@@ -25,14 +25,13 @@ var SeedUpgrade = require('./seed.upgrade');
 
 var Q = require('q');
 
-SeedInit.init();
+var functions = [
+    SeedInit.init,
+    SeedReset.reset,
+    SeedUpgrade.upgradeTourAttributes,
+    SeedUpgrade.patchFrance
+];
 
-if (config.resetAdminPassword) {
-    SeedReset.resetAdmin();
-}
-
-if (config.downloadPhotosFromProd) {
-    SeedReset.downloadPhotosFromProd();
-}
-
-SeedUpgrade.upgradeTourAttributes();
+return functions.reduce(function (soFar, f) {
+    return soFar.then(f());
+}, Q(null));
