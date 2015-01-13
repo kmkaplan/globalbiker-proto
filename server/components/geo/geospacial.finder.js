@@ -39,7 +39,7 @@ exports.find = function (schema, geometry, maxDistance) {
                     } else {
                         if (entities[entity._id].distance > result.dis) {
                             // update distance to minimal one
-                            console.warn('Update distance %d to minimal one %d', entities[entity._id].distance, result.dis);
+                            // console.log('Update distance %d to minimal one %d', entities[entity._id].distance, result.dis);
                             entities[entity._id].distance = result.dis;
                         }
                         i++;

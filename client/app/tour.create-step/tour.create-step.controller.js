@@ -55,8 +55,8 @@
                 // success
                 deffered.resolve(step);
                 $state.go('tour.step.view', {
-                    id: tour._id,
-                    stepId: step._id
+                    reference: tour.reference,
+                    stepReference: step.reference
                 }, {
                     reload: true
                 });

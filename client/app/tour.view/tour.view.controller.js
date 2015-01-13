@@ -55,7 +55,7 @@
                     callbacks: {
                         'click': function (step) {
                             $state.go('tour.step.view', {
-                                stepId: step._id
+                                stepReference: step.reference
                             });
                         }
                     }

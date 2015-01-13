@@ -1,12 +1,13 @@
 'use strict';
 
 var _ = require('lodash');
-var Step = require('./step.model');
-var Interest = require('../interest/interest.model');
 var Q = require('q');
+var sys = require('sys');
 
 var geo = require('../../components/geo/geo');
-var sys = require('sys');
+var referenceCreator = require('../../components/string/reference.creator');
+var Step = require('./step.model');
+var Interest = require('../interest/interest.model');
 
 // Get list of steps
 exports.index = function (req, res) {
@@ -37,15 +38,26 @@ exports.getByTour = function (req, res) {
 };
 
 
+
+
 // Get a single step
 exports.show = function (req, res) {
     Step.findById(req.params.id, function (err, step) {
-        /*  if (step.geometry && step.geometry.coordinates) {
-            var before = step.geometry.coordinates.length;
-            step.geometry.coordinates = geo.simplify(step.geometry, 1, true);
-            console.log('Simplify from %d to %d.', before, step.geometry.coordinates.length);
+        if (err) {
+            return handleError(res, err);
         }
-        */
+        if (!step) {
+            return res.send(404);
+        }
+        return res.json(step);
+    });
+};
+
+exports.getByReference = function (req, res) {
+    Step.findOne({
+        tourId: req.params.tourId,
+        reference: req.params.reference
+    }, function (err, step) {
         if (err) {
             return handleError(res, err);
         }
@@ -58,7 +70,12 @@ exports.show = function (req, res) {
 
 // Creates a new step in the DB.
 exports.create = function (req, res) {
-    Step.create(req.body, function (err, step) {
+    
+    var step = req.body;
+    
+    step.reference = referenceCreator.createReferenceFromString(step.cityFrom.name + '-' + step.cityTo.name);
+    
+    Step.create(step, function (err, step) {
         if (err) {
             return handleError(res, err);
         }
@@ -107,6 +124,8 @@ exports.update = function (req, res) {
         }
 
 
+        step.reference = referenceCreator.createReferenceFromString(step.cityFrom.name + '-' + step.cityTo.name);
+    
         step.save(function (err) {
             if (err) {
                 return handleError(res, err);

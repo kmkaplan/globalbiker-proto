@@ -14,7 +14,12 @@ var StepSchema = new Schema({
     tourId: {
         type: Schema.ObjectId,
         ref: 'TourSchema',
-        required: 'Please fill tour'
+        required: true
+    },
+    reference: {
+        type: String,
+        required: true,
+        trim: true
     },
     description: {
         type: String,
@@ -22,11 +27,11 @@ var StepSchema = new Schema({
     },
     difficulty: {
         type: Number,
-        required: 'Please fill difficulty'
+        required: true
     },
     interest: {
         type: Number,
-        required: 'Please fill interest'
+        required: true
     },
     photoId: {
         type: Schema.ObjectId,
@@ -35,39 +40,39 @@ var StepSchema = new Schema({
     cityFrom: {
         geonameId: {
             type: Number,
-            required: 'Please fill cityFrom geonames id'
+            required: true
         },
         name: {
             type: String,
-            required: 'Please fill cityFrom name'
+            required: true
         },
         adminName1: {
             type: String,
-            required: 'Please fill cityFrom adminName1'
+            required: true
         },
         geometry: {
             type: Object,
             index: '2dsphere',
-            required: 'Please fill cityFrom geometry'
+            required: true
         }
     },
     cityTo: {
         geonameId: {
             type: Number,
-            required: 'Please fill cityTo geonames id'
+            required: true
         },
         name: {
             type: String,
-            required: 'Please fill cityTo name'
+            required: true
         },
         adminName1: {
             type: String,
-            required: 'Please fill cityFrom adminName1'
+            required: true
         },
         geometry: {
             type: Object,
             index: '2dsphere',
-            required: 'Please fill cityFrom geometry'
+            required: true
         }
     },
     distance: Number,
@@ -81,5 +86,7 @@ var StepSchema = new Schema({
         index: '2dsphere'
     }
 });
+
+StepSchema.index({tourId: 1, reference: 1}, {unique: true});
 
 module.exports = mongoose.model('Step', StepSchema);

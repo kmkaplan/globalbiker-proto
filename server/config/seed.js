@@ -29,8 +29,7 @@ var functions = [
     SeedInit.init,
     SeedReset.reset,
     SeedUpgrade.upgradeTourAttributes,
-    SeedUpgrade.patchToursReferences,
-    SeedUpgrade.patchFrance
+    SeedUpgrade.patchStepsReferences
 ];
 
 return functions.reduce(function (soFar, f) {

@@ -4,7 +4,7 @@ angular.module('globalbikerWebApp')
     .config(function ($stateProvider) {
         $stateProvider
             .state('tour.step', {
-                url: '/step/:stepId',
+                url: '/step/:stepReference',
                 abstract: true,
                 template: '<ui-view/>',
                 resolve: {
@@ -12,9 +12,9 @@ angular.module('globalbikerWebApp')
 
                         var deffered = $q.defer();
 
-                        if ($stateParams.stepId) {
+                        if ($stateParams.stepReference) {
 
-                            stepLoaderService.loadStep($stateParams.stepId, {
+                            stepLoaderService.loadStepByReference(tour._id, $stateParams.stepReference, {
                                 tour: {},
                                 step: {
                                     interestsAround: {

@@ -115,7 +115,7 @@
         function openStep(step) {
             console.info('Open step %d', step._id);
             $state.go('tour.step.view', {
-                stepId: step._id
+                stepReference: step.reference
             }, {});
         };
 

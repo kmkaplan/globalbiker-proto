@@ -21,6 +21,22 @@ angular.module('globalbikerWebApp')
 
                 return deffered.promise;
             },
+            getStepByReference: function (tourId, reference, options) {
+                var deffered = $q.defer();
+
+                StepRepository.getByReference({
+                        tourId: tourId,
+                        reference: reference
+                    }, function (step) {
+                        deffered.resolve(step);
+                    },
+                    function (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    });
+
+                return deffered.promise;
+            },
             getPhotosAroundStep: function (step, options) {
                 var deffered = $q.defer();
 
@@ -195,6 +211,21 @@ angular.module('globalbikerWebApp')
                 var deffered = $q.defer();
 
                 this.getStep(stepId).then(function (step) {
+                        deffered.resolve(self.loadDetails(step, options));
+                    },
+                    function (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    });
+
+                return deffered.promise;
+            },
+            loadStepByReference: function (tourId, reference, options) {
+                var self = this;
+
+                var deffered = $q.defer();
+
+                this.getStepByReference(tourId, reference).then(function (step) {
                         deffered.resolve(self.loadDetails(step, options));
                     },
                     function (err) {

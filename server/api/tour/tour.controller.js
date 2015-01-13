@@ -67,6 +67,8 @@ exports.mines = function (req, res) {
 // Creates a new tour in the DB.
 exports.create = function (req, res) {
 
+    req.body.reference = referenceCreator.createReferenceFromString(req.body.title);
+    
     Tour.create(req.body, function (err, tour) {
         if (err) {
             return handleError(res, err);

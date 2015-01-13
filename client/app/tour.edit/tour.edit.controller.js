@@ -92,8 +92,8 @@
                     },
                     callbacks: {
                         'click': function (step) {
-                           $state.go('tour.step.view', {
-                                stepId: step._id
+                            $state.go('tour.step.view', {
+                                stepReference: step.reference
                             });
                         }
                     }
@@ -131,19 +131,22 @@
 
             var steps = tour.steps;
             var photo = tour.photo;
+            var interests = tour.interests;
 
             delete tour.steps;
             delete tour.photo;
-            
+            delete tour.interests;
+
             tour.$update(function (data, putResponseHeaders) {
                 console.info('Tour updated.');
-                tour.steps = steps;
-                tour.photo = photo;
 
                 deffered.resolve(steps);
             }, function (err) {
                 deffered.reject(err);
             }).finally(function () {
+                tour.steps = steps;
+                tour.photo = photo;
+                tour.interests = interests;
                 $state.go('tour.view', $stateParams);
             });
             return deffered.promise;

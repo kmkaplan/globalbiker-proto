@@ -8,6 +8,19 @@ var referenceCreator = require('../../components/string/reference.creator');
 
 var Q = require('q');
 
+/*Tour.schema.pre('save', function (next) {
+    var tour = this;
+    tour.reference = referenceCreator.createReferenceFromString(tour.title);
+    next();
+});
+
+Step.schema.pre('save', function (next) {
+    var step = this;
+    console.log(step);
+    step.reference = referenceCreator.createReferenceFromString(step.cityFrom.name + '-' + step.cityTo.name);
+    next();
+});*/
+
 Step.schema.post('save', function (doc) {
     exports.updateCalculatedAttributesFromSteps(doc.tourId).done();
 })
@@ -81,11 +94,7 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                     tour.geometry = geospacialFinder.concatenateGeometries(geometries);
 
                     tour.numberOfSteps = steps.length;
-                    
-                    if (!tour.reference){
-                        tour.reference = referenceCreator.createReferenceFromString(tour.title);
-                    }
-                    
+
                     tour.save(function (err) {
                         if (err) {
                             logger.error(err);
