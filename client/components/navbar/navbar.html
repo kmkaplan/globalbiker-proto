@@ -30,12 +30,12 @@
                 <li ng-show="isLoggedIn()" dropdown>
                     <a dropdown-toggle class="dropdown-toggle link" data-toggle="dropdown" role="button" aria-expanded="false">{{ getCurrentUser().name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li ng-class="{ active: isActive('/settings') }"><a href="/settings"><span class="glyphicon glyphicon-cog"></span> Change password</a>
+                        <li ng-class="{ active: isActive('/settings') }"><a href="/settings"><span class="glyphicon glyphicon-cog"></span> <span translate="menu.profile">Profile</span></a>
                         </li>
                         <li class="divider"></li>
-                        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin"><i class="fa fa-users"></i> Manage users</a>
+                        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin')}"><a href="/admin"><i class="fa fa-users"></i> <span translate="menu.users">Manage users</span></a>
                         </li>
-                        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin-data')}"><a href="/admin-data"><i class="fa fa-database"></i> Manage open-data</a>
+                        <li ng-show="isAdmin()" ng-class="{active: isActive('/admin-data')}"><a href="/admin-data"><i class="fa fa-database"></i> <span translate="menu.data">Manage open-data</span></a>
                         </li>
                     </ul>
                 </li>

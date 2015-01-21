@@ -2,6 +2,7 @@
 
 angular.module('globalbikerWebApp')
     .controller('SignupCtrl', function ($scope, Auth, $location, $window, MailingRepository) {
+        $scope.isAdmin = Auth.isAdmin;
         $scope.user = {};
         $scope.errors = {};
         $scope.addMail = function ($email, $) {
@@ -24,7 +25,7 @@ angular.module('globalbikerWebApp')
                 })
                     .then(function () {
                         // Account created, redirect to home
-                        $location.path('/');
+                        $location.path('/settings');
                     })
                     .catch(function (err) {
                         err = err.data;

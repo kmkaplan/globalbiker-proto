@@ -45,7 +45,10 @@
         "search-a-tour": "Search a tour",
         "my-tours": "My tours",
         "blog": "Blog",
-        "about-us": "About GlobalBiker"
+        "about-us": "About GlobalBiker",
+        "profile": "My profile",
+        "users": "Users",
+        "data": "Data"
     },
     "home": {
         "main": {

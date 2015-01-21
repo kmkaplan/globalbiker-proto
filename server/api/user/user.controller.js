@@ -58,6 +58,36 @@ exports.destroy = function(req, res) {
   });
 };
 
+
+// Updates an existing user in the DB.
+exports.update = function (req, res) {
+    if (req.body._id) {
+        delete req.body._id;
+    }
+    User.findById(req.params.id, function (err, user) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!user) {
+            return res.send(404);
+        }
+        for (var key in req.body) {
+            if (['name', 'email'].indexOf(key) !== -1 && req.body.hasOwnProperty(key)) {
+                // only update authorized attributes
+                user[key] = req.body[key];
+            }
+        }
+
+        user.save(function (err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            return res.json(200, user);
+        });
+    });
+};
+
+
 /**
  * Change a users password
  */

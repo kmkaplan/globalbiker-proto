@@ -45,7 +45,10 @@
         "search-a-tour": "Rechercher un parcours",
         "my-tours": "Mes parcours",
         "blog": "Blog",
-        "about-us": "A propos de GlobalBiker"
+        "about-us": "A propos de GlobalBiker",
+        "profile": "Mon profil",
+        "users": "Utilisateurs",
+        "data": "Données"
     },
     "home": {
         "main": {
