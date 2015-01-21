@@ -12,7 +12,7 @@ var Q = require('q');
 // Get list of tours
 exports.index = function (req, res) {
 
-    Tour.find(function (err, tours) {
+    Tour.find().populate('authors').exec(function (err, tours) {
         if (err) {
             return handleError(res, err);
         }
@@ -22,7 +22,7 @@ exports.index = function (req, res) {
 
 // Get a single tour
 exports.show = function (req, res) {
-    Tour.findById(req.params.id, function (err, tour) {
+    Tour.findById(req.params.id).populate('authors').exec(function (err, tour) {
         if (err) {
             return handleError(res, err);
         }
@@ -36,7 +36,7 @@ exports.show = function (req, res) {
 exports.getByReference = function (req, res) {
     Tour.findOne({
         reference: req.params.reference
-    }, function (err, tour) {
+    }).populate('authors').exec(function (err, tour) {
         if (err) {
             return handleError(res, err);
         }

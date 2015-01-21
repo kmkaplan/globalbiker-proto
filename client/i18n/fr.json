@@ -86,6 +86,9 @@
         "warning": "GlobalBiker est en cours de développement. La zone géographique est pour le moment réduite à la France métropolitaine, et le site n'est pas encore ouvert à contribution.",
         "title": "Rechercher un parcours en "
     },
+    "tour": {
+        "shared-by": "Parcours partagé par <span class=\"author-name\">{{ authorName }}</span>"
+    },
     "mytours": {
         "nav-bar_name": "Mes parcours",
         "create": "Créer un nouveau parcours",

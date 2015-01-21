@@ -86,6 +86,9 @@
         "warning": "GlobalBiker is early stage of development. The geographical area is restricted to France for now, and is not yet open to public contribution.",
         "title": "Search a tour in "
     },
+    "tour": {
+        "shared-by": "Tour shared by <span class=\"author-name\">{{ authorName }}</span>"
+    },
     "mytours": {
         "nav-bar_name": "My tours",
         "create": "Create a new tour",

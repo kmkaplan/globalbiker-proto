@@ -16,4 +16,14 @@
         margin-right: 10px;
         font-size: 14px;
     }
+    .shared-by{
+        color: #555;
+        text-align: center;
+        margin-top: -20px;
+        margin-bottom: 20px;
+        font-style: italic;
+        .author-name{
+            font-weight: bold;
+        }
+    }
 }

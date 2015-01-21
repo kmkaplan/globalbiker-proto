@@ -8,9 +8,15 @@ var TourSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    userId: {
+    authors: [{
         type: Schema.ObjectId,
-        ref: 'UserSchema',
+        ref: 'User',
+        required: true
+    }],
+    userId: {
+        // TODO remove
+        type: Schema.ObjectId,
+        ref: 'User',
         required: true
     },
     title: {

@@ -13,6 +13,8 @@
                         {{ tour.title }}
                     </h1>
 
+                    <div class="shared-by" ng-if="tour.authors.length" translate="tour.shared-by" translate-values="{ authorName: tour.authors[0].name }"></div>
+                   
                     <div class="icon-bar">
 
                         <div ng-if="tour.distance" class="tour-icon distance">
