@@ -4,11 +4,21 @@
         "login": "Se connecter",
         "hello": "Bonjour",
         "logout": "Se déconnecter",
+        "nom": "Nom",
         "actions": {
             "edit": "éditer",
             "save": "sauvegarder",
             "remove": "supprimer",
             "uploadphoto": "ajouter une photo"
+        },
+        "tour": {
+            "label": "Parcours",
+            "departure": "Ville de départ",
+            "arrival": "Ville de destination",
+            "from": "De",
+            "to": "à",
+            "remove": "Supprimer ce parcours",
+            "create": "Créer un nouveau parcours"
         },
         "step": {
             "label": "&Eacute;tape",

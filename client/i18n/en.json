@@ -4,11 +4,21 @@
         "login": "Log in",
         "hello": "Hello",
         "logout": "Log out",
+        "name": "Name",
         "actions": {
             "edit": "edit",
             "save": "save",
             "remove": "remove",
             "uploadphoto": "add a picture"
+        },
+        "tour": {
+            "label": "Tour",
+            "departure": "City of departure",
+            "arrival": "City of arrival",
+            "from": "From",
+            "to": "to",
+            "remove": "Remove this tour",
+            "create": "Create a new tour"
         },
         "step": {
             "label": "Step",

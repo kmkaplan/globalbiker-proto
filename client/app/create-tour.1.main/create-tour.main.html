@@ -1,0 +1,68 @@
+<div class="create-step-area">
+
+    <h1 translate="global.tour.create">Create a new tour</h1>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label translate="global.name">Name</label>
+                <div>
+                    <input ng-model="tour.title" placeholder="Tour name" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label translate="global.tour.departure">City of departure</label>
+                <div geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris, Lyon...'"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label translate="global.tour.arrival">City of arrival</label>
+                <div geonames-city-input ng-model="tour.cityTo" placeholder="'Nantes, Bordeaux...'"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-if="progress() >= 1">
+        <div class="col-sm-3">
+            <div class="tour-travel-with-icon" travel-with-icon model="tour.travelWith" in-edition="true"></div>
+        </div>
+        <div class="col-sm-3">
+            <div class="tour-keyword-icons" keyword-icons model="tour.keywords" in-edition="true"></div>
+        </div>
+        <div class="col-sm-3" ng-if="progress() >= 2">
+            <div class="tour-icon rating interest in-edition">
+                <label>Interest</label>
+                <rating class="rating-bar" state-on="'glyphicon-star selected'" state-off="'glyphicon-star unselected'" ng-model="tour.interest" max="5"></rating>
+            </div>
+        </div>
+        <div class="col-sm-3" ng-if="progress() >= 2">
+            <div class="tour-icon rating difficulty in-edition">
+                <label>Difficulty</label>
+                <rating class="rating-bar" state-on="'fa fa-bicycle selected'" state-off="'fa fa-bicycle unselected'" ng-model="tour.difficulty" max="3"></rating>
+            </div>
+        </div>
+    </div>
+
+    <div class="row description-area" ng-if="progress() >= 3">
+        <div class="col-md-12">
+            <label>Description</label>
+            <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>
+        </div>
+    </div>
+
+    <div class="row save-area row" ng-if="progress() >= 4">
+        <div class="col-md-12 text-center">
+            <a class="btn btn-primary" ng-click="createTour(tour)">
+                <i class="fa fa-plus"></i>
+                <span translate="global.actions.save">Save</span>
+            </a>
+        </div>
+    </div>
+
+</div>

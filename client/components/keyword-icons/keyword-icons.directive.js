@@ -36,7 +36,7 @@
 
                                 option.iconClass = 'icon-tag-' + option.key;
 
-                                if ($scope.model !== null && $scope.model.indexOf(option.key) !== -1) {
+                                if (typeof($scope.model) !== 'undefined' && $scope.model !== null && $scope.model.indexOf(option.key) !== -1) {
                                     option.selected = true;
                                     selectedOptions.push(option);
                                 }

@@ -15,16 +15,6 @@ angular.module('globalbikerWebApp')
             }
         });
 
-
-
-        $scope.createTour = function () {
-            $state.go('my-tour', {
-
-            }, {
-                inherit: false
-            });
-        };
-
         $scope.viewTour = function (tour) {
             $state.go('tour.view', {
                 reference: tour.reference
