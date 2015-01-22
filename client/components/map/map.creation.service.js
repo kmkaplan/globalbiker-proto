@@ -41,7 +41,9 @@
                     console.log('Fit bounds to %d geometries.', bounds.geometry.length);
 
                     var bounds = extendedMapMathsService.getBoundsFromGeometries(bounds.geometry, 0.1);
-                    map.fitBounds(bounds);
+                    if (bounds !== null){
+                        map.fitBounds(bounds);
+                    }
                 } else {
 
                     console.log('Fit bounds to geometry: ', bounds.geometry);

@@ -7,10 +7,44 @@
     function interestsMarkerBuilderService() {
 
         var service = {
-            build: build
+            build: build,
+            buildDeparture: buildDeparture,
+            buildArrival: buildArrival
         };
 
         return service;
+
+        function buildDeparture(city) {
+            var feature = {
+                type: 'Point',
+                geometry: city.geometry,
+                properties: {
+                    awesomeIcon: {
+                        prefix: 'fa',
+                        icon: 'dot-circle-o',
+                        markerColor: 'black'
+                    },
+                    label: city.name
+                }
+            };
+            return feature;
+        }
+
+        function buildArrival(city) {
+            var feature = {
+                type: 'Point',
+                geometry: city.geometry,
+                properties: {
+                    awesomeIcon: {
+                        prefix: 'fa',
+                        icon: 'flag',
+                        markerColor: 'black'
+                    },
+                    label: city.name
+                }
+            };
+            return feature;
+        }
 
         function build(interests, events) {
 
@@ -23,9 +57,11 @@
                     type: 'Point',
                     geometry: interest.geometry,
                     properties: {
-                        prefix: 'glyphicon',
-                        icon: 'question-sign',
-                        markerColor: 'black',
+                        awesomeIcon: {
+                            prefix: 'glyphicon',
+                            icon: 'question-sign',
+                            markerColor: 'black'
+                        },
                         label: interest.name
                     },
 

@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var Tour = require('./tour.model');
 var Step = require('../step/step.model');
+var Region = require('../region/region.model');
 var stepController = require('../step/step.controller');
 var auth = require('../../auth/auth.service');
 var referenceCreator = require('../../components/string/reference.creator');
@@ -170,12 +171,23 @@ exports.mines = function (req, res) {
 exports.create = function (req, res) {
 
     req.body.reference = referenceCreator.createReferenceFromString(req.body.title);
-
-    Tour.create(req.body, function (err, tour) {
+    
+    Region.findOne({
+        'reference': 'france'
+    }, function (err, region) {
         if (err) {
-            return handleError(res, err);
+            console.error(err);
+        } else {
+            
+            req.body.region = region._id;
+            
+            Tour.create(req.body, function (err, tour) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                return res.json(201, tour);
+            });
         }
-        return res.json(201, tour);
     });
 };
 

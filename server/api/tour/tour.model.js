@@ -70,6 +70,36 @@ var TourSchema = new Schema({
             required: true
         }
     },
+    cityFrom: {
+        geonameId: {
+            type: Number
+        },
+        name: {
+            type: String
+        },
+        adminName1: {
+            type: String
+        },
+        geometry: {
+            type: Object,
+            index: '2dsphere'
+        }
+    },
+    cityTo: {
+        geonameId: {
+            type: Number
+        },
+        name: {
+            type: String
+        },
+        adminName1: {
+            type: String
+        },
+        geometry: {
+            type: Object,
+            index: '2dsphere'
+        }
+    },
     priority: {
         type: Number,
         default: 1

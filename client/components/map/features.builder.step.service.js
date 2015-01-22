@@ -2,9 +2,9 @@
 
     'use strict';
 
-    angular.module('globalbikerWebApp').factory('tourFeaturesBuilderService', tourFeaturesBuilderService);
+    angular.module('globalbikerWebApp').factory('stepFeaturesBuilderService', stepFeaturesBuilderService);
 
-    function tourFeaturesBuilderService() {
+    function stepFeaturesBuilderService() {
 
         var service = {
             build: build,
@@ -13,14 +13,25 @@
 
         return service;
 
-        function build(tour, events) {
+        function getStepLabel(step) {
+            if (step.cityFrom.name === step.cityTo.name) {
+                // same source & destination
+                return step.cityFrom.name;
+            } else {
+                // TODO i18n
+                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
+            }
+        };
+
+        
+        function build(step, events) {
                 
-            if (!tour || !tour.geometry) {
+            if (!step || !step.geometry) {
                 return null;
             }
 
             var color;
-            switch (tour.difficulty) {
+            switch (step.difficulty) {
             case 1:
                 color = '#00ac75';
                 break;
@@ -36,17 +47,17 @@
             }
 
             var feature = {
-                type: tour.geometry.type,
-                geometry: tour.geometry,
+                type: step.geometry.type,
+                geometry: step.geometry,
                 properties: {
                     options: {
-                        label: tour.title,
+                        label: getStepLabel(step),
                         style: {
                             color: color,
                             opacity: 1,
                             weight: 8
                         },
-                        selected: tour.selected
+                        selected: step.selected
                     }
                 }
             };
@@ -55,20 +66,20 @@
                 feature.properties.events = events
             };
             feature.model = {
-                type: 'tour',
-                tour: tour
+                type: 'step',
+                tour: step
             }
 
             return feature;
         }
         
-        function buildAll(tours, events) {
+        function buildAll(steps, events) {
                 
-            if (!tours) {
+            if (!steps) {
                 features = [];
             }
-            var features = tours.reduce(function (features, tour) {
-                var feature = build(tour, events);
+            var features = steps.reduce(function (features, step) {
+                var feature = build(step, events);
                 
                 if (feature !== null){
                     features.push(feature);

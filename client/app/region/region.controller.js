@@ -145,7 +145,7 @@
                     return toursToDisplayInMap;
                 }, []);
 
-                features = tourFeaturesBuilderService.build(tours, {
+                features = tourFeaturesBuilderService.buildAll(tours, {
                     click: function (item, event) {
                         $scope.openTour(item.model.tour);
                     }

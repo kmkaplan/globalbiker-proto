@@ -125,7 +125,7 @@ L.GeojsonItem = L.FeatureGroup.extend({
 
             // add transparent layer
             polylineOptions.color = 'transparent';
-            polylineOptions.weight = 30;
+            polylineOptions.weight = 20;
 
             layer = new L.Polyline(latlngs, polylineOptions);
 
@@ -163,7 +163,7 @@ L.GeojsonItem = L.FeatureGroup.extend({
             // add transparent layer
             var transparentPolylineOptions = angular.copy(polylineOptions);
             transparentPolylineOptions.color = 'transparent';
-            transparentPolylineOptions.weight = 30;
+            transparentPolylineOptions.weight = 20;
 
             var layer2 = new L.MultiPolyline(latlngs, transparentPolylineOptions);
             if (item.properties.options.label) {

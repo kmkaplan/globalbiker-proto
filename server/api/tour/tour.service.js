@@ -79,19 +79,23 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                         }, 0);
                         tour.distance = distance;
 
-                    } else {
-                        tour.interest = null;
-                        tour.difficulty = null;
-                    }
-
-                    var geometries = steps.reduce(function (geometries, step) {
-                        if (step.geometry) {
-                            geometries.push(step.geometry);
+                        if (tour.cityFrom === null) {
+                            tour.cityFrom = steps[0].cityFrom;
                         }
-                        return geometries;
-                    }, []);
+                        if (tour.cityTo === null) {
+                            tour.cityTo = steps[steps.length - 1].cityTo;
+                        }
 
-                    tour.geometry = geospacialFinder.concatenateGeometries(geometries);
+                        var geometries = steps.reduce(function (geometries, step) {
+                            if (step.geometry) {
+                                geometries.push(step.geometry);
+                            }
+                            return geometries;
+                        }, []);
+
+                        tour.geometry = geospacialFinder.concatenateGeometries(geometries);
+
+                    }
 
                     tour.numberOfSteps = steps.length;
 

@@ -25,12 +25,18 @@
         function init() {
             if (!Auth.isLoggedIn) {
                 $state.go('home');
+                return;
             }
+           /* $scope.$watch('tour.cityFrom', function (cityFrom, old) {
+                if (cityFrom) {
+                    $scope.tour.title = cityFrom.name;
+                }
+            });*/
         };
 
         function progress() {
             var progress = 0;
-            if ($scope.tour && $scope.tour.cityFrom && $scope.tour.cityTo) {
+            if ($scope.tour && $scope.tour.title && $scope.tour.cityFrom && $scope.tour.cityTo) {
                 progress++;
                 if ($scope.tour.travelWith && $scope.tour.keywords && $scope.tour.keywords.length) {
                     progress++;
@@ -63,7 +69,7 @@
             new TourRepository(tour).$save(function (tour, putResponseHeaders) {
                 // success
                 deffered.resolve(tour);
-                $state.go('tour.view', {
+                $state.go('tour.edit-trace', {
                     reference: tour.reference
                 });
             }, function (err) {

@@ -3,12 +3,12 @@
 
     angular.module('globalbikerWebApp').controller('TourViewCtrl', TourViewCtrl);
 
-    function TourViewCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService, interestsMarkerBuilderService, PhotoRepository) {
+    function TourViewCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, securityService, PhotoRepository, interestsMarkerBuilderService, tourFeaturesBuilderService, stepFeaturesBuilderService) {
 
         // scope properties
         $scope.mapConfig = {};
         $scope.securityService = securityService;
-        
+
         // scope methods
         $scope.editTour = editTour;
 
@@ -36,45 +36,49 @@
         }
 
         function showTourOnMap(tour) {
+            var features = [];
             if (tour.steps) {
-                var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(tour.steps, {
-                    style: {
-                        color: '#34a0b4',
-                        width: 3,
-                        weight: 6,
-                        opacity: 0.8
-                    },
-                    label: function (step) {
-                        return getStepLabel(step);
-                    },
-                    tour: {
-                        bounds: {
-                            show: true
-                        }
-                    },
-                    callbacks: {
-                        'click': function (step) {
-                            $state.go('tour.step.view', {
-                                stepReference: step.reference
-                            });
-                        }
+
+                features = stepFeaturesBuilderService.buildAll(tour.steps, {
+                    'click': function (step) {
+                        $state.go('tour.step.view', {
+                            stepReference: step.reference
+                        });
                     }
                 });
 
-                var geometries = tour.steps.reduce(function (geometries, step) {
-                    geometries.push(step.geometry);
+            }
+            
+            if (features.length === 0){
+                // no step geometry: display tour geometry instead
+                if (tour.geometry) {
+                    var feature = tourFeaturesBuilderService.build(tour);
+                    features.push(feature);
+                }
+            }
+
+                if (tour.cityFrom) {
+                    var feature = interestsMarkerBuilderService.buildDeparture(tour.cityFrom);
+                    features.push(feature);
+                }
+
+                if (tour.cityTo) {
+                    var feature = interestsMarkerBuilderService.buildArrival(tour.cityTo);
+                    features.push(feature);
+                }
+
+            if (features.length !== 0) {
+             
+                var geometries = features.reduce(function (geometries, feature) {
+                    geometries.push(feature.geometry);
                     return geometries;
                 }, []);
+                
+                $scope.mapConfig.items = features;
 
-                traceFeatures = traceFeatures.concat(interestsMarkerBuilderService.build(tour.interests));
-
-                if (traceFeatures) {
-                    $scope.mapConfig.items = traceFeatures;
-
-                    $scope.mapConfig.bounds = {
-                        geometry: geometries
-                    };
-                }
+                $scope.mapConfig.bounds = {
+                    geometry: geometries
+                };
 
             }
         }

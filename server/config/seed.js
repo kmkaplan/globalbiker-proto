@@ -28,7 +28,8 @@ var Q = require('q');
 var functions = [
     SeedInit.init,
     SeedReset.reset,
-    SeedUpgrade.patchToursRegion
+    SeedUpgrade.patchToursRegion,
+    SeedUpgrade.upgradeTourAttributes
 ];
 
 return functions.reduce(function (soFar, f) {

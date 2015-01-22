@@ -34,7 +34,13 @@
 
                  var self = this;
 
-                 if (geometry.type === 'LineString') {
+                 if (geometry.type === 'Point') {
+                     var g = geometry.coordinates;
+                     bounds = self._updateBoundsFromPoints(bounds, {
+                         latitude: g[1],
+                         longitude: g[0]
+                     });
+                 } else if (geometry.type === 'LineString') {
                      bounds = geometry.coordinates.reduce(function (bounds, g) {
 
                          bounds = self._updateBoundsFromPoints(bounds, {
@@ -61,7 +67,7 @@
                      }, bounds);
                  } else {
                      console.error('Geometry type "%s" not supported.', geometry.type);
-                     return null;
+                     return bounds;
                  }
                  if (margin) {
                      bounds = this._extendBounds(bounds, margin);
@@ -93,7 +99,7 @@
              getBoundsFromPoints: function (points, margin) {
                  var self = this;
 
-                 if (points) {
+                 if (points && points.length > 0) {
                      var bounds = [[null, null], [null, null]];
 
                      points.reduce(function (output, p) {
@@ -111,7 +117,7 @@
                          return output;
                      }, []);
 
-                     if (margin) {
+                     if (bounds && margin) {
                          bounds = this._extendBounds(bounds, margin);
                      }
                      return bounds;
@@ -119,7 +125,7 @@
                  return null;
              },
              _extendBounds: function (bounds, margin) {
-                 if (margin) {
+                 if (bounds && margin) {
                      var latitudeMargin = (bounds[1][0] - bounds[0][0]) * margin;
                      bounds[0][0] -= latitudeMargin;
                      bounds[1][0] += latitudeMargin

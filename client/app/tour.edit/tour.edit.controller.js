@@ -104,8 +104,6 @@
                     return geometries;
                 }, []);
 
-                traceFeatures = traceFeatures.concat(interestsMarkerBuilderService.build(tour.interests));
-
                 if (traceFeatures) {
                     $scope.mapConfig.items = traceFeatures;
 
