@@ -5,11 +5,10 @@ angular.module('globalbikerWebApp')
 
         Auth.isLoggedInAsync(function (loggedIn) {
             if (Auth.isAdmin()) {
-
                 // admin can edit all tours
-                $scope.tours = TourRepository.query();
+                $scope.tours = TourRepository.all();
+                
             } else {
-
                 // user can only edit its tours
                 $scope.tours = TourRepository.getMines();
             }

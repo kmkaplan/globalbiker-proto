@@ -29,7 +29,7 @@ var functions = [
     SeedInit.init,
     SeedReset.reset,
     SeedUpgrade.upgradeTourAttributes,
-    SeedUpgrade.patchToursAuthors
+    SeedUpgrade.patchToursStatus
 ];
 
 return functions.reduce(function (soFar, f) {

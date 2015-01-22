@@ -9,7 +9,7 @@
 
                 <div class="tours-resume-list-area">
                     <div class="list-group tour-resume-list" ng-mouseout="overTour(null)">
-                        <div class="list-group-item link" ng-repeat="tour in tours" ng-click="openTour(tour)" ng-mouseover="overTour(tour)">
+                        <div class="list-group-item link" ng-class="'tour-status-' + tour.status" ng-repeat="tour in tours" ng-click="openTour(tour)" ng-mouseover="overTour(tour)">
                            
                             <div class="quick-info-area">
                                 <div class="rating-area">

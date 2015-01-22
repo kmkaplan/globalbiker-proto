@@ -11,6 +11,11 @@ angular.module('globalbikerWebApp')
                     id: 'me'
                 }
             },
+            all: {
+                method: 'GET',
+                url: '/api/tours/all',
+                isArray: true
+            },
             getByReference: {
                 method: 'GET',
                 params: {

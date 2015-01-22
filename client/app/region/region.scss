@@ -21,6 +21,10 @@
             .list-group-item {
                 display: block;
                 padding: 0px 15px 10px 15px;
+                &.tour-status-draft {
+                    color: grey;
+                    font-style: italic;
+                }
                 &:hover {
                     background: rgba($color2light2, 0.05);
                 }

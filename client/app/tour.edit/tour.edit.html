@@ -1,4 +1,4 @@
-<div class="tour-details-area">
+<div class="tour-details-area tour-edit-page">
 
     <div class="row">
 
@@ -9,6 +9,8 @@
                         <i class="fa fa-check"></i>
                     </a>
                     <h1><input ng-model="tour.title" /></h1>
+
+                    <div class="shared-by" ng-if="tour.authors.length" translate="tour.shared-by" translate-values="{ authorName: tour.authors[0].name }"></div>
 
                     <div class="icon-bar">
                         <div ng-if="tour.distance" class="tour-icon distance">
@@ -34,6 +36,19 @@
                     <div>
                         <label>Description</label>
                         <textarea ui-tinymce="tinymceOptions" name="description" ng-model="tour.description" type="text" class="form-control"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group required">
+                                <label class="control-label">Status</label>
+                                <select required name="status" ng-model="tour.status" class="form-control">
+                                    <option value="draft" translate="global.tour.status.draft">draft</option>
+                                    <option value="submitted" translate="global.tour.status.submitted">submitted</option>
+                                    <option value="validated" translate="global.tour.status.validated">validated</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="image-horizontal-selector">

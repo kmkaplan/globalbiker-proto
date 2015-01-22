@@ -46,6 +46,33 @@ exports.upgradeTourAttributes = function () {
 
 };
 
+exports.patchToursStatus = function () {
+
+    Tour.find({
+        status: null
+    }, function (err, tours) {
+        if (err) {
+            console.error(err);
+        } else if (tours.length !== 0) {
+            console.info('Upgrade %d tours status.', tours.length);
+
+            var promises = tours.reduce(function (promises, tour) {
+
+                tour.status = 'validated';
+                promises.push(tour.save());
+                return promises;
+            }, []);
+
+            Q.all(promises).then(function () {
+                console.info('%d tours status upgraded successfully.', tours.length);
+            }, function (err) {
+                console.error(err);
+            });
+        }
+    });
+
+};
+
 exports.patchToursAuthors = function () {
 
     Tour.find({

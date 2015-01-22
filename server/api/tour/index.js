@@ -7,7 +7,8 @@ var TourService = require('../tour/tour.service');
 
 var router = express.Router();
 
-router.get('/', controller.index);
+router.get('/', controller.indexAnonymous);
+router.get('/all', auth.isAuthenticated(), controller.indexConnected);
 router.get('/mines', auth.isAuthenticated(), controller.mines);
 router.get('/:id', controller.show);
 router.get('/reference/:reference', controller.getByReference);

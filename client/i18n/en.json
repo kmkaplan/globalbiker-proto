@@ -18,7 +18,12 @@
             "from": "From",
             "to": "to",
             "remove": "Remove this tour",
-            "create": "Create a new tour"
+            "create": "Create a new tour",
+            "status":{
+                "draft": "draft",
+                "submitted": "submitted",
+                "validated": "validated"
+            }
         },
         "step": {
             "label": "Step",

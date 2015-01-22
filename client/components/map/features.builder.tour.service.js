@@ -13,12 +13,16 @@
         return service;
 
         function build(tours, events) {
-
+                
             if (!tours) {
                 features = [];
             }
             var features = tours.reduce(function (features, tour) {
 
+                 if(!tour.geometry){
+                     return features;
+                 }
+                
                 var color;
                 switch (tour.difficulty) {
                 case 1:
@@ -34,7 +38,7 @@
                     color = 'black';
                     break;
                 }
-
+               
                 var feature = {
                     type: tour.geometry.type,
                     geometry: tour.geometry,

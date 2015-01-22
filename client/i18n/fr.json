@@ -18,7 +18,12 @@
             "from": "De",
             "to": "à",
             "remove": "Supprimer ce parcours",
-            "create": "Créer un nouveau parcours"
+            "create": "Créer un nouveau parcours",
+            "status":{
+                "draft": "brouillon",
+                "submitted": "proposé",
+                "validated": "validé"
+            }
         },
         "step": {
             "label": "&Eacute;tape",

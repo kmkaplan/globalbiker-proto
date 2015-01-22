@@ -40,6 +40,11 @@ var TourSchema = new Schema({
         type: String,
         trim: true
     },
+    status: {
+        type: String,
+        required: true,
+        default: 'draft'
+    },
     travelWith: {
         type: String
     },

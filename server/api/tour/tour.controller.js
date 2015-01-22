@@ -6,18 +6,45 @@ var Step = require('../step/step.model');
 var stepController = require('../step/step.controller');
 var auth = require('../../auth/auth.service');
 var referenceCreator = require('../../components/string/reference.creator');
+var config = require('../../config/environment');
 
 var Q = require('q');
 
 // Get list of tours
-exports.index = function (req, res) {
+exports.indexAnonymous = function (req, res) {
 
-    Tour.find().populate('authors').exec(function (err, tours) {
+    var criteria = {
+      status: 'validated'
+    };
+
+    Tour.find(criteria).populate('authors').exec(function (err, tours) {
         if (err) {
             return handleError(res, err);
         }
         return res.json(200, tours);
     });
+
+};
+
+// Get list of tours
+exports.indexConnected = function (req, res) {
+
+    var criteria = {
+    };
+
+   if (req.user && req.user._id && config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf('admin')) {
+        console.log('Roles:', req.user.role);
+    } else {
+        criteria.status = 'validated';
+    }
+
+    Tour.find(criteria).populate('authors').exec(function (err, tours) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(200, tours);
+    });
+
 };
 
 // Get a single tour
@@ -68,7 +95,7 @@ exports.mines = function (req, res) {
 exports.create = function (req, res) {
 
     req.body.reference = referenceCreator.createReferenceFromString(req.body.title);
-    
+
     Tour.create(req.body, function (err, tour) {
         if (err) {
             return handleError(res, err);
@@ -91,7 +118,14 @@ exports.update = function (req, res) {
         }
         for (var key in req.body) {
             if (req.body.hasOwnProperty(key)) {
-                tour[key] = req.body[key];
+                var value = req.body[key];
+                if (key === 'authors') {
+                    value = value.reduce(function (o, i) {
+                        o.push(i._id);
+                        return o;
+                    }, []);
+                }
+                tour[key] = value;
             }
         }
 
