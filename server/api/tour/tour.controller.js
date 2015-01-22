@@ -7,6 +7,7 @@ var stepController = require('../step/step.controller');
 var auth = require('../../auth/auth.service');
 var referenceCreator = require('../../components/string/reference.creator');
 var config = require('../../config/environment');
+var geo = require('../../components/geo/geo');
 
 var Q = require('q');
 
@@ -14,7 +15,7 @@ var Q = require('q');
 exports.indexAnonymous = function (req, res) {
 
     var criteria = {
-      status: 'validated'
+        status: 'validated'
     };
 
     Tour.find(criteria).populate('authors').exec(function (err, tours) {
@@ -29,10 +30,9 @@ exports.indexAnonymous = function (req, res) {
 // Get list of tours
 exports.indexConnected = function (req, res) {
 
-    var criteria = {
-    };
+    var criteria = {};
 
-   if (req.user && req.user._id && config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf('admin')) {
+    if (req.user && req.user._id && config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf('admin')) {
         console.log('Roles:', req.user.role);
     } else {
         criteria.status = 'validated';
@@ -47,9 +47,84 @@ exports.indexConnected = function (req, res) {
 
 };
 
+exports.uploadTrace = function (req, res) {
+
+    var tourReference = req.params.reference;
+
+    Tour.findOne({
+        reference: tourReference
+    }).exec(function (err, tour) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (!tour) {
+            console.log('Tour reference "%s" does not exists.', tourReference);
+            return res.send(404);
+        }
+        var file = req.files.file;
+
+        if (!file) {
+            console.log('File "file" is missing.');
+            return res.send(400, 'File "file" is missing.');
+        }
+
+        geo.readTracesFromFile(file, true).then(function (features) {
+
+                var feature;
+
+                if (features.length === 0) {
+                    console.log('Trace without any feature.');
+                    return res.send(400, 'Trace without any point');
+                } else if (features.length > 1) {
+                    console.error('Trace with %d features(s). Should never append due to readTracesFromFile second parameter.', features.length);
+                }
+
+                feature = features[0];
+
+                // update tour geometry
+                tour.geometry = {
+                    coordinates: feature.xyzCoordinates.xy, //[[[0.951528735, 44.182434697], [0.951036299, 44.182579117]]],
+                    type: feature.geometry.type
+                };
+            
+                tour.sourceGeometry = tour.geometry;
+
+                // tour.elevationPoints = feature.xyzCoordinates.z;
+
+                // tour.distance = geo.getTotalDistanceFromGeometry(tour.geometry);
+
+                /*  var elevationGain = geo.getElevationGain(feature.geometry.type, tour.elevationPoints);
+
+                if (elevationGain.lastElevation != null) {
+                    console.log('Trace has been uploaded (distance: %d, elevation gain: %d, %d).', tour.distance, elevationGain.positive, elevationGain.negative);
+                    tour.positiveElevationGain = elevationGain.positive;
+                    tour.negativeElevationGain = elevationGain.negative;
+                } else {
+                    console.log('Trace has been uploaded (distance: %d).', tour.distance);
+                    tour.positiveElevationGain = null;
+                    tour.negativeElevationGain = null;
+                }*/
+
+                tour.save(function (err) {
+                    if (err) {
+                        console.error(err);
+                        return handleError(res, err);
+                    }
+                    return res.json(200, tour);
+                });
+            },
+            function (err) {
+                console.log(err);
+                return res.send(400, err);
+            }).done();
+    });
+
+};
+
+
 // Get a single tour
 exports.show = function (req, res) {
-    Tour.findById(req.params.id).populate('authors').exec(function (err, tour) {
+    Tour.findById(req.params.id).populate('authors').populate('region').exec(function (err, tour) {
         if (err) {
             return handleError(res, err);
         }
@@ -63,7 +138,7 @@ exports.show = function (req, res) {
 exports.getByReference = function (req, res) {
     Tour.findOne({
         reference: req.params.reference
-    }).populate('authors').exec(function (err, tour) {
+    }).populate('authors').populate('region').exec(function (err, tour) {
         if (err) {
             return handleError(res, err);
         }
@@ -119,11 +194,20 @@ exports.update = function (req, res) {
         for (var key in req.body) {
             if (req.body.hasOwnProperty(key)) {
                 var value = req.body[key];
-                if (key === 'authors') {
+                if (['authors'].indexOf(key) !== -1) {
                     value = value.reduce(function (o, i) {
-                        o.push(i._id);
+                        if (typeof (i._id) !== 'undefined') {
+                            o.push(i._id);
+                        } else {
+                            o.push(i);
+                        }
                         return o;
                     }, []);
+                }
+                if (['region'].indexOf(key) !== -1) {
+                    if (typeof (value._id) !== 'undefined') {
+                        value = value._id;
+                    }
                 }
                 tour[key] = value;
             }

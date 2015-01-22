@@ -1,8 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('globalbikerWebApp')
-        .directive('travelWithIcon', function ($timeout) {
+    angular.module('globalbikerWebApp').directive('travelWithIcon', function ($timeout) {
             return {
                 templateUrl: 'components/travel-with-icon/travel-with-icon.html',
                 restrict: 'EA',

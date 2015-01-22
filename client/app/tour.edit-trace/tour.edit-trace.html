@@ -1,0 +1,27 @@
+<div class="tour-details-area tour-edit-trace-page">
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+      <h1>{{ tour.title }}</h1>
+      <h2>Tracé du parcours</h2>
+      
+        <p>Vous pouvez maintenant définir le tracé de base de votre parcours. Vous aurez la possibilité de le modifier ultérieurement, et de l'affiner étape par étapé.</p>
+       
+        <h3>Trace GPS</h3>
+       
+        <div file-upload="traceFileUpload">
+            <span translate="mytourstep.select_gps_file">Select a GPS trace (*.gpx, *.tcx)
+            </span>
+        </div>
+       
+        </div>
+        <div class="col-md-6">
+            <div class="responsive-map-area smart-area smart-map-area">
+                <div class="tour-map" map config="mapConfig"></div>
+            </div>
+        </div>
+    </div>
+
+</div>

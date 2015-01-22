@@ -64,6 +64,8 @@
 
         }
 
+        
+        
         function showTourDetails(tour) {
             $scope.showTourDetailsId = tour._id;
         }

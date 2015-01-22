@@ -8,6 +8,11 @@ var TourSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    region: {
+        type: Schema.ObjectId,
+        ref: 'Region',
+        required: true
+    },
     authors: [{
         type: Schema.ObjectId,
         ref: 'User',
@@ -81,7 +86,16 @@ var TourSchema = new Schema({
     },
     distance: Number,
     numberOfSteps: Number,
+    elevationPoints: [{
+        type: Number
+    }],
+    positiveElevationGain: Number,
+    negativeElevationGain: Number,
     geometry: {
+        type: Object,
+        index: '2dsphere'
+    },
+    sourceGeometry: {
         type: Object,
         index: '2dsphere'
     }

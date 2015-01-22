@@ -7,6 +7,7 @@ var TourService = require('../tour/tour.service');
 
 var router = express.Router();
 
+router.post('/reference/:reference/upload/trace', auth.hasRole('admin'), controller.uploadTrace);
 router.get('/', controller.indexAnonymous);
 router.get('/all', auth.isAuthenticated(), controller.indexConnected);
 router.get('/mines', auth.isAuthenticated(), controller.mines);

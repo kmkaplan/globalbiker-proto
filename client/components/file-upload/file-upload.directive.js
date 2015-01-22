@@ -1,8 +1,9 @@
-'use strict';
+(function () {
+    'use strict';
 
+    angular.module('globalbikerWebApp').directive('fileUpload', fileUpload);
 
-angular.module('globalbikerWebApp')
-    .directive('fileUpload', function ($upload) {
+    function fileUpload($upload) {
         return {
             templateUrl: 'components/file-upload/file-upload.html',
             transclude: true,
@@ -14,6 +15,24 @@ angular.module('globalbikerWebApp')
                 pre: function preLink($scope, $element, $attrs) {
 
                     $scope.onFileSelect = function ($files) {
+
+                        if ($scope.fileUpload && $scope.fileUpload.callbacks && $scope.fileUpload.callbacks.filesSelected && typeof ($scope.fileUpload.callbacks.filesSelected) === 'function') {
+                            $scope.fileUpload.callbacks.filesSelected($files);
+                        }
+
+                        if ($scope.fileUpload && $scope.fileUpload.autoUpload) {
+                            upload($files);
+                        }
+                    };
+
+                    $scope.init = function () {
+                        $scope.fileUploadProgress = null;
+                    };
+
+
+                    return $scope.init();
+
+                    function upload($files) {
                         //$files: an array of files selected, each file has name, size, and type.
                         for (var i = 0; i < $files.length; i++) {
 
@@ -42,6 +61,7 @@ angular.module('globalbikerWebApp')
                             }).progress(function (evt) {
                                 $scope.fileUploadProgress = (100 * evt.loaded / evt.total);
                             }).success(function (data, status, headers, config) {
+
                                 if ($scope.fileUpload && $scope.fileUpload.callbacks && $scope.fileUpload.callbacks.success && typeof ($scope.fileUpload.callbacks.success) === 'function') {
                                     $scope.fileUpload.callbacks.success(data);
                                 }
@@ -52,17 +72,10 @@ angular.module('globalbikerWebApp')
                             });
 
                         }
-                    };
-
-                    $scope.init = function () {
-
-                        $scope.fileUploadProgress = null;
-
-                    };
-
-
-                    return $scope.init();
+                    }
                 }
             }
         };
-    });
+
+    }
+})();

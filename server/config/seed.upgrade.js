@@ -46,6 +46,41 @@ exports.upgradeTourAttributes = function () {
 
 };
 
+exports.patchToursRegion = function () {
+
+    Region.findOne({
+        'reference': 'france'
+    }, function (err, region) {
+        if (err) {
+            console.error(err);
+        } else {
+
+            Tour.find({
+                region: null
+            }, function (err, tours) {
+                if (err) {
+                    console.error(err);
+                } else if (tours.length !== 0) {
+                    console.info('Upgrade %d tours region.', tours.length);
+
+                    var promises = tours.reduce(function (promises, tour) {
+
+                        tour.region = region;
+                        promises.push(tour.save());
+                        return promises;
+                    }, []);
+
+                    Q.all(promises).then(function () {
+                        console.info('%d tours region upgraded successfully.', tours.length);
+                    }, function (err) {
+                        console.error(err);
+                    });
+                }
+            });
+        }
+    });
+};
+
 exports.patchToursStatus = function () {
 
     Tour.find({
