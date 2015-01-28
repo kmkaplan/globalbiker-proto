@@ -1,4 +1,4 @@
-.navbar {
+.navbar-fixed-top {
     background: linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
     min-height: 25px;
     border: 0;
@@ -27,6 +27,10 @@
     .navbar-nav > li.icon > a {
         padding: 10px 10px;
     }
+    .navbar-right{
+        padding-right: 85px;
+    }
+        
 }
 
 .navbar .navbar-nav > li.active > a {
