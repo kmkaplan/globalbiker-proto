@@ -8,11 +8,45 @@
 
         var service = {
             build: build,
+            buildSource: buildSource,
             buildAll: buildAll
         };
 
         return service;
 
+        function buildSource(tour, events) {
+                
+            if (!tour || !tour.sourceGeometry) {
+                return null;
+            }
+
+            var color = '#00ac75';
+
+            var feature = {
+                type: tour.sourceGeometry.type,
+                geometry: tour.sourceGeometry,
+                properties: {
+                    options: {
+                        style: {
+                            color: color,
+                            opacity: 0.5,
+                            weight: 20
+                        }
+                    }
+                }
+            };
+
+            if (events) {
+                feature.properties.events = events
+            };
+            feature.model = {
+                type: 'tour',
+                tour: tour
+            }
+
+            return feature;
+        }
+        
         function build(tour, events) {
                 
             if (!tour || !tour.geometry) {

@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourStepEditCtrl', TourStepEditCtrl);
 
-    function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestsMarkerBuilderService, PhotoRepository) {
+    function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, bikeTourMapService, securityService, interestsMarkerBuilderService, tourFeaturesBuilderService, PhotoRepository) {
 
         // scope properties
         $scope.mapConfig = {
@@ -162,6 +162,11 @@
 
 
                 traceFeatures = traceFeatures.concat(interestsFeatures);
+
+                if (tour.sourceGeometry) {
+                    var feature = tourFeaturesBuilderService.buildSource(tour);
+                    traceFeatures.push(feature);
+                }
 
                 if (traceFeatures) {
                     $scope.mapConfig.items = traceFeatures;

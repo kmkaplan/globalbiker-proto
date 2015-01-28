@@ -154,44 +154,16 @@ L.GeojsonItem = L.FeatureGroup.extend({
                 polylineOptions = {}
             }
 
-            //  add foreground layer
+            //  add main layer
             var layer1 = new L.MultiPolyline(latlngs, polylineOptions);
 
             this._addToLayer(item, layer1, false);
 
-
-            // add transparent layer
-            var transparentPolylineOptions = angular.copy(polylineOptions);
-            transparentPolylineOptions.color = 'transparent';
-            transparentPolylineOptions.weight = 20;
-
-            var layer2 = new L.MultiPolyline(latlngs, transparentPolylineOptions);
-            if (item.properties.options.label) {
-                layer2.bindLabel(item.properties.options.label);
-            }
-
-            this._addToLayer(item, layer2, true);
-
-            var polylineOptionsOnOver = angular.copy(transparentPolylineOptions);
-            polylineOptionsOnOver.color = polylineOptions.color;
-            polylineOptionsOnOver.opacity = 0.2;
-
-            layer2.on('mouseover', function () {
-                if (polylineOptionsOnOver !== null) {
-                    layer2.setStyle(polylineOptionsOnOver);
-                }
-            });
-            layer2.on('mouseout', function () {
-                if (polylineOptionsOnOver !== null) {
-                    layer2.setStyle(transparentPolylineOptions);
-                }
-            });
-
-            if (item && item.model && item.model.tour && item.model.tour.selected) {
-                layer2.setStyle(polylineOptionsOnOver);
-            }
-
             if (item.properties.events) {
+
+                if (typeof (item.properties.events.click) === 'function') {
+                    this._addMultipolylineHoverEffect(item, latlngs, polylineOptions);
+                }
                 // register events
                 for (var eventKey in item.properties.events) {
                     if (item.properties.events.hasOwnProperty(eventKey)) {
@@ -210,6 +182,39 @@ L.GeojsonItem = L.FeatureGroup.extend({
             throw new Error('Invalid geometry type.');
         }
 
+    },
+
+    _addMultipolylineHoverEffect: function (item, latlngs, polylineOptions) {
+        // add transparent layer
+        var transparentPolylineOptions = angular.copy(polylineOptions);
+        transparentPolylineOptions.color = 'transparent';
+        transparentPolylineOptions.weight = 20;
+
+        var layer2 = new L.MultiPolyline(latlngs, transparentPolylineOptions);
+        if (item.properties.options.label) {
+            layer2.bindLabel(item.properties.options.label);
+        }
+
+        this._addToLayer(item, layer2, true);
+
+        var polylineOptionsOnOver = angular.copy(transparentPolylineOptions);
+        polylineOptionsOnOver.color = polylineOptions.color;
+        polylineOptionsOnOver.opacity = 0.2;
+
+        layer2.on('mouseover', function () {
+            if (polylineOptionsOnOver !== null) {
+                layer2.setStyle(polylineOptionsOnOver);
+            }
+        });
+        layer2.on('mouseout', function () {
+            if (polylineOptionsOnOver !== null) {
+                layer2.setStyle(transparentPolylineOptions);
+            }
+        });
+
+        if (item && item.model && item.model.tour && item.model.tour.selected) {
+            layer2.setStyle(polylineOptionsOnOver);
+        }
     },
 
     _addToLayer: function (item, layer, applyOnEachFeature) {
