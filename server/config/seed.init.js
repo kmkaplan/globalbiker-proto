@@ -21,10 +21,11 @@ var config = require('./environment');
 var InitRegions = require('./seed.init.regions');
 var InitInterestTypes = require('./seed.init.interesttypes');
 var InitLicenses = require('./seed.init.licenses');
+var InitCountries = require('./seed.init.countries');
 
 
 var Q = require('q');
 
 exports.init = function () {
-    return Q.all([InitRegions.init(), InitInterestTypes.init(), InitLicenses.init()]);
+    return Q.all([InitCountries.init(), InitRegions.init(), InitInterestTypes.init(), InitLicenses.init()]);
 };

@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourEditTraceCtrl', TourEditTraceCtrl);
 
-    function TourEditTraceCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, securityService, featuresBuilderFileService) {
+    function TourEditTraceCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, securityService, featuresBuilderFileService, tourFeaturesBuilderService, interestsMarkerBuilderService) {
 
         // scope properties
         $scope.mapConfig = {};
@@ -32,6 +32,8 @@
                 $scope.mapConfig.bounds = {
                     geometry: tour.region.geometry
                 };
+                
+                showTourOnMap(tour);
             }
         };
 
@@ -48,7 +50,11 @@
 
                             $scope.gpsFeature = feature;
 
-                            $scope.mapConfig.items = [feature];
+                            if ($scope.mapConfig.items){
+                                $scope.mapConfig.items = $scope.mapConfig.items.concat([feature]);
+                            }else{
+                                $scope.mapConfig.items = [feature];
+                            }
 
                             $scope.mapConfig.bounds = {
                                 geometry: feature.geometry
@@ -63,6 +69,42 @@
                 }
             }
         };
+
+        function showTourOnMap(tour) {
+            var features = [];
+
+            // no step geometry: display tour geometry instead
+            if (tour.geometry) {
+                var feature = tourFeaturesBuilderService.build(tour);
+                features.push(feature);
+            }
+
+            if (tour.cityFrom) {
+                var feature = interestsMarkerBuilderService.buildDeparture(tour.cityFrom);
+                features.push(feature);
+            }
+
+            if (tour.cityTo) {
+                var feature = interestsMarkerBuilderService.buildArrival(tour.cityTo);
+                features.push(feature);
+            }
+
+            if (features.length !== 0) {
+
+                var geometries = features.reduce(function (geometries, feature) {
+                    geometries.push(feature.geometry);
+                    return geometries;
+                }, []);
+
+                $scope.mapConfig.items = features;
+
+                $scope.mapConfig.bounds = {
+                    geometry: geometries
+                };
+
+            }
+        }
+
     }
 
 })();

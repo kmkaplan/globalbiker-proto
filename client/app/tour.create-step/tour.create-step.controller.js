@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourCreateStepCtrl', TourCreateStepCtrl);
 
-    function TourCreateStepCtrl(tour, $scope, $q, $state, Auth, StepRepository, securityService) {
+    function TourCreateStepCtrl(tour, $scope, $q, $state, Auth, StepRepository, CountryRepository, securityService) {
 
         // scope properties
         $scope.securityService = securityService;
@@ -16,6 +16,9 @@
         $scope.step = {
             tourId: tour._id
         };
+        $scope.countries;
+        $scope.countryOfDeparture;
+        $scope.countryOfArrival;
 
         // scope methods
         $scope.createStep = createStep;
@@ -30,9 +33,25 @@
                 $state.go('home');
             } else {
                 $scope.tour = tour;
+                
+                 loadCountries();
             }
         };
 
+        function loadCountries() {
+            CountryRepository.query(function (countries) {
+                $scope.countries = countries;
+                $scope.countryOfDeparture = countries.reduce(function (defaultCountry, country) {
+                    if (country.countryCode === 'FR') {
+                        return country;
+                    }
+                    return defaultCountry;
+                }, null);
+
+                $scope.countryOfArrival = $scope.countryOfDeparture;
+            });
+        }
+        
         function progress() {
             var progress = 0;
             if ($scope.step && $scope.step.cityFrom && $scope.step.cityTo) {

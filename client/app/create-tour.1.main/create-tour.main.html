@@ -14,16 +14,30 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group">
-                <label translate="global.tour.departure">City of departure</label>
-                <div geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris, Lyon...'"></div>
+                <label translate="global.tour.country.departure">Country of departure</label>
+                <input required typeahead-min-length="2" ng-model="countryOfDeparture" placeholder="Fra..." typeahead="country as country.name for country in countries" typeahead-loading="countryLoading" class="form-control">
+                <i ng-show="countryLoading" class="glyphicon glyphicon-refresh"></i> 
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group">
-                <label translate="global.tour.arrival">City of arrival</label>
-                <div geonames-city-input ng-model="tour.cityTo" placeholder="'Nantes, Bordeaux...'"></div>
+                <label translate="global.tour.city.departure">City of departure</label>
+                <div country-code="{{ countryOfDeparture.countryCode }}" geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris, Lyon...'"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label translate="global.tour.country.arrival">Country of arrival</label>
+                <input required typeahead-min-length="2" ng-model="countryOfArrival" placeholder="Fra..." typeahead="country as country.name for country in countries" typeahead-loading="countryLoading" class="form-control">
+                <i ng-show="countryLoading" class="glyphicon glyphicon-refresh"></i> 
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label translate="global.tour.city.arrival">City of arrival</label>
+                <div country-code="{{ countryOfArrival.countryCode }}" geonames-city-input ng-model="tour.cityTo" placeholder="'Nantes, Bordeaux...'"></div>
             </div>
         </div>
     </div>

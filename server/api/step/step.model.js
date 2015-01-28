@@ -13,7 +13,7 @@ var StepSchema = new Schema({
     },
     tourId: {
         type: Schema.ObjectId,
-        ref: 'TourSchema',
+        ref: 'Tour',
         required: true
     },
     reference: {
@@ -35,7 +35,7 @@ var StepSchema = new Schema({
     },
     photoId: {
         type: Schema.ObjectId,
-        ref: 'PhotoSchema'
+        ref: 'Photo'
     },
     cityFrom: {
         geonameId: {

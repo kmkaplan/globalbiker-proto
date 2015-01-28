@@ -281,10 +281,6 @@ angular.module('globalbikerWebApp')
                         traceOptions.style = {};
                     }
 
-                    if (!traceOptions.style.color && tour.color) {
-                        traceOptions.style.color = tour.color;
-                    }
-
                     stepTraceFeatures = stepTraceFeatures.concat(self.buildStepsTracesFeatures(tour.steps, traceOptions, tour));
 
                     return stepTraceFeatures;

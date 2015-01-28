@@ -13,10 +13,17 @@
         },
         "tour": {
             "label": "Parcours",
-            "departure": "Ville de départ",
-            "arrival": "Ville de destination",
+            "ville": {
+                "departure": "Ville de départ",
+                "arrival": "Ville de destination"
+            },
+            "pays": {
+                "departure": "Pays de départ",
+                "arrival": "Pays de destination"
+            },
             "from": "De",
             "to": "à",
+            "open": "Aller à la page du tour",
             "remove": "Supprimer ce parcours",
             "create": "Créer un nouveau parcours",
             "status":{

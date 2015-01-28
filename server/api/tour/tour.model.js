@@ -35,12 +35,6 @@ var TourSchema = new Schema({
         trim: true,
         unique: true
     },
-    color: {
-        type: String,
-        required: true,
-        trim: true,
-        default: 'blue'
-    },
     description: {
         type: String,
         trim: true

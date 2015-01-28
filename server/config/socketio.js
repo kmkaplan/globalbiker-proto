@@ -18,6 +18,8 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/city/city.socket').register(socket);
+  require('../api/country/country.socket').register(socket);
   require('../api/region/region.socket').register(socket);
   require('../api/photo/photo.socket').register(socket);
   require('../api/interesttype/interesttype.socket').register(socket);

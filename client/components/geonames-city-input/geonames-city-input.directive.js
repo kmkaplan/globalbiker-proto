@@ -9,7 +9,8 @@
             restrict: 'EA',
             scope: {
                 city: '=ngModel',
-                placeholder: '='
+                placeholder: '=',
+                countryCode: '@'
             },
             require: 'ngModel',
 
@@ -19,14 +20,6 @@
                     // scope properties
                     $scope.loading = false;
                     $scope.selectedCity;
-
-                    // default country: France
-                    $scope.country = {
-                        // geonames
-                        "geonameId": 3017382,
-                        "countryCode": "FR",
-                        "name": "France"
-                    };
 
                     // scope methods
                     $scope.selectCity = selectCity;
@@ -110,7 +103,13 @@
                     function searchCity(startWith) {
                         // search geonames
                         $scope.loading = true;
-                        return geonames.searchCitiesByNameAndCountryCode(startWith, $scope.country.countryCode).then(function (cities) {
+
+                        if (!$scope.countryCode) {
+                            // default country: France
+                            $scope.countryCode = 'FR';
+                        }
+
+                        return geonames.searchCitiesByNameAndCountryCode(startWith, $scope.countryCode).then(function (cities) {
 
                             var formatedCities = cities.reduce(function (output, city) {
 

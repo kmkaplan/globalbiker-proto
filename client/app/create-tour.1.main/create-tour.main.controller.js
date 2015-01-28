@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('CreateTourMainCtrl', CreateTourMainCtrl);
 
-    function CreateTourMainCtrl(tour, $scope, $q, $state, Auth, TourRepository, securityService) {
+    function CreateTourMainCtrl(tour, $scope, $q, $state, Auth, TourRepository, CountryRepository, securityService) {
 
         // scope properties
         $scope.securityService = securityService;
@@ -14,6 +14,9 @@
             toolbar: 'bold italic bullist numlist outdent indent removeformat subscript superscript'
         };
         $scope.tour = tour;
+        $scope.countries;
+        $scope.countryOfDeparture;
+        $scope.countryOfArrival;
 
         // scope methods
         $scope.createTour = createTour;
@@ -26,8 +29,10 @@
             if (!Auth.isLoggedIn) {
                 $state.go('home');
                 return;
+            } else {
+                loadCountries();
             }
-           /* $scope.$watch('tour.cityFrom', function (cityFrom, old) {
+            /* $scope.$watch('tour.cityFrom', function (cityFrom, old) {
                 if (cityFrom) {
                     $scope.tour.title = cityFrom.name;
                 }
@@ -51,6 +56,20 @@
             return progress;
         }
 
+        function loadCountries() {
+            CountryRepository.query(function (countries) {
+                $scope.countries = countries;
+                $scope.countryOfDeparture = countries.reduce(function (defaultCountry, country) {
+                    if (country.countryCode === 'FR') {
+                        return country;
+                    }
+                    return defaultCountry;
+                }, null);
+
+                $scope.countryOfArrival = $scope.countryOfDeparture;
+            });
+        }
+
         function createTour(tour) {
             var deffered = $q.defer();
 
@@ -58,12 +77,7 @@
 
             tour.userId = user._id;
             tour.authors = [user._id];
-            tour.country = {
-                // geonames
-                "geonameId": 3017382,
-                "countryCode": "FR",
-                "name": "France"
-            };
+            tour.country = $scope.countryOfDeparture;
 
             // create resource
             new TourRepository(tour).$save(function (tour, putResponseHeaders) {

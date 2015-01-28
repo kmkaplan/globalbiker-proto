@@ -13,10 +13,17 @@
         },
         "tour": {
             "label": "Tour",
-            "departure": "City of departure",
-            "arrival": "City of arrival",
+            "city": {
+                "departure": "City of departure",
+                "arrival": "City of arrival"
+            },
+            "country": {
+                "departure": "Country of departure",
+                "arrival": "Country of arrival"
+            },
             "from": "From",
             "to": "to",
+            "open": "Open tour page",
             "remove": "Remove this tour",
             "create": "Create a new tour",
             "status":{
