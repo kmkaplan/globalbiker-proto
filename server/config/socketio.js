@@ -18,6 +18,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/message/message.socket').register(socket);
   require('../api/city/city.socket').register(socket);
   require('../api/country/country.socket').register(socket);
   require('../api/region/region.socket').register(socket);

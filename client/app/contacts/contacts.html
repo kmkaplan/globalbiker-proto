@@ -1,0 +1,22 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container contacts-page page" ui-view>
+    <h1>Contacts</h1>
+    <form name="form" class="form" ng-submit="sendMessage(form)" novalidate>
+        <div class="form-group required">
+            <label class="control-label">Email address</label>
+            <input ng-model="email.address" name="email" required type="email" class="form-control" placeholder="Enter your email">
+        </div>
+        <div class="form-group required">
+            <label class="control-label">Subject</label>
+            <input ng-model="email.subject" name="subject" required type="text" class="form-control">
+        </div>
+        <div class="form-group required">
+            <label class="control-label">Message</label>
+            <textarea ng-model="email.message" name="message" rows="10" required ></textarea>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Send</button>
+        </div>
+    </form>
+</div>

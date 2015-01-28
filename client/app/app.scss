@@ -78,6 +78,7 @@ $black3: #555;
 @import 'account/login/login.scss';
 @import 'admin-data/admin-data.scss';
 @import 'admin/admin.scss';
+@import 'contacts/contacts.scss';
 @import 'create-tour.1.main/create-tour.main.scss';
 @import 'fonts/google.rancho.scss';
 @import 'home/home.old.scss';
@@ -288,6 +289,15 @@ img.smart-photo {
 
 .btn-primary {
     @include button-variant($white1, $color1dark1, $color1dark2);
+}
+
+.form-group.required .control-label:after {
+  content:" *";
+  color:red;
+}
+
+.dynamic-view{
+    min-height: 400px;
 }
 
 .ribbon-wrapper-green {

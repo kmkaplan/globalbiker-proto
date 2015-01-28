@@ -10,7 +10,7 @@ var MailingSchema = new Schema({
     },
     email: {
         type: String,
-        required: 'Please fill email'
+        required: true
     }
 });
 

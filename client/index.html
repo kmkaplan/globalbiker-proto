@@ -35,7 +35,9 @@
     <![endif]-->
     
     <!-- Add your site or application content here -->
-    <div ui-view=""></div>
+    <div class="dynamic-view" ui-view=""></div>
+
+    <div ng-include="'components/footer/footer.html'"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID 
      <script>
@@ -134,6 +136,8 @@
     <script src="app/admin-data/admin-data.js"></script>
     <script src="app/admin/admin.controller.js"></script>
     <script src="app/admin/admin.js"></script>
+    <script src="app/contacts/contacts.controller.js"></script>
+    <script src="app/contacts/contacts.js"></script>
     <script src="app/create-tour.1.main/create-tour.main.controller.js"></script>
     <script src="app/create-tour.1.main/create-tour.main.js"></script>
     <script src="app/create-tour/create-tour.controller.js"></script>
@@ -199,6 +203,7 @@
     <script src="components/repositories/country.repository.js"></script>
     <script src="components/repositories/interest.repository.js"></script>
     <script src="components/repositories/license.repository.js"></script>
+    <script src="components/repositories/message.repository.js"></script>
     <script src="components/repositories/photo.repository.js"></script>
     <script src="components/repositories/region.repository.js"></script>
     <script src="components/repositories/step.repository.js"></script>

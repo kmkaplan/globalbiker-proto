@@ -21,8 +21,8 @@ angular.module('globalbikerWebApp')
                     'link': '/about'
                 },
                 {
-                    'title': 'menu.blog',
-                    'link': 'http://blog.globalbiker.org'
+                    'title': 'menu.contacts',
+                    'link': '/contacts'
                 }];
             });
         }
