@@ -161,9 +161,8 @@ L.GeojsonItem = L.FeatureGroup.extend({
 
             if (item.properties.events) {
 
-                if (typeof (item.properties.events.click) === 'function') {
-                    this._addMultipolylineHoverEffect(item, latlngs, polylineOptions);
-                }
+                var layer2 = this._addMultipolylineHoverEffect(item, latlngs, polylineOptions);
+                
                 // register events
                 for (var eventKey in item.properties.events) {
                     if (item.properties.events.hasOwnProperty(eventKey)) {
@@ -215,6 +214,8 @@ L.GeojsonItem = L.FeatureGroup.extend({
         if (item && item.model && item.model.tour && item.model.tour.selected) {
             layer2.setStyle(polylineOptionsOnOver);
         }
+        
+        return layer2;
     },
 
     _addToLayer: function (item, layer, applyOnEachFeature) {
