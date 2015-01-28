@@ -10,3 +10,5 @@ server/uploads
 server/photos
 /npm-debug.log
 logs
+server/config/environment/development.js
+server/config/environment/production.js
