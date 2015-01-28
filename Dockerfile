@@ -26,8 +26,9 @@ RUN chmod 755 /app/scripts/*.sh
 
 ENV MONGOLAB_URI mongodb://mongodb/biketouringmap
 
-VOLUME ["/app/server/dist/upload"]
-VOLUME ["/app/server/dist/photos"]
+VOLUME ["/app/dist/server/upload"]
+VOLUME ["/app/dist/server/photos"]
+VOLUME ["/app/dist/server/config/environment"]
 
 CMD ["/app/scripts/run.sh"]
 

@@ -63,5 +63,6 @@ Start a new container
         --link=mongodb:mongodb \
         --volume=/opt/docker/jenkins/share/globalbiker.org/upload:/app/dist/server/upload \
         --volume=/opt/docker/jenkins/share/globalbiker.org/photos:/app/dist/server/photos \
+        --volume=/opt/docker/jenkins/share/globalbiker.org/environments:/app/dist/server/config/environments \
         -p 9209:8080 \
         --name globalbiker.org -t globalbiker/bike-touring-map
