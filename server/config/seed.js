@@ -29,7 +29,8 @@ var functions = [
     SeedInit.init,
     SeedReset.reset,
     SeedUpgrade.patchToursRegion,
-    SeedUpgrade.upgradeTourAttributes
+    SeedUpgrade.upgradeTourAttributes,
+    SeedUpgrade.patchStepsReferences
 ];
 
 return functions.reduce(function (soFar, f) {

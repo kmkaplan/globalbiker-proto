@@ -46,6 +46,32 @@ exports.upgradeTourAttributes = function () {
 
 };
 
+exports.patchStepsReferences = function () {
+
+    Step.find({
+        reference: null
+    }, function (err, steps) {
+        if (err) {
+            console.error(err);
+        } else if (steps.length !== 0) {
+            console.info('Upgrade %d steps references.', steps.length);
+
+            var promises = steps.reduce(function (promises, step) {
+                step.reference = referenceCreator.createReferenceFromString(step.cityFrom.name + '-' + step.cityTo.name);
+                promises.push(step.save());
+                return promises;
+            }, []);
+
+            Q.all(promises).then(function () {
+                console.info('%d steps references upgraded successfully.', steps.length);
+            }, function (err) {
+                console.error(err);
+            });
+        }
+    });
+
+};
+
 exports.patchToursRegion = function () {
 
     Region.findOne({
