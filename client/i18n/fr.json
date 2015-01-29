@@ -54,6 +54,9 @@
                 "wc": "wc",
                 "velotoulouse": "vélo toulouse"
             }
+        },
+        "messages": {
+            "progress": "Veuillez patienter..."
         }
     },
     "signup": {
@@ -71,7 +74,21 @@
         "profile": "Mon profil",
         "users": "Utilisateurs",
         "data": "Données",
-        "contacts": "Contacts"
+        "contacts": "Contactez-nous"
+    },
+    "contacts": {
+        "error": "Erreur innatendue pendant l'envoi du message. Veuillez ré-essayer ultérieurement ou nous contacter via les réseaux sociaux (liens en bas de page).",
+        "success": "Votre message a bien été envoyé. Nous vous répondrons dans les meilleurs délais.",
+        "form": {
+            "email": "Adresse e-mail",
+            "subject": "Sujet",
+            "message": "Message",
+            "send": "Envoyer"
+        },
+        "links": {
+            "home": "Retour à l'accueil",
+            "blog": "Visitez notre blog"
+        }
     },
     "home": {
         "main": {

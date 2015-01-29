@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('globalbikerWebApp', [
+  'ngAnimate',
   'ngCookies',
   'ngResource',
   'ngSanitize',
+  'ngMessages',
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',

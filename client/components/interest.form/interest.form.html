@@ -21,9 +21,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group required" ng-class="{ 'has-error':  form.name.$dirty && form.name.$invalid, 'has-success': form.name.$dirty && form.name.$valid }">
-                        <label class="control-label" translate="mytourstep.name">Name</label>
+                        <label class="control-message" translate="mytourstep.name">Name</label>
                         <input required name="name" ng-model="interest.name" type="text" class="form-control" placeholder="Enter the name of this point ...">
-                        <label class="error-label" ng-show="form.name.$invalid && form.name.$dirty" translate="mytourstep.name_warn">The name is required.</label>
+                        <label class="error-message" ng-show="form.name.$invalid && form.name.$dirty" translate="mytourstep.name_warn">The name is required.</label>
                     </div>
                 </div>
             </div>

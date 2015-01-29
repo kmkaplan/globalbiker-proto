@@ -26,7 +26,7 @@
             "open": "Open tour page",
             "remove": "Remove this tour",
             "create": "Create a new tour",
-            "status":{
+            "status": {
                 "draft": "draft",
                 "submitted": "submitted",
                 "validated": "validated"
@@ -41,7 +41,7 @@
             "remove": "Remove this step",
             "create": "Create a new step"
         },
-        "interest":{
+        "interest": {
             "type": {
                 "interest": "interest",
                 "bike-shop": "bike shop",
@@ -54,6 +54,9 @@
                 "wc": "wc",
                 "velotoulouse": "velo toulouse"
             }
+        },
+        "messages": {
+            "progress": "Please wait..."
         }
     },
     "signup": {
@@ -71,7 +74,21 @@
         "profile": "My profile",
         "users": "Users",
         "data": "Data",
-        "contacts": "Contacts"
+        "contacts": "Contact us"
+    },
+    "contacts": {
+        "error": "An unexpected error occured. Please try later or contact us using social networks (links provided in the bottom of the page)",
+        "success": "Your message has been successfully sent. You will receive an answer as soon as possible.",
+        "form": {
+            "email": "Email address",
+            "subject": "Subject",
+            "message": "Message",
+            "send": "Send"
+        },
+        "links": {
+            "home": "Back to home page",
+            "blog": "Visit our blog"
+        }
     },
     "home": {
         "main": {

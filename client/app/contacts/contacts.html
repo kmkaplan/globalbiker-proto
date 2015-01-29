@@ -2,21 +2,48 @@
 
 <div class="container contacts-page page" ui-view>
     <h1>Contacts</h1>
-    <form name="form" class="form" ng-submit="sendMessage(form)" novalidate>
-        <div class="form-group required">
-            <label class="control-label">Email address</label>
-            <input ng-model="email.address" name="email" required type="email" class="form-control" placeholder="Enter your email">
-        </div>
-        <div class="form-group required">
-            <label class="control-label">Subject</label>
-            <input ng-model="email.subject" name="subject" required type="text" class="form-control">
-        </div>
-        <div class="form-group required">
-            <label class="control-label">Message</label>
-            <textarea ng-model="email.message" name="message" rows="10" required ></textarea>
+
+    <div ng-if="status === 'success'">
+        <div class="alert alert-success">
+            <span role="alert" class="glyphicon glyphicon-ok"></span> 
+            <span translate="contacts.success">Your message has been successfully sent. You will receive an answer as soon as possible.</span>
         </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-primary btn-lg">Send</button>
+            <a href="/" class="btn btn-primary btn-lg" translate="contacts.links.home">Back to main page</a>
+            <a href="http://blog.globalbiker.org" class="btn btn-primary btn-lg" translate="contacts.links.blog">Visit our blog</a>
+        </div>
+    </div>
+    <form ng-if="status !== 'success'" name="form" class="form" ng-submit="sendMessage(form)" novalidate>
+        <div class="form-group required">
+            <label class="control-label" translate="contacts.form.email">Email address</label>
+            <input type="email" name="email" ng-model="email.address" ng-required="true" class="form-control" placeholder="Enter your email">
+            <div class="error-messages" ng-messages="form.email.$error" ng-if="form.email.$touched || form.$submitted" ng-messages-include="components/form/generic-error-messages.html">
+            </div>
+        </div>
+        <div class="form-group required">
+            <label class="control-label" translate="contacts.form.subject">Subject</label>
+            <input ng-model="email.subject" name="subject" ng-required="true" type="text" class="form-control">
+            <div class="error-messages" ng-messages="form.subject.$error" ng-if="form.subject.$touched || form.$submitted" ng-messages-include="components/form/generic-error-messages.html">
+            </div>
+        </div>
+        <div class="form-group required">
+            <label class="control-label" translate="contacts.form.message">Message</label>
+            <textarea ng-model="email.message" name="message" rows="10" ng-required="true"></textarea>
+            <div class="error-messages" ng-messages="form.message.$error" ng-if="form.message.$touched || form.$submitted" ng-messages-include="components/form/generic-error-messages.html">
+            </div>
+        </div>
+
+        <div ng-switch="status">
+            <div ng-switch-when="pending" class="alert alert-info" role="alert">
+                <i class="fa fa-spinner fa-spin"></i>  <span translate="global.messages.progress">Please wait...</span>
+            </div>
+            <div ng-switch-when="error" class="alert alert-danger">
+                <span role="alert" class="glyphicon glyphicon-exclamation-sign"></span> 
+                <span translate="contacts.error">An unexpected error occured. Please try later.</span>
+            </div>
+        </div>
+        <div class="text-center">
+            <button ng-disabled="status === 'pending'" type="submit" class="btn btn-primary btn-lg" translate="contacts.form.send">Send</button>
         </div>
     </form>
 </div>

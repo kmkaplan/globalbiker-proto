@@ -33,11 +33,9 @@ $color2light1: #407F7F;
 $color2light2: #669999;
 $color2dark1: #0D4D4D;
 $color2dark2: #003333;
-
 $white1: #fff;
 $white2: #eee;
 $white3: #ddd;
-
 $black1: #000;
 $black2: #333;
 $black3: #555;
@@ -103,7 +101,6 @@ $black3: #555;
 @import 'navbar/navbar.scss';
 @import 'travel-with-icon/travel-with-icon.scss';
 // endinjector
-
 html {
     font-family: $fontFamilly;
     min-height: 100%;
@@ -119,6 +116,11 @@ html {
         }
     }
     .page {
+        form {
+            .error-message {
+                color: red;
+            }
+        }
         padding: 50px 30px;
         .link {
             cursor: pointer;
@@ -173,8 +175,7 @@ html {
             border-radius: 5px;
         }
         h1 {
-            font-family: $fontFamilly2;
-            font-size: 40px;
+            font-size: 30px;
             color: $color2;
             text-shadow: 1px 1px 0 $color2dark2;
             margin-top: 20px;
@@ -216,7 +217,8 @@ html {
             padding: 25px;
             text-align: justify;
         }
-        .rating, .rating {
+        .rating,
+        .rating {
             &.in-edition {
                 .rating-bar {
                     background-clip: padding-box;
@@ -292,11 +294,11 @@ img.smart-photo {
 }
 
 .form-group.required .control-label:after {
-  content:" *";
-  color:red;
+    content: " *";
+    color: red;
 }
 
-.dynamic-view{
+.dynamic-view {
     min-height: 400px;
 }
 
@@ -310,7 +312,7 @@ img.smart-photo {
     z-index: 10000;
     display: none;
     @media all and (min-width: $screen-sm-min) {
-       display: block;
+        display: block;
     }
 }
 
@@ -340,7 +342,8 @@ img.smart-photo {
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
 }
 
-.ribbon-green:before, .ribbon-green:after {
+.ribbon-green:before,
+.ribbon-green:after {
     content: "";
     border-top: 3px solid #6e8900;
     border-left: 3px solid transparent;
