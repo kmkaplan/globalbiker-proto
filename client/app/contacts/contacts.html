@@ -9,8 +9,14 @@
             <span translate="contacts.success">Your message has been successfully sent. You will receive an answer as soon as possible.</span>
         </div>
         <div class="text-center">
-            <a href="/" class="btn btn-primary btn-lg" translate="contacts.links.home">Back to main page</a>
-            <a href="http://blog.globalbiker.org" class="btn btn-primary btn-lg" translate="contacts.links.blog">Visit our blog</a>
+            <a href="/" class="btn btn-primary btn-lg" translate="contacts.links.home">
+               <i class="glyphicon glyphicon-home"</i> 
+               Back to home page
+            </a>
+            <a href="http://blog.globalbiker.org" class="btn btn-primary btn-lg" translate="contacts.links.blog">
+               <i class="fa fa-wordpress"></i>
+               Visit our blog
+            </a>
         </div>
     </div>
     <form ng-if="status !== 'success'" name="form" class="form" ng-submit="sendMessage(form)" novalidate>

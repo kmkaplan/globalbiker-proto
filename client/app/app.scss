@@ -83,6 +83,7 @@ $black3: #555;
 @import 'home/home.scss';
 @import 'icomoon.scss';
 @import 'my-tours/my-tours.scss';
+@import 'press/press.scss';
 @import 'region/region.scss';
 @import 'table.scss';
 @import 'tour.create-step/tour.create-step.scss';
@@ -190,10 +191,10 @@ html {
         }
         h3 {
             font-size: 18px;
-            color: $color1;
-            text-shadow: 1px 0px 0 $color1dark1;
-            margin-top: 10px;
-            margin-bottom: 12px;
+            color: #555;
+            text-shadow: 1px 0px 0 #333;
+            margin-top: 12px;
+            margin-bottom: 10px;
         }
         .nav-tabs > li {
             font-weight: bold;

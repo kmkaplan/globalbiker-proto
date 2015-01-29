@@ -201,5 +201,8 @@
         "step": "Step",
         "edit-the-tour": "edit the tour",
         "edit-the-step": "edit the step"
+    },
+    "footer": {
+        "press": "press"
     }
 }

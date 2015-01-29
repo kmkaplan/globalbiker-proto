@@ -201,5 +201,8 @@
         "step": "Etape",
         "edit-the-tour": "modifier le tour",
         "edit-the-step": "modifier l'étape"
+    },
+    "footer": {
+        "press": "presse"
     }
 }
