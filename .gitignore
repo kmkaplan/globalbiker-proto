@@ -12,3 +12,4 @@ server/photos
 logs
 server/config/environment/development.js
 server/config/environment/production.js
+local

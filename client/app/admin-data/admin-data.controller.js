@@ -5,6 +5,7 @@ angular.module('globalbikerWebApp')
 
         $scope.bikemapFileupload = {
             url: '/api/bikelanes/upload',
+            autoUpload: true,
             callbacks: {
                 success: function (data) {
                     $scope.loadBikelanes();
@@ -14,6 +15,7 @@ angular.module('globalbikerWebApp')
 
         $scope.waterpointsUpload = {
             url: '/api/interests/upload/water-point',
+            autoUpload: true,
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();
@@ -23,6 +25,7 @@ angular.module('globalbikerWebApp')
 
         $scope.velotoulouseUpload = {
             url: '/api/interests/upload/velotoulouse',
+            autoUpload: true,
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();
@@ -32,6 +35,7 @@ angular.module('globalbikerWebApp')
 
         $scope.dangersCarrefoursUpload = {
             url: '/api/interests/upload/danger',
+            autoUpload: true,
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();
@@ -41,6 +45,7 @@ angular.module('globalbikerWebApp')
 
         $scope.merimeeUpload = {
             url: '/api/interests/upload/merimee',
+            autoUpload: true,
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();
@@ -50,6 +55,7 @@ angular.module('globalbikerWebApp')
 
         $scope.wcUpload = {
             url: '/api/interests/upload/wc',
+            autoUpload: true,
             callbacks: {
                 success: function (data) {
                     $scope.loadPointsOfInterests();

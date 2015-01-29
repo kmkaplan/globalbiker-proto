@@ -49,6 +49,7 @@
                             $scope.photosupload = {
                                 // TODO manage multiple photos
                                 multiple: false,
+                                autoUpload: true,
                                 url: function () {
                                     return '/api/photos/upload';
                                 },
