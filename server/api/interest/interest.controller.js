@@ -22,6 +22,9 @@ exports.index = function (req, res) {
     if (req.query.type) {
         searchCriteria.type = req.query.type;
     }
+     if (req.query.source) {
+        searchCriteria.source = req.query.source;
+    }
 
     Interest.find(searchCriteria).limit(500).exec(function (err, interests) {
         if (err) {
@@ -506,6 +509,11 @@ exports.upload = function (req, res) {
             fileName = 'RestaurantsGastronomiques.csv';
             break;
         }
+    case 'dataProvence2':
+        {
+            fileName = 'ChambresDHOtesFleursDeSoleil.csv';
+            break;
+        }
     default:
         {
             console.error('Invalid type "%s"', interestType);
@@ -530,7 +538,8 @@ exports.upload = function (req, res) {
         switch (interestType) {
 
         case 'dataProvence1':
-            interestsPromises = interestCsvParser.parse(data);
+        case 'dataProvence2':
+            interestsPromises = interestCsvParser.parse(interestType, data);
             break;
         default:
 

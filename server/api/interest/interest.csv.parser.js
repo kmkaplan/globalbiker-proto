@@ -3,9 +3,7 @@ var csv = require('csv');
 var Q = require('q');
 var logger = require('../../components/logger/logger');
 
-
-
-exports.parse = function (data) {
+exports.parse = function (interestType, data) {
 
     var deffered = Q.defer();
 
@@ -33,16 +31,16 @@ exports.parse = function (data) {
                         }
                         continue;
                     }
-                    
+
                     var data = {};
                     for (var j = 0; j < headers.length; j++) {
                         var columnName = headers[j]
                         data[columnName] = row[j];
                     }
 
-                    var interest = exports.buildInterest(data, 'upload');
-                    
-                    if (interest !== null){
+                    var interest = exports.buildInterest(interestType, data, 'upload');
+
+                    if (interest !== null) {
                         interests.push(interest);
                     }
                 }
@@ -58,12 +56,12 @@ exports.parse = function (data) {
 }
 
 
-exports.buildInterest = function (data, source) {
+exports.buildInterest = function (interestType, data, source) {
 
     if (!data) {
         return null;
     }
-    
+
     var longitude = parseFloat(data['longitude']);
     var latitude = parseFloat(data['latitude']);
 
@@ -73,14 +71,25 @@ exports.buildInterest = function (data, source) {
     };
 
     var interest = {
-        type: 'food',
         geometry: geometry,
         priority: 3,
         source: source,
         name: data['raisonsociale'],
         description: data['adresseweb']
     };
-    
+
+    switch (interestType) {
+
+    case 'dataProvence1':
+        interest.type = 'food';
+        break;
+    case 'dataProvence2':
+        interest.type = 'accomodation';
+        break;
+    default:
+        break;
+    }
+
     return interest;
 
 }

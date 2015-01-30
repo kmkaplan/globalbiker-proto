@@ -46,6 +46,10 @@ exports.initInterestTypes = function () {
                     color: 'black',
                     icon: 'glyphicon-cutlery'
                 }, {
+                    reference: 'accomodation',
+                    color: 'orange',
+                    icon: 'icon-interest-accomodation'
+                }, {
                     reference: 'merimee',
                     color: '#7b188d',
                     icon: null
@@ -73,6 +77,6 @@ exports.initInterestTypes = function () {
             }
         }
     });
-
+    
     return deffered.promise;
 };

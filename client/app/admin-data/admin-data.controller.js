@@ -12,6 +12,7 @@
         var latMax = 50.5;
 
         $scope.provenceMapConfig = {
+            items: [],
             bounds: {
                 geometry: {
                     "type": "Polygon",
@@ -31,6 +32,15 @@
                 }
             }
         };
+        $scope.dataProvence2 = {
+            url: '/api/interests/upload/dataProvence2',
+            autoUpload: true,
+            callbacks: {
+                success: function (data) {
+                    loadProvenceMap();
+                }
+            }
+        };
 
         init();
 
@@ -41,15 +51,28 @@
         function loadProvenceMap() {
 
             InterestRepository.query({
-                    type: 'food'
+                    type: 'food',
+                    source: 'upload'
                 },
                 function (interests) {
-                    var features = [];
-
-                    features = features.concat(interestsMarkerBuilderService.build(interests));
+                    var features = interestsMarkerBuilderService.build(interests);
 
                     if (features) {
-                        $scope.provenceMapConfig.items = features;
+                        $scope.provenceMapConfig.items = $scope.provenceMapConfig.items.concat(features);
+                    }
+                }, function () {
+
+                });
+
+            InterestRepository.query({
+                    type: 'accomodation',
+                    source: 'upload'
+                },
+                function (interests) {
+                    var features = interestsMarkerBuilderService.build(interests);
+
+                    if (features) {
+                        $scope.provenceMapConfig.items = $scope.provenceMapConfig.items.concat(features);
                     }
                 }, function () {
 
