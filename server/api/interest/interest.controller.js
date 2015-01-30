@@ -10,6 +10,8 @@ var fs = require('fs');
 var geo = require('../../components/geo/geo');
 var geospacialFinder = require('../../components/geo/geospacial.finder');
 var Q = require('q');
+var interestJsonParser = require('./interest.json.parser');
+var interestCsvParser = require('./interest.csv.parser');
 
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -457,34 +459,6 @@ exports.getByTour = function (req, res) {
     });
 };
 
-exports.buildInterest = function (type, coordinates, properties, source) {
-
-    if (!coordinates) {
-        return null;
-    }
-
-    // convert coordinates
-    var coordinates = geo.convertPointCoordinatesToWGS84(coordinates);
-
-    var geometry = {
-        type: type,
-        coordinates: coordinates
-    };
-
-    var p = properties;
-
-    var interest = {
-        latitude: coordinates[1],
-        longitude: coordinates[0],
-        geometry: geometry,
-        priority: 3,
-        source: source
-    };
-
-    return interest;
-
-}
-
 // Creates a new bikelane in the DB.
 exports.upload = function (req, res) {
 
@@ -527,6 +501,11 @@ exports.upload = function (req, res) {
             fileName = 'acc_carrefours_2008_2012.json';
             break;
         }
+    case 'dataProvence1':
+        {
+            fileName = 'RestaurantsGastronomiques.csv';
+            break;
+        }
     default:
         {
             console.error('Invalid type "%s"', interestType);
@@ -546,91 +525,41 @@ exports.upload = function (req, res) {
             return res.send(500, err);
         }
 
-        var geojsonContent = JSON.parse(data);
+        var interestsPromises;
 
-        var interests = geojsonContent.features.reduce(function (interests, currentFeature) {
+        switch (interestType) {
 
-            if (currentFeature.geometry === null) {
-                return interests;
-            }
+        case 'dataProvence1':
+            interestsPromises = interestCsvParser.parse(data);
+            break;
+        default:
 
-            var interest = exports.buildInterest('Point', currentFeature.geometry.coordinates, currentFeature.properties, 'upload');
+            interestsPromises = interestJsonParser.parse(data);
+            break;
+        }
 
-            if (interest === null) {
-                return interests;
-            }
+        interestsPromises.then(function (interests) {
+            Interest.find({
+                type: interestType,
+                source: 'upload'
+            }).remove(function () {
+                // replace existing interests from this file
 
-            interest.type = interestType;
-
-            switch (interestType) {
-            case 'water-point':
-                {
-                    interest.name = currentFeature.properties['TYPE'],
-                    interest.description = currentFeature.properties['LOCALISATION'];
-                    break;
-
-                }
-            case 'velotoulouse':
-                {
-                    interest.name = currentFeature.properties['nom'];
-                    interest.description = currentFeature.properties['num_station'];
-                    break;
-                }
-            case 'wc':
-                {
-                    interest.name = currentFeature.properties['type'];
-                    interest.description = currentFeature.properties['adresse'];
-                    break;
-                }
-            case 'merimee':
-                {
-                    interest.name = currentFeature.properties['chpnoms'];
-                    interest.description = currentFeature.properties['chpdesc'];
-                    break;
-                }
-            case 'danger':
-                {
-                    interest.name = currentFeature.properties['nom_des_branches_du_carrefour'];
-                    interest.description = currentFeature.properties['nom_des_branches_du_carrefour'];
-
-                    var total = currentFeature.properties['total__2008_2012_'];
-
-                    if (!total || parseInt(total) <= 2) {
-                        return interests;
+                Interest.create(interests, function (err, interest) {
+                    if (err) {
+                        console.log('Error creating interests: ' + err);
+                        return handleError(res, err);
                     }
+                    console.log('%d interests have been created.', interests.length);
+                    return res.json(201, interests);
+                });
 
-                    break;
-                }
-            }
-
-            if (interest.name && interest.description) {
-                interests.push(interest);
-            } else {
-                console.info('Name or description missing.');
-            }
-
-            return interests;
-
-        }, []);
-
-        // replace existing bikelanes
-
-        Interest.find({
-            type: interestType,
-            source: 'upload'
-        }).remove(function () {
-
-            Interest.create(interests, function (err, interest) {
-                if (err) {
-                    console.log('Error creating interests: ' + err);
-                    return handleError(res, err);
-                }
-                console.log('%d interests have been created.', interests.length);
-                return res.json(201, interests);
             });
 
+        }, function (err) {
+            console.log('Error creating interests: ' + err);
+            return handleError(res, err);
         });
-
     });
 };
 

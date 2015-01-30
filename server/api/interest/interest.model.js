@@ -10,12 +10,11 @@ var InterestSchema = new Schema({
     },
     name: {
         type: String,
-        required: 'Please fill name',
+        required: true,
         trim: true
     },
     description: {
         type: String,
-        required: 'Please fill description',
         trim: true
     },
     stepId: {
@@ -25,11 +24,11 @@ var InterestSchema = new Schema({
     geometry: {
         type: Object,
         index: '2dsphere',
-        required: 'Please fill geometry'
+        required: true
     },
     type: {
         type: String,
-        required: 'Please fill type'
+        required: true
     },
     source: {
         type: String

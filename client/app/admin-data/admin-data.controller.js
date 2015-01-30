@@ -1,7 +1,60 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('globalbikerWebApp')
-    .controller('AdminDataCtrl', function ($scope, $upload, InterestRepository, BikelaneRepository, bikeTourMapService) {
+    angular.module('globalbikerWebApp').controller('AdminDataCtrl', AdminDataCtrl);
+
+
+    function AdminDataCtrl($scope, $upload, InterestRepository, BikelaneRepository, interestsMarkerBuilderService) {
+
+        var lngMin = -4.5;
+        var lngMax = 8;
+        var latMin = 43;
+        var latMax = 50.5;
+
+        $scope.provenceMapConfig = {
+            bounds: {
+                geometry: {
+                    "type": "Polygon",
+                    "coordinates": [[[lngMin, latMax], [lngMax, latMax], [lngMax, latMin], [lngMin, latMin], [lngMin, latMax]]]
+                }
+            }
+        };
+
+        // Liste des restaurants gastronomiques
+        // http://dataprovence.cloudapp.net/DataBrowser/dataprovencetourisme/RestaurantsGastronomiques#param=--DataView--Results
+        $scope.dataProvence1 = {
+            url: '/api/interests/upload/dataProvence1',
+            autoUpload: true,
+            callbacks: {
+                success: function (data) {
+                    loadProvenceMap();
+                }
+            }
+        };
+
+        init();
+
+        function init() {
+            loadProvenceMap();
+        }
+
+        function loadProvenceMap() {
+
+            InterestRepository.query({
+                    type: 'food'
+                },
+                function (interests) {
+                    var features = [];
+
+                    features = features.concat(interestsMarkerBuilderService.build(interests));
+
+                    if (features) {
+                        $scope.provenceMapConfig.items = features;
+                    }
+                }, function () {
+
+                });
+        }
 
         $scope.bikemapFileupload = {
             url: '/api/bikelanes/upload',
@@ -66,12 +119,13 @@ angular.module('globalbikerWebApp')
 
         $scope.init = function () {
 
-            $scope.bikelines = 0;
+            // $scope.bikelines = 0;
 
-            $scope.loadBikelanes();
-            $scope.loadPointsOfInterests();
+            //$scope.loadBikelanes();
 
-            $scope.mapConfig = {
+            //$scope.loadPointsOfInterests();
+
+            /*$scope.mapConfig = {
                 class: 'admin-data-map',
                 initialCenter: {
                     lat: 43.61,
@@ -145,7 +199,7 @@ angular.module('globalbikerWebApp')
                         });
                     }
                 }
-            };
+            };*/
 
 
         };
@@ -214,4 +268,6 @@ angular.module('globalbikerWebApp')
 
 
         return $scope.init();
-    });
+    }
+
+})();

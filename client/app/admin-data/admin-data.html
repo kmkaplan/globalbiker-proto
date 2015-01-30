@@ -2,60 +2,90 @@
 
 <div class="container admin-data-page page">
 
-   <h2>Import des données</h2>
-   
-    <div class="row">
-        <div class="col-md-12">
-            <div class="admin-data-map-area responsive-map-area smart-area smart-map-area">
-                <div extended-map config="mapConfig"></div>
+    <div class="open-data-source">
+        <h2>Provence</h2>
+
+        <div><i class="glyphicon glyphicon-link"></i><a href="http://data.visitprovence.com">data.visitprovence.com</a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="admin-data-map-area responsive-map-area smart-area smart-map-area">
+                    <div class="tour-map" map config="provenceMapConfig"></div>
+                </div>
             </div>
         </div>
+
+        <section class="form-section">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Liste des restaurants gastronomiques</h3>
+                    <div><i class="glyphicon glyphicon-link"></i><a href="http://dataprovence.cloudapp.net/v1/dataprovencetourisme/RestaurantsGastronomiques/">data origin</a>
+                    </div>
+                    <div ng-hide="loadingInProgress">
+                        <div file-upload="dataProvence1">Sélectionner "RestaurantsGastronomiques.csv"</div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <section class="form-section">
-        <div class="row">
-            <div class="col-md-4">
-                <h3>Réseau cyclable et vert</h3>
-                <div ng-hide="loadingInProgress">
-                    <div file-upload="bikemapFileupload">Sélectionner "Pistes_Cyclables.json"</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <h3>Fontaines à eau</h3>
-                <div ng-hide="loadingInProgress">
-                    <div file-upload="waterpointsUpload">Sélectionner "fontaines_a_boire.json"</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <h3>Vélos toulouse</h3>
-                <div ng-hide="loadingInProgress">
-                    <div file-upload="velotoulouseUpload">Sélectionner "Velo_Toulouse.json"</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <h3>Sanisettes publiques</h3>
-                <div ng-hide="loadingInProgress">
-                    <div file-upload="wcUpload">Sélectionner "Sanisette.json"</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <h3>Base Mérimée</h3>
-                <div ng-hide="loadingInProgress">
-                    <div file-upload="merimeeUpload">Sélectionner "Base_Merimee.json"</div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <h3>Accidents aux carrefours</h3>
-                <div ng-hide="loadingInProgress">
-                    <div file-upload="dangersCarrefoursUpload">Sélectionner "acc_carrefours_2008_2012.json"</div>
-                </div>
-            </div>
-        </div>
-        <div ng-show="loadingInProgress">
-            <div class="alert alert-warning"><i class="fa fa-spinner fa-spin"></i> Chargement en cours...</div>
-        </div>
-    </section>
+   <!-- <div class="open-data-source">
+        <h2>Toulouse</h2>
 
+        <div class="row">
+            <div class="col-md-12">
+                <div class="admin-data-map-area responsive-map-area smart-area smart-map-area">
+                    <div extended-map config="mapConfig"></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="form-section">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Réseau cyclable et vert</h3>
+                    <div ng-hide="loadingInProgress">
+                        <div file-upload="bikemapFileupload">Sélectionner "Pistes_Cyclables.json"</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>Fontaines à eau</h3>
+                    <div ng-hide="loadingInProgress">
+                        <div file-upload="waterpointsUpload">Sélectionner "fontaines_a_boire.json"</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>Vélos toulouse</h3>
+                    <div ng-hide="loadingInProgress">
+                        <div file-upload="velotoulouseUpload">Sélectionner "Velo_Toulouse.json"</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Sanisettes publiques</h3>
+                    <div ng-hide="loadingInProgress">
+                        <div file-upload="wcUpload">Sélectionner "Sanisette.json"</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>Base Mérimée</h3>
+                    <div ng-hide="loadingInProgress">
+                        <div file-upload="merimeeUpload">Sélectionner "Base_Merimee.json"</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>Accidents aux carrefours</h3>
+                    <div ng-hide="loadingInProgress">
+                        <div file-upload="dangersCarrefoursUpload">Sélectionner "acc_carrefours_2008_2012.json"</div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="loadingInProgress">
+                <div class="alert alert-warning"><i class="fa fa-spinner fa-spin"></i> Chargement en cours...</div>
+            </div>
+        </section>
+
+    </div>-->
 </div>
