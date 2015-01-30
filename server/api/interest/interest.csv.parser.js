@@ -84,6 +84,7 @@ exports.buildInterest = function (interestType, data, source) {
         interest.type = 'food';
         break;
     case 'dataProvence2':
+    case 'dataProvence3':
         interest.type = 'accomodation';
         break;
     default:

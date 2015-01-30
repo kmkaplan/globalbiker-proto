@@ -514,6 +514,11 @@ exports.upload = function (req, res) {
             fileName = 'ChambresDHOtesFleursDeSoleil.csv';
             break;
         }
+    case 'dataProvence3':
+        {
+            fileName = 'Hotels.csv';
+            break;
+        }
     default:
         {
             console.error('Invalid type "%s"', interestType);
@@ -539,6 +544,7 @@ exports.upload = function (req, res) {
 
         case 'dataProvence1':
         case 'dataProvence2':
+        case 'dataProvence3':
             interestsPromises = interestCsvParser.parse(interestType, data);
             break;
         default:
@@ -551,8 +557,8 @@ exports.upload = function (req, res) {
             Interest.find({
                 type: interestType,
                 source: 'upload'
-            }).remove(function () {
-                // replace existing interests from this file
+            }).exec(function () {
+                // DO NOT REPLACE existing interests from this file
 
                 Interest.create(interests, function (err, interest) {
                     if (err) {

@@ -41,6 +41,15 @@
                 }
             }
         };
+        $scope.dataProvence3 = {
+            url: '/api/interests/upload/dataProvence3',
+            autoUpload: true,
+            callbacks: {
+                success: function (data) {
+                    loadProvenceMap();
+                }
+            }
+        };
 
         init();
 
