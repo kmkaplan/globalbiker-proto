@@ -1,17 +1,17 @@
 .page {
     /* Extra small devices (phones, less than 768px) */
-    padding: 10px 5px;
+    padding: 60px 10px;
     /* Small devices (tablets, 768px and up) */
     @media (min-width: $screen-sm-min) {
-        padding: 50px 30px;
+        padding: 60px 30px;
     }
     /* Medium devices (desktops, 992px and up) */
     @media (min-width: $screen-md-min) {
-        padding: 50px 30px;
+        padding: 60px 30px;
     }
     /* Large devices (large desktops, 1200px and up) */
     @media (min-width: $screen-lg-min) {
-        padding: 50px 30px;
+        padding: 60px 30px;
     }
     form {
         .error-message {

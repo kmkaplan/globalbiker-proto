@@ -23,19 +23,27 @@
             font-weight: bold;
             font-family: 'Gloria Hallelujah';
         }
+        color: $white2;
+        &:hover {
+            color: $white1;
+            font-weight: bold;
+        }
     }
     .navbar-nav > li.icon > a {
         padding: 10px 10px;
     }
-    .navbar-right{
+    .navbar-right {
         padding-right: 85px;
     }
-        
 }
 
 .navbar .navbar-nav > li.active > a {
     line-height: 20px;
-    background: lighten($color1, 55%);
-    color: #555;
+    background: transparent;
+    color: $white2;
     font-weight: bold;
+    &:hover {
+        background: transparent;
+        color: $white1;
+    }
 }

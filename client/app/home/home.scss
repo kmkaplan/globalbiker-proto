@@ -10,6 +10,7 @@ html body .page.home-page {
     background-size: cover;
     font-family: $fontFamilly;
     color: $white3;
+    padding-top: 10px;
     a {
         &.light-button {
             @include button-variant($white3, rgba($white3, 0.4), rgba($white3, 0.6));
@@ -22,27 +23,18 @@ html body .page.home-page {
             font-weight: bold;
         }
     }
-    .logo {
-        background: url("/assets/images/globalbiker-logo-full.png");
-        background-size: cover;
-        /* Extra small devices (phones, less than 768px) */
-        width: 200px;
-        height: 100px;
-        margin: auto;
+    .logo-full {
+        margin-left: auto;
+        margin-right: auto;
         /* Small devices (tablets, 768px and up) */
         @media (min-width: $screen-sm-min) {
-            margin: inherit;
+            margin-left: inherit;
+            margin-right: inherit;
         }
         /* Medium devices (desktops, 992px and up) */
-        @media (min-width: $screen-md-min) {
-            width: 260px;
-            height: 130px;
-        }
+        @media (min-width: $screen-md-min) {}
         /* Large devices (large desktops, 1200px and up) */
-        @media (min-width: $screen-lg-min) {
-            width: 300px;
-            height: 150px;
-        }
+        @media (min-width: $screen-lg-min) {}
     }
     h1 {
         font-family: $fontFamilly2;

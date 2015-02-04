@@ -17,6 +17,10 @@ angular.module('globalbikerWebApp')
                     authenticate: true
                 },
                 {
+                    'title': 'menu.about-us',
+                    'link': '/about'
+                },
+                {
                     'title': 'menu.contacts',
                     'link': '/contacts'
                 }];
