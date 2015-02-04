@@ -18,7 +18,7 @@
 
     angular.module('globalbikerWebApp').controller('RegionCtrl', RegionCtrl);
 
-    function RegionCtrl($scope, $q, $state, $stateParams, Auth, tourFeaturesBuilderService, tourLoaderService, RegionRepository, securityService) {
+    function RegionCtrl($scope, $q, $state, $stateParams,$timeout,  Auth, tourFeaturesBuilderService, tourLoaderService, RegionRepository, securityService) {
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
@@ -64,8 +64,8 @@
 
         }
 
-        
-        
+
+
         function showTourDetails(tour) {
             $scope.showTourDetailsId = tour._id;
         }
@@ -102,13 +102,32 @@
         }
 
         function overTour(tour) {
-            $scope.currentTour = tour;
 
-            var features = buildFeaturesFromTours($scope.tours);
+            var tourId = (tour && tour._id) ? tour._id : null;
+            var currentTourId = ($scope.currentTour && $scope.currentTour._id) ? $scope.currentTour._id : null;
 
-            if (features) {
-                $scope.mapConfig.items = features;
+            if (tourId !== currentTourId) {
+                console.log('Tour selection updated from %s to %s.', currentTourId, tourId);
+                drawAfterDelay(tour);
             }
+        }
+
+        function drawAfterDelay(tour) {
+            if ($scope.drawTimeout) {
+                $timeout.cancel($scope.drawTimeout);
+                $scope.drawTimeout = null;
+            }
+
+            $scope.drawTimeout = $timeout(function () {
+                $scope.currentTour = tour;
+
+                var features = buildFeaturesFromTours($scope.tours);
+
+                if (features) {
+                    $scope.mapConfig.items = features;
+                }
+            }, 50);
+
         }
 
         function loadToursDetailsByGeometry(geometry) {
