@@ -47,6 +47,16 @@ footer {
             }
         }
     }
+    .local-switcher-area{
+        text-align: center;
+        @media (min-width: $screen-sm-min) {
+            text-align: left;
+        }
+        /* Medium devices (desktops, 992px and up) */
+        @media (min-width: $screen-md-min) {}
+        /* Large devices (large desktops, 1200px and up) */
+        @media (min-width: $screen-lg-min) {}
+    }
     .licence {
         margin-top: 20px;
     }

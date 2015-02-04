@@ -40,7 +40,7 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
             // tour found
 
             Step.find({
-                'tourId': tour.id
+                'tourId': tour._id
             }).sort({
                 '_id': 1
             }).exec(function (err, steps) {
@@ -52,6 +52,8 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
 
                     // steps fount
                     if (steps.length !== 0) {
+                        
+                         
                         // update tour interest from step interests
                         var interestsSum = steps.reduce(function (sum, step) {
                             if (step.interest) {
@@ -79,10 +81,12 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                         }, 0);
                         tour.distance = distance;
 
-                        if (tour.cityFrom === null) {
+                        logger.info('cityFrom for tour %s.', tour._id, tour.cityFrom, {});
+                       
+                        if (!tour.cityFrom || !tour.cityFrom.geonameId) {
                             tour.cityFrom = steps[0].cityFrom;
                         }
-                        if (tour.cityTo === null) {
+                        if (!tour.cityTo || !tour.cityTo.geonameId) {
                             tour.cityTo = steps[steps.length - 1].cityTo;
                         }
 

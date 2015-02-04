@@ -19,7 +19,10 @@ exports.indexAnonymous = function (req, res) {
         status: 'validated'
     };
 
-    Tour.find(criteria).populate('authors').exec(function (err, tours) {
+    Tour.find(criteria).sort({
+                'votes': -1,
+                '_id': -1
+            }).populate('authors').exec(function (err, tours) {
         if (err) {
             return handleError(res, err);
         }

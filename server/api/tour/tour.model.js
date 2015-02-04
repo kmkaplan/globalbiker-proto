@@ -64,6 +64,9 @@ var TourSchema = new Schema({
             required: true
         }
     },
+    beginDate: {
+        type: Date
+    },
     cityFrom: {
         geonameId: {
             type: Number
@@ -101,6 +104,10 @@ var TourSchema = new Schema({
     photoId: {
         type: Schema.ObjectId,
         ref: 'PhotoSchema'
+    },
+    votes: {
+        type: Number,
+        default: 0
     },
     difficulty: {
         type: Number

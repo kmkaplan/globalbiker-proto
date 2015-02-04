@@ -15,6 +15,7 @@
                     </h1>
 
                     <div class="shared-by" ng-if="tour.authors.length" translate="tour.shared-by" translate-values="{ authorName: tour.authors[0].name }"></div>
+                    <div class="begin-date" ng-if="tour.beginDate">{{ tour.beginDate | date : 'MMMM yyyy'}}</div>
                    
                     <div class="icon-bar">
 

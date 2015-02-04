@@ -36,7 +36,7 @@
                                 <div class="collapsable-area">
                                     <div class="row">
                                         <div ng-if="tour.photo.thumbnails.w600h400" class="col-md-3 photo-area">
-                                            <img class="photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
+                                            <img class="photo smart-photo" ng-src="{{ tour.photo.thumbnails.w600h400 }}">
                                         </div>
                                         <div ng-class="{ 'col-md-9': tour.photo.thumbnails.w600h400, 'col-md-12': !tour.photo.thumbnails.w600h400 }">
                                             <p class="tour-description" truncate-text ng-bind-html="tour.description"></p>
