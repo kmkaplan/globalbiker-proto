@@ -53,8 +53,13 @@
 
     angular.module('globalbikerWebApp').controller('HomeCtrl', HomeCtrl);
 
-    function HomeCtrl($scope, $stateParams, $state, $q) {
+    function HomeCtrl($scope, $stateParams, $state, $q, $translate) {
 
+        if (!$translate.use()){
+            console.warn('Locale is not yet defined.');
+            $translate.use('fr');
+        }
+        
         // init method
         init();
 

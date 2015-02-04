@@ -2,21 +2,19 @@
 
 <div class="container page">
 
-    <div class="row" ng-if="!isAdmin()">
-        <div class="col-sm-12">
-            <h1 translate="global.signup">Joins us</h1>
-        </div>
-
+    <div ng-if="!isAdmin()">
+        <h1 translate="global.signup">Joins us</h1>
+       
         <div class="row ">
             <div class="col-sm-12 mailing">
                 <div ng-if="!mailSuccess">
-                    <h3 translate="signup.intro.description"></h3>
+                    <p translate="signup.intro.description"></p>
                     <p translate="signup.intro.invit_mailing"></p>
                     <div class="row ">
                         <div class="col-md-6">
                             <form name="mailingForm" ng-submit="addMail(emailMailing)" class="mailing-form">
                                 <div class="input-group input-group-lg">
-                                    <input class="form-control transparent-form email-input" type="email" placeholder="{{ 'home.intro.email_placeh' | translate }}" name="email" ng-model="emailMailing">
+                                    <input class="form-control transparent-form email-input" type="email" name="email" ng-model="emailMailing">
                                     <span class="input-group-btn">
                                     <button class="btn signup-btn btn-primary" type="submit">
                                         <span translate="home.intro.email_btn">Go</span>

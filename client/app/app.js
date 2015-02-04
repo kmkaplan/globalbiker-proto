@@ -18,8 +18,6 @@ angular.module('globalbikerWebApp', [
 ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider, uiSelectConfig, $analyticsProvider) {
 
-        $translateProvider.preferredLanguage(['fr']);
-
         $translateProvider.determinePreferredLanguage(function () {
             if (navigator.language && navigator.language.lastIndexOf("fr", 0) === 0) {
                 return "fr";
