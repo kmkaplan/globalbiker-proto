@@ -103,43 +103,16 @@ L.GeojsonItem = L.FeatureGroup.extend({
             break;
 
         case 'LineString':
-            var latlngs = this.coordsToLatLngs(item.geometry.coordinates, 0, coordsToLatLng);
-
-            // http://leafletjs.com/reference.html#polyline-options 
-            var polylineOptions;
-
-            if (item.properties.options.style) {
-                if (typeof (item.properties.options.style) === 'function') {
-                    polylineOptions = item.properties.options.style(item);
-                } else {
-                    polylineOptions = item.properties.options.style;
-                }
-            } else {
-                polylineOptions = {}
-            }
-
-            //  add foreground layer
-            layer = new L.Polyline(latlngs, polylineOptions);
-
-            this._addToLayer(item, layer, false);
-
-            // add transparent layer
-            polylineOptions.color = 'transparent';
-            polylineOptions.weight = 20;
-
-            layer = new L.Polyline(latlngs, polylineOptions);
-
-            if (item.properties.options.label) {
-                layer.bindLabel(item.properties.options.label);
-            }
-
-            this._addToLayer(item, layer, true);
-
-            break;
-
         case 'MultiLineString':
 
-            var latlngs = this.coordsToLatLngs(item.geometry.coordinates, 1, coordsToLatLng);
+            var levelsOfCoordinates;
+            if (item.geometry.type === 'LineString') {
+                levelsOfCoordinates = 0;
+            } else {
+                levelsOfCoordinates = 1;
+            }
+
+            var latlngs = this.coordsToLatLngs(item.geometry.coordinates, levelsOfCoordinates, coordsToLatLng);
 
             // http://leafletjs.com/reference.html#polyline-options 
             var polylineOptions;
@@ -155,14 +128,19 @@ L.GeojsonItem = L.FeatureGroup.extend({
             }
 
             //  add main layer
-            var layer1 = new L.MultiPolyline(latlngs, polylineOptions);
+            var layer1;
+            if (item.geometry.type === 'LineString') {
+                layer1 = new L.Polyline(latlngs, polylineOptions);
+            } else {
+                layer1 = new L.MultiPolyline(latlngs, polylineOptions);
+            }
 
             this._addToLayer(item, layer1, false);
 
             if (item.properties.events) {
 
                 var layer2 = this._addMultipolylineHoverEffect(item, latlngs, polylineOptions);
-                
+
                 // register events
                 for (var eventKey in item.properties.events) {
                     if (item.properties.events.hasOwnProperty(eventKey)) {
@@ -184,12 +162,19 @@ L.GeojsonItem = L.FeatureGroup.extend({
     },
 
     _addMultipolylineHoverEffect: function (item, latlngs, polylineOptions) {
+
         // add transparent layer
         var transparentPolylineOptions = angular.copy(polylineOptions);
         transparentPolylineOptions.color = 'transparent';
-        transparentPolylineOptions.weight = 20;
+        transparentPolylineOptions.weight = 30;
 
-        var layer2 = new L.MultiPolyline(latlngs, transparentPolylineOptions);
+        var layer2;
+        if (item.geometry.type === 'LineString') {
+            layer2 = new L.Polyline(latlngs, transparentPolylineOptions);
+        } else {
+            layer2 = new L.MultiPolyline(latlngs, transparentPolylineOptions);
+        }
+
         if (item.properties.options.label) {
             layer2.bindLabel(item.properties.options.label);
         }
@@ -197,8 +182,9 @@ L.GeojsonItem = L.FeatureGroup.extend({
         this._addToLayer(item, layer2, true);
 
         var polylineOptionsOnOver = angular.copy(transparentPolylineOptions);
-        polylineOptionsOnOver.color = polylineOptions.color;
-        polylineOptionsOnOver.opacity = 0.2;
+        polylineOptionsOnOver.color = '#1960a7';
+        // polylineOptionsOnOver.opacity = 0.5;
+        polylineOptionsOnOver.weight = 6;
 
         layer2.on('mouseover', function () {
             if (polylineOptionsOnOver !== null) {
@@ -214,7 +200,7 @@ L.GeojsonItem = L.FeatureGroup.extend({
         if (item && item.model && item.model.tour && item.model.tour.selected) {
             layer2.setStyle(polylineOptionsOnOver);
         }
-        
+
         return layer2;
     },
 

@@ -55,7 +55,7 @@
                         style: {
                             color: color,
                             opacity: 1,
-                            weight: 8
+                            weight: 6
                         },
                         selected: step.selected
                     }
@@ -67,7 +67,7 @@
             };
             feature.model = {
                 type: 'step',
-                tour: step
+                step: step
             }
 
             return feature;

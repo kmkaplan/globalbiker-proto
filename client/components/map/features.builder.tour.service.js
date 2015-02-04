@@ -30,7 +30,7 @@
                         style: {
                             color: color,
                             opacity: 0.5,
-                            weight: 20
+                            weight: 10
                         }
                     }
                 }
@@ -78,7 +78,7 @@
                         style: {
                             color: color,
                             opacity: 1,
-                            weight: 8
+                            weight: 6
                         },
                         selected: tour.selected
                     }

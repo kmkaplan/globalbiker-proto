@@ -40,16 +40,15 @@
             if (tour.steps) {
 
                 features = stepFeaturesBuilderService.buildAll(tour.steps, {
-                    'click': function (step) {
+                    click: function (item, event) {
                         $state.go('tour.step.view', {
-                            stepReference: step.reference
+                            stepReference: item.model.step.reference
                         });
                     }
                 });
-
             }
-            
-            if (features.length === 0){
+
+            if (features.length === 0) {
                 // no step geometry: display tour geometry instead
                 if (tour.geometry) {
                     var feature = tourFeaturesBuilderService.build(tour);
@@ -57,23 +56,23 @@
                 }
             }
 
-                if (tour.cityFrom) {
-                    var feature = interestsMarkerBuilderService.buildDeparture(tour.cityFrom);
-                    features.push(feature);
-                }
+            if (tour.cityFrom) {
+                var feature = interestsMarkerBuilderService.buildDeparture(tour.cityFrom);
+                features.push(feature);
+            }
 
-                if (tour.cityTo) {
-                    var feature = interestsMarkerBuilderService.buildArrival(tour.cityTo);
-                    features.push(feature);
-                }
+            if (tour.cityTo) {
+                var feature = interestsMarkerBuilderService.buildArrival(tour.cityTo);
+                features.push(feature);
+            }
 
             if (features.length !== 0) {
-             
+
                 var geometries = features.reduce(function (geometries, feature) {
                     geometries.push(feature.geometry);
                     return geometries;
                 }, []);
-                
+
                 $scope.mapConfig.items = features;
 
                 $scope.mapConfig.bounds = {
