@@ -1,4 +1,8 @@
 .navbar-fixed-top {
+    background: $color1;
+    background: -webkit-linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
+    background: -o-linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
+    background: -moz-linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
     background: linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
     min-height: 25px;
     border: 0;
