@@ -8,7 +8,7 @@
                 <h1><span translate="region.title">Search a tour in </span><span class="city-name">{{region.name}}</span></h1>
 
                 <div class="tours-resume-list-area">
-                    <div class="list-group tour-resume-list" ng-mouseout="overTour(null)">
+                    <div class="list-group tour-resume-list" <!--ng-mouseout="overTour(null)"-->>
                         <div class="list-group-item link" ng-class="'tour-status-' + tour.status" ng-repeat="tour in tours" ng-click="openTour(tour)" ng-mouseover="overTour(tour)">
                            
                             <div class="quick-info-area">

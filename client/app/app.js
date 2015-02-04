@@ -18,7 +18,16 @@ angular.module('globalbikerWebApp', [
 ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider, uiSelectConfig, $analyticsProvider) {
 
+        $translateProvider.preferredLanguage(['fr']);
 
+        $translateProvider.determinePreferredLanguage(function () {
+            if (navigator.language && navigator.language.lastIndexOf("fr", 0) === 0) {
+                return "fr";
+            } else {
+                return "en";
+            }
+        });
+    
         // Piwik seems to suppors buffered invocations so we don't need
         // to wrap these inside angulartics.waitForVendorApi
         $analyticsProvider.settings.trackRelativePath = true;
@@ -40,7 +49,6 @@ angular.module('globalbikerWebApp', [
             }
         });
 
-
         tinyMCE.baseURL = '/bower_components/tinymce';
 
         uiSelectConfig.theme = 'bootstrap';
@@ -53,14 +61,6 @@ angular.module('globalbikerWebApp', [
         $translateProvider.useStaticFilesLoader({
             prefix: '/i18n/',
             suffix: '.json'
-        });
-
-        $translateProvider.determinePreferredLanguage(function () {
-            if (navigator.language && navigator.language.lastIndexOf("fr", 0) === 0) {
-                return "fr";
-            } else {
-                return "en";
-            }
         });
 
     })

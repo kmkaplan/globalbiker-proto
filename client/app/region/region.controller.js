@@ -18,7 +18,7 @@
 
     angular.module('globalbikerWebApp').controller('RegionCtrl', RegionCtrl);
 
-    function RegionCtrl($scope, $q, $state, $stateParams,$timeout,  Auth, tourFeaturesBuilderService, tourLoaderService, RegionRepository, securityService) {
+    function RegionCtrl($scope, $q, $state, $stateParams, $timeout, Auth, tourFeaturesBuilderService, tourLoaderService, RegionRepository, securityService) {
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
@@ -118,15 +118,15 @@
                 $scope.drawTimeout = null;
             }
 
-            $scope.drawTimeout = $timeout(function () {
-                $scope.currentTour = tour;
+            // $scope.drawTimeout = $timeout(function () {
+            $scope.currentTour = tour;
 
-                var features = buildFeaturesFromTours($scope.tours);
+            var features = buildFeaturesFromTours($scope.tours);
 
-                if (features) {
-                    $scope.mapConfig.items = features;
-                }
-            }, 50);
+            if (features) {
+                $scope.mapConfig.items = features;
+            }
+            //  }, 50);
 
         }
 
@@ -167,7 +167,14 @@
                 features = tourFeaturesBuilderService.buildAll(tours, {
                     click: function (item, event) {
                         $scope.openTour(item.model.tour);
-                    }
+                    },
+                    /*mouseover: function (item, event) {
+                        $scope.tours = $scope.tours.reduce(function (tours, tour) {
+                            delete (tour.selected);
+                            tours.push(tour);
+                            return tours;
+                        }, []);
+                    }*/
                 });
 
             }
