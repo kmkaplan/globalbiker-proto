@@ -32,7 +32,7 @@
     "angular-ui-tinymce": "~0.0.5",
     "tinymce": "~4.1.5",
     "Leaflet.label": "https://github.com/Leaflet/Leaflet.label.git#0.2.1",
-    "angular-ui-select": "~0.8.3",
+    "angular-ui-select": "~0.9.6",
     "autofill-event": "~1.0.0",
     "jquery.dotdotdot": "~1.6.16",
     "angulartics": "~0.17.1",
@@ -46,7 +46,8 @@
   },
   "resolutions": {
     "tinymce": "~4.1.5",
-    "angular": "~1.3.11"
+    "angular": "~1.3.11",
+    "angular-ui-select": "~0.9.6"
   },
   "overrides": {
     "angulartics": {

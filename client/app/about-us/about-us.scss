@@ -1,4 +1,4 @@
-.about-us-page {
+html body .page.about-us-page {
    // background-image: linear-gradient(rgb(248, 255, 255), #f5fefe);
     .who {
         .who-photo {
@@ -8,4 +8,16 @@
             width: 225px;
         }
     }
+    h2{
+        text-align: center;
+        margin: 40px 0 30px;
+    }
+    h3{
+        text-align: left;
+        margin: 30px 0 20px;
+    }
+    p{
+        text-align: left;
+    }
+        
 }

@@ -1,12 +1,58 @@
 footer {
-    background: linear-gradient(to bottom, darken($color1, 2%) 0%, lighten($color1, 2%) 100%);
-    margin-top: 50px;
+    clear: both;
+    background: #313334;
+    color: $white3;
     text-align: center;
     padding: 10px 0;
     font-size: 14px;
-    color: $white1;
     font-style: italic;
-    a, a:hover {
+    a {
+        color: $white2;
+        &:hover {
+            color: $white3;
+        }
+    }
+    .links {
+        text-align: center;
+        /* Extra small devices (phones, less than 768px) */
+        /* Small devices (tablets, 768px and up) */
+        @media (min-width: $screen-sm-min) {}
+        /* Medium devices (desktops, 992px and up) */
+        @media (min-width: $screen-md-min) {}
+        /* Large devices (large desktops, 1200px and up) */
+        @media (min-width: $screen-lg-min) {}
+    }
+    .social-links {
+        text-align: center;
+        margin-top: 10px;
+        /* Extra small devices (phones, less than 768px) */
+        /* Small devices (tablets, 768px and up) */
+        @media (min-width: $screen-sm-min) {
+            text-align: right;
+        }
+        /* Medium devices (desktops, 992px and up) */
+        @media (min-width: $screen-md-min) {}
+        /* Large devices (large desktops, 1200px and up) */
+        @media (min-width: $screen-lg-min) {}
+        .social {
+            text-align: center;
+            border: 1px solid $white1;
+            border-radius: 50%;
+            display: inline-block;
+            width: 26px;
+            height: 26px;
+            padding: 2px;
+            &:hover {
+                border-color: $color1;
+            }
+        }
+    }
+    .licence {
+        margin-top: 20px;
+    }
+    .attributions {
+        margin-top: 5px;
+        font-size: 10px;
         color: $white3;
     }
 }

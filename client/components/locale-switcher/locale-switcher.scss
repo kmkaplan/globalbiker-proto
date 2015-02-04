@@ -1,0 +1,16 @@
+.locale-switcher {
+    font-size: 12px;
+    margin-top: 10px;
+    width: 120px;
+    display: inline-block;
+    .ui-select-match, button, .form-control, dropdown-menu {
+        background: transparent;
+        height: 26px;
+        color: $white1;
+        width: 120px;
+    }
+    button {
+        height: 26px;
+        padding: 2px 0px;
+    }
+}

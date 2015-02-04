@@ -1,6 +1,6 @@
 {
     "global": {
-        "signup": "Sign up",
+        "signup": "Join us",
         "login": "Log in",
         "hello": "Hello",
         "logout": "Log out",
@@ -70,7 +70,7 @@
         "search-a-tour": "Search a tour",
         "my-tours": "My tours",
         "blog": "Blog",
-        "about-us": "About GlobalBiker",
+        "about-us": "About",
         "profile": "My profile",
         "users": "Users",
         "data": "Data",
@@ -91,9 +91,8 @@
         }
     },
     "home": {
-        "main": {
-            "slogan": "Ride Global, Ride GlobalBiker"
-        },
+        "title": "Discover the world by bike!",
+        "motto": "GlobalBiker, the online community to prepare and share your cycling trips.",
         "intro": {
             "invit": "GlobalBiker",
             "description": "First bike tourers' community",
@@ -203,6 +202,6 @@
         "edit-the-step": "edit the step"
     },
     "footer": {
-        "press": "press"
+        "press": "Press"
     }
 }

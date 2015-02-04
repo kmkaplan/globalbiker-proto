@@ -1,56 +1,13 @@
-<div class="container home-page page" ui-view>
-    <div class="main-area">
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-7 logo-container">
-                        <h1 class="logo">
-                        <img src="/assets/images/bike.png" title="bike logo provided by http://buzz.icons8.com" />
-                        <span class="global">Global</span><span class="biker">Biker</span>
-                    </h1>
-                    </div>
-                    <div class="hidden-xs col-sm-4 contacts">
-                        <a class="pull-right" href="https://www.facebook.com/globalbikercommunity" target="_blank">
-                            <img src="/assets/images/facebook.png" title="facebook" />
-                        </a>
-                        <a class="pull-right" href="https://twitter.com/GlobalBiker_org" target="_blank">
-                            <img src="/assets/images/twitter.png" title="twitter" />
-                        </a>
-                    </div>
-                    <div class="col-sm-1 contacts dropdown">
-                        <a href type="button" data-toggle="dropdown">
-                            <img ng-src="{{languageSelection.current.img}}" />
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li role="presentation" ng-repeat="lang in languageSelection.others">
-                                <a href="" ng-click="switchLanguage(lang.code)">
-                                    <img ng-src="{{lang.img}}"></img>{{lang.name}}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <div class="container main-content">
-            <div class="row">
-                <div class="col-md-6 col-xs-12">
-                    <div>
-                        <h2 translate="home.intro.invit">GlobalBiker</h2>
-                        <h3 translate="home.intro.description">First bike tourers' community</h3>
-                    </div>
-                    <!--  <div>
-                    <a href="/region/france">
-                        <button class="btn btn-lg btn-default btn-test-prototype" type="button" translate="home.intro.beta_test">Test the prototype!</button>
-                    </a>
-                </div>-->
-                </div>
-                <div class="col-md-6 col-xs-12">
-                    <a href="/region/france">
-                        <img class="screenshot" src="assets/images/cartewelcome.png">
-                    </a>
-                </div>
-            </div>
+<div class="home-page page" rotate-background-image>
+    <div class="ribbon-wrapper">
+        <div class="ribbon">BETA</div>
+    </div>
+    <div class="logo"></div>
+    <div class="container main-content">
+        <h1 translate="home.title">Discover the world by bike!</h1>
+        <h2 class="motto" translate="home.motto">GlobalBiker, the online community to prepare and share your cycling trips.</h2>
+
+        <div class="row text-center"><a class="btn btn-lg light-button make-a-tour-button" href="/region/france">Faire un tour</a>
         </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
 {
     "global": {
-        "signup": "S'inscrire",
+        "signup": "Rejoignez-nous",
         "login": "Se connecter",
         "hello": "Bonjour",
         "logout": "Se déconnecter",
@@ -70,7 +70,7 @@
         "search-a-tour": "Rechercher un parcours",
         "my-tours": "Mes parcours",
         "blog": "Blog",
-        "about-us": "A propos de GlobalBiker",
+        "about-us": "A propos",
         "profile": "Mon profil",
         "users": "Utilisateurs",
         "data": "Données",
@@ -91,9 +91,8 @@
         }
     },
     "home": {
-        "main": {
-            "slogan": "Ride Global, Ride GlobalBiker"
-        },
+       "title": "Découvre le monde à vélo!",
+        "motto": "GlobalBiker, la communauté en ligne pour préparer et partager tes voyages à vélo.",
         "intro": {
             "invit": "GlobalBiker",
             "description": "Première communauté de voyageurs à vélo",
@@ -203,6 +202,6 @@
         "edit-the-step": "modifier l'étape"
     },
     "footer": {
-        "press": "presse"
+        "press": "Presse"
     }
 }

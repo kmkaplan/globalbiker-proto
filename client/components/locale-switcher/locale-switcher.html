@@ -1,0 +1,9 @@
+<ui-select class="locale-switcher" ng-model="selectedLocale" theme="bootstrap" on-select="switchTo($item, $model)">
+    <ui-select-match placeholder="Select locale...">
+        {{ $select.selected.name }}
+    </ui-select-match>
+    <ui-select-choices repeat="locale in locales | filter: $select.search">
+        <img ng-src="{{ locale.img }}"></img>
+        <span ng-bind-html="locale.name | highlight: $select.search"></span>
+    </ui-select-choices>
+</ui-select>
