@@ -125,7 +125,7 @@
         }
     },
     "region": {
-        "warning": "GlobalBiker est en cours de développement. La zone géographique est pour le moment réduite à la France métropolitaine, et le site n'est pas encore ouvert à contribution.",
+        "warning": "GlobalBiker est en cours de développement. La zone géographique est pour le moment réduite à la France métropolitaine, et le site n'est pas encore ouvert à contribution. <a href=\"/signup\">Rejoignez-nous</a> et soyez l'un des tous premiers contributeurs.",
         "title": "Rechercher un parcours en "
     },
     "tour": {

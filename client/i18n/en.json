@@ -125,7 +125,7 @@
         }
     },
     "region": {
-        "warning": "GlobalBiker is early stage of development. The geographical area is restricted to France for now, and is not yet open to public contribution.",
+        "warning": "GlobalBiker is early stage of development. The geographical area is restricted to France for now, and is not yet open to public contribution. <a href=\"/signup\">Join us</a> and be one of the first contributors.",
         "title": "Search a tour in "
     },
     "tour": {
