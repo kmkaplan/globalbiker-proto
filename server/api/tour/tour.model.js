@@ -21,8 +21,7 @@ var TourSchema = new Schema({
     userId: {
         // TODO remove
         type: Schema.ObjectId,
-        ref: 'User',
-        required: true
+        ref: 'User'
     },
     title: {
         type: String,
@@ -50,18 +49,16 @@ var TourSchema = new Schema({
     keywords: [{
         type: String
     }],
+    // deprecated: replaced by region
     country: {
         geonameId: {
-            type: Number,
-            required: true
+            type: Number
         },
         name: {
-            type: String,
-            required: true
+            type: String
         },
         countryCode: {
-            type: String,
-            required: true
+            type: String
         }
     },
     beginDate: {

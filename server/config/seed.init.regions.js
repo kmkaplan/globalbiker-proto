@@ -25,34 +25,34 @@ exports.initToulouse = function () {
 
     // create Toulouse region
     Region.findOne({
-            'reference': 'toulouse'
-        },
-        function (err, region) {
-            if (err) {
-                console.error(err);
-                deffered.reject(err);
-            } else {
-                if (!region) {
-                    console.info('Create "Toulouse" region.');
+        'reference': 'toulouse'
+    },
+                   function (err, region) {
+        if (err) {
+            console.error(err);
+            deffered.reject(err);
+        } else {
+            if (!region) {
+                console.info('Create "Toulouse" region.');
 
-                    Region.create({
-                        name: 'Toulouse',
-                        reference: 'toulouse',
-                        geometry: {
-                            type: "Polygon",
-                            coordinates: [[[1.0753, 43.7731], [1.9336, 43.7731], [1.9336, 43.4360], [1.0753, 43.4360], [1.0753, 43.7731]]]
-                        }
-                    }, function (err, region) {
-                        if (err) {
-                            console.error(err);
-                            deffered.reject(err);
-                        } else {
-                            deffered.resolve(region);
-                        }
-                    });
-                }
+                Region.create({
+                    name: 'Toulouse',
+                    reference: 'toulouse',
+                    geometry: {
+                        type: "Polygon",
+                        coordinates: [[[1.0753, 43.7731], [1.9336, 43.7731], [1.9336, 43.4360], [1.0753, 43.4360], [1.0753, 43.7731]]]
+                    }
+                }, function (err, region) {
+                    if (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    } else {
+                        deffered.resolve(region);
+                    }
+                });
             }
-        });
+        }
+    });
 
     return deffered.promise;
 
@@ -64,39 +64,57 @@ exports.initFrance = function () {
 
     // create Toulouse region
     Region.findOne({
-            'reference': 'france'
-        },
-        function (err, region) {
-            if (err) {
-                console.error(err);
-                deffered.reject(err);
-            } else {
-                if (!region) {
-                    console.info('Create "France" region.');
+        'reference': 'france'
+    },
+                   function (err, region) {
+        if (err) {
+            console.error(err);
+            deffered.reject(err);
+        } else {
+            var lngMin = -5;
+            var lngMax = 7;
+            var latMin = 43;
+            var latMax = 50;
 
-                    var lngMin = -4.5;
-                    var lngMax = 8;
-                    var latMin = 43;
-                    var latMax = 50.5;
+            var coordinates = [[[lngMin, latMax], [lngMax, latMax], [lngMax, latMin], [lngMin, latMin], [lngMin, latMax]]];
 
-                    Region.create({
-                        name: 'France',
-                        reference: 'france',
-                        geometry: {
-                            "type": "Polygon",
-                            "coordinates": [[[lngMin, latMax], [lngMax, latMax], [lngMax, latMin], [lngMin, latMin], [lngMin, latMax]]]
-                        }
-                    }, function (err, region) {
-                        if (err) {
-                            console.error(err);
-                            deffered.reject(err);
-                        } else {
-                            deffered.resolve(region);
-                        }
-                    });
-                }
+            if (!region) {
+                console.info('Create "France" region.');
+
+                Region.create({
+                    name: 'France',
+                    reference: 'france',
+                    geometry: {
+                        "type": "Polygon",
+                        "coordinates": coordinates
+                    }
+                }, function (err, region) {
+                    if (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    } else {
+                        deffered.resolve(region);
+                    }
+                });
+            }else{
+                console.info('Update "France" region.');
+
+                region.geometry = {
+                    "type": "Polygon",
+                    "coordinates": coordinates
+                };
+                region.save(function (err, region) {
+                    if (err) {
+                        console.error(err);
+                        deffered.reject(err);
+                    } else {
+                        console.info('Region updated successfully.');
+                        deffered.resolve(region);
+                    }
+                });  
             }
-        });
+        }
+    });
 
     return deffered.promise;
 };

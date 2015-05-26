@@ -81,6 +81,7 @@ $black3: #555;
 @import 'fonts/google.rancho.scss';
 @import 'home/home.scss';
 @import 'icomoon.scss';
+@import 'journey.edit-trace/journey.edit-trace.scss';
 @import 'logo.scss';
 @import 'my-tours/my-tours.scss';
 @import 'page.scss';
@@ -109,6 +110,7 @@ html {
     height: 100%;
     font-family: $fontFamilly;
     min-height: 100%;
+    overflow: hidden;
     body {
         width: 100%;
         height: 100%;
@@ -167,7 +169,7 @@ html {
             top: -3px;
             z-index: 10000;
             display: block;
-            opacity: 0.8;
+            opacity: 1;
             /* Extra small devices (phones, less than 768px) */
             left: -3px;
             /* Small devices (tablets, 768px and up) */
@@ -190,12 +192,8 @@ html {
             padding: 7px 0;
             top: 15px;
             width: 120px;
-            background-color: $color1;
-            background-image: -webkit-gradient(linear, left top, left bottom, from(rgba($color1light1, 0.5)), to(rgba($color1dark2, 0.5)));
-            background-image: -webkit-linear-gradient(top, rgba($color1light1, 0.5), rgba($color1dark2, 0.5));
-            background-image: -moz-linear-gradient(top, rgba($color1light1, 0.5), rgba($color1dark2, 0.5));
-            background-image: -ms-linear-gradient(top, rgba($color1light1, 0.5), rgba($color1dark2, 0.5));
-            background-image: -o-linear-gradient(top, rgba($color1light1, 0.5), rgba($color1dark2, 0.5));
+            background-color: lighten($color1, 5%);
+            
             -webkit-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
             -moz-box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);
             box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.3);

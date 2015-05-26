@@ -15,9 +15,13 @@
         return service;
 
         function create(element, config) {
+            
+            if (!config.scrollWheelZoom){
+                config.scrollWheelZoom = false;
+            }
 
             var map = L.map(element, {
-                scrollWheelZoom: false
+                scrollWheelZoom: config.scrollWheelZoom
             });
 
             var url;

@@ -63,9 +63,9 @@
                                     type: 'Point'
                                 }
                             };
-                            console.log(geonamesCity);
+                           /* console.log(geonamesCity);*/
 
-                            console.debug('Select geonames city "%s" (%s).', city.name, city.geometry.coordinates);
+                            // console.debug('Select geonames city "%s" (%s).', city.name, city.geometry.coordinates);
                             return city;
                         } else {
                             return null;

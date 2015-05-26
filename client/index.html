@@ -77,7 +77,7 @@
     </noscript>
     <!-- End Piwik Code -->
 
-
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
 
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -122,9 +122,11 @@
     <script src="bower_components/leaflet-omnivore/leaflet-omnivore.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/js-data/dist/js-data.js"></script>
+    <script src="bower_components/js-data-angular/dist/js-data-angular.js"></script>
+    <script src="bower_components/angularjs-google-directions/src/angularjs-google-directions.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-
     <!-- build:js({.tmp,client}) app/app.js -->
     <script src="app/app.js"></script>
     <!-- injector:js -->
@@ -147,6 +149,8 @@
     <script src="app/geonames/geonames.service.js"></script>
     <script src="app/home/home.controller.js"></script>
     <script src="app/home/home.js"></script>
+    <script src="app/journey.edit-trace/journey.edit-trace.controller.js"></script>
+    <script src="app/journey.edit-trace/journey.edit-trace.js"></script>
     <script src="app/my-tours/my-tours.controller.js"></script>
     <script src="app/my-tours/my-tours.js"></script>
     <script src="app/press/press.controller.js"></script>
@@ -176,6 +180,8 @@
     <script src="components/bikeTourMap/bileTourMap.service.js"></script>
     <script src="components/contact/mailing.repository.js"></script>
     <script src="components/core/console.js"></script>
+    <script src="components/entities/region.entity.js"></script>
+    <script src="components/entities/tour.entity.js"></script>
     <script src="components/extendedMap/extendedMap.core.service.js"></script>
     <script src="components/extendedMap/extendedMap.directive.js"></script>
     <script src="components/extendedMap/extendedMap.draw.service.js"></script>

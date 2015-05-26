@@ -1,0 +1,37 @@
+.journey-edit-trace-page{
+    height: 100%;
+    overflow: hidden;
+    .smart-map-area{
+        height: 100%;
+        overflow: hidden;
+        margin-top: 35px;
+        margin-bottom: -35px;
+        .journey-edit-trace-map{
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .journey-edit-map-overlay{
+            .overlay-area{
+                position: absolute;
+                top: 50px;
+                margin-left: 50px;
+                margin-right: 50px;
+            }
+            .overlay-panel{
+                background: white;
+                border-radius: 2px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 4px 15px -5px rgba(0, 0, 0, 0);
+                padding: 10px;
+            }
+            .edit-itinerary-area{
+                height: 400px;
+                width: 300px;
+            }
+            .title-area{
+                margin-left: 400px;
+                min-width: 30%;
+            }
+        }
+    }
+}

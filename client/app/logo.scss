@@ -1,6 +1,7 @@
 html body {
     .logo-full {
-        background: url("/assets/images/globalbiker-logo-full.png");
+        background: url("/assets/images/globalbiker-logo-full-white.png");
+        
         background-size: cover;
         /* Extra small devices (phones, less than 768px) */
         width: 200px;
@@ -22,22 +23,65 @@ html body {
             height: 300px;
         }
     }
-    .logo-white {
-        background-image: url("/assets/images/globalbiker-logo-full-white.png");
-    }
-    .logo-text-white {
-        background: url("/assets/images/globalbiker-logo-text-white.png");
-        background-size: cover;
+    .logo-small-screen-wrapper {
+        
         /* Extra small devices (phones, less than 768px) */
-        width: 119px;
-        height: 35px;
-        margin: 5px;
+        display:block;
+        text-align: center;
         /* Small devices (tablets, 768px and up) */
         @media (min-width: $screen-sm-min) {
+           display:none;
         }
         /* Medium devices (desktops, 992px and up) */
-        @media (min-width: $screen-md-min) {}
+        @media (min-width: $screen-md-min) {
+             display:none;
+        }
         /* Large devices (large desktops, 1200px and up) */
-        @media (min-width: $screen-lg-min) {}
+        @media (min-width: $screen-lg-min) {
+             display:none;
+        }
     }
+    .logo-large-screen-wrapper {
+        float: left;
+        /* Extra small devices (phones, less than 768px) */
+        display:none;
+        position: fixed;
+        /* Small devices (tablets, 768px and up) */
+        @media (min-width: $screen-sm-min) {
+             display:block;
+        }
+        /* Medium devices (desktops, 992px and up) */
+        @media (min-width: $screen-md-min) {
+            display:block;
+        }
+        /* Large devices (large desktops, 1200px and up) */
+        @media (min-width: $screen-lg-min) {
+            display:block;
+        }
+    }
+    .logo-image {
+            display: inline-block;
+            position: relative;
+            margin-top: 3px;
+            margin-left: 10px;
+            margin-bottom: -6px;
+
+            padding: 0;
+
+            // original size: 394 * 116
+            width: 112.08px;
+            height: 33px;
+            background: url("/assets/images/globalbiker-logo-text-white.png");
+            background-size: cover;
+            /* Extra small devices (phones, less than 768px) */
+
+            /* Small devices (tablets, 768px and up) */
+            @media (min-width: $screen-sm-min) {
+            }
+            /* Medium devices (desktops, 992px and up) */
+            @media (min-width: $screen-md-min) {}
+            /* Large devices (large desktops, 1200px and up) */
+            @media (min-width: $screen-lg-min) {}
+        }
+
 }

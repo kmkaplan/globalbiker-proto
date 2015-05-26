@@ -65,7 +65,7 @@
                 color = '#ac0028';
                 break;
             default:
-                color = 'black';
+                color = '#00ac75';
                 break;
             }
 

@@ -1,31 +1,36 @@
 'use strict';
 
 angular.module('globalbikerWebApp', [
-  'ngAnimate',
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
-  'ngMessages',
-  'btford.socket-io',
-  'ui.router',
-  'ui.bootstrap',
-  'leaflet-directive',
-  'angularFileUpload',
-  'pascalprecht.translate',
-  'ui.tinymce',
+    'ngAnimate',
+    'ngCookies',
+    'ngResource',
+    'ngSanitize',
+    'ngMessages',
+    'btford.socket-io',
+    'ui.router',
+    'ui.bootstrap',
+    'leaflet-directive',
+    'angularFileUpload',
+    'pascalprecht.translate',
+    'ui.tinymce',
     'ui.select',
-    'angulartics', 'angulartics.piwik'
+    'angulartics',
+    'angulartics.piwik',
+    'js-data',
+    'dbaq.google.directions'
 ])
-    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider, uiSelectConfig, $analyticsProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider, uiSelectConfig, $analyticsProvider, DSProvider, DSHttpAdapterProvider) {
 
         $translateProvider.determinePreferredLanguage(function () {
             if (navigator.language && navigator.language.lastIndexOf("fr", 0) === 0) {
                 return "fr";
             } else {
-                return "en";
+                // force FR
+                return "fr";
+                // return "en";
             }
         });
-    
+
         // Piwik seems to suppors buffered invocations so we don't need
         // to wrap these inside angulartics.waitForVendorApi
         $analyticsProvider.settings.trackRelativePath = true;
@@ -60,6 +65,17 @@ angular.module('globalbikerWebApp', [
             prefix: '/i18n/',
             suffix: '.json'
         });
+
+        DSProvider.defaults.basePath = '/api';
+        DSProvider.defaults.idAttribute = '_id';
+
+        DSHttpAdapterProvider.defaults.queryTransform = function (resource, params) {
+            console.log('queryTransform for resource ', resource);
+
+            // disable ie10 cache
+            params.nocache = new Date().getTime();
+            return params;
+        }
 
     })
 

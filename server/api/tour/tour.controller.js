@@ -173,24 +173,19 @@ exports.mines = function (req, res) {
 // Creates a new tour in the DB.
 exports.create = function (req, res) {
 
-    req.body.reference = referenceCreator.createReferenceFromString(req.body.title);
+    var newTour = req.body;
     
-    Region.findOne({
-        'reference': 'france'
-    }, function (err, region) {
+    // calculate reference (juste once, at creation time)
+    newTour.reference = referenceCreator.createReferenceFromString(newTour.title);
+    
+    // set author
+    newTour.authors = [req.user._id];
+    
+    Tour.create(newTour, function (err, tour) {
         if (err) {
-            console.error(err);
-        } else {
-            
-            req.body.region = region._id;
-            
-            Tour.create(req.body, function (err, tour) {
-                if (err) {
-                    return handleError(res, err);
-                }
-                return res.json(201, tour);
-            });
+            return handleError(res, err);
         }
+        return res.json(201, tour);
     });
 };
 

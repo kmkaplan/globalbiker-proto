@@ -11,7 +11,7 @@ router.post('/reference/:reference/upload/trace', auth.hasRole('admin'), control
 router.get('/', controller.indexAnonymous);
 router.get('/all', auth.isAuthenticated(), controller.indexConnected);
 router.get('/mines', auth.isAuthenticated(), controller.mines);
-router.get('/:id', controller.show);
+router.get('/:reference', controller.getByReference);
 router.get('/reference/:reference', controller.getByReference);
 router.post('/', auth.isAuthenticated(), controller.create);
 router.put('/:id', auth.isAuthenticated(), controller.update);

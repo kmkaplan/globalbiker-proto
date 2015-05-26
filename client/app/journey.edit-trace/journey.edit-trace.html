@@ -1,0 +1,34 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="journey-edit-trace-page">
+
+    <div class="smart-area smart-map-area">
+        <div class="journey-edit-trace-map" map config="mapConfig"></div>
+        <div class="journey-edit-map-overlay">
+            <div class="overlay-area edit-itinerary-area overlay-panel">
+                <h4>Tracé de l'itinéraire du voyage</h4>
+                <div class="form-group">
+                    <label>Ville de départ</label>
+                    <div geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris...'"></div>
+                </div>
+                <div class="form-group">
+                    <label>Ville d'arrivée</label>
+                    <div geonames-city-input ng-model="tour.cityTo" placeholder="'Lyon...'"></div>
+                </div>
+                <div class="form-group">
+                    <label>Points de passage</label>
+                    <div ng-repeat="wayPoint in tour.wayPoints">
+                        <div geonames-city-input ng-model="wayPoint.city" placeholder="'Marseille...'"></div>
+                    </div>
+                    <a class="btn btn-primary" ng-click="addWayPoint()">Add</a>
+                </div>
+                
+                <div ng-if="itinaryCalculationInProgress" class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Calcul de l'itinéraire en cours </div>
+            </div>
+            <div class="overlay-area overlay-panel title-area">
+                <input class="form-control" placeholder="Veuiller entrer ici le titre du tour..." ng-model="tour.title">
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
