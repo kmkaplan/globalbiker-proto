@@ -10,7 +10,9 @@
             scope: {
                 city: '=ngModel',
                 placeholder: '=',
-                countryCode: '@'
+                countryCode: '@',
+                onSelectionChange:'&',
+                ngDisabled: '='
             },
             require: 'ngModel',
 
@@ -39,11 +41,18 @@
                     }
 
                     function selectCity() {
-                        // call $parsers pipeline then update $modelValue
-                        ngModelController.$setViewValue(geonamesToExternalModel($scope.selectedCity));
 
-                        // update the local view
-                        // ngModelController.$render();
+                        var city = geonamesToExternalModel($scope.selectedCity);
+
+                        // call $parsers pipeline then update $modelValue
+                        ngModelController.$setViewValue(city);
+
+                        // callback
+                        if (typeof($scope.onSelectionChange) === 'function'){
+                            $scope.onSelectionChange({
+                                city: city
+                            });
+                        }
                     }
 
                     function geonamesToExternalModel(geonamesCity) {
@@ -63,7 +72,7 @@
                                     type: 'Point'
                                 }
                             };
-                           /* console.log(geonamesCity);*/
+                            /* console.log(geonamesCity);*/
 
                             // console.debug('Select geonames city "%s" (%s).', city.name, city.geometry.coordinates);
                             return city;

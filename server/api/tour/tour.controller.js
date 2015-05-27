@@ -9,6 +9,8 @@ var auth = require('../../auth/auth.service');
 var referenceCreator = require('../../components/string/reference.creator');
 var config = require('../../config/environment');
 var geo = require('../../components/geo/geo');
+var jsonpatch = require('fast-json-patch');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 var Q = require('q');
 
@@ -20,9 +22,9 @@ exports.indexAnonymous = function (req, res) {
     };
 
     Tour.find(criteria).sort({
-                'votes': -1,
-                '_id': -1
-            }).populate('authors').exec(function (err, tours) {
+        'votes': -1,
+        '_id': -1
+    }).populate('authors').exec(function (err, tours) {
         if (err) {
             return handleError(res, err);
         }
@@ -31,12 +33,16 @@ exports.indexAnonymous = function (req, res) {
 
 };
 
+function isAdmin(req){
+    return req.user && req.user._id && config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf('admin');
+}
+
 // Get list of tours
 exports.indexConnected = function (req, res) {
 
     var criteria = {};
 
-    if (req.user && req.user._id && config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf('admin')) {
+    if (isAdmin(req)) {
         console.log('Roles:', req.user.role);
     } else {
         criteria.status = 'validated';
@@ -74,53 +80,53 @@ exports.uploadTrace = function (req, res) {
 
         geo.readTracesFromFile(file, true).then(function (features) {
 
-                var feature;
+            var feature;
 
-                if (features.length === 0) {
-                    console.log('Trace without any feature.');
-                    return res.send(400, 'Trace without any point');
-                } else if (features.length > 1) {
-                    console.error('Trace with %d features(s). Should never append due to readTracesFromFile second parameter.', features.length);
+            if (features.length === 0) {
+                console.log('Trace without any feature.');
+                return res.send(400, 'Trace without any point');
+            } else if (features.length > 1) {
+                console.error('Trace with %d features(s). Should never append due to readTracesFromFile second parameter.', features.length);
+            }
+
+            feature = features[0];
+
+            // update tour geometry
+            tour.geometry = {
+                coordinates: feature.xyzCoordinates.xy, //[[[0.951528735, 44.182434697], [0.951036299, 44.182579117]]],
+                type: feature.geometry.type
+            };
+
+            tour.sourceGeometry = tour.geometry;
+
+            // tour.elevationPoints = feature.xyzCoordinates.z;
+
+            // tour.distance = geo.getTotalDistanceFromGeometry(tour.geometry);
+
+            /*  var elevationGain = geo.getElevationGain(feature.geometry.type, tour.elevationPoints);
+
+                    if (elevationGain.lastElevation != null) {
+                        console.log('Trace has been uploaded (distance: %d, elevation gain: %d, %d).', tour.distance, elevationGain.positive, elevationGain.negative);
+                        tour.positiveElevationGain = elevationGain.positive;
+                        tour.negativeElevationGain = elevationGain.negative;
+                    } else {
+                        console.log('Trace has been uploaded (distance: %d).', tour.distance);
+                        tour.positiveElevationGain = null;
+                        tour.negativeElevationGain = null;
+                    }*/
+
+            tour.save(function (err) {
+                if (err) {
+                    console.error(err);
+                    return handleError(res, err);
                 }
-
-                feature = features[0];
-
-                // update tour geometry
-                tour.geometry = {
-                    coordinates: feature.xyzCoordinates.xy, //[[[0.951528735, 44.182434697], [0.951036299, 44.182579117]]],
-                    type: feature.geometry.type
-                };
-            
-                tour.sourceGeometry = tour.geometry;
-
-                // tour.elevationPoints = feature.xyzCoordinates.z;
-
-                // tour.distance = geo.getTotalDistanceFromGeometry(tour.geometry);
-
-                /*  var elevationGain = geo.getElevationGain(feature.geometry.type, tour.elevationPoints);
-
-                if (elevationGain.lastElevation != null) {
-                    console.log('Trace has been uploaded (distance: %d, elevation gain: %d, %d).', tour.distance, elevationGain.positive, elevationGain.negative);
-                    tour.positiveElevationGain = elevationGain.positive;
-                    tour.negativeElevationGain = elevationGain.negative;
-                } else {
-                    console.log('Trace has been uploaded (distance: %d).', tour.distance);
-                    tour.positiveElevationGain = null;
-                    tour.negativeElevationGain = null;
-                }*/
-
-                tour.save(function (err) {
-                    if (err) {
-                        console.error(err);
-                        return handleError(res, err);
-                    }
-                    return res.json(200, tour);
-                });
-            },
-            function (err) {
-                console.log(err);
-                return res.send(400, err);
-            }).done();
+                return res.json(200, tour);
+            });
+        },
+                                                function (err) {
+            console.log(err);
+            return res.send(400, err);
+        }).done();
     });
 
 };
@@ -174,13 +180,13 @@ exports.mines = function (req, res) {
 exports.create = function (req, res) {
 
     var newTour = req.body;
-    
+
     // calculate reference (juste once, at creation time)
     newTour.reference = referenceCreator.createReferenceFromString(newTour.title);
-    
+
     // set author
     newTour.authors = [req.user._id];
-    
+
     Tour.create(newTour, function (err, tour) {
         if (err) {
             return handleError(res, err);
@@ -194,34 +200,24 @@ exports.update = function (req, res) {
     if (req.body._id) {
         delete req.body._id;
     }
-    Tour.findById(req.params.id, function (err, tour) {
+    var params = {
+        _id: new ObjectId(req.params.id)
+    };
+    if (!isAdmin(req)){
+        // check that current user is one of the authors
+        params.authors = req.user._id;
+    }
+    Tour.findOne(params).exec(function (err, tour) {
+
         if (err) {
             return handleError(res, err);
         }
         if (!tour) {
             return res.send(404);
         }
-        for (var key in req.body) {
-            if (req.body.hasOwnProperty(key)) {
-                var value = req.body[key];
-                if (['authors'].indexOf(key) !== -1) {
-                    value = value.reduce(function (o, i) {
-                        if (typeof (i._id) !== 'undefined') {
-                            o.push(i._id);
-                        } else {
-                            o.push(i);
-                        }
-                        return o;
-                    }, []);
-                }
-                if (['region'].indexOf(key) !== -1) {
-                    if (typeof (value._id) !== 'undefined') {
-                        value = value._id;
-                    }
-                }
-                tour[key] = value;
-            }
-        }
+
+        var patches = req.body.patches;
+        jsonpatch.apply(tour, patches);
 
         tour.save(function (err) {
             if (err) {

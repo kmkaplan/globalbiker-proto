@@ -15,6 +15,7 @@
     "express": "^4.0.0",
     "express-jwt": "^0.1.4",
     "express-session": "^1.0.4",
+    "fast-json-patch": "^0.5.2",
     "geojson-tools": "^0.1.7",
     "geolib": "^2.0.14",
     "jsonwebtoken": "^0.3.0",

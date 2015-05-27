@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('globalbikerWebApp').controller('TourCtrl', TourCtrl);
-
+    
     function TourCtrl(tour, $scope, $stateParams, $state, $q) {
 
         // init method

@@ -17,7 +17,8 @@ angular.module('globalbikerWebApp', [
     'angulartics',
     'angulartics.piwik',
     'js-data',
-    'dbaq.google.directions'
+    'dbaq.google.directions',
+    'ng-sortable'
 ])
     .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $translateProvider, uiSelectConfig, $analyticsProvider, DSProvider, DSHttpAdapterProvider) {
 

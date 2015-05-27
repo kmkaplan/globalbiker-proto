@@ -1,5 +1,5 @@
 <span class="geonames-city-input">
-    <input ng-model="selectedCity" placeholder="{{ placeholder }}" typeahead-min-length="2" typeahead="city as city.label for city in searchCity($viewValue)" typeahead-loading="loading" 
+    <input ng-disabled="ngDisabled" ng-model="selectedCity" placeholder="{{ placeholder }}" typeahead-min-length="2" typeahead="city as city.label for city in searchCity($viewValue)" typeahead-loading="loading" 
     typeahead-input-formatter="formatCityForInput($model)" typeahead-on-select="selectCity()" class="form-control">
     <i ng-show="loading" class="glyphicon glyphicon-refresh"></i>
 </span>

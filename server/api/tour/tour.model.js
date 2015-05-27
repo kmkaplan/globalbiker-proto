@@ -94,6 +94,25 @@ var TourSchema = new Schema({
             index: '2dsphere'
         }
     },
+    wayPoints: [
+        {
+            city: {
+                geonameId: {
+                    type: Number
+                },
+                name: {
+                    type: String
+                },
+                adminName1: {
+                    type: String
+                },
+                geometry: {
+                    type: Object,
+                    index: '2dsphere'
+                }
+            }
+        }
+    ],
     priority: {
         type: Number,
         default: 1

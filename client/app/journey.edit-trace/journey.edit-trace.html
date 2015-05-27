@@ -6,26 +6,46 @@
         <div class="journey-edit-map-overlay">
             <div class="overlay-area edit-itinerary-area overlay-panel">
                 <h4>Tracé de l'itinéraire du voyage</h4>
+                <label>Villes de départ et d'arrivée</label>
                 <div class="form-group">
-                    <label>Ville de départ</label>
-                    <div geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris...'"></div>
+                    <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/cityFrom')"></div>
                 </div>
                 <div class="form-group">
-                    <label>Ville d'arrivée</label>
-                    <div geonames-city-input ng-model="tour.cityTo" placeholder="'Lyon...'"></div>
+                    <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/cityTo')"></div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-if="isValidTourGeometry(tour)">
                     <label>Points de passage</label>
-                    <div ng-repeat="wayPoint in tour.wayPoints">
-                        <div geonames-city-input ng-model="wayPoint.city" placeholder="'Marseille...'"></div>
-                    </div>
-                    <a class="btn btn-primary" ng-click="addWayPoint()">Add</a>
+                    <p>Si nécessaire, ajustez le tracé de votre itinéraire en ajoutant un ou plusieurs points de passage.</p>
+                    <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="newWaypoint.city" placeholder="'Marseille...'" on-selection-change="addWayPoint(city)"></div>
+                    <ul class="draggable-waypoints-list list-group" ng-sortable="sortableWayPointsConfig">
+                        <li class="list-group-item draggable-waypoint-item" ng-repeat="wayPoint in tour.wayPoints">
+                            <div class="waypoint-icon handle">
+                                {{ $index + 1 }}
+                            </div>
+                            <div class="waypoint-city handle">
+                                {{ wayPoint.city.name }}
+                            </div>
+                            <div class="waypoint-trash">
+                                <a ng-disabled="isWorkInProgress()" class="link" ng-click="removeWayPoint(wayPoint, $index)"><i class="fa fa-trash"></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                    <p ng-if="tour.wayPoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant avec la souris.</p>
                 </div>
-                
-                <div ng-if="itinaryCalculationInProgress" class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Calcul de l'itinéraire en cours </div>
+
+                <div class="form-group" ng-if="isValidTourGeometry(tour)">
+                    <label>Valider mon tracé</label>
+                    <p>Une fois terminé, passez à l'étape suivante</p>
+                    <div class="text-center">
+                        <a class="btn btn-primary">Passer à l'étape suivante</a>
+                    </div>
+                </div>
+
+                <div ng-if="saveInProgress" class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Sauvegarde en cours... </div>
+                <div ng-if="itinaryCalculationInProgress" class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Calcul de l'itinéraire en cours... </div>
             </div>
             <div class="overlay-area overlay-panel title-area">
-                <input class="form-control" placeholder="Veuiller entrer ici le titre du tour..." ng-model="tour.title">
+                <input ng-disabled="isWorkInProgress()" class="form-control" placeholder="Veuiller entrer ici le titre du tour..." ng-model="tour.title" ng-change="updateTitleAfterDelay(tour)">
             </div>
         </div>
     </div>
