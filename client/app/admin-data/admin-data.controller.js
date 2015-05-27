@@ -151,87 +151,6 @@
 
         $scope.init = function () {
 
-            // $scope.bikelines = 0;
-
-            //$scope.loadBikelanes();
-
-            //$scope.loadPointsOfInterests();
-
-            /*$scope.mapConfig = {
-                class: 'admin-data-map',
-                initialCenter: {
-                    lat: 43.61,
-                    lng: 1.44,
-                    zoom: 12
-                },
-                callbacks: {
-                    'map:created': function (eMap) {
-                        $scope.$watch('bikelanes', function (bikelanes, old) {
-                            if (bikelanes) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildBikelanesFeatures(bikelanes), {
-                                    name: 'Pistes cyclables',
-                                    control: true,
-                                    show: false
-                                });
-                            }
-                        });
-                        $scope.$watch('waterPoints', function (waterPoints, old) {
-                            if (waterPoints) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(waterPoints, {
-                                    mode: 'light'
-                                }), {
-                                    name: 'Points d\'eau potable',
-                                    control: true
-                                });
-                            }
-                        });
-
-                        $scope.$watch('velotoulouse', function (velotoulouse, old) {
-                            if (velotoulouse) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(velotoulouse, {
-                                    mode: 'light'
-                                }), {
-                                    name: 'Stations vélo Toulouse',
-                                    control: true
-                                });
-                            }
-                        });
-
-                        $scope.$watch('wcs', function (wcs, old) {
-                            if (wcs) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(wcs, {
-                                    mode: 'light'
-                                }), {
-                                    name: 'Sanisettes publiques',
-                                    control: true
-                                });
-                            }
-                        });
-
-                        $scope.$watch('merimees', function (merimees, old) {
-                            if (merimees) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(merimees, {
-                                    mode: 'light'
-                                }), {
-                                    name: 'Base mérimée',
-                                    control: true
-                                });
-                            }
-                        });
-
-                        $scope.$watch('dangers', function (dangers, old) {
-                            if (dangers) {
-                                eMap.addItemsToGroup(bikeTourMapService.buildInterestsFeatures(dangers, {
-                                    mode: 'light'
-                                }), {
-                                    name: 'Dangers',
-                                    control: true
-                                });
-                            }
-                        });
-                    }
-                }
-            };*/
 
 
         };
@@ -290,12 +209,6 @@
                 }, function () {});
 
 
-            /*  InterestRepository.query(function (items) {
-                $scope.items = items;
-                $scope.loadingInProgress = false;
-            }, function () {
-                $scope.loadingInProgress = false;
-            });*/
         };
 
 

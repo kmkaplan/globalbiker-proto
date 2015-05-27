@@ -5,17 +5,29 @@
         <div class="journey-edit-trace-map" map config="mapConfig"></div>
         <div class="journey-edit-map-overlay">
             <div class="overlay-area edit-itinerary-area overlay-panel">
-                <h4>Tracé de l'itinéraire du voyage</h4>
-                <label>Villes de départ et d'arrivée</label>
                 <div class="form-group">
-                    <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/cityFrom')"></div>
-                </div>
-                <div class="form-group">
-                    <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/cityTo')"></div>
+                    <label>Villes de départ et d'arrivée</label>
+                    <div class="departure-area">
+                       <div class="departure-icon">
+                            <i class="fa fa-dot-circle-o icon-white"></i>
+                        </div>
+                        <div class="departure-city">
+                            <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/cityFrom')"></div>
+                        </div>
+                    </div>
+                    <div class="arrival-area">
+                        <div class="arrival-icon">
+                            <i class="fa fa-flag icon-white"></i>
+                        </div>
+                        <div class="arrival-city">
+                            <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/cityTo')"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group" ng-if="isValidTourGeometry(tour)">
-                    <label>Points de passage</label>
-                    <p>Si nécessaire, ajustez le tracé de votre itinéraire en ajoutant un ou plusieurs points de passage.</p>
+                    <label>Escales et points de passage</label>
+                    <p>Veuillez indiquer les villes dans lesquelles vous avez fait escale.</p>
+                    <p>Si nécessaire, ajoutez aussi un ou plusieurs points de passage pour affiner le tracé.</p>
                     <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="newWaypoint.city" placeholder="'Marseille...'" on-selection-change="addWayPoint(city)"></div>
                     <ul class="draggable-waypoints-list list-group" ng-sortable="sortableWayPointsConfig">
                         <li class="list-group-item draggable-waypoint-item" ng-repeat="wayPoint in tour.wayPoints">
@@ -30,23 +42,22 @@
                             </div>
                         </li>
                     </ul>
-                    <p ng-if="tour.wayPoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant avec la souris.</p>
+                    <p ng-if="tour.wayPoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant dans la liste avec la souris.</p>
                 </div>
-
                 <div class="form-group" ng-if="isValidTourGeometry(tour)">
                     <label>Valider mon tracé</label>
-                    <p>Une fois terminé, passez à l'étape suivante</p>
+                    <p>Une fois terminé, passez à l'étape suivante:</p>
                     <div class="text-center">
-                        <a class="btn btn-primary">Passer à l'étape suivante</a>
+                        <a class="btn btn-primary">Etape suivante</a>
                     </div>
                 </div>
 
                 <div ng-if="saveInProgress" class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Sauvegarde en cours... </div>
                 <div ng-if="itinaryCalculationInProgress" class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Calcul de l'itinéraire en cours... </div>
             </div>
-            <div class="overlay-area overlay-panel title-area">
+            <!-- <div class="overlay-area overlay-panel title-area">
                 <input ng-disabled="isWorkInProgress()" class="form-control" placeholder="Veuiller entrer ici le titre du tour..." ng-model="tour.title" ng-change="updateTitleAfterDelay(tour)">
-            </div>
+            </div>-->
         </div>
     </div>
 </div>

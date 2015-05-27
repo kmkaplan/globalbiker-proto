@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourEditCtrl', TourEditCtrl);
 
-    function TourEditCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, bikeTourMapService, securityService, interestsMarkerBuilderService, PhotoRepository) {
+    function TourEditCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, mapStepTraceBuilder, securityService, interestsMarkerBuilderService, PhotoRepository) {
 
         // scope properties
         $scope.securityService = securityService;
@@ -75,7 +75,7 @@
 
         function showTourOnMap(tour) {
             if (tour.steps) {
-                var traceFeatures = bikeTourMapService.buildStepsTracesFeatures(tour.steps, {
+                var traceFeatures = mapStepTraceBuilder.buildStepsTracesFeatures(tour.steps, {
                     style: {
                         color: '#34a0b4',
                         width: 3,

@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('JourneyEditTraceCtrl', JourneyEditTraceCtrl);
 
-    function JourneyEditTraceCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, featuresBuilderFileService, tourFeaturesBuilderService, interestsMarkerBuilderService, DS, directionsService) {
+    function JourneyEditTraceCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, directionsService, featuresBuilderFileService, tourFeaturesBuilderService, interestsMarkerBuilderService, waypointsMarkerBuilderService) {
 
         // scope properties
         $scope.mapConfig = {
@@ -95,7 +95,12 @@
             if (!tour.wayPoints) {
                 tour.wayPoints = [];
             }
-            tour.wayPoints.push(angular.copy($scope.newWaypoint));
+            var newWaypoint = {
+                type: 'transit',
+                city: $scope.newWaypoint.city
+            };
+            tour.wayPoints.push(newWaypoint);
+            // reset city
             $scope.newWaypoint.city = '';
             onCityChanged('/wayPoints');
         }
@@ -140,7 +145,7 @@
         }
 
         function updateTitleAfterDelay(tour) {
-            if ($scope.titleUpdateDelayTimer){
+            if ($scope.titleUpdateDelayTimer) {
                 $timeout.cancel($scope.titleUpdateDelayTimer);
             }
             $scope.titleUpdateDelayTimer = $timeout(function () {
@@ -303,6 +308,10 @@
             if (tour.cityTo) {
                 var feature = interestsMarkerBuilderService.buildArrival(tour.cityTo);
                 features.push(feature);
+            }
+
+            if (tour.wayPoints) {
+                features = features.concat(waypointsMarkerBuilderService.buildAll(tour.wayPoints));
             }
 
             if (features.length !== 0) {

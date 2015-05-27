@@ -1,16 +1,16 @@
 .journey-edit-trace-page {
     height: 100%;
     overflow: hidden;
-    
+
     .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
         background-color: inherit;
     }
-    
+
     .smart-map-area {
         height: 100%;
         overflow: hidden;
-        margin-top: 65px;
-        margin-bottom: -65px;
+        margin-top: 35px;
+        margin-bottom: -35px;
         .journey-edit-trace-map {
             height: 100%;
             overflow: hidden;
@@ -18,7 +18,7 @@
         .journey-edit-map-overlay {
             .overlay-area {
                 position: absolute;
-                top: 75px;
+                top: 55px;
                 margin-left: 50px;
                 margin-right: 50px;
             }
@@ -28,34 +28,62 @@
                 // same style as .leaflet-bar
                 border-radius: 4px;
                 box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+                padding: 10px 20px;
             }
             .edit-itinerary-area {
+                width: 370px;
                 min-height: 400px;
-                width: 350px;
+                max-height: 70%;
+                max-height: calc(100% - 90px);
+                overflow: auto;
             }
             .title-area {
                 margin-left: 500px;
                 min-width: 30%;
             }
         }
+        .departure-area, .arrival-area{
+            margin-bottom: 0px;
+            .departure-icon, .departure-city, .arrival-icon, .arrival-city {
+                display: inline-block;
+                line-height: 20px;
+                font-size: 16px;
+                vertical-align: middle;
+                padding: 5px;
+            }
+            .departure-icon,.arrival-icon {
+                width: 25px;
+                text-align: left;
+                color: white;
+                background: black;
+                border-radius: 8px;
+            }
+            .departure-city,.arrival-city {
+                width: 270px;
+            }
+        }
         .draggable-waypoints-list {
             margin-top: 10px;
-            max-height: 350px;
+            max-height: 250px;
             .draggable-waypoint-item {
                 padding: 0px 5px;
                 .handle{
                     cursor: move;
                     cursor: -webkit-grabbing;
                 }
-                .waypoint-icon, .waypoint-trash, .waypoint-city {
+                .waypoint-icon, .waypoint-city, .waypoint-trash {
                     display: inline-block;
                     line-height: 20px;
-                    font-size: 16px;
+                    font-size: 14px;
                     vertical-align: middle;
                 }
                 .waypoint-icon {
                     width: 20px;
                     text-align: left;
+                    color: blue;
+                }
+                .waypoint-city {
+                    width: 260px;
                 }
                 .waypoint-trash {
                     width: 10px;
@@ -64,9 +92,6 @@
                         color: grey;
                         cursor: pointer;
                     }
-                }
-                .waypoint-city {
-                    width: 260px;
                 }
             }
         }

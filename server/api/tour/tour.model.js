@@ -96,6 +96,12 @@ var TourSchema = new Schema({
     },
     wayPoints: [
         {
+            // transit, stop
+            type: {
+                type: String,
+                required: true,
+                default: 'transit'
+            },
             city: {
                 geonameId: {
                     type: Number
