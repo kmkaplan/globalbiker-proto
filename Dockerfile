@@ -5,13 +5,13 @@ MAINTAINER Nicolas Toublanc <n.toublanc@gmail.com>
 
 ENV APT_PACKAGES ruby-compass ruby-sass libvips-dev
 
-RUN echo "Test to force not using docker cache"
-
 # install via APT
 RUN apt-get update && \
     apt-get install -q -y $APT_PACKAGES && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN gem install --no-ri --no-rdoc compass
 
 # define working directory (to build app)
 WORKDIR /app
