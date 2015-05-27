@@ -1,36 +1,64 @@
-## Adapted from https://github.com/dockerfile/nodejs-bower-grunt-runtime
-FROM dockerfile/nodejs-bower-grunt
+# Pull base image.
+FROM nodesource/node:jessie
 
 MAINTAINER Nicolas Toublanc <n.toublanc@gmail.com>
 
-# update APT
+ENV APT_PACKAGES ruby-compass ruby-sass libvips-dev
+
+# install via APT
 RUN apt-get update && \
-    apt-get install -q -y ruby-compass ruby-sass libvips-dev && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -q -y $APT_PACKAGES && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN gem install --no-ri --no-rdoc compass
-
+# define working directory (to build app)
 WORKDIR /app
 
-ADD . /app
+ENV GLOBAL_NPM_PACKAGES bower grunt-cli forever
 
-# ADD package.json /app/package.json
-RUN npm install --verbose
+# install globally via npm
+RUN npm install -g $GLOBAL_NPM_PACKAGES
 
-# ADD bower.json /app/bower.json
+ENV NPM_PACKAGES express phantomjs lwip socket.io socket.io-client mongoose grunt-contrib-imagemin grunt-node-inspector
+
+RUN npm -g install npm@next
+
+# install via npm
+RUN npm install $NPM_PACKAGES
+
+# install npm dependencies
+ADD package.json /app/
+RUN npm install
+
+# install bower dependencies
+ADD bower.json /app/
+ADD .bowerrc /app/
 RUN bower install --allow-root --config.interactive=false
 
-RUN grunt build:dist --force
+RUN ls -la
 
-RUN chmod 755 /app/scripts/*.sh
+# buid application
+ADD . /app
 
+RUN ls -la
+
+RUN ls -la node_modules
+
+RUN grunt build:dist
+
+# define working directory (to run app)
+WORKDIR /app/dist
+
+# set mongo URL (using mongodb linked docker container)
 ENV MONGOLAB_URI mongodb://mongodb/biketouringmap
 
-VOLUME ["/app/dist/server/upload"]
-VOLUME ["/app/dist/server/photos"]
-VOLUME ["/app/dist/server/config/environment"]
+# production mode
+ENV NODE_ENV production
 
-CMD ["/app/scripts/run.sh"]
+RUN mkdir -p /app/dist/server/logs
+
+# define default command.
+CMD forever -l /app/dist/server/logs/server.log -o /app/dist/server/logs/out.log -e /app/dist/server/logs/err.log /app/dist/server/app.js
 
 # Expose ports.
 EXPOSE 8080
