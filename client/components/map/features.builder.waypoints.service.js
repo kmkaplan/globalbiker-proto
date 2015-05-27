@@ -38,19 +38,14 @@
                         }
                     };
 
-                    switch (waypoint.type) {
-
-                    case 'stop':
+                    if (waypoint.stopover) {
+                        // stopover
                         feature.properties.circle.fillColor = 'red';
                         feature.properties.circle.color = 'red';
-                        break;
-                    case 'transit':
+                    }else{
+                        // transit
                         feature.properties.circle.fillColor = 'blue';
                         feature.properties.circle.color = 'blue';
-                        break;
-                    default:
-                        console.warn('Unknown type "%s" for waypoint %s.', waypoint.type, waypoint._id);
-                        break;
                     }
                     if (events) {
                         feature.properties.events = events

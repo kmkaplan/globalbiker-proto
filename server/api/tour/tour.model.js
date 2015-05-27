@@ -96,11 +96,16 @@ var TourSchema = new Schema({
     },
     wayPoints: [
         {
-            // transit, stop
+            // 'transit' (if not stopover), 'camping', 'hotel', 'host'
             type: {
                 type: String,
                 required: true,
                 default: 'transit'
+            },
+            stopover: {
+                type: Boolean,
+                required: true,
+                default: false
             },
             city: {
                 geonameId: {

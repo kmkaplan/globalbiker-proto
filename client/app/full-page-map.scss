@@ -1,0 +1,50 @@
+.full-page-map-page {
+    height: 100%;
+    overflow: hidden;
+    .full-page-map-area {
+        height: 100%;
+        overflow: hidden;
+        margin-top: 35px;
+        margin-bottom: -35px;
+        .full-page-map {
+            height: 100%;
+            overflow: hidden;
+        }
+        .full-page-map-overlay-area {
+            .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+                background-color: inherit;
+            }
+            position: absolute;
+            top: 55px;
+            margin-left: 50px;
+            margin-right: 50px;
+            &.context-area {
+                width: 370px;
+                min-height: 400px;
+                max-height: 70%;
+                max-height: calc(100% - 90px);
+                overflow: auto;
+                .main-title {
+                    text-align: center;
+                    text-transform: capitalize;
+                    border: 1px solid grey;
+                    margin: 0 0 10px 0;
+                    padding: 2px;
+                }
+            }
+            &.status-messages-area {
+                min-width: 50%;
+                width: calc(100% - 500px);
+                margin-left: 450px;
+            }
+            &.overlay-panel {
+                background: white;
+                padding: 10px;
+                // same style as .leaflet-bar
+                border-radius: 4px;
+                box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+                padding: 10px 20px;
+            }
+        }
+    }
+}

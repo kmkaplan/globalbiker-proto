@@ -1,64 +1,69 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-<div class="journey-edit-trace-page">
+<div class="journey-edit-trace-page full-page-map-page">
 
-    <div class="smart-area smart-map-area">
-        <div class="journey-edit-trace-map" map config="mapConfig"></div>
-        <div class="journey-edit-map-overlay">
-            <div class="overlay-area edit-itinerary-area overlay-panel">
-                <div class="form-group">
-                    <label>Villes de départ et d'arrivée</label>
-                    <div class="departure-area">
-                       <div class="departure-icon">
-                            <i class="fa fa-dot-circle-o icon-white"></i>
-                        </div>
-                        <div class="departure-city">
-                            <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/cityFrom')"></div>
-                        </div>
-                    </div>
-                    <div class="arrival-area">
-                        <div class="arrival-icon">
-                            <i class="fa fa-flag icon-white"></i>
-                        </div>
-                        <div class="arrival-city">
-                            <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/cityTo')"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group" ng-if="isValidTourGeometry(tour)">
-                    <label>Escales et points de passage</label>
-                    <p>Veuillez indiquer les villes dans lesquelles vous avez fait escale.</p>
-                    <p>Si nécessaire, ajoutez aussi un ou plusieurs points de passage pour affiner le tracé.</p>
-                    <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="newWaypoint.city" placeholder="'Marseille...'" on-selection-change="addWayPoint(city)"></div>
-                    <ul class="draggable-waypoints-list list-group" ng-sortable="sortableWayPointsConfig">
-                        <li class="list-group-item draggable-waypoint-item" ng-repeat="wayPoint in tour.wayPoints">
-                            <div class="waypoint-icon handle">
-                                {{ $index + 1 }}
-                            </div>
-                            <div class="waypoint-city handle">
-                                {{ wayPoint.city.name }}
-                            </div>
-                            <div class="waypoint-trash">
-                                <a ng-disabled="isWorkInProgress()" class="link" ng-click="removeWayPoint(wayPoint, $index)"><i class="fa fa-trash"></i></a>
-                            </div>
-                        </li>
-                    </ul>
-                    <p ng-if="tour.wayPoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant dans la liste avec la souris.</p>
-                </div>
-                <div class="form-group" ng-if="isValidTourGeometry(tour)">
-                    <label>Valider mon tracé</label>
-                    <p>Une fois terminé, passez à l'étape suivante:</p>
-                    <div class="text-center">
-                        <a class="btn btn-primary">Etape suivante</a>
-                    </div>
-                </div>
-
-                <div ng-if="saveInProgress" class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Sauvegarde en cours... </div>
-                <div ng-if="itinaryCalculationInProgress" class="alert alert-info"><i class="fa fa-spin fa-spinner"></i> Calcul de l'itinéraire en cours... </div>
+    <div class="full-page-map-area">
+        <div class="full-page-map" map config="mapConfig"></div>
+        <div class="full-page-map-overlay-area status-messages-area" ng-if="saveInProgress || itinaryCalculationInProgress">
+            <div ng-if="saveInProgress" class="alert alert-info">
+                <i class="fa fa-spin fa-spinner"></i> Sauvegarde en cours...
             </div>
-            <!-- <div class="overlay-area overlay-panel title-area">
+            <div ng-if="itinaryCalculationInProgress" class="alert alert-info">
+                <i class="fa fa-spin fa-spinner"></i> Calcul de l'itinéraire en cours...
+            </div>
+        </div>
+        <div class="full-page-map-overlay-area overlay-panel context-area">
+            <h4 class="main-title">Tracé de l'itinéraire</h4>
+            <div class="form-group">
+                <label>Villes de départ et d'arrivée du voyage</label>
+                <div class="departure-area">
+                    <div class="departure-icon">
+                        <i class="fa fa-dot-circle-o icon-white"></i>
+                    </div>
+                    <div class="departure-city">
+                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/cityFrom')"></div>
+                    </div>
+                </div>
+                <div class="arrival-area">
+                    <div class="arrival-icon">
+                        <i class="fa fa-flag icon-white"></i>
+                    </div>
+                    <div class="arrival-city">
+                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/cityTo')"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-if="isValidTourGeometry(tour)">
+                <label>Escales et points de passage</label>
+                <p>Veuillez indiquer les villes dans lesquelles vous avez fait escale.</p>
+                <p>Si nécessaire, ajoutez aussi un ou plusieurs points de passage pour affiner le tracé.</p>
+                <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="newWaypoint.city" placeholder="'Marseille...'" on-selection-change="addWayPoint(city)"></div>
+                <ul class="draggable-waypoints-list list-group" ng-sortable="sortableWayPointsConfig">
+                    <li class="list-group-item draggable-waypoint-item" ng-repeat="wayPoint in tour.wayPoints">
+                        <div class="waypoint-icon handle">
+                            {{ $index + 1 }}
+                        </div>
+                        <div class="waypoint-city handle">
+                            {{ wayPoint.city.name }}
+                        </div>
+                        <div class="waypoint-trash">
+                            <a ng-disabled="isWorkInProgress()" class="link" ng-click="removeWayPoint(wayPoint, $index)"><i class="fa fa-trash"></i></a>
+                        </div>
+                    </li>
+                </ul>
+                <p ng-if="tour.wayPoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant dans la liste avec la souris.</p>
+            </div>
+            <div class="form-group" ng-if="isValidTourGeometry(tour)">
+                <label>Valider mon tracé</label>
+                <p>Une fois terminé, passez à l'étape suivante:</p>
+                <div class="text-center">
+                    <a ng-if="tour._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-stopovers({tourReference: tour.reference})" class="btn btn-primary">Etape suivante</a>
+                </div>
+            </div>
+
+        </div>
+        <!-- <div class="full-page-map-overlay-area overlay-panel title-area">
                 <input ng-disabled="isWorkInProgress()" class="form-control" placeholder="Veuiller entrer ici le titre du tour..." ng-model="tour.title" ng-change="updateTitleAfterDelay(tour)">
             </div>-->
-        </div>
     </div>
 </div>
 
