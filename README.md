@@ -22,6 +22,11 @@ Export from prod database (throw SSH tunel):
 Import to dev database:
 
     mongorestore --db biketouringmap-dev ./dumps/biketouringmap/
+    
+    or 
+    
+    mongorestore --host localhost:27018 --db globalbikerweb-beta ./dumps/biketouringmap/
+    
 
 ## Continuous integration deployment
 
