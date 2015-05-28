@@ -25,7 +25,7 @@ RUN npm install --verbose
 # ADD bower.json /app/bower.json
 RUN bower install --allow-root --config.interactive=false
 
-RUN grunt build:dist --force
+RUN grunt build:dist
 
 # set mongo URL (using mongodb linked docker container)
 ENV MONGOLAB_URI mongodb://mongodb/biketouringmap
