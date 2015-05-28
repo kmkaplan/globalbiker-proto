@@ -12,7 +12,7 @@
 
         return service;
 
-        function getDirections(originGeometry, destinationGeometry, wayPointsGeometries) {
+        function getDirections(originGeometry, destinationGeometry, waypointsGeometries) {
 
             var deffered = $q.defer();
 
@@ -20,7 +20,7 @@
                 travelMode: 'bicycling',
                 origin: toGoogleDirectionsString(originGeometry),
                 destination: toGoogleDirectionsString(destinationGeometry),
-                waypoints: wayPointsGeometries.reduce(function (waypoints, wayPointGeometry) {
+                waypoints: waypointsGeometries.reduce(function (waypoints, wayPointGeometry) {
                     if (wayPointGeometry) {
                         waypoints.push({
                             location: toGoogleDirectionsString(wayPointGeometry)
@@ -31,10 +31,10 @@
             }
 
             if (args.waypoints.length < 8) {
-                var promise = getDirectionsMax8WayPoints(args);
+                var promise = getDirectionsMax8Waypoints(args);
                 deffered.resolve(promise);
             } else {
-                var promise = getDirectionsMoreThan8WayPointsByChunks(args);
+                var promise = getDirectionsMoreThan8WaypointsByChunks(args);
                 deffered.resolve(promise);
             }
 
@@ -42,7 +42,7 @@
             return deffered.promise;
         }
 
-        function getDirectionsMoreThan8WayPointsByChunks(args) {
+        function getDirectionsMoreThan8WaypointsByChunks(args) {
             var deffered = $q.defer();
 
             // split in several requests
@@ -87,7 +87,7 @@
                 };
                 console.log('Chunk args: ', chunkArgs);
 
-                var promise = getDirectionsMax8WayPoints(chunkArgs);
+                var promise = getDirectionsMax8Waypoints(chunkArgs);
                 promises.push(promise);
             }
 
@@ -123,7 +123,7 @@
             return deffered.promise;
         }
 
-        function getDirectionsMax8WayPoints(args) {
+        function getDirectionsMax8Waypoints(args) {
 
             var deffered = $q.defer();
 

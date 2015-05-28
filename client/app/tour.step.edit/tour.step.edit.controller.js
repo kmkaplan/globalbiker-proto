@@ -163,11 +163,6 @@
 
                 traceFeatures = traceFeatures.concat(interestsFeatures);
 
-                if (tour.sourceGeometry) {
-                    var feature = tourFeaturesBuilderService.buildSource(tour);
-                    traceFeatures.push(feature);
-                }
-
                 if (traceFeatures) {
                     $scope.mapConfig.items = traceFeatures;
 

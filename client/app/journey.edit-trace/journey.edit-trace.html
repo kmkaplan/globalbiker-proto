@@ -20,7 +20,7 @@
                         <i class="fa fa-dot-circle-o icon-white"></i>
                     </div>
                     <div class="departure-city">
-                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/cityFrom')"></div>
+                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.geo.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/geo/cityFrom')"></div>
                     </div>
                 </div>
                 <div class="arrival-area">
@@ -28,7 +28,7 @@
                         <i class="fa fa-flag icon-white"></i>
                     </div>
                     <div class="arrival-city">
-                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/cityTo')"></div>
+                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.geo.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/geo/cityTo')"></div>
                     </div>
                 </div>
             </div>
@@ -36,9 +36,9 @@
                 <label>Escales et points de passage</label>
                 <p>Veuillez indiquer les villes dans lesquelles vous avez fait escale.</p>
                 <p>Si nécessaire, ajoutez aussi un ou plusieurs points de passage pour affiner le tracé.</p>
-                <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="newWaypoint.city" placeholder="'Marseille...'" on-selection-change="addWayPoint(city)"></div>
-                <ul class="draggable-waypoints-list list-group" ng-sortable="sortableWayPointsConfig">
-                    <li class="list-group-item draggable-waypoint-item" ng-repeat="wayPoint in tour.wayPoints">
+                <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="newWaypoint.city" placeholder="'Marseille...'" on-selection-change="addWaypoint(city)"></div>
+                <ul class="draggable-waypoints-list list-group" ng-sortable="sortableWaypointsConfig">
+                    <li class="list-group-item draggable-waypoint-item" ng-repeat="wayPoint in tour.geo.waypoints">
                         <div class="waypoint-icon handle">
                             {{ $index + 1 }}
                         </div>
@@ -46,24 +46,21 @@
                             {{ wayPoint.city.name }}
                         </div>
                         <div class="waypoint-trash">
-                            <a ng-disabled="isWorkInProgress()" class="link" ng-click="removeWayPoint(wayPoint, $index)"><i class="fa fa-trash"></i></a>
+                            <a ng-disabled="isWorkInProgress()" class="link" ng-click="removeWaypoint(wayPoint, $index)"><i class="fa fa-trash"></i></a>
                         </div>
                     </li>
                 </ul>
-                <p ng-if="tour.wayPoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant dans la liste avec la souris.</p>
+                <p ng-if="tour.geo.waypoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant dans la liste avec la souris.</p>
             </div>
             <div class="form-group" ng-if="isValidTourGeometry(tour)">
                 <label>Valider mon tracé</label>
-                <p>Une fois terminé, passez à l'étape suivante:</p>
+                <p>Une fois terminé, passez à la page suivante:</p>
                 <div class="text-center">
-                    <a ng-if="tour._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-stopovers({tourReference: tour.reference})" class="btn btn-primary">Etape suivante</a>
+                    <a ng-if="tour._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-stopovers({tourReference: tour.reference})" class="btn btn-primary">Page suivante</a>
                 </div>
             </div>
 
         </div>
-        <!-- <div class="full-page-map-overlay-area overlay-panel title-area">
-                <input ng-disabled="isWorkInProgress()" class="form-control" placeholder="Veuiller entrer ici le titre du tour..." ng-model="tour.title" ng-change="updateTitleAfterDelay(tour)">
-            </div>-->
     </div>
 </div>
 

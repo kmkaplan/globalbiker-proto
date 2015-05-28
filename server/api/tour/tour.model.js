@@ -18,90 +18,87 @@ var TourSchema = new Schema({
         ref: 'User',
         required: true
     }],
-    userId: {
-        // TODO remove
-        type: Schema.ObjectId,
-        ref: 'User'
-    },
-    title: {
-        type: String,
-        required: true,
-        trim: true
-    },
     reference: {
         type: String,
         required: true,
         trim: true,
         unique: true
     },
-    description: {
-        type: String,
-        trim: true
-    },
-    status: {
-        type: String,
-        required: true,
-        default: 'draft'
-    },
-    travelWith: {
-        type: String
-    },
-    keywords: [{
-        type: String
-    }],
-    // deprecated: replaced by region
-    country: {
-        geonameId: {
+    properties: {
+        title: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        description: {
+            type: String,
+            trim: true
+        },
+        status: {
+            type: String,
+            required: true,
+            default: 'draft'
+        },
+        travelWith: {
+            type: String
+        },
+        keywords: [{
+            type: String
+        }],
+        beginDate: {
+            type: Date
+        },
+        difficulty: {
             type: Number
         },
-        name: {
-            type: String
-        },
-        countryCode: {
-            type: String
+        interest: {
+            type: Number
         }
     },
-    beginDate: {
-        type: Date
-    },
-    cityFrom: {
-        geonameId: {
-            type: Number
-        },
-        name: {
-            type: String
-        },
-        adminName1: {
-            type: String
+    geo: {
+        properties: {
+            distance: Number,
+            positiveElevationGain: Number,
+            negativeElevationGain: Number,
+            elevationPoints: [{
+                type: Number
+            }]
         },
         geometry: {
             type: Object,
             index: '2dsphere'
-        }
-    },
-    cityTo: {
-        geonameId: {
-            type: Number
         },
-        name: {
-            type: String
-        },
-        adminName1: {
-            type: String
-        },
-        geometry: {
-            type: Object,
-            index: '2dsphere'
-        }
-    },
-    wayPoints: [
-        {
-            // 'transit' (if not stopover), 'camping', 'hotel', 'host'
-            type: {
-                type: String,
-                required: true,
-                default: 'transit'
+        cityFrom: {
+            geonameId: {
+                type: Number
             },
+            name: {
+                type: String
+            },
+            adminName1: {
+                type: String
+            },
+            geometry: {
+                type: Object,
+                index: '2dsphere'
+            }
+        },
+        cityTo: {
+            geonameId: {
+                type: Number
+            },
+            name: {
+                type: String
+            },
+            adminName1: {
+                type: String
+            },
+            geometry: {
+                type: Object,
+                index: '2dsphere'
+            }
+        },
+        waypoints: [{
             stopover: {
                 type: Boolean,
                 required: true,
@@ -122,41 +119,79 @@ var TourSchema = new Schema({
                     index: '2dsphere'
                 }
             }
+                }]
+    },
+    steps: [{
+        reference: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        properties: {
+            description: {
+                type: String,
+                trim: true
+            },
+            difficulty: {
+                type: Number
+            },
+            interest: {
+                type: Number
+            }
+        },
+        geo: {
+            properties: {
+                distance: Number,
+                positiveElevationGain: Number,
+                negativeElevationGain: Number,
+                elevationPoints: [{
+                    type: Number
+                }]
+            },
+            geometry: {
+                type: Object,
+                index: '2dsphere'
+            },
+            cityFrom: {
+                geonameId: {
+                    type: Number,
+                    required: true
+                },
+                name: {
+                    type: String,
+                    required: true
+                },
+                adminName1: {
+                    type: String,
+                    required: true
+                },
+                geometry: {
+                    type: Object,
+                    index: '2dsphere',
+                    required: true
+                }
+            },
+            cityTo: {
+                geonameId: {
+                    type: Number,
+                    required: true
+                },
+                name: {
+                    type: String,
+                    required: true
+                },
+                adminName1: {
+                    type: String,
+                    required: true
+                },
+                geometry: {
+                    type: Object,
+                    index: '2dsphere',
+                    required: true
+                }
+            }
         }
-    ],
-    priority: {
-        type: Number,
-        default: 1
-    },
-    photoId: {
-        type: Schema.ObjectId,
-        ref: 'PhotoSchema'
-    },
-    votes: {
-        type: Number,
-        default: 0
-    },
-    difficulty: {
-        type: Number
-    },
-    interest: {
-        type: Number
-    },
-    distance: Number,
-    numberOfSteps: Number,
-    elevationPoints: [{
-        type: Number
-    }],
-    positiveElevationGain: Number,
-    negativeElevationGain: Number,
-    geometry: {
-        type: Object,
-        index: '2dsphere'
-    },
-    sourceGeometry: {
-        type: Object,
-        index: '2dsphere'
-    }
+}]
 });
 
 module.exports = mongoose.model('Tour', TourSchema);

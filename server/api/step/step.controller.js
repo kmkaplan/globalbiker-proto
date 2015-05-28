@@ -70,10 +70,12 @@ exports.getByReference = function (req, res) {
 
 // Creates a new step in the DB.
 exports.create = function (req, res) {
-    
+
     var step = req.body;
-    
-    step.reference = referenceCreator.createReferenceFromString(step.cityFrom.name + '-' + step.cityTo.name);
+
+    step.reference = referenceCreator.createReferenceFromString(step.cityFrom.name + '-' + step.cityTo.name+ '-' + Math.floor((Math.random() * 1000) + 1));
+
+    updateStepGeometryCalculs(step);
     
     Step.create(step, function (err, step) {
         if (err) {
@@ -102,30 +104,8 @@ exports.update = function (req, res) {
             }
         }
 
-        if (step.geometry) {
+        updateStepGeometryCalculs(step);
 
-            step.distance = geo.getTotalDistanceFromGeometry(step.geometry);
-
-            var elevationGain = geo.getElevationGain(step.geometry.type, step.elevationPoints);
-
-            if (elevationGain.lastElevation != null) {
-                console.log('Trace has been uploaded (distance: %d, elevation gain: %d, %d).', step.distance, elevationGain.positive, elevationGain.negative);
-                step.positiveElevationGain = elevationGain.positive;
-                step.negativeElevationGain = elevationGain.negative;
-            } else {
-                console.log('Trace has been uploaded (distance: %d).', step.distance);
-                step.positiveElevationGain = null;
-                step.negativeElevationGain = null;
-            }
-        } else {
-            console.log('No trace on step %d.', step._id);
-            step.positiveElevationGain = null;
-            step.negativeElevationGain = null;
-        }
-
-
-        step.reference = referenceCreator.createReferenceFromString(step.cityFrom.name + '-' + step.cityTo.name);
-    
         step.save(function (err) {
             if (err) {
                 return handleError(res, err);
@@ -134,6 +114,33 @@ exports.update = function (req, res) {
         });
     });
 };
+
+function updateStepGeometryCalculs(step) {
+    if (step.geometry) {
+
+        if (!step.elevationPoints){
+            step.elevationPoints=[];
+        }
+        
+        step.distance = geo.getTotalDistanceFromGeometry(step.geometry);
+
+        var elevationGain = geo.getElevationGain(step.geometry.type, step.elevationPoints);
+
+        if (elevationGain.lastElevation != null) {
+            console.log('Trace has been uploaded (distance: %d, elevation gain: %d, %d).', step.distance, elevationGain.positive, elevationGain.negative);
+            step.positiveElevationGain = elevationGain.positive;
+            step.negativeElevationGain = elevationGain.negative;
+        } else {
+            console.log('Trace has been uploaded (distance: %d).', step.distance);
+            step.positiveElevationGain = null;
+            step.negativeElevationGain = null;
+        }
+    } else {
+        console.log('No trace on step %d.', step._id);
+        step.positiveElevationGain = null;
+        step.negativeElevationGain = null;
+    }
+}
 
 exports.uploadTrace = function (req, res) {
 
@@ -240,6 +247,37 @@ exports.removeWithChildren = function (stepId) {
     return deffered.promise;
 };
 
+exports.destroyAll = function (req, res) {
+    
+    var tourId = req.query.tourId;
+    
+    if (!tourId){
+        return handleError(res, new Error('Tour id is missing.'));
+    }
+    
+    Step.find({
+        'tourId': tourId
+    }).exec(function (err, steps) {
+        if (err) {
+            return handleError(res, err);
+        }
+        
+        var promises = steps.reduce(function(promises, step){
+            var promise = exports.removeWithChildren(step._id);
+            promises.push(promise);
+            return promises;
+        }, []);
+        
+        Q.all(promises).then(function(stepIdArray){
+            return res.send(204);
+        }, function(err){
+            return handleError(res, err);
+        });
+        
+    });
+
+};
+
 // Deletes a step from the DB.
 exports.destroy = function (req, res) {
     var stepId = req.params.id;
@@ -253,5 +291,6 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
+    console.error(err);
     return res.send(500, err);
 }

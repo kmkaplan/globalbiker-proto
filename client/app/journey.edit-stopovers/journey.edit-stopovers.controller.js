@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('JourneyEditStopoversCtrl', JourneyEditStopoversCtrl);
 
-    function JourneyEditStopoversCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, directionsService, featuresBuilderFileService, tourFeaturesBuilderService, interestsMarkerBuilderService, waypointsMarkerBuilderService) {
+    function JourneyEditStopoversCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, directionsService, featuresBuilderFileService, tourFeaturesBuilderService, interestsMarkerBuilderService, waypointsMarkerBuilderService, JourneyEditStopoversTourPatchService) {
 
         // scope properties
         $scope.mapConfig = {
@@ -11,16 +11,15 @@
         };
         $scope.tour = {};
         $scope.saveInProgress = false;
-        $scope.autoSaveIsPlanned = false;
 
         // scope methods
         $scope.goToNextStep = goToNextStep;
         $scope.goToPreviousStep = goToPreviousStep;
-        
-        //$scope.updateWayPointsAfterDelay = updateWayPointsAfterDelay;
+
+        //$scope.updateWaypointsAfterDelay = updateWaypointsAfterDelay;
         $scope.toggleStopover = function (wayPoint) {
             wayPoint.stopover = !wayPoint.stopover;
-            // updateWayPointsAfterDelay($scope.tour);
+            // updateWaypointsAfterDelay($scope.tour);
         }
         $scope.isWorkInProgress = function () {
             return $scope.saveInProgress;
@@ -39,6 +38,7 @@
                     showTourOnMap(tour);
 
                 }, function (err) {
+                    $state.go('journey-create-trace');
                     console.error(err);
                 });
 
@@ -49,103 +49,61 @@
 
         };
 
-        /*        function updateWayPointsAfterDelay(tour) {
-                    $scope.autoSaveIsPlanned = true;
-                    showTourOnMap(tour);
-
-                    if ($scope.updateWayPointsAfterDelayTimer) {
-                        $timeout.cancel($scope.updateWayPointsAfterDelayTimer);
-                    }
-                    $scope.updateWayPointsAfterDelayTimer = $timeout(function () {
-                        updateWayPoints(tour);
-                    }, 2000);
-                }*/
-
         function goToPreviousStep() {
-            updateWayPoints($scope.tour).then(function (tour) {
 
+            $scope.saveInProgress = true;
+
+            // save modifications
+            JourneyEditStopoversTourPatchService.patchTour($scope.tour).then(function (tour) {
+
+                // go to previous page
                 $state.go('journey-edit-trace', {
                     tourReference: tour.reference
                 });
 
+            }).finally(function () {
+                $scope.saveInProgress = false;
             });
         }
-        
-        function goToNextStep() {
-            updateWayPoints($scope.tour).then(function (tour) {
 
+        function goToNextStep() {
+
+            $scope.saveInProgress = true;
+
+            // save modifications
+            JourneyEditStopoversTourPatchService.patchTour($scope.tour).then(function (tour) {
+
+                // go to next page
                 $state.go('tour.edit', {
                     reference: tour.reference
                 });
 
-            });
-        }
-
-        function updateWayPoints(tour) {
-            var deffered = $q.defer();
-            var patch = {
-                op: 'replace',
-                path: '/wayPoints',
-                value: tour.wayPoints
-            };
-
-            var patches = [patch];
-
-            $scope.saveInProgress = true;
-            $scope.autoSaveIsPlanned = false;
-
-            DS.update('tours', tour._id, {
-                patches: patches
-            }, {
-                method: 'patch'
-            }).then(function (tour) {
-                // success
-                deffered.resolve(tour);
-            }, function (err) {
-                console.error(err);
-                deffered.reject(err);
             }).finally(function () {
                 $scope.saveInProgress = false;
             });
-            return deffered.promise;
-        }
-
-        function createSteps(tour){
-            var stopoverPoints = tour.wayPoints.reduce(function(stopoverPoints, wayPoint){
-                if (wayPoint.stopover){
-                    stopoverPoints.push(wayPoint);
-                }
-                return stopoverPoints;
-            }, []);
-            
-            if (stopoverPoints.length === 0){
-                // only one step
-            }
-            
-            DS.delete('steps    
         }
 
         function showTourOnMap(tour) {
             var features = [];
 
             // no step geometry: display tour geometry instead
-            if (tour.geometry) {
+            if (tour.geo.geometry) {
                 var feature = tourFeaturesBuilderService.build(tour);
                 features.push(feature);
             }
 
-            if (tour.cityFrom) {
-                var feature = interestsMarkerBuilderService.buildDeparture(tour.cityFrom);
+            if (tour.geo.cityFrom) {
+                var feature = interestsMarkerBuilderService.buildDeparture(tour.geo.cityFrom);
                 features.push(feature);
             }
 
-            if (tour.cityTo) {
-                var feature = interestsMarkerBuilderService.buildArrival(tour.cityTo);
+            if (tour.geo.cityTo) {
+                var feature = interestsMarkerBuilderService.buildArrival(tour.geo.cityTo);
                 features.push(feature);
             }
 
-            if (tour.wayPoints) {
-                features = features.concat(waypointsMarkerBuilderService.buildAll(tour.wayPoints));
+            if (tour.geo.waypoints) {
+                features = features.concat(waypointsMarkerBuilderService.buildAll(tour.geo.waypoints));
             }
 
             if (features.length !== 0) {
@@ -155,7 +113,7 @@
                     return geometries;
                 }, []);
 
-                if (!tour.cityFrom || !tour.cityTo) {
+                if (!tour.geo.cityFrom || !tour.geo.cityTo) {
                     // keep region geometry while departure and arrival are not set
                     geometries.push($scope.region.geometry);
                 }
@@ -168,7 +126,6 @@
 
             }
         }
-
 
     }
 

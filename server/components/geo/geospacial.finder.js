@@ -118,7 +118,7 @@ exports.coordinatesToPoints = function (coordinates, distance) {
 
     var points = geojsonTools.complexify(coordinates, distance / 1000);
 
-    console.info('Complexify coordinates from %d to %d, ratio: %d.', coordinates.length, points.length, coordinates.length / points.length);
+    // console.info('Complexify coordinates from %d to %d, ratio: %d.', coordinates.length, points.length, coordinates.length / points.length);
 
     return points;
 };
@@ -130,10 +130,10 @@ exports.geometryToPoints = function (geometry, distance) {
     if (geometry && geometry.coordinates) {
         var points;
         if (geometry.type === 'LineString') {
-            console.log('LineString');
+            // console.log('LineString');
             points = exports.coordinatesToPoints(geometry.coordinates, distance);
         } else if (geometry.type === 'MultiLineString') {
-            console.log('MultiLineString');
+            // console.log('MultiLineString');
 
             points = geometry.coordinates.reduce(function (points, coordinates) {
                 return points.concat(exports.coordinatesToPoints(coordinates, distance));

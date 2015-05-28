@@ -14,24 +14,24 @@
         return service;
 
         function getStepLabel(step) {
-            if (step.cityFrom.name === step.cityTo.name) {
+            if (step.geo && step.geo.cityFrom.name === step.geo.cityTo.name) {
                 // same source & destination
                 return step.cityFrom.name;
             } else {
                 // TODO i18n
-                return 'From ' + step.cityFrom.name + ' to ' + step.cityTo.name;
+                return 'From ' + step.geo.cityFrom.name + ' to ' + step.geo.cityTo.name;
             }
         };
 
         
         function build(step, events) {
                 
-            if (!step || !step.geometry) {
+            if (!step || !step.geo.geometry || !step.geo.geometry) {
                 return null;
             }
 
             var color;
-            switch (step.difficulty) {
+            switch (step.properties.difficulty) {
             case 1:
                 color = '#00ac75';
                 break;
@@ -47,8 +47,8 @@
             }
 
             var feature = {
-                type: step.geometry.type,
-                geometry: step.geometry,
+                type: step.geo.geometry.type,
+                geometry: step.geo.geometry,
                 properties: {
                     options: {
                         label: getStepLabel(step),

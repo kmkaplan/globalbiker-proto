@@ -8,53 +8,19 @@
 
         var service = {
             build: build,
-            buildSource: buildSource,
             buildAll: buildAll
         };
 
         return service;
 
-        function buildSource(tour, events) {
-                
-            if (!tour || !tour.sourceGeometry) {
-                return null;
-            }
-
-            var color = '#00ac75';
-
-            var feature = {
-                type: tour.sourceGeometry.type,
-                geometry: tour.sourceGeometry,
-                properties: {
-                    options: {
-                        style: {
-                            color: color,
-                            opacity: 0.5,
-                            weight: 10
-                        }
-                    }
-                }
-            };
-
-            if (events) {
-                feature.properties.events = events
-            };
-            feature.model = {
-                type: 'tour',
-                tour: tour
-            }
-
-            return feature;
-        }
-        
         function build(tour, events) {
                 
-            if (!tour || !tour.geometry) {
+            if (!tour || !tour.geo || !tour.geo.geometry) {
                 return null;
             }
 
             var color;
-            switch (tour.difficulty) {
+            switch (tour.properties.difficulty) {
             case 1:
                 color = '#00ac75';
                 break;
@@ -70,11 +36,11 @@
             }
 
             var feature = {
-                type: tour.geometry.type,
-                geometry: tour.geometry,
+                type: tour.geo.geometry.type,
+                geometry: tour.geo.geometry,
                 properties: {
                     options: {
-                        label: tour.title,
+                        label: tour.properties.title,
                         style: {
                             color: color,
                             opacity: 1,

@@ -172,7 +172,7 @@ exports.coordinatesToNearCriterias = function (coordinates, distance) {
 
     var points = geojsonTools.complexify(simplifiedCoordinates, distance / 1000);
 
-    console.info('Simplify from %d to %d then complexify  instead of %d, ratio: %d.', coordinates.length, simplifiedCoordinates.length, points.length, simplifiedCoordinates.length / points.length);
+    // console.info('Simplify from %d to %d then complexify  instead of %d, ratio: %d.', coordinates.length, simplifiedCoordinates.length, points.length, simplifiedCoordinates.length / points.length);
 
     var nearCriterias = points.reduce(function (nearCriterias, point) {
         var criteria = {
@@ -202,10 +202,10 @@ exports.geometryToNearCriterias = function (geometry, distance) {
     if (geometry && geometry.coordinates) {
         var nearCriterias;
         if (geometry.type === 'LineString') {
-            console.log('LineString');
+            // console.log('LineString');
             nearCriterias = exports.coordinatesToNearCriterias(geometry.coordinates, distance);
         } else if (geometry.type === 'MultiLineString') {
-            console.log('MultiLineString');
+            // console.log('MultiLineString');
 
             nearCriterias = geometry.coordinates.reduce(function (nearCriterias, coordinates) {
                 var criteriaArray = exports.coordinatesToNearCriterias(coordinates, distance);

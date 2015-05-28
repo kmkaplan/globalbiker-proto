@@ -181,10 +181,7 @@ exports.create = function (req, res) {
 
     var newTour = req.body;
 
-    // calculate reference (juste once, at creation time)
-    newTour.reference = referenceCreator.createReferenceFromString(newTour.title + '-' + Math.floor((Math.random() * 1000) + 1));
-
-    // set author
+     // set author
     newTour.authors = [req.user._id];
 
     Tour.create(newTour, function (err, tour) {
@@ -217,8 +214,13 @@ exports.update = function (req, res) {
         }
 
         var patches = req.body.patches;
+        
         jsonpatch.apply(tour, patches);
 
+        console.log('Save tour: ', tour);
+        
+        console.log('Save tour : ', tour);
+        
         tour.save(function (err) {
             if (err) {
                 return handleError(res, err);

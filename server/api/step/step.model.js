@@ -26,12 +26,10 @@ var StepSchema = new Schema({
         trim: true
     },
     difficulty: {
-        type: Number,
-        required: true
+        type: Number
     },
     interest: {
-        type: Number,
-        required: true
+        type: Number
     },
     photoId: {
         type: Schema.ObjectId,

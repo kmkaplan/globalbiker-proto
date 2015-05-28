@@ -8,29 +8,58 @@ var referenceCreator = require('../../components/string/reference.creator');
 
 var Q = require('q');
 
-/*Tour.schema.pre('save', function (next) {
+Tour.schema.pre('validate', function (next) {
     var tour = this;
-    tour.reference = referenceCreator.createReferenceFromString(tour.title);
+    fillMissingProperties(tour)
     next();
 });
 
+function fillMissingProperties(tour) {
+    if (!tour.properties) {
+        tour.properties = {};
+    }
+
+    if (!tour.properties.title || tour.properties.title.trim().length === 0) {
+        // build tour title
+        tour.properties.title = 'Voyage de ' + tour.geo.cityFrom.name + ' à ' + tour.geo.cityTo.name;
+    }
+
+    // build tour reference
+    if (!tour.reference) {
+        tour.reference = referenceCreator.createReferenceFromString(tour.properties.title + '-' + Math.floor((Math.random() * 1000) + 1));
+    }
+
+    if (tour.steps) {
+        tour.steps.reduce(function (o, step) {
+            if (!step.reference) {
+                // build step reference
+                step.reference = referenceCreator.createReferenceFromString(step.geo.cityFrom.name + '-' + step.geo.cityTo.name + '-' + Math.floor((Math.random() * 1000) + 1));
+            }
+            return null;
+        }, null);
+    }
+}
+/*
 Step.schema.pre('save', function (next) {
     var step = this;
     console.log(step);
     step.reference = referenceCreator.createReferenceFromString(step.cityFrom.name + '-' + step.cityTo.name);
     next();
 });*/
-
+/*
 Step.schema.post('save', function (doc) {
-    exports.updateCalculatedAttributesFromSteps(doc.tourId).done();
+   // exports.updateCalculatedAttributesFromSteps(doc.tourId).done();
 })
 
 Step.schema.post('remove', function (doc) {
-    exports.updateCalculatedAttributesFromSteps(doc.tourId).done();
-})
+   // exports.updateCalculatedAttributesFromSteps(doc.tourId).done();
+})*/
 
 exports.updateCalculatedAttributesFromSteps = function (tourId) {
     var deffered = Q.defer();
+
+
+    logger.info("updateCalculatedAttributesFromSteps for tour %s", tourId);
 
     Tour.findById(tourId, function (err, tour) {
         if (err) {
@@ -52,8 +81,8 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
 
                     // steps fount
                     if (steps.length !== 0) {
-                        
-                         
+
+
                         // update tour interest from step interests
                         var interestsSum = steps.reduce(function (sum, step) {
                             if (step.interest) {
@@ -82,7 +111,7 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                         tour.distance = distance;
 
                         logger.info('cityFrom for tour %s.', tour._id, tour.cityFrom, {});
-                       
+
                         if (!tour.cityFrom || !tour.cityFrom.geonameId) {
                             tour.cityFrom = steps[0].cityFrom;
                         }
@@ -102,6 +131,12 @@ exports.updateCalculatedAttributesFromSteps = function (tourId) {
                     }
 
                     tour.numberOfSteps = steps.length;
+                    tour.steps = steps.reduce(function (stepIds, step) {
+                        stepIds.push(step._id);
+                        return stepIds;
+                    }, []);
+
+                    logger.info("Number of steps: ", tour.steps.length);
 
                     tour.save(function (err) {
                         if (err) {

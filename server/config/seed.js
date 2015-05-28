@@ -27,10 +27,10 @@ var Q = require('q');
 
 var functions = [
     SeedInit.init,
-    SeedReset.reset,
-    SeedUpgrade.patchToursRegion,
+    SeedReset.reset/* ,
+    SeedUpgrade.patchToursRegion/,
     SeedUpgrade.upgradeTourAttributes,
-    SeedUpgrade.patchStepsReferences
+    SeedUpgrade.patchStepsReferences*/
 ];
 
 return functions.reduce(function (soFar, f) {
