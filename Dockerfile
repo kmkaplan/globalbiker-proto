@@ -3,6 +3,8 @@ FROM dockerfile/nodejs-bower-grunt
 
 MAINTAINER Nicolas Toublanc <n.toublanc@gmail.com>
 
+RUN echo "expire cache on 28/05/2015"
+
 # update APT
 RUN apt-get update && \
     apt-get install -q -y ruby-compass ruby-sass libvips-dev && \
