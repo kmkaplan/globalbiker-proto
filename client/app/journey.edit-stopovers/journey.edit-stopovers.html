@@ -23,7 +23,7 @@
                 <tbody>
                     <tr class="link" ng-repeat="wayPoint in tour.wayPoints" ng-click="toggleStopover(wayPoint)">
                         <td>
-                            <input ng-click="updateWayPointsAfterDelay(tour); $event.stopPropagation();" ng-disabled="isWorkInProgress()" type="checkbox" ng-model="wayPoint.stopover">
+                            <input ng-click="$event.stopPropagation();" ng-disabled="isWorkInProgress()" type="checkbox" ng-model="wayPoint.stopover">
                         </td>
                            <td class="waypoint-city">
                             {{ wayPoint.city.name }}
@@ -36,8 +36,8 @@
                 <label>Valider les escales</label>
                 <p>Une fois vos choix terminés, passez à l'étape suivante:</p>
                 <div class="text-center">
-                    <a ng-if="tour._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-trace({tourReference: tour.reference})" class="btn btn-primary">Etape précédente</a>
-                    <a ng-if="tour._id" ng-disabled="isWorkInProgress() || autoSaveIsPlanned" ui-sref="tour.edit({reference: tour.reference})" class="btn btn-primary">Etape suivante</a>
+                    <a ng-if="tour._id" ng-disabled="isWorkInProgress() || autoSaveIsPlanned" ng-click="goToPreviousStep()" class="btn btn-primary">Etape précédente</a>
+                    <a ng-if="tour._id" ng-disabled="isWorkInProgress() || autoSaveIsPlanned" ng-click="goToNextStep()" class="btn btn-primary">Etape suivante</a>
                 </div>
             </div>
         </div>

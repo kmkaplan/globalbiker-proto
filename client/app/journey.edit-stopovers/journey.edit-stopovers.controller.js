@@ -14,13 +14,16 @@
         $scope.autoSaveIsPlanned = false;
 
         // scope methods
-        $scope.updateWayPointsAfterDelay = updateWayPointsAfterDelay;
+        $scope.goToNextStep = goToNextStep;
+        $scope.goToPreviousStep = goToPreviousStep;
+        
+        //$scope.updateWayPointsAfterDelay = updateWayPointsAfterDelay;
         $scope.toggleStopover = function (wayPoint) {
             wayPoint.stopover = !wayPoint.stopover;
-            updateWayPointsAfterDelay($scope.tour);
+            // updateWayPointsAfterDelay($scope.tour);
         }
         $scope.isWorkInProgress = function () {
-            return $scope.saveInProgress ;
+            return $scope.saveInProgress;
         };
 
         // init method
@@ -46,16 +49,36 @@
 
         };
 
-        function updateWayPointsAfterDelay(tour) {
-            $scope.autoSaveIsPlanned = true;
-            showTourOnMap(tour);
+        /*        function updateWayPointsAfterDelay(tour) {
+                    $scope.autoSaveIsPlanned = true;
+                    showTourOnMap(tour);
 
-            if ($scope.updateWayPointsAfterDelayTimer) {
-                $timeout.cancel($scope.updateWayPointsAfterDelayTimer);
-            }
-            $scope.updateWayPointsAfterDelayTimer = $timeout(function () {
-                updateWayPoints(tour);
-            }, 2000);
+                    if ($scope.updateWayPointsAfterDelayTimer) {
+                        $timeout.cancel($scope.updateWayPointsAfterDelayTimer);
+                    }
+                    $scope.updateWayPointsAfterDelayTimer = $timeout(function () {
+                        updateWayPoints(tour);
+                    }, 2000);
+                }*/
+
+        function goToPreviousStep() {
+            updateWayPoints($scope.tour).then(function (tour) {
+
+                $state.go('journey-edit-trace', {
+                    tourReference: tour.reference
+                });
+
+            });
+        }
+        
+        function goToNextStep() {
+            updateWayPoints($scope.tour).then(function (tour) {
+
+                $state.go('tour.edit', {
+                    reference: tour.reference
+                });
+
+            });
         }
 
         function updateWayPoints(tour) {
@@ -87,6 +110,20 @@
             return deffered.promise;
         }
 
+        function createSteps(tour){
+            var stopoverPoints = tour.wayPoints.reduce(function(stopoverPoints, wayPoint){
+                if (wayPoint.stopover){
+                    stopoverPoints.push(wayPoint);
+                }
+                return stopoverPoints;
+            }, []);
+            
+            if (stopoverPoints.length === 0){
+                // only one step
+            }
+            
+            DS.delete('steps    
+        }
 
         function showTourOnMap(tour) {
             var features = [];
