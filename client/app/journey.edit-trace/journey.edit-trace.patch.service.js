@@ -1,24 +1,24 @@
 (function () {
     'use strict';
 
-    angular.module('globalbikerWebApp').factory('JourneyEditTraceTourPatchService', JourneyEditTraceTourPatchService);
+    angular.module('globalbikerWebApp').factory('JourneyEditTracePatchService', JourneyEditTracePatchService);
 
-    function JourneyEditTraceTourPatchService($q, DS, directionsService) {
+    function JourneyEditTracePatchService($q, DS, directionsService) {
 
         var service = {
-            createTour: createTour,
-            patchTourByPath: patchTourByPath
+            createJourney: createJourney,
+            patchJourneyByPath: patchJourneyByPath
         };
 
         return service;
 
-        function createTour(tour) {
+        function createJourney(journey) {
             var deffered = $q.defer();
 
-            // create tour
+            // create journey
 
-            DS.create('tours', tour).then(function (tour) {
-                deffered.resolve(tour);
+            DS.create('journeys', journey).then(function (journey) {
+                deffered.resolve(journey);
             }, function (err) {
                 console.error(err);
                 deffered.reject(err);
@@ -26,17 +26,17 @@
 
             return deffered.promise;
         }
-        
-        function patchTourByPath(tour, path) {
+
+        function patchJourneyByPath(journey, path) {
             var deffered = $q.defer();
             var patch = null;
 
             if (path === '/geo/waypoints') {
 
                 var waypoints;
-                if (tour.geo.waypoints) {
+                if (journey.geo.waypoints) {
                     // keep only valid way points
-                    waypoints = tour.geo.waypoints.reduce(function (waypoints, wayPoint) {
+                    waypoints = journey.geo.waypoints.reduce(function (waypoints, wayPoint) {
                         if (wayPoint && wayPoint.city && wayPoint.city.geometry) {
                             waypoints.push(wayPoint);
                         }
@@ -55,13 +55,13 @@
                 patch = {
                     op: 'replace',
                     path: path,
-                    value: tour.geo.cityFrom
+                    value: journey.geo.cityFrom
                 };
             } else if (path === '/geo/cityTo') {
                 patch = {
                     op: 'replace',
                     path: path,
-                    value: tour.geo.cityTo
+                    value: journey.geo.cityTo
                 };
             } else {
                 console.error('Invalid path "%s".', path);
@@ -73,16 +73,20 @@
                 var patches = [patch, {
                     op: 'replace',
                     path: '/geo/geometry',
-                    value: tour.geo.geometry
+                    value: journey.geo.geometry
+                }, {
+                    op: 'replace',
+                    path: '/steps',
+                    value: []
                 }];
 
-                DS.update('tours', tour._id, {
+                DS.update('journeys', journey.reference, {
                     patches: patches
                 }, {
                     method: 'patch'
-                }).then(function (tour) {
+                }).then(function (journey) {
                     // success
-                    deffered.resolve(tour);
+                    deffered.resolve(journey);
                 }, function (err) {
                     console.error(err);
                     deffered.reject(err);

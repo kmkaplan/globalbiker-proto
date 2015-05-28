@@ -38,6 +38,8 @@ function fillMissingProperties(tour) {
             return null;
         }, null);
     }
+    
+    console.info('Tour after filling missing properties: ', tour);
 }
 /*
 Step.schema.pre('save', function (next) {

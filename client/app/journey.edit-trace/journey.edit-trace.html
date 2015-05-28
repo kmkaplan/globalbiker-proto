@@ -20,7 +20,7 @@
                         <i class="fa fa-dot-circle-o icon-white"></i>
                     </div>
                     <div class="departure-city">
-                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.geo.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/geo/cityFrom')"></div>
+                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="journey.geo.cityFrom" placeholder="'Paris...'" on-selection-change="onCityChanged('/geo/cityFrom')"></div>
                     </div>
                 </div>
                 <div class="arrival-area">
@@ -28,17 +28,17 @@
                         <i class="fa fa-flag icon-white"></i>
                     </div>
                     <div class="arrival-city">
-                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="tour.geo.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/geo/cityTo')"></div>
+                        <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="journey.geo.cityTo" placeholder="'Lyon...'" on-selection-change="onCityChanged('/geo/cityTo')"></div>
                     </div>
                 </div>
             </div>
-            <div class="form-group" ng-if="isValidTourGeometry(tour)">
+            <div class="form-group" ng-if="isValidJourneyGeometry(journey)">
                 <label>Escales et points de passage</label>
                 <p>Veuillez indiquer les villes dans lesquelles vous avez fait escale.</p>
                 <p>Si nécessaire, ajoutez aussi un ou plusieurs points de passage pour affiner le tracé.</p>
                 <div ng-disabled="isWorkInProgress()" geonames-city-input ng-model="newWaypoint.city" placeholder="'Marseille...'" on-selection-change="addWaypoint(city)"></div>
                 <ul class="draggable-waypoints-list list-group" ng-sortable="sortableWaypointsConfig">
-                    <li class="list-group-item draggable-waypoint-item" ng-repeat="wayPoint in tour.geo.waypoints">
+                    <li class="list-group-item draggable-waypoint-item" ng-repeat="wayPoint in journey.geo.waypoints">
                         <div class="waypoint-icon handle">
                             {{ $index + 1 }}
                         </div>
@@ -50,13 +50,13 @@
                         </div>
                     </li>
                 </ul>
-                <p ng-if="tour.geo.waypoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant dans la liste avec la souris.</p>
+                <p ng-if="journey.geo.waypoints.length > 2">Vous pouvez réordonner les points de passage en les déplaçant dans la liste avec la souris.</p>
             </div>
-            <div class="form-group" ng-if="isValidTourGeometry(tour)">
+            <div class="form-group" ng-if="isValidJourneyGeometry(journey)">
                 <label>Valider mon tracé</label>
                 <p>Une fois terminé, passez à la page suivante:</p>
                 <div class="text-center">
-                    <a ng-if="tour._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-stopovers({tourReference: tour.reference})" class="btn btn-primary">Page suivante</a>
+                    <a ng-if="journey._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-stopovers({reference: journey.reference})" class="btn btn-primary">Page suivante</a>
                 </div>
             </div>
 

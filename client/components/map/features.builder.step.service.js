@@ -25,6 +25,10 @@
 
         
         function build(step, events) {
+            
+            if (!step.properties){
+                step.properties = {};
+            }
                 
             if (!step || !step.geo.geometry || !step.geo.geometry) {
                 return null;
@@ -42,7 +46,7 @@
                 color = '#ac0028';
                 break;
             default:
-                color = 'black';
+                color = '#0063ac';
                 break;
             }
 

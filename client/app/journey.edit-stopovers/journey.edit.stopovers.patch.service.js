@@ -1,40 +1,40 @@
 (function () {
     'use strict';
 
-    angular.module('globalbikerWebApp').factory('JourneyEditStopoversTourPatchService', JourneyEditStopoversTourPatchService);
+    angular.module('globalbikerWebApp').factory('JourneyEditStopoversPatchService', JourneyEditStopoversPatchService);
 
-    function JourneyEditStopoversTourPatchService($q, DS, directionsService) {
+    function JourneyEditStopoversPatchService($q, DS, directionsService) {
 
         var service = {
-            patchTour: patchTour
+            patchJourney: patchJourney
         };
 
         return service;
 
-        function patchTour(tour) {
+        function patchJourney(journey) {
             var deffered = $q.defer();
 
             // patch way points
             var patches = [{
                 op: 'replace',
                 path: '/geo/waypoints',
-                value: tour.geo.waypoints
+                value: journey.geo.waypoints
             }];
 
-            buildStepsPatch(tour).then(function (patch) {
+            buildStepsPatch(journey).then(function (patch) {
 
                 if (patch !== null) {
                     // patch steps
                     patches.push(patch);
                 }
 
-                DS.update('tours', tour._id, {
+                DS.update('journeys', journey.reference, {
                     patches: patches
                 }, {
                     method: 'patch'
-                }).then(function (tour) {
+                }).then(function (journey) {
                     // success
-                    deffered.resolve(tour);
+                    deffered.resolve(journey);
                 }, function (err) {
                     console.error(err);
                     deffered.reject(err);
@@ -45,11 +45,11 @@
             return deffered.promise;
         }
 
-        function buildStepsPatch(tour) {
+        function buildStepsPatch(journey) {
 
             var deffered = $q.defer();
 
-            tour.steps = buildSteps(tour).then(function (steps) {
+            journey.steps = buildSteps(journey).then(function (steps) {
 
                 var patch = {
                     op: 'replace',
@@ -67,19 +67,19 @@
 
         }
 
-        function buildSteps(tour) {
+        function buildSteps(journey) {
 
             var deffered = $q.defer();
 
             // init first step attributes
             var stepsAttributes = [
                 {
-                    cityFrom: tour.geo.cityFrom,
+                    cityFrom: journey.geo.cityFrom,
                     waypointsGeometries: []
                 }
             ];
 
-            tour.geo.waypoints.reduce(function (stepsAttributes, wayPoint) {
+            journey.geo.waypoints.reduce(function (stepsAttributes, wayPoint) {
                 var stepAttributes = stepsAttributes[stepsAttributes.length - 1];
                 if (wayPoint.stopover) {
                     // set destination point
@@ -97,15 +97,15 @@
 
             // finalize last step attributes
             var stepAttributes = stepsAttributes[stepsAttributes.length - 1];
-            stepAttributes.cityTo = tour.geo.cityTo;
+            stepAttributes.cityTo = journey.geo.cityTo;
 
             if (stepsAttributes.length === 0) {
-                // only one step: same as tour geometry
+                // only one step: same as journey geometry
                 var stepAttributes = stepsAttributes[0];
                 deffered.resolve({
                     cityFrom: stepAttributes.cityFrom,
                     cityTo: stepAttributes.cityTo,
-                    geometry: tour.geo.geometry
+                    geometry: journey.geo.geometry
                 });
             } else {
                 // calculate geometry for every step

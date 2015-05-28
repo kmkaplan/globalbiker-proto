@@ -1,0 +1,55 @@
+.journey-edit-trace-page {
+    .departure-area, .arrival-area {
+        margin-bottom: 0px;
+        .departure-icon, .departure-city, .arrival-icon, .arrival-city {
+            display: inline-block;
+            line-height: 20px;
+            font-size: 16px;
+            vertical-align: middle;
+            padding: 5px;
+        }
+        .departure-icon, .arrival-icon {
+            width: 25px;
+            text-align: left;
+            color: white;
+            background: black;
+            border-radius: 8px;
+        }
+        .departure-city, .arrival-city {
+            width: 270px;
+        }
+    }
+    .draggable-waypoints-list {
+        margin-top: 10px;
+        max-height: 250px;
+        .draggable-waypoint-item {
+            padding: 0px 5px;
+            .handle {
+                cursor: move;
+                cursor: -webkit-grabbing;
+            }
+            .waypoint-icon, .waypoint-city, .waypoint-trash {
+                display: inline-block;
+                line-height: 20px;
+                font-size: 14px;
+                vertical-align: middle;
+            }
+            .waypoint-icon {
+                width: 20px;
+                text-align: left;
+                color: blue;
+            }
+            .waypoint-city {
+                width: 260px;
+            }
+            .waypoint-trash {
+                width: 10px;
+                text-align: right;
+                a.link {
+                    color: grey;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

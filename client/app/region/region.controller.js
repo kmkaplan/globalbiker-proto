@@ -18,7 +18,7 @@
 
     angular.module('globalbikerWebApp').controller('RegionCtrl', RegionCtrl);
 
-    function RegionCtrl($scope, $q, $state, $stateParams, $timeout, Auth, tourFeaturesBuilderService, tourLoaderService, RegionRepository, securityService) {
+    function RegionCtrl($scope, $q, $state, $stateParams, $timeout, Auth, journeyFeaturesBuilderService, tourLoaderService, RegionRepository, securityService) {
 
         // scope properties
         $scope.isAdmin = Auth.isAdmin;
@@ -164,7 +164,7 @@
                     return toursToDisplayInMap;
                 }, []);
 
-                features = tourFeaturesBuilderService.buildAll(tours, {
+                features = journeyFeaturesBuilderService.buildAll(tours, {
                     click: function (item, event) {
                         $scope.openTour(item.model.tour);
                     },

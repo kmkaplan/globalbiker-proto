@@ -3,14 +3,14 @@
 
     angular.module('globalbikerWebApp').controller('JourneyEditTraceCtrl', JourneyEditTraceCtrl);
 
-    function JourneyEditTraceCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, directionsService, featuresBuilderFileService, tourFeaturesBuilderService, interestsMarkerBuilderService, waypointsMarkerBuilderService, JourneyEditTraceTourPatchService) {
+    function JourneyEditTraceCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, featuresBuilderFileService, journeyFeaturesBuilderService, JourneyEditTracePatchService, directionsService) {
 
         // scope properties
         $scope.mapConfig = {
             scrollWheelZoom: true
         };
         $scope.regionReference = 'france';
-        $scope.tour = {
+        $scope.journey = {
             attributes: {},
             geo: {}
         };
@@ -28,7 +28,7 @@
         $scope.newWaypoint = {};
 
         // scope methods
-        $scope.isValidTourGeometry = isValidTourGeometry;
+        $scope.isValidJourneyGeometry = isValidJourneyGeometry;
         $scope.onCityChanged = onCityChanged;
         $scope.updateTitleAfterDelay = updateTitleAfterDelay;
         $scope.removeWaypoint = removeWaypoint;
@@ -43,12 +43,12 @@
 
             $scope.loadingInProgress = false;
 
-            if ($stateParams.tourReference) {
-                // edit tour
-                DS.find('tours', $stateParams.tourReference).then(function (tour) {
-                    $scope.tour = tour;
+            if ($stateParams.reference) {
+                // edit journey
+                DS.find('journeys', $stateParams.reference).then(function (journey) {
+                    $scope.journey = journey;
 
-                    showTourOnMap(tour);
+                    showJourneyOnMap(journey);
 
                 }, function (err) {
                     console.error(err);
@@ -57,14 +57,14 @@
                 });
 
             } else {
-                // create tour
+                // create journey
                 DS.find('regions', $scope.regionReference).then(function (region) {
                     $scope.region = region;
                     $scope.mapConfig.bounds = {
                         geometry: region.geometry
                     };
 
-                    $scope.tour.region = $scope.region._id;
+                    $scope.journey.region = $scope.region._id;
 
                 }, function (err) {
                     console.error(err);
@@ -76,31 +76,31 @@
         };
 
         function onCityChanged(path) {
-            var tour = $scope.tour;
+            var journey = $scope.journey;
 
-            if (isValidTourGeometry(tour)) {
+            if (isValidJourneyGeometry(journey)) {
 
-                // update tour geometry
-                updateTourGeometry(tour).then(function (tour) {
+                // update journey geometry
+                updateJourneyGeometry(journey).then(function (journey) {
 
-                    if (!tour._id) {
-                        // create tour
+                    if (!journey._id) {
+                        // create journey
                         $scope.saveInProgress = true;
-                        JourneyEditTraceTourPatchService.createTour(tour).then(function (tour) {
-                            // go to edit existing tour page
+                        JourneyEditTracePatchService.createJourney(journey).then(function (journey) {
+                            // go to edit existing journey page
                             $state.go('journey-edit-trace', {
-                                tourReference: tour.reference
+                                reference: journey.reference
                             });
                         }).finally(function () {
                             $scope.saveInProgress = false;
                         });
                     } else {
                         // update map
-                        showTourOnMap(tour);
+                        showJourneyOnMap(journey);
 
-                        // update tour
+                        // update journey
                         $scope.saveInProgress = true;
-                        JourneyEditTraceTourPatchService.patchTourByPath(tour, path).finally(function () {
+                        JourneyEditTracePatchService.patchJourneyByPath(journey, path).finally(function () {
                             $scope.saveInProgress = false;
                         });
                     }
@@ -108,71 +108,71 @@
                 });
             } else {
                 // update map
-                showTourOnMap(tour);
+                showJourneyOnMap(journey);
             }
         }
 
         function addWaypoint(city) {
-            var tour = $scope.tour;
-            if (!tour.geo.waypoints) {
-                tour.geo.waypoints = [];
+            var journey = $scope.journey;
+            if (!journey.geo.waypoints) {
+                journey.geo.waypoints = [];
             }
             var newWaypoint = {
                 type: 'transit',
                 city: $scope.newWaypoint.city
             };
-            tour.geo.waypoints.push(newWaypoint);
+            journey.geo.waypoints.push(newWaypoint);
             // reset city
             $scope.newWaypoint.city = '';
             onCityChanged('/geo/waypoints');
         }
 
         function removeWaypoint(wayPoint, index) {
-            var tour = $scope.tour;
+            var journey = $scope.journey;
 
-            tour.geo.waypoints.splice(index, 1);
+            journey.geo.waypoints.splice(index, 1);
 
-            // update tour geometry
-            updateTourGeometry(tour).then(function (tour) { // update map
-                showTourOnMap(tour);
+            // update journey geometry
+            updateJourneyGeometry(journey).then(function (journey) { // update map
+                showJourneyOnMap(journey);
 
-                // update tour
+                // update journey
                 $scope.saveInProgress = true;
-                JourneyEditTraceTourPatchService.patchTourByPath(tour, '/geo/waypoints').finally(function () {
+                JourneyEditTracePatchService.patchJourneyByPath(journey, '/geo/waypoints').finally(function () {
                     $scope.saveInProgress = false;
                 });
 
             });
         }
 
-        function updateTitleAfterDelay(tour) {
+        function updateTitleAfterDelay(journey) {
             if ($scope.titleUpdateDelayTimer) {
                 $timeout.cancel($scope.titleUpdateDelayTimer);
             }
             $scope.titleUpdateDelayTimer = $timeout(function () {
-                updateTitle(tour);
+                updateTitle(journey);
             }, 2000);
         }
 
-        function isValidTourGeometry(tour) {
-            if (tour && tour.geo.cityTo && tour.geo.cityFrom && tour.geo.cityTo.geometry && tour.geo.cityFrom.geometry) {
+        function isValidJourneyGeometry(journey) {
+            if (journey && journey.geo.cityTo && journey.geo.cityFrom && journey.geo.cityTo.geometry && journey.geo.cityFrom.geometry) {
                 return true;
             }
             return false;
         }
 
-        function updateTourGeometry(tour) {
+        function updateJourneyGeometry(journey) {
 
             var deffered = $q.defer();
 
-            if (isValidTourGeometry(tour)) {
+            if (isValidJourneyGeometry(journey)) {
                 // geometry has been updated
                 $scope.itinaryCalculationInProgress = true;
 
                 var waypointsGeometries = [];
 
-                if (tour.geo.waypoints) {
-                    waypointsGeometries = tour.geo.waypoints.reduce(function (waypointsGeometries, point) {
+                if (journey.geo.waypoints) {
+                    waypointsGeometries = journey.geo.waypoints.reduce(function (waypointsGeometries, point) {
                         if (point && point.city && point.city.geometry) {
                             waypointsGeometries.push(point.city.geometry);
                         }
@@ -180,11 +180,11 @@
                     }, []);
                 }
 
-                directionsService.getDirections(tour.geo.cityFrom.geometry, tour.geo.cityTo.geometry, waypointsGeometries)
+                directionsService.getDirections(journey.geo.cityFrom.geometry, journey.geo.cityTo.geometry, waypointsGeometries)
                     .then(function (geometry) {
                         // success
-                        tour.geo.geometry = geometry;
-                        deffered.resolve(tour);
+                        journey.geo.geometry = geometry;
+                        deffered.resolve(journey);
                     }, function (err) {
                         // error
                         console.error(err);
@@ -192,33 +192,16 @@
                         $scope.itinaryCalculationInProgress = false;
                     });
             } else {
-                deffered.resolve(tour);
+                deffered.resolve(journey);
             }
             return deffered.promise;
         }
 
-        function showTourOnMap(tour) {
-            var features = [];
-
-            // no step geometry: display tour geometry instead
-            if (tour.geo.geometry) {
-                var feature = tourFeaturesBuilderService.build(tour);
-                features.push(feature);
-            }
-
-            if (tour.geo.cityFrom) {
-                var feature = interestsMarkerBuilderService.buildDeparture(tour.geo.cityFrom);
-                features.push(feature);
-            }
-
-            if (tour.geo.cityTo) {
-                var feature = interestsMarkerBuilderService.buildArrival(tour.geo.cityTo);
-                features.push(feature);
-            }
-
-            if (tour.geo.waypoints) {
-                features = features.concat(waypointsMarkerBuilderService.buildAll(tour.geo.waypoints));
-            }
+        function showJourneyOnMap(journey) {
+            var features = journeyFeaturesBuilderService.buildFeatures(journey, {
+                waypoints: true,
+                steps: false
+            });
 
             if (features.length !== 0) {
 
@@ -227,7 +210,7 @@
                     return geometries;
                 }, []);
 
-                if (!tour.geo.cityFrom || !tour.geo.cityTo) {
+                if (!journey.geo.cityFrom || !journey.geo.cityTo) {
                     // keep region geometry while departure and arrival are not set
                     geometries.push($scope.region.geometry);
                 }

@@ -1,41 +1,59 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('globalbikerWebApp')
-    .controller('MyToursCtrl', function ($scope, $state, TourRepository, Auth) {
+    angular.module('globalbikerWebApp').controller('MyToursCtrl', MyToursCtrl);
 
-        Auth.isLoggedInAsync(function (loggedIn) {
-            if (Auth.isAdmin()) {
-                // admin can edit all tours
-                $scope.tours = TourRepository.all();
-                
-            } else {
-                // user can only edit its tours
-                $scope.tours = TourRepository.getMines();
-            }
-        });
+    function MyToursCtrl($scope, $state, Auth, DS, journeyFeaturesBuilderService) {
 
-        $scope.viewTour = function (tour) {
-            $state.go('tour.view', {
-                reference: tour.reference
-            }, {
-                inherit: false
+        // scope properties
+        $scope.mapConfig = {
+            scrollWheelZoom: true
+        };
+        $scope.journeys = null;
+
+        // scope methods
+
+        // init method
+        init();
+
+        function init() {
+
+            // view all journeys
+            DS.findAll('journeys', null, {bypassCache: true}).then(function (journeys) {
+                $scope.journeys = journeys;
+
+                showJourneysOnMap(journeys);
+
+            }, function (err) {
+                $state.go('home');
+                console.error(err);
             });
+
         };
 
-        $scope.deleteTour = function (tour) {
+        function showJourneysOnMap(journeys) {
+            var features = journeys.reduce(function(features, journey){
+                features = features.concat(journeyFeaturesBuilderService.buildFeatures(journey));
+                return features;
+            }, []);
 
-            if (confirm('Are you sure do you want to delete the tour "' + tour.title + '" ?')) {
+            if (features.length !== 0) {
 
-                TourRepository.remove({
-                    id: tour._id
-                });
-                angular.forEach($scope.tours, function (t, i) {
-                    if (t === tour) {
-                        $scope.tours.splice(i, 1);
-                    }
-                });
+                var geometries = features.reduce(function (geometries, feature) {
+                    geometries.push(feature.geometry);
+                    return geometries;
+                }, []);
+
+                $scope.mapConfig.items = features;
+
+                $scope.mapConfig.bounds = {
+                    geometry: geometries
+                };
+
             }
-        };
+        }
 
 
-    });
+    }
+
+}());

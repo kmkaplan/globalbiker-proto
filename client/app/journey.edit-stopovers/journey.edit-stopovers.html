@@ -11,11 +11,11 @@
         <div class="full-page-map-overlay-area overlay-panel context-area">
             <h4 class="main-title">Excales du voyage</h4>
 
-            <div ng-if="tour.geo.waypoints.length === 0">
+            <div ng-if="journey.geo.waypoints.length === 0">
                 <p>Vous n'avez indiqué aucun point de passage ou d'escale. Votre voyage est donc constitué d'une seule étape d'une journée.</p>
                 <p>Si vous voulez ajoutez des escales, revenez à la page précédente.</p>
             </div>
-            <div ng-if="tour.geo.waypoints.length !== 0">
+            <div ng-if="journey.geo.waypoints.length !== 0">
                 <p>Nous allons désormais découper votre voyage en étapes d'une journée chacune.</p>
                 <p>Pour ce faire, veuillez indiquez parmis les points de passage quelles sont ceux correspondants à vos escales.</p>
 
@@ -27,7 +27,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="link" ng-repeat="wayPoint in tour.geo.waypoints" ng-click="toggleStopover(wayPoint)">
+                        <tr class="link" ng-repeat="wayPoint in journey.geo.waypoints" ng-click="toggleStopover(wayPoint)">
                             <td>
                                 <input ng-click="$event.stopPropagation();" ng-disabled="isWorkInProgress()" type="checkbox" ng-model="wayPoint.stopover">
                             </td>
@@ -40,10 +40,10 @@
             </div>
             <div class="form-group">
                 <label>Valider les escales</label>
-                <p ng-if="tour.geo.waypoints.length !== 0">Une fois vos choix terminés, passez à l'étape suivante:</p>
+                <p ng-if="journey.geo.waypoints.length !== 0">Une fois vos choix terminés, passez à l'étape suivante:</p>
                 <div class="text-center">
-                    <a ng-if="tour._id" ng-disabled="isWorkInProgress()" ng-click="goToPreviousStep()" class="btn btn-primary">Page précédente</a>
-                    <a ng-if="tour._id" ng-disabled="isWorkInProgress()" ng-click="goToNextStep()" class="btn btn-primary">Page suivante</a>
+                    <a ng-if="journey._id" ng-disabled="isWorkInProgress()" ng-click="goToPreviousStep()" class="btn btn-primary">Page précédente</a>
+                    <a ng-if="journey._id" ng-disabled="isWorkInProgress()" ng-click="goToNextStep()" class="btn btn-primary">Page suivante</a>
                 </div>
             </div>
         </div>

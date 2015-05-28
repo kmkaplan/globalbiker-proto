@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourViewCtrl', TourViewCtrl);
 
-    function TourViewCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, securityService, PhotoRepository, interestsMarkerBuilderService, tourFeaturesBuilderService, stepFeaturesBuilderService) {
+    function TourViewCtrl(tour, $scope, $stateParams, $state, $q, $timeout, Auth, securityService, PhotoRepository, interestsMarkerBuilderService, journeyFeaturesBuilderService, stepFeaturesBuilderService) {
 
         // scope properties
         $scope.mapConfig = {};
@@ -51,7 +51,7 @@
             if (features.length === 0) {
                 // no step geometry: display tour geometry instead
                 if (tour.geometry) {
-                    var feature = tourFeaturesBuilderService.build(tour);
+                    var feature = journeyFeaturesBuilderService.build(tour);
                     features.push(feature);
                 }
             }

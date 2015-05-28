@@ -5,18 +5,10 @@
     <div class="full-page-map-area">
         <div class="full-page-map" map config="mapConfig"></div>
         <div class="full-page-map-overlay-area overlay-panel context-area">
-            <h4 class="main-title">Mes voyages</h4>
+            <h4 class="main-title">{{ journey.properties.title }}</h4>
 
-            <ul>
-                <li ng-repeat="journey in journeys">
-                    <a class="link" ui-sref="journey-view({reference: journey.reference})">{{ journey.properties.title }}</a>
-                </li>
-            </ul>
-           
             <div class="form-group">
-                
-                 <a ui-sref="journey-create-trace" class="btn btn-primary edit-step-button"><i class="fa fa-plus-square"></i> Créer un nouveau voyage</a>
-                
+                <p ng-if="journey.geo.waypoints.length !== 0">Une fois vos choix terminés, passez à l'étape suivante:</p>
                 <div class="text-center">
                     <a ng-if="journey._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-stopovers({reference: journey.reference})" class="btn btn-primary">Editer mon voyage</a>
                 </div>
@@ -24,6 +16,5 @@
         </div>
     </div>
 </div>
-   
-</div>
 
+</div>

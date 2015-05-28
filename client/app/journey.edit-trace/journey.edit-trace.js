@@ -8,7 +8,7 @@
             templateUrl: 'app/journey.edit-trace/journey.edit-trace.html',
             controller: 'JourneyEditTraceCtrl'
         }) .state('journey-edit-trace', {
-            url: '/journey/:tourReference/edit-trace',
+            url: '/journey/:reference/edit-trace',
             templateUrl: 'app/journey.edit-trace/journey.edit-trace.html',
             controller: 'JourneyEditTraceCtrl'
         });

@@ -184,6 +184,8 @@ exports.create = function (req, res) {
      // set author
     newTour.authors = [req.user._id];
 
+    console.info('Create tour:', newTour)
+    
     Tour.create(newTour, function (err, tour) {
         if (err) {
             return handleError(res, err);
@@ -272,5 +274,6 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
-    return res.send(500, err);
+    console.error(err);
+    return res.status(500).send(err) 
 }

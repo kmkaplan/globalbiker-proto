@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('TourStepEditCtrl', TourStepEditCtrl);
 
-    function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, securityService, interestsMarkerBuilderService, tourFeaturesBuilderService, PhotoRepository) {
+    function TourStepEditCtrl(tour, step, $scope, $stateParams, $state, $q, $timeout, Auth, StepRepository, securityService, interestsMarkerBuilderService, journeyFeaturesBuilderService, PhotoRepository) {
 
         // scope properties
         $scope.mapConfig = {

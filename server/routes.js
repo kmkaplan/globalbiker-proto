@@ -19,6 +19,7 @@ module.exports = function (app) {
 
 
     // Insert routes below
+    app.use('/api/journeys', require('./api/journey'));
     app.use('/api/messages', require('./api/message'));
     app.use('/api/cities', require('./api/city'));
     app.use('/api/countries', require('./api/country'));
