@@ -10,6 +10,11 @@ RUN apt-get update && \
 
 RUN gem install --no-ri --no-rdoc compass
 
+ENV GLOBAL_NPM_PACKAGES bower grunt-cli forever
+
+# install globally via npm
+RUN npm install -g $GLOBAL_NPM_PACKAGES
+
 WORKDIR /app
 
 ADD . /app

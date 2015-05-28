@@ -20,9 +20,9 @@
                 travelMode: 'bicycling',
                 origin: toGoogleDirectionsString(originGeometry),
                 destination: toGoogleDirectionsString(destinationGeometry),
-                waypoints: wayPointsGeometries.reduce(function(waypoints, wayPointGeometry){
-                    if (wayPointGeometry){
-                        waypoints.push({ 
+                waypoints: wayPointsGeometries.reduce(function (waypoints, wayPointGeometry) {
+                    if (wayPointGeometry) {
+                        waypoints.push({
                             location: toGoogleDirectionsString(wayPointGeometry)
                         });
                     }
@@ -46,15 +46,18 @@
 
                     console.info('Direction calculated successfully.');
                     deffered.resolve(geometry);
-                }else{
+                } else {
                     console.error('Error getting direction', directions);
                     deffered.reject(new Error('Error getting direction.'));
                 }
+            }, function (err) {
+                console.error(err);
+                deffered.reject(err);
             });
-            
+
             return deffered.promise;
         }
-        
+
         function toGoogleDirectionsString(geometry) {
             return '' + geometry.coordinates[1] + ',' + geometry.coordinates[0];
         }
