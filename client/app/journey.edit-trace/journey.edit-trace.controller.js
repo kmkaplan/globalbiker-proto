@@ -148,6 +148,7 @@
         function updateTitleAfterDelay(journey) {
             if ($scope.titleUpdateDelayTimer) {
                 $timeout.cancel($scope.titleUpdateDelayTimer);
+                $timeout.cancel($scope.titleUpdateDelayTimer);
             }
             $scope.titleUpdateDelayTimer = $timeout(function () {
                 updateTitle(journey);

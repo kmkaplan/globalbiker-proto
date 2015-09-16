@@ -8,11 +8,34 @@
             <div class="details-area bordered-area large-area">
                 <h1>{{ journey.properties.title }}</h1>
 
-                <span ng-repeat="photo in journey.photos">
-                <img ng-src="{{ photo.thumbnails[2].url }}" />
-            </span>
-                <div>
-                    <div file-upload="photosUploadConfig">Upload photos</div>
+                <carousel interval="myInterval" no-wrap="noWrapSlides">
+                    <slide ng-repeat="photo in journey.photos" active="slide.active">
+                        <img ng-src="{{ photo.thumbnails[0].url }}" style="margin:auto;">
+                        <div class="carousel-caption">
+                            <h4>Titre de l'image {{ photo._id }}</h4>
+                        </div>
+                    </slide>
+                </carousel>
+
+                <!--
+                 => pour mobile
+                 <ul rn-carousel rn-carousel-transition="hexagon" class="image text-center">
+                  <li ng-repeat="photo in journey.photos">
+                    <div class="layer">
+                       <h1>Titre de l'image {{ photo._id }}</h1>
+                        <img ng-src="{{ photo.thumbnails[0].url }}" />
+                    </div>
+                  </li>
+                </ul>-->
+                <br/>
+                <br/>
+                <div class="row text-center">
+                    <div class="col-xs-6">
+                        <div file-upload="photosUploadConfig">Upload photos</div>
+                    </div>
+                    <div class="col-xs-6">
+                        <a class="btn btn-danger" ng-click="clearPhotos()">Clear photos</a>
+                    </div>
                 </div>
             </div>
         </div>

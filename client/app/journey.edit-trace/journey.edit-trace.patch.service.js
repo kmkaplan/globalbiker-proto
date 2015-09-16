@@ -1,6 +1,5 @@
 (function () {
     'use strict';
-
     angular.module('globalbikerWebApp').factory('JourneyEditTracePatchService', JourneyEditTracePatchService);
 
     function JourneyEditTracePatchService($q, DS, directionsService) {
@@ -62,6 +61,12 @@
                     op: 'replace',
                     path: path,
                     value: journey.geo.cityTo
+                };
+            } else if (path === '/photos') {
+                patch = {
+                    op: 'replace',
+                    path: path,
+                    value: journey.photos
                 };
             } else {
                 console.error('Invalid path "%s".', path);

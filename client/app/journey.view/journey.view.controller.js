@@ -3,7 +3,7 @@
 
     angular.module('globalbikerWebApp').controller('JourneyViewCtrl', JourneyViewCtrl);
 
-    function JourneyViewCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, directionsService, journeyFeaturesBuilderService) {
+    function JourneyViewCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, directionsService, journeyFeaturesBuilderService, JourneyEditTracePatchService) {
 
         // scope properties
         $scope.mapConfig = {
@@ -15,15 +15,15 @@
             autoUpload: true,
             callbacks: {
                 success: function (photos) {
-                    $scope.journey.photos.concat(photos);
-                    console.log($scope.journey);
+                    $scope.journey.photos = $scope.journey.photos.concat(photos);
                 }
             }
         };
         $scope.journey = null;
 
         // scope methods
-
+$scope.clearPhotos = clearPhotos;
+        
         // init method
         init();
 
@@ -69,6 +69,10 @@
             }
         }
 
+        function clearPhotos(){
+            $scope.journey.photos = [];
+            JourneyEditTracePatchService.patchJourneyByPath($scope.journey, '/photos');
+        }
 
     }
 
