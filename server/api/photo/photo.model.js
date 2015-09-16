@@ -12,16 +12,29 @@ var PhotoSchema = new Schema({
         type: String,
         trim: true
     },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
     url: {
         type: String,
         required: 'Please fill url'
     },
-    thumbnails: {
-        w600h400: {
+    thumbnails: [{
+        maxWidth: {
+            type: Number,
+            required: true
+        },
+        maxHeight: {
+            type: Number,
+            required: true
+        },
+        url: {
             type: String,
-            required: 'Please fill thumbnails w600h400'
+            required: true
         }
-    },
+    }],
     author: {
         name: String,
         url: String

@@ -7,16 +7,11 @@
 var express = require('express');
 var multer  = require('multer')
 var errors = require('./components/errors');
+var localEnv = require('./config/local.env');
 
 module.exports = function (app) {
 
-
-    app.use(multer({
-        dest: __dirname + '/uploads/'
-    }))
-
-    app.use('/photos', express.static(__dirname + '/photos'));
-
+    app.use('/photos', express.static(localEnv.photosDir));
 
     // Insert routes below
     app.use('/api/journeys', require('./api/journey'));

@@ -1,20 +1,39 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="journey-view-page full-page-map-page">
+<div class="journey-view-page page">
 
-    <div class="full-page-map-area">
-        <div class="full-page-map" map config="mapConfig"></div>
-        <div class="full-page-map-overlay-area overlay-panel context-area">
-            <h4 class="main-title">{{ journey.properties.title }}</h4>
+    <div class="row">
 
-            <div class="form-group">
-                <p ng-if="journey.geo.waypoints.length !== 0">Une fois vos choix terminés, passez à l'étape suivante:</p>
-                <div class="text-center">
-                    <a ng-if="journey._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-stopovers({reference: journey.reference})" class="btn btn-primary">Editer mon voyage</a>
+        <div class="col-xl-6">
+            <div class="details-area bordered-area large-area">
+                <h1>{{ journey.properties.title }}</h1>
+
+                <span ng-repeat="photo in journey.photos">
+                <img ng-src="{{ photo.thumbnails[2].url }}" />
+            </span>
+                <div>
+                    <div file-upload="photosUploadConfig">Upload photos</div>
                 </div>
             </div>
         </div>
+        <div class="col-xl-6">
+            <div class="details-area bordered-area large-area">
+
+                <h1>{{ journey.properties.title }}</h1>
+
+                <div class="form-group">
+                    <div class="text-center">
+                        <a ng-if="journey._id" ng-disabled="isWorkInProgress()" ui-sref="journey-edit-stopovers({reference: journey.reference})" class="btn btn-primary">Editer mon voyage</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="text-center">
+                        <a ng-if="journey._id" ng-disabled="isWorkInProgress()" ui-sref="journey-view-map({reference: journey.reference})" class="btn btn-primary">Carte plein écran</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-</div>
 
 </div>

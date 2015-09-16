@@ -6,10 +6,7 @@ var jsonpatch = require('fast-json-patch');
 var ObjectId = require('mongoose').Types.ObjectId;
 var JourneyService = require('./journey.service');
 var config = require('../../config/environment');
-
-function isAdmin(req) {
-    return req.user && req.user._id && config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf('admin');
-}
+var PhotoService = require('../photo/photo.service');
 
 // Get list of journeys
 exports.index = function (req, res) {
@@ -23,16 +20,18 @@ exports.index = function (req, res) {
 
 // Get a single journey
 exports.show = function (req, res) {
-    Journey.findOne({
-        reference: req.params.reference
-    }).exec(function (err, journey) {
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!journey) {
-            return res.send(404);
-        }
-        return res.json(journey);
+    
+    var populate = 'photos';
+    
+    console.log('test');
+    
+    JourneyService.findJourney(req.params.reference, req.user, false, populate).then(function (journey) {
+       
+        console.log('test2');
+        
+        res.json(journey);
+    }, function(err){
+        return handleError(res, err);
     });
 };
 
@@ -50,28 +49,51 @@ exports.create = function (req, res) {
     });
 };
 
-exports.patch = function (req, res) {
-    if (req.body._id) {
-        delete req.body._id;
-    }
-    var params = {
-        reference: req.params.reference
-    };
-    if (!isAdmin(req)) {
-        // check that current user is one of the authors
-        params.authors = req.user._id;
-    }
-    Journey.findOne(params).exec(function (err, journey) {
 
-        if (err) {
-            return handleError(res, err);
-        }
-        if (!journey) {
-            return res.send(404);
-        }
+// Creates a new photo in the DB.
+exports.addPhoto = function (req, res) {
+
+    var file = req.file;
+
+    if (!file) {
+        console.log('File "file" is missing.');
+        return res.send(400, 'File "file" is missing.');
+    }
+    
+    JourneyService.findJourney(req.params.reference, req.user).then(function (journey) {
 
         var patches = req.body.patches;
-        
+
+        PhotoService.createPhoto(file, req.user._id).then(function (photo) {
+            
+            
+            journey.photos.push(photo);
+
+            console.log('Journey: ', journey);
+            
+            journey.save(function (err) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                return res.json(200, photo);
+            });
+            
+        }, function (err) {
+            return handleError(res, err);
+        }).done();
+
+    }, function (err) {
+        return handleError(res, err);
+    }).done();
+
+};
+
+exports.patch = function (req, res) {
+
+    JourneyService.findJourney(req.params.reference, req.user).then(function (journey) {
+
+        var patches = req.body.patches;
+
         jsonpatch.apply(journey, patches);
 
         journey.save(function (err) {
@@ -80,6 +102,8 @@ exports.patch = function (req, res) {
             }
             return res.json(200, journey);
         });
+    }, function (err) {
+        return handleError(res, err);
     });
 };
 

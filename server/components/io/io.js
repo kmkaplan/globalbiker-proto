@@ -80,7 +80,7 @@ exports.addPathSuffixBeforeFileExtension = function (inputPath, suffix) {
 };
 
 exports.getHttpPath = function (filePath) {
-    return '/images/' + path.basename(filePath).toLowerCase();
+    return '/photos/' + path.basename(filePath).toLowerCase();
 };
 
 exports.createThumbnail = function (inputPath, outputPath, maxWidth, maxHeight) {

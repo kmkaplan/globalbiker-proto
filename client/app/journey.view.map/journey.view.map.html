@@ -1,0 +1,19 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="journey-view-map-page full-page-map-page">
+
+    <div class="full-page-map-area">
+        <div class="full-page-map" map config="mapConfig"></div>
+        <div class="full-page-map-overlay-area overlay-panel context-area">
+            <h4 class="main-title">{{ journey.properties.title }}</h4>
+
+            <div class="form-group">
+                <div class="text-center">
+                    <a ng-if="journey._id" ng-disabled="isWorkInProgress()" ui-sref="journey-view({reference: journey.reference})" class="btn btn-primary">Vue générale</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

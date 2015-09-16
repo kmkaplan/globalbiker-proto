@@ -1,24 +1,13 @@
 (function () {
     'use strict';
 
-    angular.module('globalbikerWebApp').controller('JourneyViewCtrl', JourneyViewCtrl);
+    angular.module('globalbikerWebApp').controller('JourneyViewMapCtrl', JourneyViewMapCtrl);
 
-    function JourneyViewCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, directionsService, journeyFeaturesBuilderService) {
+    function JourneyViewMapCtrl($scope, $stateParams, $state, $q, $timeout, Auth, securityService, DS, directionsService, journeyFeaturesBuilderService) {
 
         // scope properties
         $scope.mapConfig = {
             scrollWheelZoom: true
-        };
-        $scope.photosUploadConfig = {
-            multiple: true,
-            url: '/api/journeys/' + $stateParams.reference + '/photo',
-            autoUpload: true,
-            callbacks: {
-                success: function (photos) {
-                    $scope.journey.photos.concat(photos);
-                    console.log($scope.journey);
-                }
-            }
         };
         $scope.journey = null;
 

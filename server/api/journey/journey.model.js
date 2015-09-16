@@ -121,6 +121,12 @@ var JourneySchema = new Schema({
             }
                 }]
     },
+    photos: [
+        {
+            type: Schema.ObjectId,
+            ref: 'Photo'
+        }
+    ],
     steps: [{
         reference: {
             type: String,

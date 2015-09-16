@@ -1,12 +1,10 @@
 <div class="file-upload-area">
-    <div ng-if="fileUploadProgress === null">
-        <div class="file-upload btn btn-primary">
+    <div ng-if="!progress.currentFileProgress">
+        <div class="file-upload btn btn-primary" ngf-select="onFileSelect($files)" ngf-multiple="fileUpload.multiple" >
             <span ng-transclude></span>
-            <input type="file" class="upload" ng-file-select="onFileSelect($files)" ng-attr-multiple="{{ fileUpload.multiple }}"  />
         </div>
     </div>
-    <div ng-if="fileUploadProgress !== null">
-        <i class="fa fa-spinner fa-spin"></i> Mise à jour en cours...
-        <progressbar max="100" value="fileUploadProgress"></progressbar>
+    <div ng-if="progress.currentFileProgress">
+        <progressbar max="100" value="progress.currentFileProgress"><i class="fa fa-spinner fa-spin"></i> Uploading file {{ progress.currentFileIndex + 1 }} /  {{ progress.totalFiles }}</progressbar>
     </div>
 </div>

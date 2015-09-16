@@ -4,6 +4,7 @@ var _ = require('lodash');
 var Photo = require('./photo.model');
 var geo = require('../../components/geo/geo');
 var Step = require('../step/step.model');
+var PhotoService = require('./photo.service');
 var Q = require('q');
 var ObjectId = require('mongoose').Types.ObjectId;
 var io = require('../../components/io/io');
@@ -160,12 +161,20 @@ exports.show = function (req, res) {
 
 // Creates a new photo in the DB.
 exports.create = function (req, res) {
-    Photo.create(req.body, function (err, photo) {
-        if (err) {
-            return handleError(res, err);
-        }
+
+    var file = req.file;
+
+    if (!file) {
+        console.log('File "file" is missing.');
+        return res.send(400, 'File "file" is missing.');
+    }
+
+    PhotoService.createPhoto(file, req.user._id).then(function (photo) {
         return res.json(201, photo);
+    }, function (err) {
+        return handleError(res, err);
     });
+
 };
 
 // Updates an existing photo in the DB.
@@ -209,6 +218,7 @@ exports.destroy = function (req, res) {
 };
 
 function handleError(res, err) {
+    console.error(err);
     return res.send(500, err);
 }
 

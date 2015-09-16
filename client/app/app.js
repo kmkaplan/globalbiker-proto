@@ -10,7 +10,7 @@ angular.module('globalbikerWebApp', [
     'ui.router',
     'ui.bootstrap',
     'leaflet-directive',
-    'angularFileUpload',
+    'ngFileUpload',
     'pascalprecht.translate',
     'ui.tinymce',
     'ui.select',
