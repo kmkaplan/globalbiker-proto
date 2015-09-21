@@ -1,73 +1,8 @@
-globalbiker-web
+Globalbiker
 ================
 
 Map application to share bike tours itinaries.
 
-Prototype: (http://globalbiker.org)
+Prototype: [GlobalBiker.org](http://globalbiker.org)
 
-## Warning: work in progress
-
-The project just started a few days ago, is unstable and has a lack of documentation. Use it at your own risks.
-
-## Dev install
-
-FIXME: work in progress
-
-## Import / Export database
-
-Export from prod database (throw SSH tunel):
-
-    mongodump --host localhost:27018 -d biketouringmap -o ./dumps
-    
-Import to dev database:
-
-    mongorestore --db biketouringmap-dev ./dumps/biketouringmap/
-    
-    or 
-    
-    mongorestore --host localhost:27018 --db globalbikerweb-beta ./dumps/biketouringmap/
-    
-
-## Continuous integration deployment
-
-### Docker build
-
-Build the docker image from sources:  
-    
-    sudo docker build -t="globalbiker/bike-touring-map" .
-
-    
-### Pre-requisites
-
-Run a mongoDB image with shared directory:
-
-    mkdir -p /opt/docker/mongodb/data
-
-    sudo docker run -d \
-        -p 27019:27017 \
-        -v /opt/docker/mongodb/data:/data/db \
-        --name mongodb dockerfile/mongodb
-   
-### Test the image
-
-    sudo docker run --rm -i \
-        --link=mongodb:mongodb \
-        -p 8080:8080 \
-        -t globalbiker/bike-touring-map /bin/bash
-   
-### Run application
-
-Create shared directories to avoid loosing your data:
-
-    mkdir -p /opt/docker/jenkins/share/globalbiker.org/upload
-    mkdir -p /opt/docker/jenkins/share/globalbiker.org/photos
-
-Start a new container
-
-    docker run -d \
-        --link=mongodb:mongodb \
-        --volume=/opt/docker/jenkins/share/globalbiker.org/upload:/app/dist/server/upload \
-        --volume=/opt/docker/jenkins/share/globalbiker.org/photos:/app/dist/server/photos \
-        --volume=/opt/docker/jenkins/share/globalbiker.org/environments:/app/dist/server/config/environments \
-        -p 9209:8080 \
-        --name globalbiker.org -t globalbiker/bike-touring-map
+[Installation](doc/technical/install.md)
